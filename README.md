@@ -56,3 +56,4 @@ Near-future plans:
 - Provide instructions on how to switch to real jQuery for the few browsers that are unsupported (ie8)
 - Provide a library of replacements for a wide range of jQuery-methods. This will allow you to copy/paste the functions you need
 
+picoQuery is based on picoCSS, available here: https://github.com/vladocar/picoCSS
