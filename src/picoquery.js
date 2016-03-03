@@ -33,3 +33,5 @@ picoQueryClass.prototype = {
     });
   },
 }
+
+p$ = picoQuery;
