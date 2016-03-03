@@ -20,13 +20,14 @@ Here are some more examples with what you can do with the basic feature set of p
   
 	p$('div .column').addClass('selected').addClass('big');
 
-<h3>Like in jQuery, you can get an underlying DOM node with the "get" function:</h3>
+<h3>Like in jQuery, you can get an underlying DOM element with the "get" function:</h3>
 
-	var node = p$('div .column').get(0)
+	var elm = p$('div .column').get(0)
 
-<h3>Like in jQuery, you can easily wrap a DOM node and a DOM list</h3>
+<h3>Like in jQuery, you can wrap a DOM element and a DOM list</h3>
 
-	p$(node)
+	p$(elm);
+)
 
 <h3>Like in jQuery, you can do a custom each loop:</h3>
 
