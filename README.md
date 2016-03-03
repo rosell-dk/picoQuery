@@ -56,3 +56,6 @@ Near-future plans:
 - Provide an extra js with a fuller range of jQuery-methods. This will allow you to copy/paste the functions you need for a project into your picoQuery. I expect to call this file "microquery.js"
 
 picoQuery is based on picoCSS, available here: https://github.com/vladocar/picoCSS
+
+Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
+
