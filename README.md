@@ -53,6 +53,6 @@ I'm very actively developing this library these days. More methods will be added
 
 Near-future plans:
 - Provide instructions on how to switch to real jQuery for the few browsers that are unsupported (ie8)
-- Provide a library of replacements for a wide range of jQuery-methods. This will allow you to copy/paste the functions you need
+- Provide an extra js with a fuller range of jQuery-methods. This will allow you to copy/paste the functions you need for a project into your picoQuery. I expect to call this file "microquery.js"
 
 picoQuery is based on picoCSS, available here: https://github.com/vladocar/picoCSS
