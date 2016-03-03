@@ -4,7 +4,7 @@ An ultra lightweight alternative to jQuery.
 jQuery is a big download. But on top of that, it takes time for the client browser to render it - on EACH page.
 picoQuery is designed to assist in the task of migrating code from jQuery. picoQuery has the very same syntax. Ie to add a class to all a-tags, you will write:
 
-  p$('a').addClass('selected');
+	p$('a').addClass('selected');
 
 But picoQuery only implements a bare essentials subset of jQuery functionality. This is how we keep it ultra-lightweight. So it is not a drop-in replacement.
 
