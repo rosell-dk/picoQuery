@@ -27,7 +27,6 @@ Here are some more examples with what you can do with the basic feature set of p
 <h3>Like in jQuery, you can wrap a DOM element and a DOM list</h3>
 
 	p$(elm);
-)
 
 <h3>Like in jQuery, you can do a custom each loop:</h3>
 
