@@ -25,9 +25,11 @@ the script into the mentioned parts and migrate the first part to picoQuery
 
 You can read more about this strategy here: https://varvy.com/pagespeed/render-blocking.html
 
-Point for now is that you ideally never should include picoquery.js the way we do here:
+Point for now is that you ideally never should include picoquery.js the way we do here.
+Also, here we include microquery-oneliners.js instead of picoquery.js, in order to demonstrate all available methods.
+
 -->
-<script src="src/picoquery.js"></script>
+<script src="src/microquery-oneliners.js"></script>
 <script>
 function domReady(){
 
@@ -44,6 +46,10 @@ function domReady(){
     var colorOfFirstLI = p$('li').first().css('color');
     alert(colorOfFirstLI);
     
+  });
+
+  p$('#clickmethree').click(function(e) {
+    p$('#clickme').click();
   });
 
   
@@ -70,6 +76,7 @@ document.addEventListener( "DOMContentLoaded", domReady, false );
     <li>Three</li>
   </ul>
   <span id="clickmetoo" class="clickable">Click me to view the value of a css property</span><br>
+  <span id="clickmethree" class="clickable">Click me to trigger an event</span><br>
 
 </body>
 </html>
