@@ -14,11 +14,11 @@ Here are some more examples with what you can do with the basic feature set of p
 
 <h3>Like in jQuery, you can use id-selectors, class selectors, etc</h3>
 
-  p$('#contact_form .column a').addClass('selected');
+	p$('#contact_form .column a').addClass('selected');
 
 <h3>Like in jQuery, you can chain:</h3>
   
-  p$('div .column').addClass('selected').addClass('big');
+	p$('div .column').addClass('selected').addClass('big');
 
 <h3>Like in jQuery, you can get an underlying DOM node with the "get" function:</h3>
 
@@ -26,27 +26,27 @@ Here are some more examples with what you can do with the basic feature set of p
 
 <h3>Like in jQuery, you can easily wrap a DOM node and a DOM list</h3>
 
-  p$(node)
+	p$(node)
 
 <h3>Like in jQuery, you can do a custom each loop:</h3>
 
-  p$('div .column').each(function(node) {
-    p$(node).addClass('big');
-  })
+	p$('div .column').each(function(node) {
+		p$(node).addClass('big');
+	})
 
 picoQuery has only a very limited number of functions, but is very easy to extend
 For example (if it wasn't there already, the addClass method could be added like this:
 
-  picoQueryClass.prototype.addClass = function(v) {
-    return this.each(function (n) {
-      if (n.classList) {
-        n.classList.add(v);
-      } 
-      else {
-        n.className += ' ' + v;
-      }
-    });
-  }
+	picoQueryClass.prototype.addClass = function(v) {
+		return this.each(function (n) {
+			if (n.classList) {
+				n.classList.add(v);
+			} 
+			else {
+				n.className += ' ' + v;
+			}
+		});
+	}
 
 
 I'm very actively developing this library these days. More methods will be added.
