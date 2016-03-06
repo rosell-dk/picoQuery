@@ -1,59 +1,58 @@
 # picoQuery
-An ultra lightweight alternative to jQuery.
+An ultra lightweight alternative to jQuery, with jQuery fallback for unmodern browsers
 
-jQuery is a big download. But on top of that, it takes time for the client browser to render it - on EACH page.
-picoQuery is designed to assist in the task of migrating code from jQuery. picoQuery has the very same syntax. Ie to add a class to all a-tags, you will write:
+DOM manipulation libraries such as jQuery do a great job of providing browser compatibility. But the expense is a big download - and rendering time - for all clients, even though the compatibility is only needed for a few percent.
 
-	p$('a').addClass('selected');
+picoQuery has an alternative approach. The library itself is written only for modern browsers. But the twist is that everything that works in picoQuery works in jQuery too. Hence, it allows us to fallback to jQuery. Bottom line: Great performance for modern browsers AND browser compatibility
 
-But picoQuery only implements a bare essentials subset of jQuery functionality. This is how we keep it ultra-lightweight. So it is not a drop-in replacement.
+Here is how this is achieved:
 
-However, near-future plan is to provide a picoquery-migrate.js, which can be used while migrating, and which will tell you when an unsupported jQuery-method is called, and in some cases, how to extend picoQuery with the needed functionality. This way, your'e workflow of migrating will actually start with drop-in-replacement
+	<script src="src/picoquery.js"></script>
+	<script>
+	if ((!document.querySelectorAll) || (!document.addEventListener)) {
+  		// JQuery 1.12.0 on Google CDN
+  		document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"><' + '/script>');
+  		document.write('<script>$(document).ready(function() {p$ = jQuery;domReady()})<' + '/script>');
+	}
 
-Here are some more examples with what you can do with the basic feature set of picoQuery:
+	function domReady(){
+		// Your code goes here:
+  		p$('.clickable').css('cursor', 'pointer').css('background-color', '#ccc');
+	}
 
-<h3>Like in jQuery, you can use id-selectors, class selectors, etc</h3>
+	document.addEventListener( "DOMContentLoaded", domReady, false );
+
+
+Here are some more examples with what you can do with picoQuery:
+
+<h3>Selectors - including css3 selectors</h3>
 
 	p$('#contact_form .column a').addClass('selected');
 
-<h3>Like in jQuery, you can chain:</h3>
+<h3>You can chain:</h3>
   
 	p$('div .column').addClass('selected').addClass('big');
 
-<h3>Like in jQuery, you can get an underlying DOM element with the "get" function:</h3>
-
-	var elm = p$('div .column').get(0)
-
-<h3>Like in jQuery, you can wrap a DOM element and a DOM list</h3>
+<h3>You can wrap a DOM element and a DOM list</h3>
 
 	p$(elm);
 
-<h3>Like in jQuery, you can do a custom each loop:</h3>
+<h3>You can do a custom each loop:</h3>
 
 	p$('div .column').each(function(node) {
 		p$(node).addClass('big');
 	})
 
-picoQuery has only a very limited number of functions, but is very easy to extend
-For example (if it wasn't there already, the addClass method could be added like this:
+<h3>You can add event handler:</h3>
 
-	picoQueryClass.prototype.addClass = function(v) {
-		return this.each(function (n) {
-			if (n.classList) {
-				n.classList.add(v);
-			} 
-			else {
-				n.className += ' ' + v;
-			}
-		});
-	}
+	p$('#clickme').click(function(e) {
+		alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
+	});
 
+Also, "css", "get", "first", "addClass" and "removeClass" are supported. Many more are on the way - I'm very actively developing this library these days. And the library is easily extended.
 
-I'm very actively developing this library these days. More methods will be added.
+As the library grows, I will provide a builder, so you can build a custom picoQuery with only the methods you need for your project - to keep it as small as possible
 
-Near-future plans:
-- Provide instructions on how to switch to real jQuery for the few browsers that are unsupported (ie8)
-- Provide an extra js with a fuller range of jQuery-methods. This will allow you to copy/paste the functions you need for a project into your picoQuery. I expect to call this file "microquery.js"
 
 picoQuery is based on picoCSS, available here: https://github.com/vladocar/picoCSS
 
