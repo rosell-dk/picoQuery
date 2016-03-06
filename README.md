@@ -9,18 +9,26 @@ Here is how this is achieved:
 
 	<script src="src/picoquery.js"></script>
 	<script>
-	if ((!document.querySelectorAll) || (!document.addEventListener)) {
-  		// JQuery 1.12.0 on Google CDN
-  		document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"><' + '/script>');
-  		document.write('<script>$(document).ready(function() {p$ = jQuery;domReady()})<' + '/script>');
-	}
-
 	function domReady(){
 		// Your code goes here:
   		p$('.clickable').css('cursor', 'pointer').css('background-color', '#ccc');
 	}
 
-	document.addEventListener( "DOMContentLoaded", domReady, false );
+	if ((!document.querySelectorAll) || (!document.addEventListener)) {
+  		// Unmodern browser fallback to jQuery
+
+  		// JQuery 1.12.0 on Google CDN
+  		document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"><' + '/script>');
+
+		// the jQuery "ready" function fires at different times, depending
+		// on browser. But it will be earliest on DOMContentLoaded, and always before the "onload"
+		document.write('<script>$(document).ready(function() {p$ = jQuery;domReady()})<' + '/script>');
+	}
+	else {
+  		// For stuff that should be there on the first render, you want to
+  		// hook on to the "DOMContentLoaded" event, which fires before the onLoad.
+		document.addEventListener( "DOMContentLoaded", domReady, false );
+	}
 
 
 Here are some more examples with what you can do with picoQuery:
