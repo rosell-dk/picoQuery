@@ -1,37 +1,35 @@
 # picoQuery
-An ultra lightweight alternative to jQuery, with jQuery fallback for unmodern browsers
+An ultra lightweight subset of jQuery functionality
 
-DOM manipulation libraries such as jQuery do a great job of providing browser compatibility. But the expense is a big download - and rendering time - for all clients, even though the compatibility is only needed for a few percent.
+picoQuery is designed such that everything that works in picoQuery works in jQuery too. This has interesting benefits:
 
-picoQuery has an alternative approach. The library itself is written only for modern browsers. But the twist is that everything that works in picoQuery works in jQuery too. Hence, it allows us to fallback to jQuery. Bottom line: Great performance for modern browsers AND browser compatibility
+- It allows fallback to jQuery on older browsers
+- It eases the process of migrating jQuery-code to something lightweight
+- If you start a project in picoQuery and it later turns out that you need full-flegded jQuery functionality, it just works
 
-Here is how this is achieved:
+picoQuery will come with a builder allowing you to select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 1k uncompressed. With 1k, you can for example do stuff like this: $('#main > div p:last-child').addClass('big').css('color', 'green');
+
+Here is how you can achieve fallback to jQuery for older browsers:
 
 	<script src="src/picoquery.js"></script>
 	<script>
 	function domReady(){
 		// Your code goes here:
-  		p$('.clickable').css('cursor', 'pointer').css('background-color', '#ccc');
+		$ = p$;
+		$('.clickable').css('cursor', 'pointer').css('background-color', '#ccc');
 	}
 
 	if ((!document.querySelectorAll) || (!document.addEventListener)) {
-  		// Unmodern browser fallback to jQuery
-
-  		// JQuery 1.12.0 on Google CDN
-  		document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"><' + '/script>');
-
-		// the jQuery "ready" function fires at different times, depending
-		// on browser. But it will be earliest on DOMContentLoaded, and always before the "onload"
+		// fallback to jQuery
+		document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"><' + '/script>');
 		document.write('<script>$(document).ready(function() {p$ = jQuery;domReady()})<' + '/script>');
 	}
 	else {
-  		// For stuff that should be there on the first render, you want to
-  		// hook on to the "DOMContentLoaded" event, which fires before the onLoad.
 		document.addEventListener( "DOMContentLoaded", domReady, false );
 	}
 
 
-Here are some more examples with what you can do with picoQuery:
+Here are some examples of what you can currently do with picoQuery:
 
 <h3>Selectors - including css3 selectors</h3>
 
@@ -57,9 +55,7 @@ Here are some more examples with what you can do with picoQuery:
 		alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
 	});
 
-Also, "css", "get", "first", "addClass" and "removeClass" are supported. Many more are on the way - I'm very actively developing this library these days. And the library is easily extended.
-
-As the library grows, I will provide a builder, so you can build a custom picoQuery with only the methods you need for your project - to keep it as small as possible
+Also, "each", "css", "get", "first", "addClass", "removeClass", "append", "appendTo" are supported. Many more are on the way - I'm very actively developing this library these days. And the library is easily extended.
 
 
 picoQuery is based on picoCSS, available here: https://github.com/vladocar/picoCSS
