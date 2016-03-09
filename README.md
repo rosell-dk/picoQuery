@@ -1,8 +1,16 @@
 # picoQuery - A down to 1k replacement of jQuery
 
-picoQuery is designed such that <i>everything that works in picoQuery works in jQuery too</i>. This has interesting benefits. Particulary, it allows <i>fallback to jQuery</i> for older browsers. In other words, we can leave the heavy job of making things work on older browser to jQuery. The few percent of users that use old browsers, will be served jQuery, while the majority will not. This allows picoQuery to be very lightweight.
+<h3>Everything that works in picoQuery works in jQuery too</h3>
+picoQuery has is designed to be compatible with jQuery. This has interesting benefits. Significantly, it allows <i>swapping to jQuery</i> for older browsers. This is trick #1 that enables picoQuery to be uncomparingly small. Of cause, visitors that have older browsers (IE8 and below, as a rough generalization) will not enjoy the performance gain of not having to download and render jQuery, but currently this only amounts to about 4% of all traffic, globally.
 
-Another thing that allows picoQuery to be lightweight is that it comes (work in progress!) with a builder, allowing you to select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 1k uncompressed. With 1k, you can for example do stuff like this: $('#main > div p:last-child').addClass('big').css('color', 'green');
+The other trick that allows picoQuery to be lightweight is that it comes (work in progress!) with a builder, allowing you to select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 1k uncompressed. With 1k, you can for example do stuff like this: $('#main > div p:last-child').addClass('big').css('color', 'green');
+
+<h3>Before you get too excited</h3>
+I should mention that picoQuery currently only supports a small subset of jQuery functionality. I'm however working hard these days to expand it. And perhaps you want to join in?
+
+The following methods is currently supported: 
+.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .focus(), .keyup(), .hide(),
+
 
 Here is how fallback to jQuery is achieved:
 
@@ -71,10 +79,8 @@ Here are some examples of what you can currently do with picoQuery:
 		alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
 	});
 
-Also, "each", "css", "get", "first", "addClass", "removeClass", "append", "appendTo" are supported. Many more are on the way - I'm very actively developing this library these days. And the library is easily extended.
 
-
-picoQuery is based on picoCSS, available here: https://github.com/vladocar/picoCSS
+picoQuery is originally based on picoCSS, available here: https://github.com/vladocar/picoCSS
 
 Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
 
