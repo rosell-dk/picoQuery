@@ -1,5 +1,4 @@
-# picoQuery
-An ultra lightweight subset of jQuery functionality. As small as 1k for a barebone selection of features
+# picoQuery - An ultra lightweight subset of jQuery functionality. <small>(As small as 1k for a barebone selection of features)</small>
 
 picoQuery is designed such that <i>everything that works in picoQuery works in jQuery too</i>. This has interesting benefits. Particulary, it allows <i>fallback to jQuery</i> for older browsers. In other words, we can leave the heavy job of making things work on older browser to jQuery. The few percent of users that use old browsers, will be served jQuery, while the majority will not. This allows picoQuery to be very lightweight.
 
