@@ -1,7 +1,7 @@
 # picoQuery - A down to 1k replacement of jQuery
 
 <h3>Everything that works in picoQuery works in jQuery too</h3>
-picoQuery has is designed to be compatible with jQuery. This has interesting benefits. Significantly, it allows <i>swapping to jQuery</i> for older browsers. This is trick #1 that enables picoQuery to be uncomparingly small. Of cause, visitors that have older browsers (IE8 and below, as a rough generalization) will not enjoy the performance gain of not having to download and render jQuery, but currently this only amounts to about 4% of all traffic, globally.
+picoQuery has is designed to be compatible with jQuery. This has interesting benefits. Significantly, it allows <i>swapping to jQuery</i> for older browsers. This is trick #1 that enables picoQuery to be uncomparingly small. Of course, visitors that have older browsers (IE8 and below, as a rough generalization) will not enjoy the performance gain of not having to download and render jQuery, but this only amounts to about 4% of all traffic, and falling.
 
 <h3>picoQuery comes with a builder</h3>
 The other trick that allows picoQuery to be lightweight is that it comes (work in progress!) with a builder, allowing you to select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 1k uncompressed. With 1k, you can for example do stuff like this: $('#main > div p:last-child').addClass('big').css('color', 'green');

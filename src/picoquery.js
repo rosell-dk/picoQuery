@@ -179,8 +179,10 @@ P$.fn = P$.prototype = {
   // Events. Probably not needed for above-the-fold scripting
   // TODO: read this: http://perfectionkills.com/detecting-event-support-without-browser-sniffing/
   // (this will answer this question: http://stackoverflow.com/questions/18094334/feature-detect-support-for-domcontentloaded-event)
+  // http://api.jquery.com/on/
+  // .on( events [, selector ] [, data ], handler )
   // ========================================================
-
+  
   on: function(type,fn) {
     return this._e(function(el) {
       el.addEventListener(type,fn,false);
