@@ -130,6 +130,8 @@ P$.fn = P$.prototype = {
      http://api.jquery.com/append/#append-content-content
 
      http://api.jquery.com/append/#append-function
+
+     Dependencies: 
   */
   append: function() {
     var args = arguments;
