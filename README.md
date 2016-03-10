@@ -15,7 +15,7 @@ The following methods is currently supported:
 
 <h3>Here is how fallback to jQuery is achieved</h3>
 
-	<script src="src/picoquery.js"></script>
+	<script src="builder/picoquery.js.php?build=0.1-1-1-fff3"></script>
 	<script>
 	function domReady(){
 		// Your code goes here:
