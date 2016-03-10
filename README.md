@@ -56,15 +56,7 @@ According to caniuse.com, this collection of browsers are currently used for abo
 
 Note that IE8 is treated as an "old" browser here, as it does not support "addEventListener". As a happy coincidence, IE8 is the only browser where querySelectorAll does not support CSS3 selectors. The criteria thus ensures that querySelectorAll is only used on browsers that supports CSS3 selectors.
 
-<h3>Usecase: Above-the-fold rendering</h3>
-When optimizing for performance, you want to avoid what is called 'render-blocking' javascript. When you put in a script-tag, be it in head or in body, the browser needs to get the script (download it or get it from cache) and parse it (this is always needed). Many times, you actually find that none of the things you do in your script is so critical, that it cannot wait til after onload. You can then just defer your javascript, and your good to go - the download and rendering is done after the page is displayed, and if the browser is running on some decent hardware, it will not affect the perceived performance.
-
-However, there are times, when you want some of your script to run before the page is displayed. If for example you create some of the elements dynamically, and they are placed in top of the document (meaning that they are in the viewport). What you do is split up the script in parts that needs to be done when DOM is ready, and parts that can be defered til after document is loaded. The bulk of the scripting can probably be defered. As it is not too bad for performance to use jQuery for the defered part, this means that most of your script can use jQuery. The first part is often so small, that it can be put inline in the HTML, in order to avoid making it render-blocking. You want to keep this script as small as possible, as it is downloaded on each page request. Until now, this has meant turning to vanilla javascript, probably pasting in some convinience functions for DOM manipulation. But with picoQuery, you have a library small enough to justify being inserted inline. And when set up with jQuery fallback, you have full browser compatibility, and you have the convinience of working with a syntax you already learned. As the above-the-fold scripting you need to do is probably limited, it is not too big a drawback, that picoQuery currently only have a small subset of jQuery implemented.
-
-<h3>Usecase: Limiting bandwith usage on mobile browsers</h3>
-jQuery is quite a download. If you want to be friendly to your mobile users, and you do not have too much coding to do, you may want to do everything in picoQuery. Or you may perhaps be able to limit jQuery usage to some pages. 
-
-Here are some examples of what you can currently do with picoQuery:
+<h3>Examples of what you can currently do with picoQuery:</h3>
 
 	// Construct from selector, DOM element, HTMLCollection object and picoQuery object (cloning):
 	p$('#contact_form .column a');
@@ -74,8 +66,8 @@ Here are some examples of what you can currently do with picoQuery:
 
 	// Chaining:
 	p$('.some-class').css('color', 'blue').first().removeClass('some-class');
-  
-  // Each loop:
+
+	// Each loop:
 	p$('div .column').each(function(i, elm) {
 		p$(elm).addClass('big');
 	})
@@ -84,6 +76,14 @@ Here are some examples of what you can currently do with picoQuery:
 	p$('#clickme').click(function(e) {
 		alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
 	});
+
+<h3>Usecase: Above-the-fold rendering</h3>
+When optimizing for performance, you want to avoid what is called 'render-blocking' javascript. When you put in a script-tag, be it in head or in body, the browser needs to get the script (download it or get it from cache) and parse it (this is always needed). Many times, you actually find that none of the things you do in your script is so critical, that it cannot wait til after onload. You can then just defer your javascript, and your good to go - the download and rendering is done after the page is displayed, and if the browser is running on some decent hardware, it will not affect the perceived performance.
+
+However, there are times, when you want some of your script to run before the page is displayed. If for example you create some of the elements dynamically, and they are placed in top of the document (meaning that they are in the viewport). What you do is split up the script in parts that needs to be done when DOM is ready, and parts that can be defered til after document is loaded. The bulk of the scripting can probably be defered. As it is not too bad for performance to use jQuery for the defered part, this means that most of your script can use jQuery. The first part is often so small, that it can be put inline in the HTML, in order to avoid making it render-blocking. You want to keep this script as small as possible, as it is downloaded on each page request. Until now, this has meant turning to vanilla javascript, probably pasting in some convinience functions for DOM manipulation. But with picoQuery, you have a library small enough to justify being inserted inline. And when set up with jQuery fallback, you have full browser compatibility, and you have the convinience of working with a syntax you already learned. As the above-the-fold scripting you need to do is probably limited, it is not too big a drawback, that picoQuery currently only have a small subset of jQuery implemented.
+
+<h3>Usecase: Limiting bandwith usage on mobile browsers</h3>
+jQuery is quite a download. If you want to be friendly to your mobile users, and you do not have too much coding to do, you may want to do everything in picoQuery. Or you may perhaps be able to limit jQuery usage to some pages. 
 
 
 picoQuery is originally based on picoCSS, available here: https://github.com/vladocar/picoCSS
