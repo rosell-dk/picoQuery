@@ -58,8 +58,9 @@ Note that IE8 is treated as an "old" browser here, as it does not support "addEv
 
 <h3>Examples of what you can currently do with picoQuery:</h3>
 
-	// Construct from selector, DOM element, HTMLCollection object and picoQuery object (cloning):
+	// Construct from selector, HTML-text, DOM element, HTMLCollection or picoQuery object (cloning):
 	p$('#contact_form .column a');
+	p$('<p>some <b>HTML</b></p>');
 	p$(document.getElementById('main'));
 	p$(document.getElementsByTagName('div'));
 	p$(p$('div .column'));
@@ -76,6 +77,10 @@ Note that IE8 is treated as an "old" browser here, as it does not support "addEv
 	p$('#clickme').click(function(e) {
 		alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
 	});
+
+	// Append with "appendTo" and "append"
+	p$('<b>bold</b>').appendTo(p$('body'));
+  $('body').append('<b>bold</b>', '<i>italic</i>');
 
 <h3>Usecase: Above-the-fold rendering</h3>
 When optimizing for performance, you want to avoid what is called 'render-blocking' javascript. When you put in a script-tag, be it in head or in body, the browser needs to get the script (download it or get it from cache) and parse it (this is always needed). Many times, you actually find that none of the things you do in your script is so critical, that it cannot wait til after onload. You can then just defer your javascript, and your good to go - the download and rendering is done after the page is displayed, and if the browser is running on some decent hardware, it will not affect the perceived performance.
