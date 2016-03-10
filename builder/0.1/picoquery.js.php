@@ -1,6 +1,6 @@
 <?php
 header("Content-type: text/javascript;charset=UTF-8");
-require_once('inc/picoquery-features.inc');
+require_once('features.inc');
 
 $build = $_GET['build'];
 if (!isset($build)) {
@@ -36,7 +36,7 @@ function feat($feature_id) {
 //echo feat('.addClass()');
 //echo feat('.css()');
 ?>
-/* picoQuery build: <?php echo $build ?> */
+/* picoQuery <?php echo $_GET['v'] ?>, build <?php echo $build ?> */
 function p$(sel) {
   return new P$(sel);
 }

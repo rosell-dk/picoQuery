@@ -1,0 +1,15 @@
+
+
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Redirect for example "picoquery-0.1-F10f.js" to "/builder/0.1/picoquery.js.php?v=0.1&build=F10f"
+
+RewriteRule ^picoquery-([\d\.]+)-(F[a-f\d]*)\.js  ../builder/picoquery.js.php?v=$1&build=$2 [L]
+
+
+</IfModule>
+
+
+

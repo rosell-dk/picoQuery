@@ -28,7 +28,7 @@ You can read more about this strategy here: https://varvy.com/pagespeed/render-b
 Point for now is that you ideally never should include picoquery.js the way we do here.
 
 -->
-<script src="src/picoquery.js.php?build=F1"></script>
+<script src="builder/picoquery.js.php?v=0.1&build=F1"></script>
 <script>
 function domReady(){
   var $ = p$;
@@ -70,9 +70,21 @@ function domReady(){
   
 }
 
-// For stuff that should be there on the first render, you want to
-// hook on to the "DOMContentLoaded" event, which fires before the onLoad.
-document.addEventListener( "DOMContentLoaded", domReady, false );
+if ((!document.querySelectorAll) || (!document.addEventListener)) {
+	// fallback to jQuery
+	document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"><' + '/script>');
+	document.write('<script>$(document).ready(function() {p$ = jQuery;domReady()})<' + '/script>');
+}
+else {
+  // For stuff that should be there on the first render, you want to
+  // hook on to the "DOMContentLoaded" event, which fires before the onLoad.
+  document.addEventListener( "DOMContentLoaded", domReady, false );
+
+  // this will later be:
+  // $(document).ready(domReady);
+
+}
+
 
 // The script that can be deferred, you want t
 //window.addEventListener('load', documentReady, false);

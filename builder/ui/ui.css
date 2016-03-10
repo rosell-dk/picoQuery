@@ -1,0 +1,34 @@
+columns {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+column {
+/*  display: inline-block;*/
+  display: table-cell;
+  vertical-align: top;
+}
+
+column:first-child {
+  min-width: 20%;
+}
+column:last-child {
+  width: 100%;
+}
+#code_panel {
+  height: 100%;
+}
+
+#code_panel textarea {
+  height: 500px;
+  width: 100%;
+  width: calc(100% - 20px);
+}
+
+#features_panel {
+  margin-top: 10px;
+}
+#features {
+  margin-top: 10px;
+}
+
