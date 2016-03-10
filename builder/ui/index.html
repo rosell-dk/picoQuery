@@ -11,22 +11,40 @@
 <body>
   <columns>
     <column>
-      <div id="version">
-        Select version: 
+      <panel id="version_panel">
+        <label>picoQuery version:</label>
         <select id="version_selector"></select>
-      </div>
-      <div id="features_panel">
-        Select features:
+      </panel>
+      <panel id="commenting_panel">
+        <label>Include comments:</label>
+        <select id="comment_selector" multiple="multiple">
+          <option value="1" selected>Build id</option>
+<!--          <option value="2" selected>Method signatures</option>-->
+          <option value="4">Method description</option>
+          <option value="8">Code notes</option>
+          <option value="16">Developer notes</option>
+        </select>
+      </panel>
+      <panel id="minify_panel">
+        <label>Minify:</label>
+        <select id="minify_selector" multiple="multiple">
+          <option value="1" selected>Minify functions</option>
+          <option value="2">Minify all</option>
+        </select>
+      </panel>
+      <panel id="features_panel">
+        <label>Select features:</label><br>
+        <input type="checkbox" id="select_all_features"></input>
         <div id="features"></div>
-      </div>
+      </panel>
     </column>
     <column>
-      <div id="code_panel">
+      <panel id="code_panel">
         <div>
           <h3>Code <span id="code_size"><span></h3>
           <textarea id="code"></textarea>
         </div>
-      </div>
+      </panel>
     </column>
   </columns>
 </body>

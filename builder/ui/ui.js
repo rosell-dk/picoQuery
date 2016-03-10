@@ -19,9 +19,9 @@ function versionChanged() {
 function populateFeaturesPanel(features) {
 //alert(JSON.stringify(features));
   for (var i=0; i<features.length; i++) {
-    var name = features[i];
+    var feature = features[i];
 //alert(name);
-    $('#features').append('<div class="feature"><input name="feature-' + i + '" type="checkbox"/>' + name + '</div>');
+    $('#features').append('<div class="feature"><input name="feature-' + i + '" type="checkbox"/>' + feature['id'] + '</div>');
   }
 //  $('.feature:first-child > input').attr('checked', 'checked');
   $('.feature').change(generate);
@@ -41,7 +41,19 @@ function loadFeatures() {
   })
 }
 
-function generate() {
+function buildBuildId() {
+
+  // Version
+  var v = $('#version_selector').val();
+
+  // Comments
+  var commentFlagsDec = 0;  
+  $('#comment_selector option:selected').each(function() {
+    commentFlagsDec += parseInt($(this).val(), 10);
+  });
+  commentFlagsHex = commentFlagsDec.toString(16);
+
+  // Features
   $checkboxes = $('.feature > input');
   var flags = '';
   for (var i=0; i<$checkboxes.length; i++) {
@@ -59,8 +71,18 @@ function generate() {
     hex += parseInt(fourflags, 2).toString(16);
   }
 
-  var v = $('#version_selector').val();
-  var jqXHR = $.ajax( '../' + v + '/picoquery.js.php?v=' + v + '&build=F' + hex)
+  // Minimizer
+  var minFlagsDec = 0;  
+  $('#minify_selector option:selected').each(function() {
+    minFlagsDec += parseInt($(this).val(), 10);
+  });
+  minFlagsHex = minFlagsDec.toString(16);
+
+  return v + '-' + commentFlagsHex + '-' + minFlagsHex + '-' + hex;
+}
+
+function generate() {
+  var jqXHR = $.ajax( '../picoquery.js.php?build=' + buildBuildId())
   .done(function() {
     $('#code').html(jqXHR.responseText);
 
@@ -76,6 +98,13 @@ function generate() {
 $(document).ready(function() {
 
   $('#version_selector').on('change', versionChanged);
+  $('#comment_selector').on('change', generate);
+  $('#minify_selector').on('change', generate);
+  $('#select_all_features').on('change', function() {
+//    alert('t');
+    $('.feature input').prop('checked', $(this).is(':checked'));
+    generate();
+  }).prop('checked', false);  // http://api.jquery.com/prop/ */
   populateVersions();
 
 });

@@ -8,12 +8,28 @@ column {
   display: table-cell;
   vertical-align: top;
 }
-
 column:first-child {
   min-width: 20%;
 }
 column:last-child {
   width: 100%;
+}
+
+panel {
+  margin: 20px 0;
+  display: block;
+}
+
+label {
+  font-style: italic;
+}
+
+select[multiple=multiple] {
+  display: block;
+}
+
+#comment_selector {
+  display: block;
 }
 #code_panel {
   height: 100%;
