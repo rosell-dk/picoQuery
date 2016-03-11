@@ -20,7 +20,8 @@ function populateFeaturesPanel(features) {
   for (var i=0; i<features.length; i++) {
     var feature = features[i];
 //alert(name);
-    $('#features').append('<div class="feature"><input name="feature-' + i + '" type="checkbox"/>' + feature['id'] + '</div>');
+//    $('#features').append('<div class="feature"><input name="feature-' + i + '" type="checkbox"/>' + feature['id'] + '</div>');
+    $('#features').append('<div class="feature"><input id="feature_' + (i+1) + '" type="checkbox" value="' + (i+1) + '"></input><label for="feature_' + (i+1) + '">' + feature['id'] + '</label></div>');
   }
 //  $('.feature:first-child > input').attr('checked', 'checked');
   $('.feature').change(generateCode);
@@ -28,7 +29,7 @@ function populateFeaturesPanel(features) {
 }
 
 function loadFeatures(v, cb) {
-  var jqXHR = $.ajax( '../' + v + '/features.php', {'dataType': 'json'} )
+  var jqXHR = $.ajax( v + '/features.php', {'dataType': 'json'} )
   .done(function() {
 //    alert( "success" );
     cb.call({}, jqXHR.responseJSON);
@@ -43,23 +44,6 @@ function buildBuildId() {
   // Version
   var v = $('#version_selector').val();
 
-  // Features
-  $checkboxes = $('.feature > input');
-  var flags = '';
-  for (var i=0; i<$checkboxes.length; i++) {
-    if ($('.feature [name="feature-' + i + '"]:checked').length == 1) {
-      flags += '1';
-    }
-    else {
-      flags += '0';
-    }
-  }
-  // convert flags to hex
-  var hex = '';
-  for (var i=0; i<flags.length; i+=4) {
-    var fourflags = flags.substr(i, 4).split('').reverse().join('');
-    hex += parseInt(fourflags, 2).toString(16);
-  }
 
 /*
   This is commented out, because it does not fill in gaps,
@@ -109,8 +93,10 @@ function buildBuildId() {
   // Minimizer
   var minFlagsHex = calculateHexFromCheckboxes($('#minify_panel .checkbox-list input'));
 
+  // Features
+  var featuresHex = calculateHexFromCheckboxes($('.feature > input'));
 
-  return v + '-' + commentFlagsHex + '-' + minFlagsHex + '-' + hex;
+  return v + '-' + commentFlagsHex + '-' + minFlagsHex + '-' + featuresHex;
 }
 
 function setBuildId(buildId) {
@@ -164,10 +150,7 @@ function setBuildId(buildId) {
   loadFeatures(version, function(responseJSON) {
     populateFeaturesPanel(responseJSON);
 
-    $('.feature > input').each(function() {
-      var i = parseInt($(this).attr('name').substr(8), 10);
-      $(this).prop('checked', (i<featureFlags.length && featureFlags[i]));
-    });
+    setCheckboxesByFlags($('.feature input'), featureFlags);
 
     generateCode();
 
@@ -176,7 +159,7 @@ function setBuildId(buildId) {
 
 function generateCode() {
 //alert('generating code...');
-  var jqXHR = $.ajax( '../picoquery.js.php?build=' + buildBuildId())
+  var jqXHR = $.ajax( 'picoquery.js.php?build=' + buildBuildId())
   .done(function() {
     $('#code').html(jqXHR.responseText);
 
@@ -210,7 +193,7 @@ $(document).ready(function() {
       setBuildId(location.search.substr(7));   
     }
     else {
-      setBuildId('0.1-5-1-8100');
+      setBuildId('0.1-5-1-0000');
     }
   });
 
