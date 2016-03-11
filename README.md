@@ -6,6 +6,9 @@ picoQuery has is designed to be compatible with jQuery. This has interesting ben
 <h3>picoQuery comes with a builder</h3>
 The other trick that allows picoQuery to be lightweight is that it comes with a builder, allowing you to select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 1k uncompressed. With 1k, you can for example do stuff like this: $('#main > div p:last-child').addClass('big').css('color', 'green');
 
+Take a look! 
+http://picoquery.com/builder/
+
 <h3>Before you get too excited</h3>
 I should mention that picoQuery currently only supports a small subset of jQuery functionality. I'm however working hard these days to expand it. And perhaps you want to join in? Or simply spread the word!
 
