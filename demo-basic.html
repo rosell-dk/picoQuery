@@ -33,12 +33,15 @@ Point for now is that you ideally never should include picoquery.js the way we d
 function domReady(){
   var $ = p$;
 
+
+
   p$('<b>bold</b>').appendTo(p$('body'));
 
   $('body').append('<b>bold</b>', '<i>italic</i>');
 
 //  p$(p$('.clickable'));
 
+//  alert($('li').length);
 
   $('li').each(function (i, el) {
 //    alert(i);
