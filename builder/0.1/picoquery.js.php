@@ -87,8 +87,14 @@ function featBegin($feat_id) {
 
   $feature = $features_by_id[$feat_id];
   echo "\n";
+  if ($comments_method_description || ($comments_method_signatures)) {
+    echo "\n";
+  }
+  if ($comments_method_signatures) {
+    echo "  // " . $feat_id . "\n";
+  }
   if ($comments_method_description && isset($feature['description'])) {
-    echo "\n  // " . $feature['description'] . "\n";
+    echo "  // " . $feature['description'] . "\n";
   }
   funcBegin();
 }

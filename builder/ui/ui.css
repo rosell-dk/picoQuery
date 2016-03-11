@@ -34,12 +34,22 @@ panel {
   display: block;
 }
 
-label {
+h3.panel-title {
   font-style: italic;
+  font-weight: normal;
+  margin: 0 0 10px;
+  padding: 2px 8px;
+  font-size: 0.9em;
+  background-color: #ccc;
 }
 
-select[multiple=multiple] {
-  display: block;
+.checkbox-list label {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE/Edge */
+  user-select: none;           /* non-prefixed version, currently not supported by any browser */
 }
 
 #comment_selector {

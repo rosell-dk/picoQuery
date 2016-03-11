@@ -15,28 +15,41 @@
       <h3>Build options</h3>
 
       <panel id="version_panel">
-        <label>picoQuery version:</label>
+        <h3 class="panel-title">picoQuery version:</h3>
         <select id="version_selector"></select>
       </panel>
       <panel id="commenting_panel">
-        <label>Include comments:</label>
-        <select id="comment_selector" multiple="multiple">
-          <option value="1" selected>Build id</option>
-<!--          <option value="2" selected>Method signatures</option>-->
-          <option value="4">Method description</option>
-          <option value="8">Code notes</option>
-<!--          <option value="16">Developer notes</option>-->
-        </select>
+        <h3 class="panel-title">Include comments:</h3>
+        <div class="checkbox-list">
+          <input type="checkbox" id="comments_build_id" value="1"></input>
+          <label for="comments_build_id">Build id</label><br>
+
+
+          <input type="checkbox" id="comments_method_signatures" value="2"></input>
+          <label for="comments_method_signatures">Method signatures</label><br>
+
+          <input type="checkbox" id="comments_method_description" value="3"></input>
+          <label for="comments_method_description">Method description</label><br>
+
+          <input type="checkbox" id="comments_inline_comments" value="4"></input>
+          <label for="comments_inline_comments">Inline comments</label><br>
+
+          <input type="checkbox" id="comments_devel_notes" value="5"></input>
+          <label for="comments_devel_notes">Developer notes</label><br>
+
+        </div>
       </panel>
       <panel id="minify_panel">
-        <label>Minify:</label>
-        <select id="minify_selector" multiple="multiple">
-          <option value="1" selected>Minify functions</option>
-          <option value="2">Minify all</option>
-        </select>
+        <h3 class="panel-title">Minify:</h3>
+        <div class="checkbox-list">
+          <input type="checkbox" id="minify_functions" value="1"></input>
+          <label for="minify_functions">Minify functions</label><br>
+          <input type="checkbox" id="minify_all" value="2"></input>
+          <label for="minify_all">Minify all</label><br>
+        </div>
       </panel>
       <panel id="features_panel">
-        <label>Select features:</label><br>
+        <h3 class="panel-title">Select features:</h3><br>
         <input type="checkbox" id="select_all_features"></input>
         <div id="features"></div>
       </panel>
