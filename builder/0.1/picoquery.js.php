@@ -140,6 +140,9 @@ function p$(sel) {
 // TODO: also use second argument, because of this syntax:
 //          http://stackoverflow.com/questions/10619445/the-prefered-way-of-creating-a-new-element-with-jquery
 // api: http://api.jquery.com/jQuery/
+
+// TODO: Make this._v accessible with array selector []
+// http://stackoverflow.com/questions/21077408/how-is-jquery-object-able-to-behave-like-an-array-even-though-it-isnt-one
 <?php endif; ?>
 <?php funcBegin(); ?>
 function P$(a,b) {

@@ -1,4 +1,4 @@
-function populateVersions() {
+function populateVersions(cb) {
   // TODO: Get avalailable versions with ajax call
   var versions = ['0.1'];
   for (var i=0; i<versions.length; i++) {
@@ -7,13 +7,12 @@ function populateVersions() {
     $option = $("<option></option>").attr("value",key).text(value);
     $('#version_selector').append($option); 
   }
-
-  // Select the latest version
-  $('#version_selector option:last-child').attr('selected', 'selected').trigger('change');
+  cb.apply()
 }
 
+
 function versionChanged() {
-  loadFeatures();
+//TODO  loadFeatures();
 }
 
 function populateFeaturesPanel(features) {
@@ -24,17 +23,15 @@ function populateFeaturesPanel(features) {
     $('#features').append('<div class="feature"><input name="feature-' + i + '" type="checkbox"/>' + feature['id'] + '</div>');
   }
 //  $('.feature:first-child > input').attr('checked', 'checked');
-  $('.feature').change(generate);
-  generate();
+  $('.feature').change(generateCode);
+//alert($('.feature')[0]);
 }
 
-function loadFeatures() {
-  var v = $('#version_selector').val();
-
+function loadFeatures(v, cb) {
   var jqXHR = $.ajax( '../' + v + '/features.php', {'dataType': 'json'} )
   .done(function() {
 //    alert( "success" );
-    populateFeaturesPanel(jqXHR.responseJSON);
+    cb.call({}, jqXHR.responseJSON);
   })
   .fail(function() {
     alert('failed loading features for specified version');
@@ -81,7 +78,50 @@ function buildBuildId() {
   return v + '-' + commentFlagsHex + '-' + minFlagsHex + '-' + hex;
 }
 
-function generate() {
+function setBuildId(buildId) {
+  function hexstr2flagsarray(hexstr, minLength) {
+    var flags = [];
+    var chars = hexstr
+    for (var i=0; i<hexstr.length; i++) {
+      var four_flags = parseInt(hexstr.charAt(i),16);
+      for (var j=0; j<4; j++) {
+        if ((four_flags & Math.pow(2, j)) > 0) {
+          flags.push(true);
+        }
+        else {
+          flags.push(false);
+        }
+      }
+    }
+    while (flags.length < minLength) {
+      flags.push(false);
+    }
+    return flags;
+  }
+
+  var tokens = buildId.split('-');
+
+  var version = tokens[0];
+  $('#version_selector').val(version);
+
+  var features = tokens[3];
+  var featureFlags = hexstr2flagsarray(features);
+
+  loadFeatures(version, function(responseJSON) {
+    populateFeaturesPanel(responseJSON);
+
+    $('.feature > input').each(function() {
+      var i = parseInt($(this).attr('name').substr(8), 10);
+      $(this).prop('checked', (i<featureFlags.length && featureFlags[i]));
+    });
+
+    generateCode();
+
+  });
+}
+
+function generateCode() {
+//alert('generating code...');
   var jqXHR = $.ajax( '../picoquery.js.php?build=' + buildBuildId())
   .done(function() {
     $('#code').html(jqXHR.responseText);
@@ -95,16 +135,29 @@ function generate() {
   })  
 }
 
+
 $(document).ready(function() {
 
+
   $('#version_selector').on('change', versionChanged);
-  $('#comment_selector').on('change', generate);
-  $('#minify_selector').on('change', generate);
+  $('#comment_selector').on('change', generateCode);
+  $('#minify_selector').on('change', generateCode);
   $('#select_all_features').on('change', function() {
 //    alert('t');
     $('.feature input').prop('checked', $(this).is(':checked'));
-    generate();
+    generateCode();
   }).prop('checked', false);  // http://api.jquery.com/prop/ */
-  populateVersions();
+
+
+  populateVersions(function() {
+    if ((location.search) && (location.search.indexOf('?build=') == 0)) {
+      setBuildId(location.search.substr(7));   
+    }
+    else {
+      setBuildId('0.1-5-0-8100');
+    }
+  });
+
+
 
 });

@@ -1,3 +1,15 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+h1 {
+  padding: 5px 20px;
+  margin: 0;
+  font-size: 16px;
+  background-color: #666;
+  text-align: center;
+  color: white;
+}
 columns {
   display: table;
   width: 100%;
@@ -7,9 +19,11 @@ column {
 /*  display: inline-block;*/
   display: table-cell;
   vertical-align: top;
+  padding: 0 20px;
 }
 column:first-child {
-  min-width: 20%;
+  border-right: 1px solid #ccc;
+  min-width: 220px;
 }
 column:last-child {
   width: 100%;
