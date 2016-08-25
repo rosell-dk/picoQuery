@@ -18,29 +18,31 @@ The following methods is currently supported:
 
 <h3>Examples of what you can currently do with picoQuery:</h3>
 
-	// Construct from selector, HTML-text, DOM element, HTMLCollection or picoQuery object (cloning):
-	$('#contact_form .column a');
-	$('<p>some <b>HTML</b></p>');
-	$(document.getElementById('main'));
-	$(document.getElementsByTagName('div'));
-	$($('div .column'));
+```javascript
+// Construct from selector, HTML-text, DOM element, HTMLCollection or picoQuery object (cloning):
+$('#contact_form .column a');
+$('<p>some <b>HTML</b></p>');
+$(document.getElementById('main'));
+$(document.getElementsByTagName('div'));
+$($('div .column'));
 
-	// Chaining:
-	$('.some-class').css('color', 'blue').first().removeClass('some-class');
+// Chaining:
+$('.some-class').css('color', 'blue').first().removeClass('some-class');
 
-	// Each loop:
-	$('div .column').each(function(i, elm) {
-		$(elm).addClass('big');
-	})
+// Each loop:
+$('div .column').each(function(i, elm) {
+	$(elm).addClass('big');
+})
 
-	// Add event handler:
-	$('#clickme').click(function(e) {
-		alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
-	});
+// Add event handler:
+$('#clickme').click(function(e) {
+	alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
+});
 
-	// Append with "appendTo()" and "append()"
-	$('<b>bold</b>').appendTo($('body'));
-	$('body').append('<b>bold</b>', '<i>italic</i>');
+// Append with "appendTo()" and "append()"
+$('<b>bold</b>').appendTo($('body'));
+$('body').append('<b>bold</b>', '<i>italic</i>');
+```
 
 <h3>Usecase: Above-the-fold scripting</h3>
 When optimizing for performance, you want to avoid what is called 'render-blocking' javascript. When you put in a script-tag, be it in head or in body, the browser needs to get the script (download it or get it from cache) and parse it (this is always needed). Many times, you actually find that none of the things you do in your script is so critical, that it cannot wait til after onload. You can then just defer your javascript, and your good to go - the download and rendering is done after the page is displayed, and if the browser is running on some decent hardware, it will not affect the perceived performance.
