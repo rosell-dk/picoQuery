@@ -52,10 +52,10 @@ However, there are times, when you want some of your script to run before the pa
 <h3>Usecase: Limiting bandwith usage on mobile browsers</h3>
 jQuery is quite a download (100k compressed). If you want to be friendly to your mobile users, and you do not have too much coding to do, you may want to do everything in picoQuery. Or you may perhaps be able to limit jQuery usage to some pages. 
 
-<h3>Challenge</h3>
-picoQuery aims to be as lightweight as almost theoretically possible. The developer literally spend hours to find ways to save a few bytes - it's become a sport. Find a way to squeze more bytes out, and I'll by you a beer!
+<h3>A beer challenge</h3>
+picoQuery aims to be as lightweight as almost theoretically possible. I literally spend hours to find ways to save a few bytes - it's become a sport. Find a way to squeze more bytes out, and I'll buy you a beer! - Write me: beerchallenge[at]rosell.dk
 
+<h3>Credits/links</h3>
 picoQuery is originally based on picoCSS, available here: https://github.com/vladocar/picoCSS
-
 Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
 
