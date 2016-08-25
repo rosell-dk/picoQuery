@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>picoQuery demo</title>
+<!--
+For best performance, a webpage should ideally split the scripts needed in two.
+
+First part is for the bare essentials for viewing the part of the page that is initially visible.
+This part is best put *directly* in the HTML (that is, inline - between <script>-tags).
+The reason is that you want minimize the number of requests required to finish before the browser
+is allowed to show anything. picoQuery is made small enough so you can include it inline for this purpose.
+
+The second part of the script is for stuff that does not need to be there for the first render.
+Ie. click events, animations, footer appearance. Use defered loading for this - that is load it dynamically after the document load event. See this article: https://varvy.com/pagespeed/defer-loading-javascript.html
+
+It is not too bad to use jQuery, when it is truly defered, as the user will not notice that
+the browser is downloading and rendering more script. Your priority should therefore be to split
+the script into the mentioned parts and migrate the first part to picoQuery
+
+You can read more about this strategy here: https://varvy.com/pagespeed/render-blocking.html
+
+All this, just to explain why we here include picoQuery inline, instead of doing like this:
+
+
+
+-->
+<!--<script src="http://picoquery.com/builder/picoquery.js.php?build=0.2-5-0-3000"></script>-->
+<script src="test.js"></script>
+<script>
+$(function() {
+//  alert('ready');
+  $('#clickme').addClass('red-text');
+
+  $('ul li').css('background-color', 'red');
+//alert($('ul li').css('background-color'));
+
+  $('<b>bold</b>').appendTo($('body'));
+
+  $('body').append('<b>bold</b>', '<i>italic</i>');
+
+  $('li').each(function (i, el) {
+//    alert(i);
+//    alert(el);
+  });
+
+  $('.clickable').css('cursor', 'pointer').css('background-color', '#ccc');
+  $('#clickme').click(function(e) {
+    alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
+  });
+  $('#hideme').hide();
+  $('ul li').css('background-color', 'brown');
+
+  $('ul li').css('background-color', 'red').first().css('color', 'white');
+  $('ul li:last-child').css('font-weight', 'bold');
+
+  
+  $('#clickmetoo').click(function(e) {
+    var colorOfFirstLI = $('li').first().css('color');
+    alert(colorOfFirstLI);
+    
+  });
+
+  $('#clickmethree').click(function(e) {
+    $('#clickme').click();
+  });
+});
+
+</script>
+
+
+<style>
+#clickme {cursor:pointer; background-color: #ccc}
+.red-text {color:red;}
+</style>
+</head>
+<body>
+  <span id="clickme" class="clickable">Click me</span><br>
+  <span id="hideme">picoQuery has hidden me</span><br>
+  <ul class="list">
+    <li>One</li>
+    <li>Two</li>
+    <li>Three</li>
+  </ul>
+  <span id="clickmetoo" class="clickable">Click me to view the value of a css property</span><br>
+  <span id="clickmethree" class="clickable">Click me to trigger an event</span><br>
+
+</body>
+</html>

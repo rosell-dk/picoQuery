@@ -1,0 +1,40 @@
+
+
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Redirect "builder/[version]" to "[version]/builder/index.html"
+RewriteRule ^builder/([\d\.]+)/?$  $1/builder/index.html [L]
+
+# Redirect "builder/[version]/*" to "[version]/builder/*"
+RewriteRule ^builder/([\d\.]+)/(.*)  $1/builder/$2 [L]
+
+# Redirect "builder/" to "0.2/builder/"
+RewriteRule ^builder/$  /builder/0.2/ [L,R=302]
+
+
+# Redirect for example "src/picoquery0.2-full-nofallback.min.js" to "0.2/builder/picoquery.js.php?full.nofallback.min.js"
+#                   or "src/picoquery0.2-full-nofallback.min.js" to "0.2/builder/picoquery.js.php?file=picoquery0.2-full.nofallback.min.js"
+#                   or "src/picoquery0.2-full-nofallback.min.js" to "0.2/builder/picoquery.js.php?v=0.2&compactness=0&features=full.nofallback.min.js"
+#RewriteRule ^src/picoquery([\d\.]+)(.*)  $1/builder/picoquery.js.php?file=picoquery$2 [L]
+
+RewriteRule ^src/picoquery([\d\.]+)-(.*)\.min\.js  $1/builder/picoquery.js.php?v=$1&compactness=0&features=$2 [L]
+RewriteRule ^src/picoquery([\d\.]+)-(.*)\.cmpct\.js  $1/builder/picoquery.js.php?v=$1&compactness=2&features=$2 [L]
+RewriteRule ^src/picoquery([\d\.]+)-(.*)\.very-compact\.js  $1/builder/picoquery.js.php?v=$1&compactness=2&features=$2 [L]
+RewriteRule ^src/picoquery([\d\.]+)-(.*)\.compact\.js  $1/builder/picoquery.js.php?v=$1&compactness=5&features=$2 [L]
+RewriteRule ^src/picoquery([\d\.]+)-(.*)\.devel\.js  $1/builder/picoquery.js.php?v=$1&compactness=10&features=$2 [L]
+
+
+
+
+
+# Redirect for example "picoquery-0.1-4-1-10f.js" to "/builder/picoquery.js.php?build=0.1-4-1-10f"
+
+# RewriteRule ^picoquery-([\d\.]+-[a-f\d]+-[a-f\d]+-[a-f\d]+)\.js  ../builder/picoquery.js.php?build=$1 [L]
+
+
+</IfModule>
+
+
+

@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>picoQuery</title>
+  <style>
+  body {font-size: 1.2em; margin:0; padding:4% 0}
+  a {color: black}
+  a.biglink {font-size: 1.5em; line-height: 150px;}
+
+  intro {
+    display: block;
+    margin:0 10%;
+    text-align: center;
+  }
+  center {
+    text-align: center;
+  }
+
+  article {
+    margin: 0px 10%;
+  }
+  pre {
+    padding: 16px;
+    overflow: auto;
+    line-height: 2.45;
+    background-color: #f7f7f7;
+    border-radius: 3px;
+    word-wrap: normal;
+    margin-top: 0;
+    font: 12px monospace;
+    color: #333;
+    line-height:20px;
+  }
+  h3 {
+    font-weight: normal;
+    margin: 35px 0 10px;
+    font-family: sans-serif; 
+  }
+  p {
+    margin: 10px 0;
+  }
+  .github-link {
+    text-align: center;
+    margin-bottom: 90px;
+  }
+  </style>
+</head>
+<body>
+  <intro>    
+    <p>picoQuery is a <span style="font-size:30px">ridicously small</span> alternative to jQuery. It has the same syntax, so nothing new to learn. For IE8 and other older browsers, it automatically falls back to jQuery.
+    </p>
+    <a href="builder/" class="biglink">Try the builder</a>
+  </intro>
+
+<article class="markdown-body entry-content" itemprop="text">
+
+<h3><a id="user-content-everything-that-works-in-picoquery-works-in-jquery-too" class="anchor" href="#everything-that-works-in-picoquery-works-in-jquery-too" aria-hidden="true"></a>Everything that works in picoQuery works in jQuery too</h3>
+
+<p>picoQuery is designed to be compatible with jQuery. This has interesting benefits. Significantly, it allows <i>swapping to jQuery</i> for older browsers. This is trick #1 that enables picoQuery to be uncomparingly small - picoQuery can rely on modern DOM manipulation techniques and let jQuery lift the burden of compatibility with older browsers.</p>
+
+<h3><a id="user-content-picoquery-comes-with-a-builder" class="anchor" href="#picoquery-comes-with-a-builder" aria-hidden="true"></a>picoQuery comes with a builder</h3>
+
+<p>The other trick that allows picoQuery to be lightweight is that it comes with a builder, allowing you to select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes. With 600 bytes, you can for example do stuff like this: $('#main &gt; div p:last-child').addClass('big').css('color', 'green');</p>
+
+<p>Take a look! 
+<a href="http://picoquery.com/builder/">http://picoquery.com/builder/</a></p>
+
+<h3><a id="user-content-before-you-get-too-excited" class="anchor" href="#before-you-get-too-excited" aria-hidden="true"></a>Before you get too excited</h3>
+
+<p>I should mention that picoQuery currently only supports a small subset of jQuery functionality. I'm however working hard these days to expand it. And perhaps you want to join in? Or simply spread the word!</p>
+
+<p>The following methods is currently supported: 
+.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .ready()</p>
+
+<h3><a id="user-content-examples-of-what-you-can-currently-do-with-picoquery" class="anchor" href="#examples-of-what-you-can-currently-do-with-picoquery" aria-hidden="true"></a>Examples of what you can currently do with picoQuery:</h3>
+
+<pre><code>// Construct from selector, HTML-text, DOM element, HTMLCollection or picoQuery object (cloning):
+$('#contact_form .column a');
+$('&lt;p&gt;some &lt;b&gt;HTML&lt;/b&gt;&lt;/p&gt;');
+$(document.getElementById('main'));
+$(document.getElementsByTagName('div'));
+$($('div .column'));
+
+// Chaining:
+$('.some-class').css('color', 'blue').first().removeClass('some-class');
+
+// Each loop:
+$('div .column').each(function(i, elm) {
+    $(elm).addClass('big');
+})
+
+// Add event handler:
+$('#clickme').click(function(e) {
+    alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
+});
+
+// Append with "appendTo()" and "append()"
+$('&lt;b&gt;bold&lt;/b&gt;').appendTo($('body'));
+$('body').append('&lt;b&gt;bold&lt;/b&gt;', '&lt;i&gt;italic&lt;/i&gt;');
+</code></pre>
+
+<h3><a id="user-content-usecase-above-the-fold-scripting" class="anchor" href="#usecase-above-the-fold-scripting" aria-hidden="true"></a>Usecase: Above-the-fold scripting</h3>
+
+<p>When optimizing for performance, you want to avoid what is called 'render-blocking' javascript. When you put in a script-tag, be it in head or in body, the browser needs to get the script (download it or get it from cache) and parse it (this is always needed). Many times, you actually find that none of the things you do in your script is so critical, that it cannot wait til after onload. You can then just defer your javascript, and your good to go - the download and rendering is done after the page is displayed, and if the browser is running on some decent hardware, it will not affect the perceived performance.</p>
+
+<p>However, there are times, when you want some of your script to run before the page is displayed. If for example you create some of the elements dynamically, and they are placed in top of the document (meaning that they are in the viewport). What you do is split up the script in parts that needs to be done when DOM is ready, and parts that can be defered til after document is loaded. The bulk of the scripting can probably be defered. As it is not too bad for performance to use jQuery for the defered part, this means that most of your script can use jQuery. The first part is often so small, that it can be put inline in the HTML, in order to avoid making it render-blocking. You want to keep this script as small as possible, as it is downloaded on each page request. Until now, this has meant turning to vanilla javascript, probably pasting in some convinience functions for DOM manipulation. But with picoQuery, you have a library small enough to justify being inserted inline. And when set up with jQuery fallback, you have full browser compatibility, and you have the convinience of working with a syntax you already learned. As the above-the-fold scripting you need to do is probably limited, it is not too big a drawback, that picoQuery currently only have a small subset of jQuery implemented.</p>
+
+<h3><a id="user-content-usecase-limiting-bandwith-usage-on-mobile-browsers" class="anchor" href="#usecase-limiting-bandwith-usage-on-mobile-browsers" aria-hidden="true"></a>Usecase: Limiting bandwith usage on mobile browsers</h3>
+
+<p>jQuery is quite a download (100k compressed). If you want to be friendly to your mobile users, and you do not have too much coding to do, you may want to do everything in picoQuery. Or you may perhaps be able to limit jQuery usage to some pages. </p>
+
+<p>picoQuery is originally based on picoCSS, available here: <a href="https://github.com/vladocar/picoCSS">https://github.com/vladocar/picoCSS</a></p>
+
+<p>Here is a resource for writing code without jQuery: <a href="http://youmightnotneedjquery.com/">http://youmightnotneedjquery.com/</a></p>
+</article>
+
+<center>
+  <a class="biglink" href="https://github.com/rosell-dk/picoQuery">Go to project page on github</a>
+</center>
+
+<!--
+  <sidebar>
+    <h3>Roadmap</h3>
+    <h4>Version 0.2</h4>
+    <ul>
+      <li>Support a bit more of the jQuery API</li>
+      <li>Do not include helper-functions that aren't needed</li>
+      <li>Helper-functions that are only used in one place will be inlined</li>
+      <li>Document all methods with JSDoc comments</li>
+    </ul>
+    <h4>Version 0.3</h4>
+    <ul>
+      <li>Provide a CDN</li>
+      <li>Support a larger subset of the jQuery API</li>
+    </ul>
+    <h4>Further ahead</h4>
+    <ul>
+      <li>Provide a tool which can automatically find out which parts of the jQuery API your code is using (using Google Closure Compiler</li>
+      <li>Unit tests</li>
+      <li>Build options for <i>tweaking</i>. Ie if ".removeClass()" has been selected, there will be a tweak option available to not support the signature .removeClass(function), but only .removeClass(classname).</li>
+      <li>Build option for making picoQuery automatically fall back to jQuery when browser is too old. It makes sense to have this in the builder, because the builder can utilize knowledge of which parts of the api that are used</li>
+      <li>Build option for browser support. Ie options such as "IE8+", "IE9+" and "ECMAScript 5 compatible browsers". If for example the build is run with the "Accept IE8 partial support for querySelector", IE8+ is selected, no features is enabled besides the constructor, and automatic fallback is selected, IE8 will not fall back to jQuery. If however some feature is selected, which is not possible in IE8, it will fall back to jQuery (or IE8+ option will be disabled).</li>
+    </ul>
+  </sidebar>-->
+
+</body>
+</html>

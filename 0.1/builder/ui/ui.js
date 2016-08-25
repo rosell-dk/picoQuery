@@ -29,7 +29,7 @@ function populateFeaturesPanel(features) {
 }
 
 function loadFeatures(v, cb) {
-  var jqXHR = $.ajax( v + '/features.php', {'dataType': 'json'} )
+  var jqXHR = $.ajax('../' + v + '/features.php', {'dataType': 'json'} )
   .done(function() {
 //    alert( "success" );
     cb.call({}, jqXHR.responseJSON);

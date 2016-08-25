@@ -1,0 +1,124 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+h1 {
+  padding: 5px 20px;
+  margin: 0;
+  font-size: 16px;
+  background-color: #666;
+  text-align: center;
+  color: white;
+}
+columns {
+  display: table;
+  width: 100%;
+}
+column {
+/*  display: inline-block;*/
+  display: table-cell;
+  vertical-align: top;
+}
+body > columns > column {
+  padding: 0 20px;
+  border-right: 1px solid #ccc;
+  min-width: 420px;
+  height: 100%;
+}
+body > columns > column:last-child {
+  border-right: 0px solid gold;
+  width: 100%;
+}
+
+column column {
+  width: 50%;
+}
+column column:first-child {
+  padding-right: 20px;
+}
+
+panel {
+  display: block;
+}
+
+panel ~ panel {
+  margin-top: 30px;
+}
+
+h3.panel-title {
+  font-style: italic;
+  font-weight: normal;
+  margin: 0 0 10px;
+  padding: 2px 8px;
+  font-size: 0.9em;
+  background-color: #ccc;
+}
+
+.checkbox-list label {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE/Edge */
+  user-select: none;           /* non-prefixed version, currently not supported by any browser */
+}
+
+#comment_selector {
+  display: block;
+}
+#code_panel {
+  height: 100%;
+}
+
+#code_panel textarea {
+  height: 500px;
+  width: 100%;
+  width: calc(100% - 20px);
+}
+
+#code-warning {
+  background-color: yellow;
+  width: 100%;
+}
+#code-url {
+  width: 80%;
+}
+
+#features_panel {
+}
+#features {
+  margin-top: 10px;
+}
+.feature .help-icon {
+  display: inline-block;
+  float: right;
+}
+
+#popup {
+  display: none;
+  left: 30%;
+  top: 40px;
+  position: absolute;
+  max-width: 65%;
+  max-height: 90%;
+  border: 1px solid #555;
+  overflow: auto;
+  background-color: #ccc;
+}
+#popup h4 {
+  background-color: #555;
+  display: block;
+  height: 25px;
+  margin: 0;
+  padding:0;
+  padding-left: 10px;
+  font-size: 15px;
+  line-height: 25px;
+  border-bottom: 1px solid #555;
+  color: white;
+}
+#popup pre {
+  margin: 0;
+  padding: 20px;
+  max-width: 100%;
+}

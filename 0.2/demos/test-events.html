@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>-->
+<title>Event tests</title>
+
+<script>
+(function(w,d) {
+
+  // helpers
+  function e($,f){$.e.forEach(f);return $}
+  function I(arr, fn){arr.forEach(fn)}
+  function t(a){return[].slice.call(a)}
+
+  // constructor
+  function P(a,c){if("string"===typeof a)if("<"==a.charAt(0)){var b=d.createElement("div");b.innerHTML=a;this.e=[b.firstChild]}else this.e=t(d.querySelectorAll(a));else{if(typeof a == "function")return $(d).ready(a);this.e=a.nodeType?[a]:a instanceof P?a.e:a.length?t(a):[]}};
+
+  // methods
+  P.prototype = {
+    on:function(a,b){return this.e.forEach(function(c){c.addEventListener(a,b,!1)})},
+    ready:function(a){if(/^u|ng/.test(document.readyState))this.on("DOMContentLoaded",function(){a($)});else a($);return this},
+
+    // Execute all handlers and behaviors attached to the matched elements for the given e    
+    trigger: function(type) {
+//console.log(arguments);
+//      t(arguments).forEach(function(a){console.log(a)})
+//      I(t(arguments),function(a){console.log(a)})
+//      for (z=arguments.length-1;z>=0;z--){console.log(arguments[z])}
+//return
+
+      return e(this, function(el) {
+        var ev = document.createEvent('HTMLEvents');
+        ev.initEvent(type,true,false);
+        el.dispatchEvent(ev);
+      });
+    },
+
+  }
+
+  ;['click', 'focus'].forEach(function(a) {
+    P.prototype[a] = function(b){
+      if (!b) {
+        return this.trigger(a);
+      } 
+      else {
+        return this.on(a,b);
+      }
+    }
+  });
+
+
+  if (!w.$) {
+    w.$ = function() {
+      // Allow to create new instances without new
+      return function(a,b) {
+        return new P(a,b);
+      };
+    }();
+
+    // Fallback to jQuery
+    if ((!d.querySelectorAll) || (!d.addEventListener)) {
+      document.write('<scrip' + 't src="https://code.jquery.com/jquery-1.9.1.min.js"><' + '/script>');
+    }
+  }
+})(window,document)
+
+
+
+</script>
+<script>
+var a='<';
+console.log(a.charAt(0));
+console.log(a[0]);
+console.log(a.charAt(0) == '<');
+console.log(a[0] == '<');
+
+var a='';
+console.log(a.charAt(0));
+console.log(a[0]);
+
+
+/*
+console.log(typeof a);
+console.log(typeof a==='string');
+console.log(typeof a=='string');
+console.log((typeof a)[0] == 's');
+console.log((typeof a).length==6);
+console.log(/^s/.test(typeof a));
+console.log(typeof a>'s');
+*/
+
+// Possible data types (alphabetically): boolean, number, function, object, string
+
+/*
+function t() {
+  return function() {
+    alert('hejsa');
+    return $;
+  }();
+}
+function T() {
+  return (alert('hejsa') ? $ : $);
+}
+alert(T());
+$(function(){
+
+  $('p').click(function(e) {
+    alert($(this).e[0].innerHTML);
+//    alert(e);
+  });
+
+  $('p').trigger('click');
+
+});
+*/
+</script>
+
+
+</head>
+<body>
+<p>Click me!</p>
+<p>And me!</p>
+</body>
+</html>

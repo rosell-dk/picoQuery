@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>-->
+<title>ie</title>
+
+<script>
+(function(w,d) {
+  if (!w.$) {
+    w.$ = function(){
+    }
+    if ((!d.querySelectorAll) || (!d.addEventListener)) {
+      // Warning:
+      // Be aware that the folowing script injection will not be available in this script block
+      // in IE8. So do not reference $ in this script block
+      d.write('<script src="https://code.jquery.com/jquery-1.10.1.min.js?a"><' + '/script>');
+      //alert($);
+    }
+  }
+}(window,document));
+
+/*
+(function(w,d){}(window,document))
+
+(function(){var w=window,d=document}());
+*/
+
+</script>
+<script>
+alert($);
+$(document).ready(function(){
+  alert($);
+});
+</script>
+
+<script>
+// The following alerts something different in IE8...
+var v = 'global';
+void function(){
+  var v = 'local';
+  document.write('<script>v="changed"' + '<' + '/script>');
+//  document.write('<script>alert(h2)' + '<' + '/script>');
+  alert('inside the function, v is:' + v);
+}();
+alert('outside the function, v is:' + v);
+</script>
+
+
+</head>
+<body>
+</body>
+</html>
