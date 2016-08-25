@@ -1,13 +1,16 @@
 # picoQuery - A down to 1k replacement of jQuery
 
 <h3>Everything that works in picoQuery works in jQuery too</h3>
-picoQuery is designed to be compatible with jQuery. This has interesting benefits. Significantly, it allows <i>swapping to jQuery</i> for older browsers. This is trick #1 that enables picoQuery to be uncomparingly small - picoQuery can rely on modern techniques and on jQuery to lift the burden of compatibility with older browsers.
+picoQuery is designed to be compatible with jQuery. This has interesting benefits. Significantly, it allows <i>fallback to jQuery</i>, which means picoQuery can rely on modern DOM manipulation techniques and delegate the burden of the old browsers to jQuery.
 
 <h3>picoQuery comes with a builder</h3>
-The other trick that allows picoQuery to be lightweight is that it comes with a builder, allowing you to select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes. With 600 bytes, you can for example do stuff like this: $('#main > div p:last-child').addClass('big').css('color', 'green');
+Another trick that allows picoQuery to be lightweight is that it comes with a builder, allowing you to select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes. With 600 bytes, you can for example do stuff like this: $('#main > div p:last-child').addClass('big').css('color', 'green');
 
 Take a look! 
 http://picoquery.com/builder/
+
+<h3>less is more</h3>
+picoQuery aims to be as lightweight as almost theoretically possible. The developer literally spend hours to find ways to save a few bytes - it's become a sport. Find a way to squeze more bytes out, and I'll by you a beer.
 
 <h3>Before you get too excited</h3>
 I should mention that picoQuery currently only supports a small subset of jQuery functionality. I'm however working hard these days to expand it. And perhaps you want to join in? Or simply spread the word!
