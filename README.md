@@ -1,10 +1,10 @@
 # picoQuery - A down to 1k replacement of jQuery
 
 <h3>Everything that works in picoQuery works in jQuery too</h3>
-picoQuery has is designed to be compatible with jQuery. This has interesting benefits. Significantly, it allows <i>swapping to jQuery</i> for older browsers. This is trick #1 that enables picoQuery to be uncomparingly small. Of course, visitors that have older browsers (IE8 and below, as a rough generalization) will not enjoy the performance gain of not having to download and render jQuery, but this only amounts to about 4% of all traffic, and falling.
+picoQuery is designed to be compatible with jQuery. This has interesting benefits. Significantly, it allows <i>swapping to jQuery</i> for older browsers. This is trick #1 that enables picoQuery to be uncomparingly small - picoQuery can rely on modern techniques and on jQuery to lift the burden of compatibility with older browsers.
 
 <h3>picoQuery comes with a builder</h3>
-The other trick that allows picoQuery to be lightweight is that it comes with a builder, allowing you to select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 1k uncompressed. With 1k, you can for example do stuff like this: $('#main > div p:last-child').addClass('big').css('color', 'green');
+The other trick that allows picoQuery to be lightweight is that it comes with a builder, allowing you to select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes. With 600 bytes, you can for example do stuff like this: $('#main > div p:last-child').addClass('big').css('color', 'green');
 
 Take a look! 
 http://picoquery.com/builder/
@@ -13,76 +13,33 @@ http://picoquery.com/builder/
 I should mention that picoQuery currently only supports a small subset of jQuery functionality. I'm however working hard these days to expand it. And perhaps you want to join in? Or simply spread the word!
 
 The following methods is currently supported: 
-.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click()
+.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .ready()
 
-
-<h3>Here is how fallback to jQuery is achieved</h3>
-
-	<script src="builder/picoquery.js.php?build=0.1-1-1-fff3"></script>
-	<script>
-	function domReady(){
-		// Your code goes here:
-		$ = p$;
-		$('.clickable').css('cursor', 'pointer').css('background-color', '#ccc');
-	}
-
-	if ((!document.querySelectorAll) || (!document.addEventListener)) {
-		// fallback to jQuery
-		document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"><' + '/script>');
-		document.write('<script>$(document).ready(function() {p$ = jQuery;domReady()})<' + '/script>');
-	}
-	else {
-		document.addEventListener( "DOMContentLoaded", domReady, false );
-    // this will later be:
-    // $(document).ready(domReady);
-	}
-
-
-Thus, the line between "old" browsers and "new" browsers in this context, is whether the browser support both "querySelectorAll" and "addEventListener". picoQuery will only need to take care for compatibilility for the browsers that meet this criteria. This mounts to the following browsers:
-
-- IE9+
-- Edge 12+
-- Firefox 3.5+
-- Chrome 4+
-- Safari 3.1+
-- IOS Safari 3.2+
-- Opera Mini 8+
-- Android Browser 2.1+
-- Blackberry browser 10+
-- Chrome for Android 47+
-- Firefox for Android 44+
-- IE mobile 10+
-- UC Browser for Android 9.9+
-
-(source: http://caniuse.com/#feat=queryselector and http://caniuse.com/#feat=addeventlistener)
-According to caniuse.com, this collection of browsers are currently used for about 96% of all visits globally. 
-
-Note that IE8 is treated as an "old" browser here, as it does not support "addEventListener". As a happy coincidence, IE8 is the only browser where querySelectorAll does not support CSS3 selectors. The criteria thus ensures that querySelectorAll is only used on browsers that supports CSS3 selectors.
 
 <h3>Examples of what you can currently do with picoQuery:</h3>
 
 	// Construct from selector, HTML-text, DOM element, HTMLCollection or picoQuery object (cloning):
-	p$('#contact_form .column a');
-	p$('<p>some <b>HTML</b></p>');
-	p$(document.getElementById('main'));
-	p$(document.getElementsByTagName('div'));
-	p$(p$('div .column'));
+	$('#contact_form .column a');
+	$('<p>some <b>HTML</b></p>');
+	$(document.getElementById('main'));
+	$(document.getElementsByTagName('div'));
+	$($('div .column'));
 
 	// Chaining:
-	p$('.some-class').css('color', 'blue').first().removeClass('some-class');
+	$('.some-class').css('color', 'blue').first().removeClass('some-class');
 
 	// Each loop:
-	p$('div .column').each(function(i, elm) {
-		p$(elm).addClass('big');
+	$('div .column').each(function(i, elm) {
+		$(elm).addClass('big');
 	})
 
 	// Add event handler:
-	p$('#clickme').click(function(e) {
+	$('#clickme').click(function(e) {
 		alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
 	});
 
 	// Append with "appendTo" and "append"
-	p$('<b>bold</b>').appendTo(p$('body'));
+	$('<b>bold</b>').appendTo($('body'));
   $('body').append('<b>bold</b>', '<i>italic</i>');
 
 <h3>Usecase: Above-the-fold scripting</h3>
