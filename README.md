@@ -9,9 +9,6 @@ Another trick that allows picoQuery to be lightweight is that it comes with a bu
 Take a look! 
 http://picoquery.com/builder/
 
-<h3>less is more</h3>
-picoQuery aims to be as lightweight as almost theoretically possible. The developer literally spend hours to find ways to save a few bytes - it's become a sport. Find a way to squeze more bytes out, and I'll by you a beer.
-
 <h3>Before you get too excited</h3>
 I should mention that picoQuery currently only supports a small subset of jQuery functionality. I'm however working hard these days to expand it. And perhaps you want to join in? Or simply spread the word!
 
@@ -55,6 +52,8 @@ However, there are times, when you want some of your script to run before the pa
 <h3>Usecase: Limiting bandwith usage on mobile browsers</h3>
 jQuery is quite a download (100k compressed). If you want to be friendly to your mobile users, and you do not have too much coding to do, you may want to do everything in picoQuery. Or you may perhaps be able to limit jQuery usage to some pages. 
 
+<h3>Challenge</h3>
+picoQuery aims to be as lightweight as almost theoretically possible. The developer literally spend hours to find ways to save a few bytes - it's become a sport. Find a way to squeze more bytes out, and I'll by you a beer!
 
 picoQuery is originally based on picoCSS, available here: https://github.com/vladocar/picoCSS
 
