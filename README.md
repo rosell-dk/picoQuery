@@ -1,10 +1,14 @@
-# picoQuery - A down to 1k replacement of jQuery
+# picoQuery - A 1k alternative to jQuery
 
-<h3>Everything that works in picoQuery works in jQuery too</h3>
-picoQuery is designed to be compatible with jQuery. This has interesting benefits. Significantly, it allows <i>fallback to jQuery</i>, which means picoQuery can rely on modern DOM manipulation techniques and delegate the burden of the old browsers to jQuery.
+picoQuery is a <i>ridicously small</i> DOM manipulation library. It has the same syntax as jQuery, so nothing new to learn. For IE8 and other older browsers, it automatically falls back to jQuery.
 
-<h3>picoQuery comes with a builder</h3>
-Another trick that allows picoQuery to be lightweight is that it comes with a builder, allowing you to select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes. With 600 bytes, you can for example do stuff like this: $('#main > div p:last-child').addClass('big').css('color', 'green');
+<h3>Why is this smart?</h3>
+There are other lightweight DOM manipulation libraries out there. They all face a dilemma of browser support. If they choose to drop support of old browsers, well, the webpages that uses the library won't work in older browsers. If they choose to include support of older browsers, well, the library isn't going to end up so lightweight after all (and a lot of effort has to go in to develop and test the library). picoQuery solves the dilemma by being a library created for modern browsers, but which provides a fallback for older browsers. As picoQuery is a subset of jQuery, it can use jQuery as fallback, the benefit being that jQuery is well tested for old browsers.
+
+Further, of course, the benefit is that you probably already know jQuery. And if your project grows and turns out to require advanced features, migration to jQuery is just a swap away.
+
+<h3>picoQuery feature selector</h3>
+Another trick that allows picoQuery to be lightweight is that you can select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes.
 
 Take a look! 
 http://picoquery.com/builder/
@@ -42,6 +46,7 @@ $('#clickme').click(function(e) {
 // Append with "appendTo()" and "append()"
 $('<b>bold</b>').appendTo($('body'));
 $('body').append('<b>bold</b>', '<i>italic</i>');
+</script>
 ```
 
 <h3>Usecase: Above-the-fold scripting</h3>
