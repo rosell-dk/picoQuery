@@ -173,6 +173,13 @@ if (isset($compactness)) {
   $comments_build_id = $compactness <= 1;
 }
 
+// Calculate feature flags.
+// This variable used in the end of this file for the builder url comment
+$feature_flags = array();
+foreach ($feature_nameids as $i => $feat) {
+  $feature_flags[] = isFeatureEnabled($feat)?1:0;
+}
+
 // Dependencies
 enableFeatureByNameId('ready'); // Constructor is dependent on this
 enableFeatureByNameId('on');
@@ -593,8 +600,7 @@ function remove_unused_helpers($js) {
   return $js;
 }
 
-?><?php if ($comments_build_id): ?>/* picoQuery.com/builder/ */
-<?php endif; ?>
+?>
 (function(w,d,u<?php if ($use_optimized_methods) {echo ',z';} // TODO: Detect if u and z are used. u can be tested For example with the javascript parser ?>) {
 <?php
 include_helpers();
@@ -691,6 +697,21 @@ if ($minify_all) {
   $js = \JShrink\Minifier::minify($js, array('flaggedComments' => false));
   $js = str_replace(array(";}", ",}"),"}", $js);
 
+}
+//if ($comments_build_id) {
+if (TRUE) {
+  // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
+  // Builder URL, format #2: http://picoquery.com/builder/0.2/?addClass-css.min.js
+
+  $hex = '';
+  $length = count($feature_flags);
+  for ($i=0; $i<$length; $i+=4) {
+    $fourflags = implode('', array_reverse(array_slice($feature_flags, $i, 4)));
+//print_r(array_slice($flags, $i, 4));
+    $hex .= dechex(intval($fourflags, 2));
+  }
+
+  echo "/* picoquery.com/builder/0.2/?" . $compactness . "-" . $hex . " */\n";
 }
 echo $js;
 ?>
