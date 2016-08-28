@@ -57,18 +57,20 @@ Support: Partial
  */
 css: function(name, value) {
   if (value === undefined) {
-    return this.e[0].style[name];
+    this.e[0].style[name];
   } 
   else {
-    return __EACH__(this, function(el) {
+    __EACH__(this, function(el) {
       el.style[name] = value;
     });
   }
+  return this;
 }
 
 // OPTIMIZED_VERSION //
 css:function(a,b) {
-  return __IS_UNDEFINED__(b)?this.e[0].style[a]:__EACH__(this,function(c) {
+  __IS_UNDEFINED__(b)?this.e[0].style[a]:__EACH__(this,function(c) {
     c.style[a]=b
-  })
+  });
+  return this;
 }
