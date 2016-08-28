@@ -87,12 +87,12 @@ elseif (isset($_GET['file'])) {
 elseif (isset($_GET['v'])) {
 //  print_r($_GET);
 
-  // CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-2fa0.min.js
+  // CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js
   // CDN URL, format #2:     https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js
-  // !!! TODO: BUT... how to diffentiate? !!!
+  // Note that build id starts with "A"
 
-  // Builder URL, format #1: http://picoquery.com/builder/0.2/?build=2fa0.min.js
-  // Builder URL, format #2: http://picoquery.com/builder/0.2/?build=addClass-css.min.js
+  // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
+  // Builder URL, format #2: http://picoquery.com/builder/0.2/?addClass-css.min.js
 
 
   //         http://picoquery.com/build?v=0.2&features=addclass-css-each

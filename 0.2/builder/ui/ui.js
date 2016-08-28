@@ -131,10 +131,10 @@ function buildBuildId() {
     case 'min':
       compactnessFlagsHex = '0';
       break;
-    case 'cmpct':
+    case 'optimized':
       compactnessFlagsHex = '3';
       break;
-    case 'compact':
+    case 'default':
       compactnessFlagsHex = '5';
       break;
     case 'devel':
@@ -196,11 +196,11 @@ function setBuildId(buildId) {
     case '0':
       $('input[name="compactness"][value="min"]').prop("checked", true);
       break;
-    case '3':
-      $('input[name="compactness"][value="cmpct"]').prop("checked", true);
+    case '2':
+      $('input[name="compactness"][value="optimized"]').prop("checked", true);
       break;
     case '5':
-      $('input[name="compactness"][value="compact"]').prop("checked", true);
+      $('input[name="compactness"][value="default"]').prop("checked", true);
       break;
     case '9':
       $('input[name="compactness"][value="devel"]').prop("checked", true);
@@ -214,14 +214,13 @@ function setBuildId(buildId) {
   setCheckboxesByFlags($('#minify_panel .checkbox-list input'), minifyFlags);*/
 
   // Features
-  var features = tokens[2];
+  var features = tokens[1];
   var featureFlags = hexstr2flagsarray(features, 0);
 
 //  function loadFeatures(v, cb) {
   function loadFeatures(cb) {
     var jqXHR = $.ajax('features.php', {'dataType': 'json'} )
     .done(function() {
-  //    alert( "success" );
       cb.call({}, jqXHR.responseJSON);
     })
     .fail(function() {
@@ -323,11 +322,34 @@ $(document).ready(function() {
 
 
   populateVersions(function() {
-    if ((location.search) && (location.search.indexOf('?build=') == 0)) {
-      setBuildId(location.search.substr(7));   
+  // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
+  // Builder URL, format #2: http://picoquery.com/builder/0.2/?addClass-css.min.js
+
+    if ((location.search) && (location.search.indexOf('?') == 0)) {
+//      alert(location.search.charAt(1));
+      if (!isNaN(location.search.charAt(1))) {
+        // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
+        setBuildId(location.search.substr(1));
+
+      }
+      else {
+        var a = location.search.substr(1).split('.');
+        var compactness = 5;
+        switch (a[1]) {
+          case 'min':
+            compactness = 0;
+            break;
+          case 'optimized':
+            compactness = 3;
+            break;
+          case 'devel':
+            compactness = 9;
+            break;
+        }
+      }
     }
     else {
-      setBuildId('0.2-5-0-1000');
+      setBuildId('5-0000');
     }
   });
 

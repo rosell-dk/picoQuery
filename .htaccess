@@ -24,10 +24,9 @@ RewriteRule ^builder/$  /builder/0.2/ [L,R=302]
 #RewriteRule ^src/picoquery([\d\.]+)(.*)  $1/builder/build.php?file=picoquery$2 [L]
 
 RewriteRule ^src/picoquery([\d\.]+)-(.*)\.min\.js  $1/builder/build.php?v=$1&compactness=0&features=$2 [L]
-RewriteRule ^src/picoquery([\d\.]+)-(.*)\.cmpct\.js  $1/builder/build.php?v=$1&compactness=2&features=$2 [L]
-RewriteRule ^src/picoquery([\d\.]+)-(.*)\.very-compact\.js  $1/builder/build.php?v=$1&compactness=2&features=$2 [L]
-RewriteRule ^src/picoquery([\d\.]+)-(.*)\.compact\.js  $1/builder/build.php?v=$1&compactness=5&features=$2 [L]
-RewriteRule ^src/picoquery([\d\.]+)-(.*)\.devel\.js  $1/builder/build.php?v=$1&compactness=10&features=$2 [L]
+RewriteRule ^src/picoquery([\d\.]+)-(.*)\.optimized\.js  $1/builder/build.php?v=$1&compactness=3&features=$2 [L]
+RewriteRule ^src/picoquery([\d\.]+)-(.*)\.devel\.js  $1/builder/build.php?v=$1&compactness=9&features=$2 [L]
+RewriteRule ^src/picoquery([\d\.]+)-(.*)\.js  $1/builder/build.php?v=$1&compactness=5&features=$2 [L]
 
 
 
