@@ -22,6 +22,8 @@ Unsupported signatures
 */
 on:function(events, handler) {
   return __EACH__(this, function(el) {
+    // The third parameter "useCapture" is according to web standards optional and defaults to false.
+    // However, in Firefox 2-6, it is non-optional
     el.addEventListener(events, handler, false);
   });
 }

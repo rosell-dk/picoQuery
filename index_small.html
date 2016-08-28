@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>picoQuery</title>
+  <style>
+  body {font-size: 1.2em; margin:0; padding:0}
+  a {color: black; font-size: 1.5em}
+
+  header {display: block; padding-top:0; position: absolute; left:auto;right:auto;width: 200px}
+  header h1 {font-size: 1.5em; font-family: monospace; margin:0; padding:10px;text-align: center;}
+
+  h1 {position: absolute; top: 10px; left: 20px;}
+  .tagline {font-size: 0.5em;}
+
+  content {padding-top: 4%; display: block;background-color: white; margin:0 10%;text-align: center;}
+  content > * {}
+  content ul {text-align: left; max-width: 500px; margin: auto; list-style-type:none; margin-bottom: 4%; padding: 10px; padding-left: 40px;}
+  content li {padding: 10px 0}
+
+  sidebar {width: 300px; background-color: #eee; border: 1px solid #ccc; padding: 0 10px; float: right; margin: 2%; display: block;}
+  sidebar h3, sidebar h4 {font-size: 1.0em;}
+  sidebar h4 {margin-bottom: 5px;}
+  sidebar ul {margin: 0; padding: 0 0 0 20px;}
+  sidebar li {margin: 0; padding: 4px 0;font-size: 0.8em;}
+  </style>
+</head>
+<body>
+<!--
+  <header>
+    <h1>picoQuery<br><span class="tagline">A down to 1k replacement of jQuery</span></h1>
+    <br>
+  </header>-->
+<!--
+  <sidebar>
+    <h3>Roadmap</h3>
+    <h4>Version 0.2</h4>
+    <ul>
+      <li>Support a bit more of the jQuery API</li>
+      <li>Do not include helper-functions that aren't needed</li>
+      <li>Helper-functions that are only used in one place will be inlined</li>
+      <li>Document all methods with JSDoc comments</li>
+    </ul>
+    <h4>Version 0.3</h4>
+    <ul>
+      <li>Provide a CDN</li>
+      <li>Support a larger subset of the jQuery API</li>
+    </ul>
+    <h4>Further ahead</h4>
+    <ul>
+      <li>Provide a tool which can automatically find out which parts of the jQuery API your code is using (using Google Closure Compiler</li>
+      <li>Unit tests</li>
+      <li>Build options for <i>tweaking</i>. Ie if ".removeClass()" has been selected, there will be a tweak option available to not support the signature .removeClass(function), but only .removeClass(classname).</li>
+      <li>Build option for making picoQuery automatically fall back to jQuery when browser is too old. It makes sense to have this in the builder, because the builder can utilize knowledge of which parts of the api that are used</li>
+      <li>Build option for browser support. Ie options such as "IE8+", "IE9+" and "ECMAScript 5 compatible browsers". If for example the build is run with the "Accept IE8 partial support for querySelector", IE8+ is selected, no features is enabled besides the constructor, and automatic fallback is selected, IE8 will not fall back to jQuery. If however some feature is selected, which is not possible in IE8, it will fall back to jQuery (or IE8+ option will be disabled).</li>
+    </ul>
+  </sidebar>-->
+  <content>
+    
+    <p>picoQuery is a <span style="font-size:30px">ridicously small</span> alternative to jQuery. It has the same syntax, so nothing new to learn. For IE8 and other older browsers, it automatically falls back to jQuery.
+    </p>
+    <br>
+    <a href="builder/">Try the builder</a><br><br><br>
+    <a href="https://github.com/rosell-dk/picoQuery">Go to project page on github</a>
+  </content>
+
+</body>
+</html>

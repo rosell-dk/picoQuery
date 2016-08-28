@@ -87,12 +87,28 @@ elseif (isset($_GET['file'])) {
 elseif (isset($_GET['v'])) {
 //  print_r($_GET);
 
-  // Code URL:    https://picoquery.com/code?v=0.2&comments=none&minify=functions,all&fallback=jquery&methods=addclass,css,each
+  // CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-2fa0.min.js
+  // CDN URL, format #2:     https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js
+  // !!! TODO: BUT... how to diffentiate? !!!
+
+  // Builder URL, format #1: http://picoquery.com/builder/0.2/?build=2fa0.min.js
+  // Builder URL, format #2: http://picoquery.com/builder/0.2/?build=addClass-css.min.js
+
+
+  //         http://picoquery.com/build?v=0.2&features=addclass-css-each
+  // Builder URL: http://picoquery.com/builder/0.2/basic-click-nofallback.min.js
+
+  // Alternative code URLs
+  // https://picoquery.com/code?v=0.2&comments=none&minify=functions,all&fallback=jquery&methods=addclass,css,each
   // or...        https://picoquery.com/code?v=0.2&compactness=8&methods=addclass,css,each
   // or...        https://picoquery.com/src/picoquery0.2-addclass-css-each.min.js [min.js | max.js | readable.js]
   // or...        https://picoquery.com/src/picoquery0.2-full.min.js [min.js | max.js | readable.js]
   // or...        https://picoquery.com/src/picoquery0.2-full-nofallback.min.js [min.js | max.js | readable.js]
   // or...        https://picoquery.com/src/picoquery0.2-basic-click.min.js [min.js | compact.js | .js | max.js]
+  // or...        https://picoquery.com/build?v=0.2&features=addclass-css-each
+
+  // http://github.e-sites.nl/zeptobuilder/
+  // maybe uglify ?
 
   // Builder URL: https://picoquery.com/builder/0.2/basic-click-nofallback.min.js
 
@@ -449,7 +465,7 @@ function remove_unused_helpers($js) {
     global $inline_all_helpers;
 //$inline_all_helpers = TRUE;
 // ($helper[0] == 'EACH') || 
-    $treshold = 1;
+    $treshold = 100;
     if (($inline_all_helpers) || (($numCallsToHelper > 0) && ($numCallsToHelper <= $treshold))) {
       // Inline the helper
       // Ie. "if(__IS_FUNCTION__(value))" will become: "if(typeof value == "function")
@@ -579,7 +595,7 @@ function remove_unused_helpers($js) {
 
 ?><?php if ($comments_build_id): ?>/* picoQuery.com/builder/ */
 <?php endif; ?>
-(function(w,d<?php if ($use_optimized_methods) {echo ',z';} ?>) {
+(function(w,d,u<?php if ($use_optimized_methods) {echo ',z';} // TODO: Detect if u and z are used. u can be tested For example with the javascript parser ?>) {
 <?php
 include_helpers();
 ?>
@@ -606,6 +622,11 @@ include_constructor();
   // ;['<?php echo implode("', '", $enabled_event_methods) ? >'].forEach(function(a) {
   // I(['<?php echo implode("', '", $enabled_event_methods) ? >'], function(a) {
 
+  /* TODO: If there are only few events, its probably cheaper to create them at the prototype object
+    click: function(b) {
+      return b ? this.on('click',b) : this.trigger('click')
+    }
+  */
 ?>
   ;['<?php echo implode("', '", $enabled_event_methods) ?>'].forEach(function(a) {
     P.prototype[a] = function(b){
@@ -641,10 +662,14 @@ include_constructor();
     - Opera Mini 8+
     - Android Browser 2.1+
     - Blackberry browser 7+
-    - Chrome for Android 49+
-    - Firefox for Android 45+
+    - Chrome for Android 51+
+    - Firefox for Android 47+
     - IE mobile 10+
     - UC Browser for Android 9.9+
+
+    But also "createEvent", if .trigger() is selected. (It has almost same browser support as addEventListener.
+                             but: IE mobile 11+ )
+    http://caniuse.com/#feat=dispatchevent
 
     (source: http://caniuse.com/#feat=queryselector and http://caniuse.com/#feat=addeventlistener)
     According to caniuse.com, this collection of browsers are currently used for about 96% of all visits globally. 

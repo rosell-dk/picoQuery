@@ -4,6 +4,6 @@
 }
 
 [[INLINE_VERSION]]
-void 0===[[ARG1]]
+u===[[ARG1]]
 
 

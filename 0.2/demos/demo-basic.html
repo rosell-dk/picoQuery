@@ -28,7 +28,55 @@ All this, just to explain why we here include picoQuery inline, instead of doing
 -->
 <!--<script src="http://picoquery.com/builder/picoquery.js.php?build=0.2-5-0-3000"></script>-->
 <!--  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
-<script src="http://picoquery/builder/0.2/picoquery.js.php?build=9-ff56"></script>
+<!--<script src="http://picoquery/builder/0.2/build.php?build=9-fff7"></script>-->
+<script>
+(function(w,d,u) {
+
+  // constructor
+  function P(a,b){if(typeof a>'s'){if(a[0]=='<'){var el=d.createElement('div');el.innerHTML=a;this.e=[el.firstChild]}else{this.e=[].slice.call(d.querySelectorAll(a))}}else if(typeof a == "function"){return $(d).ready(a)}else if(a.nodeType){this.e=[a]}else if(a instanceof P){this.e=a.e}else if(a.length){this.e=[].slice.call(a)}else{this.e=[]}}
+
+  // methods
+  P.prototype = {
+    addClass:function(value){return this.e.forEach(function(el){if(el.classList){el.classList.add(value)}else{el.className+=' '+value}})},
+    append:function(){var a=arguments;return this.e.forEach(function(el){for(var i=0;i<a.length;i++){$(a[i]).e.forEach(function(el2){el.appendChild(el2)})}})},
+    appendTo:function(t){this.e.forEach(function(el){$(t).append(el)});return this},
+    css:function(a,b){u===b?this.e[0].style[a]:this.e.forEach(function(c){c.style[a]=b});return this},
+    each:function(fn){this.e.forEach(function(el,index){fn.call(el,index,el)});return this},
+    first:function(){return $(this.e[0])},
+    get:function(index){return u===index?this.e:this.e[index]},
+    hide:function(fn){this.css('display','none')},
+    on:function(events,handler){return this.e.forEach(function(el){el.addEventListener(events,handler,false)})},
+    ready:function(handler){if(/^u|ng/.test(document.readyState))this.on('DOMContentLoaded',function(){handler($)});else{handler($)}return this},
+    removeClass:function(className){this.e.forEach(function(el){el.className=el.className.replace(new RegExp('\b'+className.replace(' ','\b|\b')+'\b','g'),' ')});return this},
+    trigger:function(eventType){this.e.forEach(function(el){var ev=document.createEvent('HTMLEvents');ev.initEvent(eventType,true,false);el.dispatchEvent(ev)});return this},
+  }
+
+  // Standard events
+  ;['click', 'focus', 'keyup'].forEach(function(a) {
+    P.prototype[a] = function(b){
+      return b ? this.on(a,b) : this.trigger(a)
+    }
+  });
+
+  if (!w.$) {
+    w.$ = function() {
+      // Allow to create new instances without new
+      return function(a,b) {
+        return new P(a,b);
+      };
+    }();
+
+    // Fallback to jQuery
+    if ((!d.querySelectorAll) || (!d.addEventListener)) {
+      document.write('<scrip' + 't src="https://code.jquery.com/jquery-1.9.1.min.js"><' + '/script>');
+    }
+
+    
+  }
+})(window,document)
+
+
+</script>
 <script>
 $(function() {
 //  alert('ready');
@@ -89,5 +137,6 @@ $(function() {
   <span id="clickmetoo" class="clickable">Click me to view the value of a css property</span><br>
   <span id="clickmethree" class="clickable">Click me to trigger an event</span><br>
 
+Note: "trigger" isn't well tested across browsers. I got the code from youmightnotneedjquery.com, so its probably pretty ok.
 </body>
 </html>

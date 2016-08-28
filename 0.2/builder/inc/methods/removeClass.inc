@@ -273,6 +273,7 @@ removeClass: function(className) {
 //    el.className=el.className.split(" ").filter(function(v){return (" "+className+" ").indexOf(v)==-1}).join(" ");
     // el.className = el.className.split(" ").filter(function(v){return (" " + className + " ").indexOf(v) >= 0}).join(" ");
 
+//    j='\\b';el.className=el.className.replace(new RegExp(j+className.replace(' ',j+'|'+j)+j,'g'),' ');
     el.className=el.className.replace(new RegExp('\\b'+className.replace(' ','\\b|\\b')+'\\b','g'),' ');
   });
   return this
@@ -289,6 +290,13 @@ removeClass: function(b){
 }*/
 removeClass: function(b){
   __EACH__(this,function(a){
+    // Actually, the junk variable-version produces bigger gzip
+    // So we do not do this:
+    // z='\\b';a.className=a.className.replace(new RegExp(z+b.replace(' ',z+'|'+z)+z,'g'),' ');    
+
+    // And filter version is also results in larger gzip:
+    // a.className=a.className.split(" ").filter(function(v){return!(" "+b+" ").match(' '+v+' ')}).join(" ");
+
     a.className=a.className.replace(new RegExp("\\b"+b.replace(" ","\\b|\\b")+"\\b","g")," ")
   });
   return this

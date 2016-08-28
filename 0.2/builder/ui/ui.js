@@ -243,7 +243,7 @@ function getSizeString(sizeInBytes) {
 
 function generateCode() {
 //alert('generating code...');
-  var url = 'picoquery.js.php?build=' + buildBuildId();
+  var url = 'build.php?build=' + buildBuildId();
   var jqXHR = $.ajax(url)
   .done(function() {
     $('#code').html(jqXHR.responseText);
