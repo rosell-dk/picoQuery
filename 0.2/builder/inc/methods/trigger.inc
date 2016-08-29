@@ -104,7 +104,7 @@ trigger: function(eventType) {
 */
   });
   return this;
-},
+}
 
 // OPTIMIZED_VERSION //
 trigger: function(a) {
