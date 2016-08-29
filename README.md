@@ -65,7 +65,9 @@ jQuery is quite a download (100k compressed). If you want to be friendly to your
 <h3>A beer challenge</h3>
 picoQuery aims to be as lightweight as almost theoretically possible. I literally spend hours to find ways to save a few bytes - it's become a sport. Find a way to squeze more bytes out, and I'll buy you a beer! - Write me: beerchallenge[at]rosell.dk
 
-<h3>Credits/links</h3>
+<h3>Links</h3>
 picoQuery is originally based on picoCSS, available here: https://github.com/vladocar/picoCSS
 Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
+There exists a library called 'zepto', which also implements a subset of jQuery. zepto implements almost the full jQuery api. Its also modular, but the feature selector is not as fine grained as picoquery, and its not possible to get below ~10k gzipped (picoQuery is ~1k, jQuery is ~100k). http://zeptojs.com/
+
 
