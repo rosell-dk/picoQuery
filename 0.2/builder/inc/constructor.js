@@ -54,16 +54,22 @@ function P(a,b) {
     this.e = [];
   }
 
-  // IF FEATURE: core:array-like:brackets
-  // Make our picoQuery object array-like, in the sense that it is accessible with []
-/*
+  // IF FEATURE: core:array-like
+  // Make our picoQuery object array-like, in the sense that it is accessible with [], and it has a "length" property
+
   for (var i=0; i<this.e.length; i++) {
     this[i] = this.e[i];    
   }
+  // IF FEATURE: core:array-like
+  this.length = this.e.length;
 
-  // IF FEATURE: core:array-like:length
-  this.length = this.e.length;*/
+  // We could also add the splice method in order for console.log to display
+  // it like an array, as jQuery does.
+  // http://elijahmanor.com/jquery-object-quacks-like-an-array-duck/
+  // For now, we choose not to, as we fail to see much value in it.
+  // this.splice = [].splice;
+
 }
 
 // OPTIMIZED_VERSION //
-function P(a,c){if(typeof a>"s")if("<"==a[0]){z=d.createElement("div");z.innerHTML=a;this.e=[z.firstChild]}else this.e=__TO_ARRAY__(d.querySelectorAll(a));else{if(__IS_FUNCTION__(a))return $(d).ready(a);this.e=a.nodeType?[a]:a instanceof P?a.e:a.length?__TO_ARRAY__(a):[]}};
+function P(a,c){if("s"<typeof a)if("<"==a[0]){z=d.createElement("div");z.innerHTML=a;this.e=[z.firstChild]}else this.e=__TO_ARRAY__(d.querySelectorAll(a));else{if(__IS_FUNCTION__(a))return $(d).ready(a);this.e=a.nodeType?[a]:a instanceof P?a.e:a.length?__TO_ARRAY__(a):[]}for(b=0;b<this.e.length;b++)this[b]=this.e[b];this.length=this.e.length};

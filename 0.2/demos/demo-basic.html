@@ -72,6 +72,15 @@ $(function() {
   $('#clickmethree').click(function(e) {
     $('#clickme').click();
   });
+
+  var $li = $('li');
+//alert($li.length);
+
+  for (var i=0; i<$li.length; i++) {
+    $($li[i]).css('text-decoration', 'underline')
+  }
+  console.log($li);
+
 });
 
 </script>

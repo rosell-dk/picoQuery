@@ -289,6 +289,12 @@ function include_javascript($filename) {
 
 function include_method($feat_nameid) {
   $js = include_javascript('inc/methods/' . $feat_nameid . '.inc');
+
+  // If "array-like" feature isn't disabled, substitute "this.e[...]" with "this[...]"
+  // TODO: Create the feature, and check it.
+  $js = str_replace('this.e[', 'this[', $js);
+
+
   $js = indent($js, 4, TRUE);
   echo $js;
 }

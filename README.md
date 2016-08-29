@@ -46,6 +46,11 @@ $('#clickme').click(function(e) {
 // Append with "appendTo()" and "append()"
 $('<b>bold</b>').appendTo($('body'));
 $('body').append('<b>bold</b>', '<i>italic</i>');
+
+// Access the jQuery object like an array
+var numItems = $('li').length;
+var firstItem = $('li')[0];
+
 </script>
 ```
 
