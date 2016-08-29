@@ -289,7 +289,7 @@ function include_javascript($filename) {
 
 function include_method($feat_nameid) {
   $js = include_javascript('inc/methods/' . $feat_nameid . '.inc');
-  $js = indent($js, 2, TRUE);
+  $js = indent($js, 4, TRUE);
   echo $js;
 }
 
@@ -332,7 +332,7 @@ function include_methods() {
 
 function include_constructor() {
   $js = include_javascript('inc/constructor.js');
-  $js = indent($js, 1, TRUE);
+  $js = indent($js, 3, TRUE);
   echo $js;
 }
 
@@ -602,26 +602,35 @@ function remove_unused_helpers($js) {
 
 ?>
 (function(w,d,u<?php if ($use_optimized_methods) {echo ',z';} // TODO: Detect if u and z are used. u can be tested For example with the javascript parser ?>) {
+  if (d.querySelectorAll && d.addEventListener) {
+    if (!w.$) {
+
 <?php
 include_helpers();
 ?>
+      $ = function() {
+        // Allow to create new instances without new
+        return function(a,b) {
+          return new P(a,b);
+        };
+      }();
 
-  // constructor
+      // constructor
 <?php
 include_constructor();
 ?>
 
 
-  // methods
-  P.prototype = {
+      // methods
+      $.fn = P.prototype = {
 <?php
   include_methods();
 ?>
 
-  }
+      }
 <?php if (count($enabled_event_methods) > 0):?>
 
-  // Standard events
+      // Standard events
 <?php
   // TODO: Make ITERATE work here
   // like this: __ITERATE__(['<?php echo implode("', '", $enabled_event_methods) ? >'], function(a) {
@@ -634,25 +643,21 @@ include_constructor();
     }
   */
 ?>
-  ;['<?php echo implode("', '", $enabled_event_methods) ?>'].forEach(function(a) {
-    P.prototype[a] = function(b){
-      return b ? this.on(a,b) : this.trigger(a)
-    }
-  });
+      ;['<?php echo implode("', '", $enabled_event_methods) ?>'].forEach(function(a) {
+        $.fn[a] = function(b){
+          return b ? this.on(a,b) : this.trigger(a)
+        }
+      });
 
 <?php endif;?>
-  if (!w.$) {
-    w.$ = function() {
-      // Allow to create new instances without new
-      return function(a,b) {
-        return new P(a,b);
-      };
-    }();
+    }        
+  }
+  else {
+    // jQuery fallback
+    d.write('<scrip' + 't src="http://code.jquery.com/jquery-1.9.1.min.js"><' + '/script>');
+  }
+})(window,document)
 
-    // Fallback to jQuery
-    if ((!d.querySelectorAll) || (!d.addEventListener)) {
-      document.write('<scrip' + 't src="https://code.jquery.com/jquery-1.9.1.min.js"><' + '/script>');
-    }
 
     <?php
 /*    The browser must support both "querySelectorAll" and "addEventListener". This mounts to the following browsers:
@@ -683,9 +688,6 @@ include_constructor();
     Note that IE8 is treated as an "old" browser here, as it does not support "addEventListener". As a happy coincidence, IE8 is the only browser where querySelectorAll does not support CSS3 selectors. The criteria thus ensures that querySelectorAll is only used on browsers that supports CSS3 selectors.
     */
     ?>
-
-  }
-})(window,document)
 
 <?php
 
