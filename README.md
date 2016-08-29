@@ -68,6 +68,6 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 <h3>Links</h3>
 - picoQuery is originally based on picoCSS, available here: https://github.com/vladocar/picoCSS
 - Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
-- There exists a library called '''Zepto.js''', which also implements a subset of jQuery. '''Zepto.js''' implements almost the full jQuery api. Its also modular, but the feature selector is not as fine grained as picoquery, and its not possible to get below ~10k gzipped (picoQuery is ~1k, jQuery is ~100k). http://zeptojs.com/
+- There exists a library called *Zepto.js*, which also implements a subset of jQuery. *Zepto.js* implements almost the full jQuery api. Its also modular, but the feature selector is not as fine grained as picoquery, and its not possible to get below ~10k gzipped (picoQuery is ~1k, jQuery is ~100k). http://zeptojs.com/
 
 
