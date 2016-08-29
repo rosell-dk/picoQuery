@@ -29,9 +29,15 @@ All this, just to explain why we here include picoQuery inline, instead of doing
 <!--<script src="http://picoquery.com/builder/picoquery.js.php?build=0.2-5-0-3000"></script>-->
 <script src="test.js"></script>
 <script>
+
+$.fn.test = function() {
+  alert('extended');
+}
+
 $(function() {
 //  alert('ready');
-  $('#clickme').addClass('red-text').test();
+  $('#clickme').addClass('red-text');
+  $('#clickme').test();
 
   $('ul li').css('background-color', 'red');
 //alert($('ul li').css('background-color'));
