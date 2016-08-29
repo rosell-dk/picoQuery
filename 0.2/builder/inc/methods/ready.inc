@@ -26,5 +26,5 @@ ready:function(handler) {
 
 // OPTIMIZED_VERSION //
 ready: function(a) {
-  if(/^u|ng/.test(document.readyState))this.on("DOMContentLoaded",function(){a($)});else a($);return this;
+  /^u|ng/.test(d.readyState)?this.on("DOMContentLoaded",function(){a($)}):a($);return this;
 }
