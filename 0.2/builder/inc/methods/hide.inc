@@ -1,3 +1,3 @@
-  hide: function(fn) {
-    this.css('display','none');
-  }
+hide: function() {
+  this.css('display','none');
+}
