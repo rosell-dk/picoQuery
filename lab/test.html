@@ -28,76 +28,42 @@ All this, just to explain why we here include picoQuery inline, instead of doing
 -->
 <!--<script src="http://picoquery.com/builder/picoquery.js.php?build=0.2-5-0-3000"></script>-->
 <!--
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src=http://code.jquery.com/jquery-1.9.1.min.js></script>
 -->
-<script src="../../builder/0.2/build.php?build=5-ffff17"></script>
+<script src="test.js"></script>
+
 <script>
-var p$ = $;
-$ = undefined;
-</script>
-<script src="zepto.js"></script>
-<script>
-var z$ = $;
-</script>
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-<script>
+
+$.fn.test = function() {
+  alert('extended');
+}
+//$('<div/>').addClass('test').addClass('kurt');
+
+
+var greppedArray = jQuery.grep(['one', 'two', 'three'], function (el,i) {
+  return (i==1);
+});
+
+//alert(greppedArray);
+
 
 $(function() {
-  
 
-console.log(!~-1);
-console.log(!~0);
-console.log(!~1);
 //  alert('ready');
-//  $('span').filter(':nth-of-type(odd)').addClass('red-text');
-/*
-  $('span').filter($('span:nth-of-type(odd)')).addClass('red-text');
-  $('span').filter('*').addClass('red-text');
+  var spans = $('span');
+  spans.filter('.clickable').addClass('red-text');
+//  spans.addClass('red-text');
 
+  return
 
-  console.log('jQuery');
-  console.log($(document).parent());
-  console.log($(document).parent().filter('li'));
-  console.log($('li').parent());
-*/
-  // Now swap to zepto
-/*
-  $=z$;
-  console.log('zepto');
+//  $('#clickme').addClass('red-text');
 
-  console.log($(document));
-  console.log($('html').parent());
-  console.log($('body').parent().parent());
-  console.log($('body').parent().parent().parent());
-*/
-
-  // Now swap to picoQuery
-  $=p$;
-/*
-  console.log('picoQuery');
-  console.log($(document).parent());
-  console.log($(document).parent().filter('li'));
-  console.log($('li').parent());
-
-
-//  console.log($('body').parent().parent().parent().parent());
-
-/*  console.log($('body').e[0]);
-  console.log($('body').e[0].parentElement);
-  console.log($('body').e[0].parentElement.parentElement);
-  console.log($('body').e[0].parentElement.parentElement.parentElement);*/
-
-//  return;
-  $('#clickme').addClass('red-text');
+  $('#clickme').test();
 
   $('ul li').css('background-color', 'red');
 //alert($('ul li').css('background-color'));
 
   $('<b>bold</b>').appendTo($('body'));
-
-//	var div = $( "<div>hej</div>" ).appendTo( "body" );
 
   $('body').append('<b>bold</b>', '<i>italic</i>');
 
@@ -126,15 +92,6 @@ console.log(!~1);
   $('#clickmethree').click(function(e) {
     $('#clickme').click();
   });
-
-  var $li = $('li');
-//alert($li.length);
-
-  for (var i=0; i<$li.length; i++) {
-    $($li[i]).css('text-decoration', 'underline')
-  }
-  console.log($li);
-
 });
 
 </script>
@@ -156,6 +113,5 @@ console.log(!~1);
   <span id="clickmetoo" class="clickable">Click me to view the value of a css property</span><br>
   <span id="clickmethree" class="clickable">Click me to trigger an event</span><br>
 
-Note: "trigger" isn't well tested across browsers. I got the code from youmightnotneedjquery.com, so its probably pretty ok.
 </body>
 </html>

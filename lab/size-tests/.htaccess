@@ -1,0 +1,14 @@
+
+
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Redirect "*.min.js" to "../minimizer.php?file=*.js"
+RewriteRule ^(.*).min.js  minimizer.php?file=$1.js [L]
+
+
+</IfModule>
+
+
+

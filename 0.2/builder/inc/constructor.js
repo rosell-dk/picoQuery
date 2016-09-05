@@ -1,5 +1,5 @@
 /*
-.each() 
+jQuery
 
 Description:
   Return a collection of matched elements either found in the DOM based on passed argument(s) or created by passing an HTML string.
@@ -28,7 +28,7 @@ function P(a,b) {
     // jQuery( selector )
     // TODO: Support optional [context]
     else {
-      this.e = __TO_ARRAY__(d.querySelectorAll(a));
+      this.e = __TO_ARRAY__((b||d).querySelectorAll(a));
     }
   }
   // jQuery( callback )
@@ -57,19 +57,21 @@ function P(a,b) {
   // IF FEATURE: core:array-like
   // Make our picoQuery object array-like, in the sense that it is accessible with [], and it has a "length" property
 
+  <?php if (isFeatureEnabled('arraylike')):?>
   for (var i=0; i<this.e.length; i++) {
     this[i] = this.e[i];    
   }
   // IF FEATURE: core:array-like
   this.length = this.e.length;
-
-  // We could also add the splice method in order for console.log to display
+  // We also add the splice method in order for console.log to display
   // it like an array, as jQuery does.
   // http://elijahmanor.com/jquery-object-quacks-like-an-array-duck/
-  // For now, we choose not to, as we fail to see much value in it.
-  // this.splice = [].splice;
+  // (although it does not seem to have any production value... tempted to let go...)
+  this.splice = [].splice;
+
+  <?php endif;?>
 
 }
 
 // OPTIMIZED_VERSION //
-function P(a,c){if("s"<typeof a)if("<"==a[0]){z=d.createElement("div");z.innerHTML=a;this.e=[z.firstChild]}else this.e=__TO_ARRAY__(d.querySelectorAll(a));else{if(__IS_FUNCTION__(a))return $(d).ready(a);this.e=a.nodeType?[a]:a instanceof P?a.e:a.length?__TO_ARRAY__(a):[]}for(b=0;b<this.e.length;b++)this[b]=this.e[b];this.length=this.e.length};
+function P(a){if("s"<typeof a)if("<"==a[0]){z=d.createElement("div");z.innerHTML=a;this.e=[z.firstChild]}else this.e=__TO_ARRAY__(d.querySelectorAll(a));else{if(__IS_FUNCTION__(a))return $(d).ready(a);this.e=a.nodeType?[a]:a instanceof P?a.e:a.length?__TO_ARRAY__(a):[]}<?php if (isFeatureEnabled('arraylike')):?>for(z=0;z<this.e.length;z++)this[z]=this.e[z];this.length=this.e.length;this.splice = [].splice;<?php endif;?>};

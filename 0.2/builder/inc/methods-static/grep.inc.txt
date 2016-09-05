@@ -1,0 +1,57 @@
+/*
+jQuery.grep()
+
+Description:
+  Finds the elements of an array which satisfy a filter function. The original array is not affected.
+  http://api.jquery.com/jQuery.grep/
+
+Partially supported signatures: 
+  
+  jQuery.grep( array, function [,invert] ) => Array
+     array [ArrayLikeObject]: 
+        The array-like object to search through.
+     function [ Object elementOfArray, Integer indexInArray]: 
+        The function to process each item against. The first argument to the function 
+        is the item, and the second argument is the index. The function should return 
+        a Boolean value.  this will be the global window object.
+     invert [boolean]: If "invert" is false, or not provided, then the function returns
+        an array consisting of all elements for which "callback" returns true. If 
+        "invert" is true, then the function returns an array consisting of all elements 
+        for which "callback" returns false.
+     
+  invert parameter isn't supported.
+
+*/
+$.grep = function(elems, callback) {
+  return [].filter.call(elems, callback);
+  /* jQuery implementation:
+	grep: function( elems, callback, inv ) {
+		var retVal,
+			ret = [],
+			i = 0,
+			length = elems.length;
+		inv = !!inv;
+
+		// Go through the array, only saving the items
+		// that pass the validator function
+		for ( ; i < length; i++ ) {
+			retVal = !!callback( elems[ i ], i );
+			if ( inv !== retVal ) {
+				ret.push( elems[ i ] );
+			}
+		}
+
+		return ret;
+	},
+  */
+  /* zepto implementation: (note: zepto does not support 'inv' parameter)
+  $.grep = function(elements, callback){
+    return filter.call(elements, callback)
+  }
+*/
+}
+// OPTIMIZED_VERSION //
+$.grep = function(a, b) {
+  return [].filter.call(a, b);
+}
+

@@ -5,16 +5,16 @@
 RewriteEngine On
 
 # Redirect for example "picoquery-0.2-B5-b040.js" to "/builder/0.2/build.php?build=5-b040.js"
-RewriteRule ^src/picoquery-([\d\.]+)-B(.*)  http://sensorlog.rosell.dk/ [L]
+# RewriteRule ^src/picoquery-([\d\.]+)-B(.*)  http://sensorlog.rosell.dk/ [L]
 # $1/builder/build.php?build=$2 [L]
 
 # Redirect "builder/[version]" to "[version]/builder/index.html"
 RewriteRule ^builder/([\d\.]+)/?$  $1/builder/index.html [L]
 
 # Redirect "builder/[version]/*" to "[version]/builder/*"
-RewriteRule ^builder/([\d\.]+)/(.*)  $1/builder/$2 [L]
+RewriteRule ^builder/([\d\.]+)/(.*)$  /$1/builder/$2 [L,R=302]
 
-# Redirect "builder/" to "0.2/builder/"
+# 302 Redirect "builder/" to LATEST version: "0.2/builder/"
 RewriteRule ^builder/$  /builder/0.2/ [L,R=302]
 
 

@@ -1,6 +1,6 @@
 <?php
 header("Content-type: application/javascript;charset=UTF-8");
-require_once('features.inc');
+require_once('build-options.inc');
 
 
 function hexstr2binstr($hexstr) {
@@ -69,9 +69,22 @@ if (isset($_GET['build'])) {
   $features_to_include = hexstr2flagsarray($features_to_include);
 
 //global $features_by_id;
-  foreach ($features_to_include as $index => $flag) {
-    if ($flag == TRUE) {
-      enableFeatureByIndex($index);
+//  foreach ($features_to_include as $index => $flag) {
+  global $buildoptions_nameids;
+  foreach ($buildoptions_nameids as $index => $nameid) {
+    $nameid = getFeatureNameIdByIndex($index);
+    if (!isset($features_to_include[$index])) {
+      $features_to_include[$index] = FALSE;
+    }
+    if (isFeatureDefaultEnabled($nameid)) {
+      if ($features_to_include[$index] == TRUE) {
+        disableFeatureByNameId($nameid);
+      }
+    }
+    else {
+      if ($features_to_include[$index] == TRUE) {
+        enableFeatureByNameId($nameid);
+      }
     }
   }
 
@@ -176,7 +189,7 @@ if (isset($compactness)) {
 // Calculate feature flags.
 // This variable used in the end of this file for the builder url comment
 $feature_flags = array();
-foreach ($feature_nameids as $i => $feat) {
+foreach ($buildoptions_nameids as $i => $feat) {
   $feature_flags[] = isFeatureEnabled($feat)?1:0;
 }
 
@@ -185,6 +198,15 @@ enableFeatureByNameId('ready'); // Constructor is dependent on this
 enableFeatureByNameId('on');
 if (isFeatureEnabled('appendTo')) {
   enableFeatureByNameId('append');
+}
+if (isFeatureEnabled('hide')) {
+  enableFeatureByNameId('css');
+}
+if (isFeatureEnabled('next') || isFeatureEnabled('prev') || isFeatureEnabled('parent')) {
+  enableFeatureByNameId('filter');
+}
+if (isFeatureEnabled('filter')) {
+  enableFeatureByNameId('parent');
 }
 
 $enabled_event_methods = array();
@@ -201,7 +223,7 @@ if (count($enabled_event_methods) > 0) {
 
 
 if ($minify_functions || $minify_all) {
-  include('lib/JShrink.php');
+  include('../../lib/JShrink.php');
 }
 
 ob_start(); 
@@ -287,32 +309,36 @@ function include_javascript($filename) {
 }
 
 
-function include_method($feat_nameid) {
-  $js = include_javascript('inc/methods/' . $feat_nameid . '.inc');
+function include_method($feat_nameid, $type = 'instance') {
+  $js = include_javascript('inc/methods-' . $type . '/' . $feat_nameid . '.inc');
 
   // If "array-like" feature isn't disabled, substitute "this.e[...]" with "this[...]"
   // TODO: Create the feature, and check it.
-  $js = str_replace('this.e[', 'this[', $js);
+//  $js = str_replace('this.e[', 'this[', $js);
 
 
-  $js = indent($js, 4, TRUE);
+  $js = indent($js, ($type == 'instance' ? 4 : 3), TRUE);
   echo $js;
 }
 
-function include_methods() {
-  $files = scandir(getcwd() . '/inc/methods');
+function include_methods($type = 'instance') {
+  $files = scandir(getcwd() . '/inc/methods-' . $type);
 
   $methods = array();
 
   foreach ($files as $i => $filename) {
     $m = array();
-
     // Only include inc files
     if (!preg_match('/(.*).inc$/', $filename, $m)) continue;
 
-    // Only include method if feature is enabled
+    // Only include method if feature is enabled, and its a method
     $feat_nameid = $m[1];
-    if (!isFeatureEnabled($feat_nameid)) continue;
+    if ($type == 'instance') {
+      if (!isFeatureEnabledInstanceMethod($feat_nameid)) continue;
+    }
+    if ($type == 'static') {
+      if (!isFeatureEnabledStaticMethod($feat_nameid)) continue;
+    }
 
     // Do not include standard event methods
     // - we include them after the prototype declaration
@@ -321,18 +347,30 @@ function include_methods() {
 
     $methods[] = $feat_nameid;
 //    echo $feat_id;
-    
-
   }
 
-  foreach ($methods as $i => $feat_nameid) {
-    include_method($feat_nameid);
-    if ($i < count($methods) - 1) {
-      echo ",\n";
+  if (count($methods) > 0) {
+    if ($type == 'instance') {
+      echo "\n\n      // methods\n";
+      echo "      $.fn = P.prototype = {\n";
+
+      foreach ($methods as $i => $feat_nameid) {
+        include_method($feat_nameid, $type);
+        if ($i < count($methods) - 1) {
+          echo ",";
+        }
+        echo "\n";
+      }
+      echo "      }\n";
+    }
+    elseif ($type == 'static') {
+      echo "\n\n      // static methods\n";
+      foreach ($methods as $i => $feat_nameid) {
+        include_method($feat_nameid, $type);
+        echo "\n";
+      }
     }
   }
-
-
 }
 
 
@@ -347,14 +385,16 @@ $helpers = array(
   array('IS_FUNCTION', 'isFunction', 'i'),
   array('IS_UNDEFINED', 'isUndefined', 'u'),
   array('TO_ARRAY', 'toArray', 't'),
-  array('ITERATE', 'iterate', 'I'),   // Iterate normal array. Use instead of "for (var i=0; ..."
+  array('ITERATE', 'iterate', 'I'),     // Iterate normal array. Use instead of "for (var i=0; ..."
+  array('MAP', 'map', 'm'),             // Map normal array
+  array('PROPERTY_FUNC', 'prop', 'p'),  // Used with map.
 );
 $helpers_output = array();
 $helpers_inline = array();
 
 // jparser-1-0-0 http://timwhitlock.info/blog/2009/11/jparser-and-jtokenizer-released/
 // alternative parsers, tokenizers: http://stackoverflow.com/questions/3571303/is-there-a-javascript-lexer-tokenizer-in-php/36030252#36030252
-require 'lib/jtokenizer.php';
+require '../../lib/jtokenizer1.0.0.php';
 // parse javascript arguments - even multiline.
 // ie: "value, 'tejst', function(el) {}" => ['args'=>['value', "'text'", 'function(el) {}']]
 // If input string has extra code after the last argument, it will be returned in "extra"
@@ -607,14 +647,20 @@ function remove_unused_helpers($js) {
 }
 
 ?>
-(function(w,d,u<?php if ($use_optimized_methods) {echo ',z';} // TODO: Detect if u and z are used. u can be tested For example with the javascript parser ?>) {
-  if (d.querySelectorAll && d.addEventListener) {
+(function(w,d,u,$<?php if ($use_optimized_methods) {echo ',z';} // TODO: Detect if u and z are used. u can be tested For example with the javascript parser ?>) {
+<?php if (isFeatureEnabled('fallback')):?>
+  if ([].indexOf) {
+<?php endif;?>
     if (!w.$) {
 
 <?php
 include_helpers();
+
+// It could be tempting not to declare $, so it overides the global.
+// However, we want it to work along with other libraries - including jQuery
+// And we do not want a picoQuery query like this: $.parent() to return a jQuery $
 ?>
-      $ = function() {
+      w.$ = $ = function() {
         // Allow to create new instances without new
         return function(a,b) {
           return new P(a,b);
@@ -624,16 +670,9 @@ include_helpers();
       // constructor
 <?php
 include_constructor();
+include_methods('static');
+include_methods('instance');
 ?>
-
-
-      // methods
-      $.fn = P.prototype = {
-<?php
-  include_methods();
-?>
-
-      }
 <?php if (count($enabled_event_methods) > 0):?>
 
       // Standard events
@@ -657,16 +696,19 @@ include_constructor();
 
 <?php endif;?>
     }        
+<?php if (isFeatureEnabled('fallback')):?>
   }
   else {
-    // jQuery fallback
-    d.write('<scrip' + 't src="http://code.jquery.com/jquery-1.9.1.min.js"><' + '/script>');
+    // jQuery fallback 
+    d.write('<scrip' + 't src=http://code.jquery.com/jquery-1.9.1.min.js><' + '/script>');
   }
-})(window,document)
+<?php endif;?>
+})(window,document);<?php
 
+/*
+  We do not need quotes around attribute values: https://mathiasbynens.be/notes/unquoted-attribute-values
 
-    <?php
-/*    The browser must support both "querySelectorAll" and "addEventListener". This mounts to the following browsers:
+    The browser must support both "querySelectorAll" and "addEventListener". This mounts to the following browsers:
 
     - IE9+
     - Edge 12+
@@ -688,13 +730,21 @@ include_constructor();
                              but: IE mobile 11+ )
     http://caniuse.com/#feat=dispatchevent
 
+    But we are also interested in Array.prototype.indexOf (for .filter())
+    Its supported in FF4+, IE9+, SF4+, Opera 10.5+, Konq 4.9+ and all modern browsers.
+    It seems (likely) that all browsers meeting this criteria also meets the two other criteria
+    http://kangax.github.io/compat-table/es5/
+    Also, the test is quite small: 
+    if ([].indexOf) versus
+    if (d.querySelectorAll && d.addEventListener) {
+
+
     (source: http://caniuse.com/#feat=queryselector and http://caniuse.com/#feat=addeventlistener)
     According to caniuse.com, this collection of browsers are currently used for about 96% of all visits globally. 
 
     Note that IE8 is treated as an "old" browser here, as it does not support "addEventListener". As a happy coincidence, IE8 is the only browser where querySelectorAll does not support CSS3 selectors. The criteria thus ensures that querySelectorAll is only used on browsers that supports CSS3 selectors.
     */
     ?>
-
 <?php
 
 $js = ob_get_clean();
@@ -719,7 +769,9 @@ if (TRUE) {
     $hex .= dechex(intval($fourflags, 2));
   }
 
-  echo "/* picoquery.com/builder/0.2/?" . $compactness . "-" . $hex . " */\n";
+  if (isFeatureEnabled('builderurl')) {
+    echo "/* picoquery.com/builder/0.2/?" . $compactness . "-" . $hex . " */\n";
+  }
 }
 echo $js;
 ?>

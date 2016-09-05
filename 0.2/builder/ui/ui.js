@@ -1,22 +1,171 @@
 var bid = '';
 
-function populateVersions(cb) {
-  // TODO: Get avalailable versions with ajax call
-  var versions = ['0.1', '0.2'];
-  for (var i=0; i<versions.length; i++) {
-    var key, value
-    key = value = versions[i];
-    $option = $("<option></option>").attr("value",key).text(value);
-    $('#version_selector').append($option); 
-  }
-  cb.apply()
+var FULL=0, PARTIAL=1, NONE=2;
+
+var general_meta = {
+  'arraylike': [
+    'Array-like',
+    'Make our picoQuery object array-like, in the sense that it is accessible with [], and it has a "length" property'
+  ],
+  'builderurl': [
+    'Add builder url',
+    'Adds comment in top of the code with an url to this builder PLUS a string which uniquely describes the selected build options. This enables you to easily change the build in the future, where you may need to extend the selection of methods. Just follow the link, and the builder will initialize with those build options, which was selected for that build'
+  ],
+  'fallback': [
+    'Fallback to jQuery',
+    'Make picoQuery automatically fall back to jQuery for unsupported browsers'
+  ],
+}
+
+var methods_meta = {
+  'addClass': [
+    'http://api.jquery.com/addClass/',
+    [
+      ['.addClass( className ) => jQuery', FULL],
+      ['.addClass( function ) => jQuery', NONE],
+    ]
+  ],
+  'append': [
+    'http://api.jquery.com/append/',
+    [
+      ['.append( content [,content] ) => jQuery', FULL],
+      ['.append( function ) => jQuery', NONE],
+    ]
+  ],
+  'appendTo': [
+    'http://api.jquery.com/appendTo/',
+    [
+      ['.appendTo( target ) => jQuery', FULL],
+    ]
+  ],
+  'click': [
+    'http://api.jquery.com/click/',
+    [
+      ['.click( handler ) => jQuery', FULL],
+      ['.click( eventData, handler ) => jQuery', NONE],
+      ['.click() => jQuery', FULL],
+    ]
+  ],
+  'css': [
+    'http://api.jquery.com/css/',
+    [
+      ['.css( propertyName ) => String', FULL],
+      ['.css( propertyNames ) => String', NONE],
+      ['.css( propertyName, value ) => jQuery', FULL],
+      ['.css( propertyName, function ) => jQuery', NONE],
+      ['.css( properties ) => jQuery', NONE],
+    ]
+  ],
+  'each': [
+    'http://api.jquery.com/each/',
+    [
+      ['.each( function ) => jQuery', FULL],
+    ]
+  ],
+  'filter': [
+    'http://api.jquery.com/filter/',
+    [
+      ['.filter(selector) => jQuery', FULL, 'Note though, as with all selectors in picoQuery, only standard CSS3 selectors are supported. The special JQuery selectors, such as ":button", etc are not supported'],
+      ['.filter(elements) => jQuery', FULL],
+      ['.filter(selection) => jQuery', FULL],
+      ['.filter(function) => jQuery', NONE],
+    ],
+  ],
+  'first': [
+    'http://api.jquery.com/first/',
+    [
+      ['.first() => jQuery', FULL],
+    ],
+  ],
+  'focus': [
+    'http://api.jquery.com/focus/',
+    [
+      ['.focus( handler ) => jQuery', FULL],
+      ['.focus( eventData, handler ) => jQuery', NONE],
+      ['.focus() => jQuery', FULL],
+    ]
+  ],
+  'get': [
+    'http://api.jquery.com/get/',
+    [
+      ['.get( index ) => Element', FULL],
+      ['.get( ) => Elements', FULL],
+    ],
+  ],
+  'hide': [
+    'http://api.jquery.com/hide/',
+    [
+      ['.hide( ) => jQuery', FULL],
+      ['.hide( [ duration ][, complete ]) => jQuery', NONE],
+      ['.hide( options) => jQuery', NONE],
+      ['.hide( [ duration ][, easing][, complete ]) => jQuery', NONE],
+    ],
+  ],
+  'keyup': [
+    'http://api.jquery.com/keyup/',
+    [
+      ['.keyup( handler ) => jQuery', FULL],
+      ['.keyup( [eventData], handler ) => jQuery', NONE],
+      ['.keyup() => jQuery', FULL],
+    ]
+  ],
+  'next': [
+    'http://api.jquery.com/next/',
+    [
+      ['.next( [selector] ) => jQuery', FULL, 'Note though, as with all selectors in picoQuery, only standard CSS3 selectors are supported. The special JQuery selectors, such as ":button", etc are not supported'],
+    ]
+  ],
+  'on': [
+    'http://api.jquery.com/on/',
+    [
+      ['.on( events, handler ) => jQuery', PARTIAL, 'Multiple events are NOT SUPPORTED - only one event name may be specified. Namespaces such as "keydown.myPlugin" are not supported.'],
+      ['.on( events ) => jQuery', PARTIAL, 'Same restrictions as above apply'],
+      ['.on( events [,selector] [,data], handler ) => jQuery', NONE],
+      ['.on( events [,selector] [,data] ) => jQuery', NONE],
+    ]
+  ],
+  'parent': [
+    'http://api.jquery.com/next/',
+    [
+      ['.parent( [selector] ) => String', FULL, 'Note though, as with all selectors in picoQuery, only standard CSS3 selectors are supported. The special JQuery selectors, such as ":button", etc are not supported'],
+    ]
+  ],
+  'prev': [
+    'http://api.jquery.com/prev/',
+    [
+      ['.prev( [selector] ) => jQuery', FULL, 'Note though, as with all selectors in picoQuery, only standard CSS3 selectors are supported. The special JQuery selectors, such as ":button", etc are not supported'],
+    ]
+  ],
+  'ready': [
+    'http://api.jquery.com/ready/',
+    [
+      ['.ready( handler ) => jQuery', FULL, ],
+    ],
+  'This is not just an alias for .on("DOMContentLoaded"). As in jQuery, handler is also called in cases where the DOMContentLoaded event has already fired at the time this method is called'
+  ],
+  'removeClass': [
+    'http://api.jquery.com/prev/',
+    [
+      ['.removeClass( className ) => jQuery', FULL],
+      ['.removeClass( ) => jQuery', NONE],
+      ['.removeClass( function ) => jQuery', NONE],
+    ]
+  ],
+  'trigger': [
+    'http://api.jquery.com/trigger/',
+    [
+      ['.trigger( eventType ) => jQuery', FULL],
+      ['.trigger( eventType, extraParameters ) => jQuery', NONE],
+    ]
+  ]
+
 }
 
 
 /*
 function versionChanged() {
-//TODO  loadFeatures();
-  $('#features').empty();
+//TODO  loadBuildOptions();
+  $('#buildoptions').empty();
 
   var tokens = bid.split('-');
   tokens[0] = $('#version_selector').val();
@@ -24,9 +173,10 @@ function versionChanged() {
   setBuildId(tokens.join('-'));
 }*/
 
-function populateFeaturesPanel(features) {
-//alert(JSON.stringify(features));
-  features.sort(function (a, b) {
+function populateOptionsPanel(buildoptions) {
+//alert(JSON.stringify(buildoptions));
+console.log(buildoptions);
+  buildoptions.sort(function (a, b) {
     if (a.nameid < b.nameid) {
       return -1;
     }
@@ -36,26 +186,125 @@ function populateFeaturesPanel(features) {
     return 0;
   });
 
-  for (var i=0; i<features.length; i++) {
-    var feature = features[i];
-    var index = feature['index']+1;
-//alert(name);
-//    $('#features').append('<div class="feature"><input name="feature-' + i + '" type="checkbox"/>' + feature['id'] + '</div>');
-//    $('#features').append('<div class="feature"><input id="feature_' + (feature['index']+1) + '" type="checkbox" value="' + (feature['index']+1) + '"></input><label for="feature_' + (i+1) + '">' + feature['nameid'] + '</label><div class="help-icon">?</div></div>');
-    $('#features').append('<div class="feature"><input id="feature_' + index + '" type="checkbox" value="' + index + '"></input><label for="feature_' + index + '">.' + feature['nameid'] + '()</label></div>');
+  for (var i=0; i<buildoptions.length; i++) {
+    var buildoption = buildoptions[i];
+    if (buildoption['is_method']) continue;
+    var index = buildoption['index']+1;
+    var label = buildoption['nameid'];
+    var meta = general_meta[buildoption['nameid']];
+    if (meta) {
+      label = meta[0];
+    }
+    
+    var html = '<div class="buildoption" nameid=""><input id="buildoption_' + index + '" type="checkbox" value="' + index + '" default_enabled="true"></input><label for="buildoption_' + index + '">' + label + '</label>';
+
+    if (meta && meta[1]) {
+      var helpicon = '<span class="icon-info"></span>';
+      html += '<div class="help-icon">' + helpicon + '</div><div class="helptext">' + meta[1] + '</div></div>'
+    }
+
+    $('#general').append(html);
   }
-//  $('.feature:first-child > input').attr('checked', 'checked');
+
+  for (var i=0; i<buildoptions.length; i++) {
+    var buildoption = buildoptions[i];
+    if (!buildoption['is_method']) continue;
+
+    var index = buildoption['index']+1;
+//alert(name);
+//    $('#buildoptions').append('<div class="buildoption"><input name="buildoption-' + i + '" type="checkbox"/>' + buildoption['id'] + '</div>');
+//    $('#buildoptions').append('<div class="buildoption"><input id="buildoption_' + (buildoption['index']+1) + '" type="checkbox" value="' + (buildoption['index']+1) + '"></input><label for="buildoption_' + (i+1) + '">' + buildoption['nameid'] + '</label><div class="help-icon">?</div></div>');
+    var helptext = '';
+    meta = methods_meta[buildoption['nameid']];
+    if (meta) {
+      var signatures = meta[1];
+    }
+    if (signatures) {
+//      helptext += meta[0];
+      var sigmap = [];
+      for (var j=0; j<signatures.length; j++) { 
+        var signature = signatures[j];
+        if (!sigmap[signature[1]]) {
+          sigmap[signature[1]] = [];
+        }
+        sigmap[signature[1]].push(signature);
+      }
+      for (var j=0; j<sigmap.length; j++) {
+        if (!sigmap[j]) continue;
+        helptext += '<div class="signatures">';
+        helptext += '<h4>';
+        switch (j) {
+          case FULL:
+            helptext += 'Fully supported signatures:';
+            break;
+          case PARTIAL:
+            helptext += 'Partially supported signatures:';
+            break;
+          case NONE:
+            helptext += 'Unsupported signatures:';
+            break;        
+        }
+        helptext += '</h4>';
+        for (var k=0; k<sigmap[j].length; k++) {
+          var signature = sigmap[j][k];
+          helptext += '<span class="signature">';
+          helptext += signature[0];
+          if (j == PARTIAL) {
+//            helptext += '<img src="ui/help.svg" width="15" height="15"/>';
+          }
+          helptext += '</span>';
+          if (signature[2]) {
+            helptext += '<span class="note">' + signature[2] + '</span>';
+          }
+        }
+        helptext += '</div>';
+      }
+      if (meta && meta[2]) {
+        helptext += '<div class="notes">' + meta[2] + '</div>';
+      }
+    }
+    var html = '<div class="buildoption" nameid=""><input id="buildoption_' + index + '" type="checkbox" value="' + index + '"></input><label for="buildoption_' + index + '">.' + buildoption['nameid'] + '()</label>';
+    if (meta) {
+
+      var warn = (sigmap[PARTIAL] || sigmap[NONE]);
+      var helpicon;
+      if (warn) {
+//        helpicon = '<img src="ui/warn.svg"/>';
+        helpicon = '<span class="icon-warning"></span>';
+//        helpicon = '<span class="icon-warning2"></span>';
+//        helpicon = '<span class="incomplete">info</span>';
+      }
+      else {
+//        helpicon = '<span class="complete">info</span>';
+//        helpicon = '<img src="ui/help.svg"/>';
+        helpicon = '<span class="icon-info"></span>';
+//        helpicon = '<span class="icon-info"></span>';
+      }
+      helpicon = '<a href="' + meta[0] + '" target="_blank">' + helpicon + '</a>';
+
+      html += '<div class="help-icon' + (warn?' warning':'') + '">' + helpicon + '</div><div class="helptext">' + helptext + '</div></div>'
+    }
+    $('#methods').append(html);
+  }
+//  $('.buildoption:first-child > input').attr('checked', 'checked');
 
 //  $('#popup').css('top', $(this).offset().top);
 
-  $('.feature').change(generateCode);
+  $('.buildoption').change(generateCode);
+
+  $('.buildoption .help-icon').hover(function() {
+    $(this).parent('div').find('.helptext').show();
+  }, function() {
+    $(this).parent('div').find('.helptext').hide();
+  });
+
 /*
-  $('.feature .help-icon').hover(function(e) {
-    $feature = $(this).parent('div');
-    $('#popup h4').text($feature.find('label').text());
+  $('.buildoption .help-icon').hover(function(e) {
+    $buildoption = $(this).parent('div');
+    $('#popup h4').text($buildoption.find('label').text());
     $('#popup pre').text('');
     $('#popup').show();
-    var filename = $feature.find('label').text().replace(/\.|\(|\)/g, '');
+    var filename = $buildoption.find('label').text().replace(/\.|\(|\)/g, '');
     var jqXHR = $.ajax( $('#version_selector').val() + '/api.php?method=' + filename, {'dataType': 'text'} )
     .done(function() {
       $('#popup pre').text(jqXHR.responseText);
@@ -66,7 +315,7 @@ function populateFeaturesPanel(features) {
 
   }, function () {
   });*/
-//alert($('.feature')[0]);
+//alert($('.buildoption')[0]);
 }
 
 
@@ -99,7 +348,9 @@ function buildBuildId() {
     $checkboxes.each(function() {
       var i = $(this).val() - 1;
       maxI = Math.max(i, maxI);
-      if ($(this).is(':checked')) {
+
+      var invertFlag = ($(this).attr('default_enabled') == 'true');
+      if (invertFlag^$(this).is(':checked')) {
         flags[i] = '1';
       }
 //      flags += ($(this).is(':checked') ? '1' : '0');
@@ -109,6 +360,8 @@ function buildBuildId() {
         flags[i] = '0';
       }
     }
+
+
     // convert flags to hex string
     var hex = '';
     for (var i=0; i<flags.length; i+=4) {
@@ -142,11 +395,11 @@ function buildBuildId() {
       break;
   }
 
-  // Features
-  var featuresHex = calculateHexFromCheckboxes($('.feature > input'));
+  // buildoptions
+  var buildoptionsHex = calculateHexFromCheckboxes($('.buildoption > input'));
 
-//  bid = v + '-' + commentFlagsHex + '-' + minFlagsHex + '-' + featuresHex;
-  bid = compactnessFlagsHex + '-' + featuresHex;
+//  bid = v + '-' + commentFlagsHex + '-' + minFlagsHex + '-' + buildoptionsHex;
+  bid = compactnessFlagsHex + '-' + buildoptionsHex;
   return bid;
 }
 
@@ -177,7 +430,11 @@ function setBuildId(buildId) {
   function setCheckboxesByFlags($checkboxes, flags) {
     $checkboxes.each(function() {
       var i = parseInt($(this).val()) - 1;
-      $(this).prop('checked', (i<flags.length && flags[i]));
+
+      // If option is "default enabled", it means that the flag for this option
+      // must be inverted
+      var default_enabled = ($(this).attr('default_enabled') == 'true')
+      $(this).prop('checked', default_enabled^(i<flags.length && flags[i]));
     });
   }
 
@@ -213,31 +470,31 @@ function setBuildId(buildId) {
   var minifyFlags = hexstr2flagsarray(minify, 1);
   setCheckboxesByFlags($('#minify_panel .checkbox-list input'), minifyFlags);*/
 
-  // Features
-  var features = tokens[1];
-  var featureFlags = hexstr2flagsarray(features, 0);
+  // buildoptions
+  var buildoptions = tokens[1];
+  var buildOptionFlags = hexstr2flagsarray(buildoptions, 0);
 
-//  function loadFeatures(v, cb) {
-  function loadFeatures(cb) {
-    var jqXHR = $.ajax('features.php', {'dataType': 'json'} )
+//  function loadBuildOptions(v, cb) {
+  function loadBuildOptions(cb) {
+    var jqXHR = $.ajax('build-options-json.php', {'dataType': 'json'} )
     .done(function() {
       cb.call({}, jqXHR.responseJSON);
     })
     .fail(function() {
-      alert('failed loading features for specified version');
+      alert('failed loading buildoptions for specified version');
     })
   }
 
-//  loadFeatures(version, function(responseJSON) {
-  loadFeatures(function(responseJSON) {
-    populateFeaturesPanel(responseJSON);
-    setCheckboxesByFlags($('.feature input'), featureFlags);
+//  loadBuildOptions(version, function(responseJSON) {
+  loadBuildOptions(function(responseJSON) {
+    populateOptionsPanel(responseJSON);
+    setCheckboxesByFlags($('.buildoption input'), buildOptionFlags);
     generateCode();
   });
 }
 
 function getSizeString(sizeInBytes) {
-  return (sizeInBytes > 1024 ? (Math.round(sizeInBytes / 1024 * 10) / 10) + ' kb' : sizeInBytes + ' bytes');
+  return (sizeInBytes > 1024 ? '<span title="' + sizeInBytes +' bytes">' + (Math.round(sizeInBytes / 1024 * 10) / 10) + ' kb</span>' : sizeInBytes + ' bytes');
 }
 
 function generateCode() {
@@ -286,7 +543,7 @@ $(document).ready(function() {
   $('#popup').hover(function() {}, function (){
     $('#popup').hide();
   }); 
-  $('.feature label').hover(function() {
+  $('.buildoption label').hover(function() {
     $('#popup').hide();
     }, function (){
   }); 
@@ -307,51 +564,50 @@ $(document).ready(function() {
 
   $('[name="compactness"]').on('change', function() {
 //    alert('t');
-//    $('.feature input').prop('checked', $(this).is(':checked'));
+//    $('.buildoption input').prop('checked', $(this).is(':checked'));
     generateCode();
   });
 
   $('#commenting_panel .checkbox-list input').on('change', generateCode);
   $('#minify_panel .checkbox-list input').on('change', generateCode);
 
-  $('#select_all_features').on('change', function() {
+  $('#select_all_methods').on('change', function() {
 //    alert('t');
-    $('.feature input').prop('checked', $(this).is(':checked'));
+    $('#methods .buildoption input').prop('checked', $(this).is(':checked'));
     generateCode();
   }).prop('checked', false);  // http://api.jquery.com/prop/ */
 
 
-  populateVersions(function() {
   // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
   // Builder URL, format #2: http://picoquery.com/builder/0.2/?addClass-css.min.js
 
-    if ((location.search) && (location.search.indexOf('?') == 0)) {
+  if ((location.search) && (location.search.indexOf('?') == 0)) {
 //      alert(location.search.charAt(1));
-      if (!isNaN(location.search.charAt(1))) {
-        // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
-        setBuildId(location.search.substr(1));
+    if (!isNaN(location.search.charAt(1))) {
+      // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
+      setBuildId(location.search.substr(1));
 
-      }
-      else {
-        var a = location.search.substr(1).split('.');
-        var compactness = 5;
-        switch (a[1]) {
-          case 'min':
-            compactness = 0;
-            break;
-          case 'optimized':
-            compactness = 3;
-            break;
-          case 'devel':
-            compactness = 9;
-            break;
-        }
-      }
     }
     else {
-      setBuildId('5-0000');
+      var a = location.search.substr(1).split('.');
+      var compactness = 5;
+      switch (a[1]) {
+        case 'min':
+          compactness = 0;
+          break;
+        case 'optimized':
+          compactness = 3;
+          break;
+        case 'devel':
+          compactness = 9;
+          break;
+      }
     }
-  });
+  }
+  else {
+    setBuildId('5-0000');
+  }
+
 
 
 

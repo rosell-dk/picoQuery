@@ -1,0 +1,78 @@
+Generally having similar argument names in the function results in better compression. We started out using a system like this:
+
+each:function(a){this.e.forEach(function(b,c){a.call(b,c,b)});return this},
+on:function(a,b){this.e.forEach(function(c){c.addEventListener(a,b,!1)});return this},
+
+That is, first argument is 'a', then 'b', etc. In inner function continue.
+
+However, its better compressed, if we start from a new offset in the inner functions:
+
+each:function(a){this.e.forEach(function(m,n){a.call(m,n,m)});return this},
+on:function(a,b){this.e.forEach(function(m){m.addEventListener(a,b,!1)});return this},
+
+Why this? The reason lies in the LZ77 part of the deflate compression, which is used in gzip.
+The second time a string "function(m" is met in the code, LZ77 can just reference it.
+In the original system, inner function definitions start with "function(b", if the outer function
+takes 1 parameter, "function(c", if it takes two, etc. By having all inner functions that takes
+a parameter start with "function(m", we ensure better compression
+
+Here is a good introduction to deflate and LZ77:
+http://www.gzip.org/deflate.html
+
+Our system can however be further improved: 
+each:function(a){this.e.forEach(function(b,bb){a.call(b,bb,b)});return this},
+on:function(a,aa){this.e.forEach(function(b){b.addEventListener(a,aa,!1)});return this},
+
+Although the improved version uses more characters, its compressed size is smaller.
+Why this?
+This time, its about two thing: The places that the variables are used, and the other part of the deflate
+algoritm: Huffman encoding.
+
+First: Similar variable names increases the chance of reusage.
+Examples:
+- the string "b,b" occours three times in this string: "function(b,bb){a.call(b,bb,b)"
+- the string "u===a" occours both in "u===a" and in "u===aa"
+  (btw: we can optimize further by writing a===u instead, 
+   because "a===u?" occours both in "a===u?" and in "aa===u?")
+- the string "[a" occours both in "[a" and "[aa"
+
+Second:
+We end up with code containing a lot of "a"'s. Hoffman encoding ensures that these "a"'s will be represented
+with less than 8 bits. Perhaps 4 or 5 bits, I'm guessing.
+
+But we can improve further. Because we should choose a letter, which is already used a lot in the rest
+of the script. This can be demonstrated by the fact that we actually do worse than the original, if we apply
+the second method, but uses uppercase letters instead (there are almost no uppercase letters in the rest
+of the code)
+
+In this test, these characters did best:
+'a', 'd', 'e' (860 bytes)  ('d' is already taken (document))
+'s' (861 bytes)
+'c' (862 bytes)
+'b', 'r', 't' (863 bytes)
+'l' (864 bytes)
+
+
+From this, it follows that 'z' is a poor name for the junk variable.
+
+Also, always put string literal on the same side of a comparison,
+Ie: the string "'==a" occours two times in here: ('<'==a || 'ev'==aa)
+but only one time here: ('<'==a || aa=='ev')
+
+In HTML, there are a lot of attributes, <img src="xxx">, so there are a lot of '="'
+Therefore it may result in lower gzip size to put the string behind.
+
+Another thing to take away is that we should use the same type of quotes everywhere.
+As its custom to use double-quotes in HTML, we should use double-quotes when our 
+script is inlined (our script will then be gzipped along with a lot of HTML containing
+more double quotes than single quotes).
+When picoQuery is saved as an external script, it should also use double quotes,
+because most jQuery code does, and our script might be concatted with jQuery code
+
+
+
+Links regarding optimizing for gzip:
+http://programmers.stackexchange.com/questions/321364/do-javascript-minifiers-optimize-for-gzip
+
+
+

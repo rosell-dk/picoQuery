@@ -1,5 +1,5 @@
 <?php
-header("Content-type: text/javascript;charset=UTF-8");
+header("Content-type: application/javascript;charset=UTF-8");
 require_once('features.inc');
 
 if (!isset($_GET['build'])) {
@@ -56,7 +56,7 @@ list($comments_build_id, $comments_method_signatures, $comments_method_descripti
 list($minify_functions, $minify_all) = hexstr2flagsarray($min, 2);
 
 if ($minify_functions || $minify_all) {
-  include('lib/JShrink.php');
+  include('../../lib/JShrink.php');
 }
 
 if ($minify_all) {

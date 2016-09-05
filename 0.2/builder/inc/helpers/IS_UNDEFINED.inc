@@ -4,6 +4,6 @@
 }
 
 [[INLINE_VERSION]]
-u===[[ARG1]]
+[[ARG1]]===u
 
 

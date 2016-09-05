@@ -68,6 +68,25 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 <h3>Links</h3>
 - picoQuery is originally based on picoCSS, available here: https://github.com/vladocar/picoCSS
 - Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
-- There exists a library called *Zepto.js*, which also implements a subset of jQuery. *Zepto.js* implements almost the full jQuery api. Its also modular, but the feature selector is not as fine grained as picoquery, and its not possible to get below ~10k gzipped (picoQuery is ~1k, jQuery is ~100k). http://zeptojs.com/
+- There exists a library called *Zepto.js*, which also implements a subset of jQuery. *Zepto.js* implements almost the full jQuery api. Its also modular, but the feature selector is not as fine grained as picoquery, and its not possible to get below ~10k gzipped (picoQuery is ~1k, jQuery 1.9.1 is ~37k). http://zeptojs.com/
+
+<h3>New in 0.2</h3>
+- Uses "$" instead of "p$", so picoQuery can be a drop-in replacement of jQuery
+- Automatically falls back to jQuery (can be disabled in builder)
+- Defines $.fn, so you can easily extend the picoQuery prototype with yet unsupported methods
+- picoQuery object is now array-like, like jQuery (can be disabled)
+- In order to easily change picoQuery build on a project, there now is an URL in the top of the code, which loads the builder and initializes it with he selected build options (can be disabled)
+- Instead of a fine-grain selection of what which type of comments should be included and which parts that should be minified, you now select between 4 versions
+- Non-minified code is more readable
+- Optimization. Various tricks has been applied to get the code even smaller. In 0.1, gzip size of a full minified version was 743 bytes. In 0.2, if you disable the new features, gzip size is 734 bytes.
+
+- TODO: CDN. Not just full versions - ALL combinations! (a pull server). It will probably be on URLs like these: https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js. I will also allow URLs like these: https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js. That is: You can specify the build options directly in the URL, so you don't have to go to the builder in order to add a feaure.
+
+- TODO: new methods: .filter(), .next(), .parent()
+
+<h3>Roadmap</h3>
+- 0.3: A lot of efford has already gone into making the library as small as possible. In version 0.3, focus will be on getting the gzip even smaller. Lessons learned can be applied when writing upcomming methods.
+- 0.4: Focus will be unit tests
+- 0.5: Focus will be browser tests. I will apply for a free "open source" account on browsershack.com
 
 

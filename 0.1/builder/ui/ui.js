@@ -157,15 +157,25 @@ function setBuildId(buildId) {
   });
 }
 
+function getSizeString(sizeInBytes) {
+  return (sizeInBytes > 1024 ? (Math.round(sizeInBytes / 1024 * 10) / 10) + ' kb' : sizeInBytes + ' bytes');
+}
+
 function generateCode() {
 //alert('generating code...');
   var jqXHR = $.ajax( 'picoquery.js.php?build=' + buildBuildId())
   .done(function() {
     $('#code').html(jqXHR.responseText);
 
-    var sizeInBytes = jqXHR.responseText.length;
+/*    var sizeInBytes = jqXHR.responseText.length;
     var sizeInKb = Math.round(sizeInBytes / 1024 * 10) / 10;
     $('#code_size').html('(' + sizeInKb + ' kb)');
+*/
+    var compressedSize = parseInt(jqXHR.getResponseHeader('Content-Length'),10);
+    var uncompressedSize = jqXHR.responseText.length;
+    $('#code_size').html('(' + getSizeString(compressedSize) + ' gzipped) <span style="font-size:9px;">(' + getSizeString(uncompressedSize) + ' uncompressed - but remember, <a style="color:black" href="https://www.tjvantoll.com/2014/01/27/only-the-gzip-size-matters/">only the gzip size matters</a>)</span>');
+
+
   })
   .fail(function() {
     alert('failed generating picoquery.js');

@@ -1,6 +1,7 @@
 body {
   padding: 0;
   margin: 0;
+  font-size: 1em;
 }
 h1 {
   padding: 5px 20px;
@@ -20,7 +21,7 @@ column {
   vertical-align: top;
 }
 body > columns > column {
-  padding: 0 20px;
+  padding: 0 0 0 20px;
   border-right: 1px solid #ccc;
   min-width: 420px;
   height: 100%;
@@ -33,7 +34,7 @@ body > columns > column:last-child {
 column column {
   width: 50%;
 }
-column column:first-child {
+column column {
   padding-right: 20px;
 }
 
@@ -84,14 +85,10 @@ h3.panel-title {
   width: 80%;
 }
 
-#features_panel {
+#methods_panel {
 }
-#features {
+#methods {
   margin-top: 10px;
-}
-.feature .help-icon {
-  display: inline-block;
-  float: right;
 }
 
 #popup {
@@ -121,4 +118,174 @@ h3.panel-title {
   margin: 0;
   padding: 20px;
   max-width: 100%;
+}
+
+.buildoption {
+  position: relative;
+}
+.buildoption label {
+  width: 100%;
+  display: inline-block;
+  width: 165px;
+}
+.buildoption .help-icon {
+/*  display: none;*/
+  position: absolute;
+  right: 0;
+  top: 0;
+/*  float: right;*/
+/*
+  text-align: center;
+  font-size: 10px;
+  cursor: default;
+  line-height: 8px;
+  padding: 5px;
+  border-radius: 10px;
+  color: black;
+  font-weight: bold;
+  border: 1px solid #000;
+  background-color: #cfc;
+/*
+  background-color: #fff;
+  border: 1px solid #000;
+
+*/
+}
+.buildoption .help-icon .incomplete,
+.buildoption .help-icon .complete {
+  text-align: center;
+  font-size: 10px;
+  cursor: default;
+  line-height: 8px;
+  padding: 5px;
+  border-radius: 10px;
+  color: black;
+  font-weight: bold;
+  border: 1px solid #000;
+  background-color: #cfc;
+}
+.buildoption .help-icon .incomplete {
+  background-color: #eeee00;
+}
+.buildoption .help-icon .complete {
+/*  background-color: #3366ff;*/
+  background-color: #99dd00;
+}
+.buildoption:hover {
+/*  background-color: #ddd;*/
+}
+.buildoption:hover .help-icon {
+  display: block;
+}
+
+.buildoption .help-icon img {
+  width: 16px;
+}
+.buildoption .help-icon a {
+  cursor: pointer;
+  text-decoration: none;
+  color: #111;
+}
+.buildoption .help-icon.warning {
+  /*
+  color: #aa0;
+  background-color: #ff7;
+  */
+}
+
+.buildoption .helptext {
+  display: none;
+  position: absolute;
+  z-index:1;
+  border: 1px solid #111;
+  background-color: #eee;
+  margin: 5px 0 0 25px;
+  padding: 10px;
+  min-width: 170px;
+}
+.buildoption:nth-child(n+13) .helptext {
+  left: 170px;
+  bottom: -20px;
+}
+
+#general_panel .buildoption .helptext {
+  min-width: 350px;
+}
+/*
+.buildoption:hover .helptext {
+  display: block;
+}*/
+.buildoption .helptext h4 {
+  white-space: nowrap;
+  display: block;
+/*  font-family: sans-serif;*/
+  font-size: 1em;
+  font-weight: normal;
+/*  text-decoration:underline;*/
+  margin: 0 0 3px 0;
+  
+}
+.buildoption .helptext .signature {
+  white-space: nowrap;
+  display: block;
+  margin: 4px 0 0 0px;
+  font-family: monospace;
+  font-size: 1.1em;
+}
+.buildoption .helptext .signature:last-child {
+  margin-bottom: 20px;
+}
+
+.buildoption .helptext .signatures .note {
+  display: block;
+  font-family: serif;
+  font-size: 12px;
+  font-style: italic;
+  margin: 0 10px 10px 0px;
+}
+
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?rf1fmr');
+  src:  url('fonts/icomoon.eot?rf1fmr#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?rf1fmr') format('truetype'),
+    url('fonts/icomoon.woff?rf1fmr') format('woff'),
+    url('fonts/icomoon.svg?rf1fmr#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  color: #999;
+}
+
+.icon-warning {
+  font-size: 16px;
+  text-indent: 2px;
+  color: #eecc00;
+}
+.icon-warning:hover {
+}
+.icon-info {
+  font-size: 18px;
+  padding-right: 1px;
+  color: #3366ff;
+  color: #999;
+/*  font-weight: bold; *//* actually, this makes it prettier... */
+}
+.icon-info:hover {
 }
