@@ -3,7 +3,7 @@
 picoQuery is a <i>ultra small</i> DOM manipulation library. It has the same syntax as jQuery, so nothing new to learn. For IE8 and other older browsers, it automatically falls back to jQuery.
 
 <h3>Why is this smart?</h3>
-- Because this strategy alows picoQuery to be written for modern browsers without leaving older browsers behind. For new browsers, the benefit is ultra lightweight code (~1k). For old browsers, the benefit is simply that the webpage works (unlike other DOM-libraries written for modern browsers)
+&dash; Because this strategy alows picoQuery to be written for modern browsers without leaving older browsers behind. For new browsers, the benefit is ultra lightweight code (~1k). For old browsers, the benefit is simply that the webpage works (unlike other DOM-libraries written for modern browsers)
 
 Further, of course, the benefit is that you probably already know jQuery. And if your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery.
 
