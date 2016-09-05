@@ -712,6 +712,10 @@ Also, according to paul irish, its now an anti-pattern; https should always be u
 problems loading https resources on a http website 4) its not true anymore, that https is slower
 (if server is set up correctly - which it presumably is on jquery.com)
 
+If http content really is trivial intercepted, then I imagine that popular libraries like
+jQuery will be on the target list. It will be trivial to serve a modified version of jQuery,
+that includes malicious code.
+
 http://stackoverflow.com/questions/4978235/absolute-urls-omitting-the-protocol-scheme-in-order-to-preserve-the-one-of-the
 http://www.paulirish.com/2010/the-protocol-relative-url/
 
@@ -724,41 +728,19 @@ https://istlsfastyet.com/
 /*
   We do not need quotes around attribute values: https://mathiasbynens.be/notes/unquoted-attribute-values
 
-    The browser must support both "querySelectorAll" and "addEventListener". This mounts to the following browsers:
+  Requirements:
+    - querySelectorAll (core)   http://caniuse.com/#feat=queryselector
+    - addEventListener (core)   http://caniuse.com/#feat=addeventlistener
+    - dispatchevent (trigger)   http://caniuse.com/#feat=dispatchevent 
+    - [].indexOf (filter, etc)  http://kangax.github.io/compat-table/es5/
+    - Element.children          https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children
 
-    - IE9+
-    - Edge 12+
-    - Firefox 3.5+
-    - Chrome 4+
-    - Safari 3.1+
-    - IOS Safari 3.2+
-    - Opera 10.1+
-    - iOS Safari 3.2+
-    - Opera Mini 8+
-    - Android Browser 2.1+
-    - Blackberry browser 7+
-    - Chrome for Android 51+
-    - Firefox for Android 47+
-    - IE mobile 10+
-    - UC Browser for Android 9.9+
+    Right now, if above tables are correct, a single test is enough.
+    Any browser that supports [].indexOf also supports the other requirements
 
-    But also "createEvent", if .trigger() is selected. (It has almost same browser support as addEventListener.
-                             but: IE mobile 11+ )
-    http://caniuse.com/#feat=dispatchevent
+    Browser support is: FF4+, IE9+, Safari 4+, Opera 10.5+, Konq 4.9+ and all modern browsers.
 
-    But we are also interested in Array.prototype.indexOf (for .filter())
-    Its supported in FF4+, IE9+, SF4+, Opera 10.5+, Konq 4.9+ and all modern browsers.
-    It seems (likely) that all browsers meeting this criteria also meets the two other criteria
-    http://kangax.github.io/compat-table/es5/
-    Also, the test is quite small: 
-    if ([].indexOf) versus
-    if (d.querySelectorAll && d.addEventListener) {
-
-
-    (source: http://caniuse.com/#feat=queryselector and http://caniuse.com/#feat=addeventlistener)
-    According to caniuse.com, this collection of browsers are currently used for about 96% of all visits globally. 
-
-    Note that IE8 is treated as an "old" browser here, as it does not support "addEventListener". As a happy coincidence, IE8 is the only browser where querySelectorAll does not support CSS3 selectors. The criteria thus ensures that querySelectorAll is only used on browsers that supports CSS3 selectors.
+    As a happy coincidence, IE8 is the only browser where querySelectorAll does not support CSS3 selectors. The criteria thus ensures that querySelectorAll is only used on browsers that supports CSS3 selectors.
     */
     ?>
 <?php

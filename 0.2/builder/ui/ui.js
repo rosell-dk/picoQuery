@@ -109,6 +109,12 @@ var methods_meta = {
       ['.keyup() => jQuery', FULL],
     ]
   ],
+  'map': [
+    'http://api.jquery.com/map/',
+    [
+      ['.map( callback ) => jQuery', FULL],
+    ]
+  ],
   'next': [
     'http://api.jquery.com/next/',
     [
@@ -125,9 +131,9 @@ var methods_meta = {
     ]
   ],
   'parent': [
-    'http://api.jquery.com/next/',
+    'http://api.jquery.com/parent/',
     [
-      ['.parent( [selector] ) => String', FULL, 'Note though, as with all selectors in picoQuery, only standard CSS3 selectors are supported. The special JQuery selectors, such as ":button", etc are not supported'],
+      ['.parent( [selector] ) => jQuery', FULL, 'Note though, as with all selectors in picoQuery, only standard CSS3 selectors are supported. The special JQuery selectors, such as ":button", etc are not supported'],
     ]
   ],
   'prev': [
