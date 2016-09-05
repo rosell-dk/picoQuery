@@ -3,12 +3,12 @@
 picoQuery is a <i>ultra small</i> DOM manipulation library. It has the same syntax as jQuery, so nothing new to learn. For IE8 and other older browsers, it automatically falls back to jQuery.
 
 <h3>Why is this smart?</h3>
-- Because this strategy alows picoQuery to be written for modern browsers without leaving older browsers behind. For new browsers, the benefit is ultra small code. For old browsers, the benefit is that the webpage works.
+- Because this strategy alows picoQuery to be written for modern browsers without leaving older browsers behind. For new browsers, the benefit is ultra lightweight code (~1k). For old browsers, the benefit is simply that the webpage works (unlike other DOM-libraries written for modern browsers)
 
 Further, of course, the benefit is that you probably already know jQuery. And if your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery.
 
 <h3>picoQuery web builder</h3>
-Another trick that allows picoQuery to be lightweight is that you can specify the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes.
+Another trick that allows picoQuery to be lightweight is that you can specify the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes gzipped.
 
 Take a look! 
 http://picoquery.com/builder/
@@ -23,12 +23,13 @@ The following methods is currently supported:
 <h3>Examples of what you can currently do with picoQuery:</h3>
 
 ```javascript
-// Construct from selector, HTML-text, DOM element, HTMLCollection or picoQuery object (cloning):
+// Construct from selector, HTML-text, DOM element, HTMLCollection or picoQuery object (cloning), and optionally with a context
 $('#contact_form .column a');
 $('<p>some <b>HTML</b></p>');
 $(document.getElementById('main'));
 $(document.getElementsByTagName('div'));
 $($('div .column'));
+$('li', $('#math').get(0));
 
 // Chaining:
 $('.some-class').css('color', 'blue').first().removeClass('some-class');
