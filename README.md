@@ -5,7 +5,7 @@ picoQuery is a <i>ultra small</i> DOM manipulation library. It has the same synt
 <h3>Why is this smart?</h3>
 &dash; Because this strategy alows picoQuery to be written for modern browsers without leaving older browsers behind. For new browsers, the benefit is ultra lightweight code (~1k). For old browsers, the benefit is simply that the webpage works (unlike other DOM-libraries written for modern browsers)
 
-Further, of course, the benefit is that you probably already know jQuery. And if your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery.
+Further, of course, the benefit is that you probably already know jQuery. And if your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery. Also, jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light.
 
 <h3>picoQuery web builder</h3>
 Another trick that allows picoQuery to be lightweight is that you can specify the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes gzipped.
