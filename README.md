@@ -63,7 +63,6 @@ $.fn.bgColor = function(bgColor) {
 }
 $('li').bgColor('blue');
 
-</script>
 ```
 
 <h3>Usecase: Above-the-fold scripting</h3>
