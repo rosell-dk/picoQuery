@@ -700,11 +700,27 @@ include_methods('instance');
   }
   else {
     // jQuery fallback 
-    d.write('<scrip' + 't src=http://code.jquery.com/jquery-1.9.1.min.js><' + '/script>');
+    d.write('<scrip' + 't src=https://code.jquery.com/jquery-1.9.1.min.js><' + '/script>');
   }
 <?php endif;?>
 })(window,document);<?php
+/*
+We could save a few bytes by changing to protocol-relative url. (src=//code.jquery..)
+But then it will not work on local files (the file:// protocol).
+Also, according to paul irish, its now an anti-pattern; https should always be used.
+1) for the security, 2) even when website is in http, its better security, 3) there are no
+problems loading https resources on a http website 4) its not true anymore, that https is slower
+(if server is set up correctly - which it presumably is on jquery.com)
 
+http://stackoverflow.com/questions/4978235/absolute-urls-omitting-the-protocol-scheme-in-order-to-preserve-the-one-of-the
+http://www.paulirish.com/2010/the-protocol-relative-url/
+
+Note: We should definitely not use src=http://, because on IE8, it triggers an annoying 
+warning about the page containing insecure content, when web page is on https
+
+Tips on how to set up https with good performance:
+https://istlsfastyet.com/
+*/
 /*
   We do not need quotes around attribute values: https://mathiasbynens.be/notes/unquoted-attribute-values
 
