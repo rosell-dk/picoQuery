@@ -4,43 +4,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>picoQuery demo</title>
-<!--
-For best performance, a webpage should ideally split the scripts needed in two.
-
-First part is for the bare essentials for viewing the part of the page that is initially visible.
-This part is best put *directly* in the HTML (that is, inline - between <script>-tags).
-The reason is that you want minimize the number of requests required to finish before the browser
-is allowed to show anything. picoQuery is made small enough so you can include it inline for this purpose.
-
-The second part of the script is for stuff that does not need to be there for the first render.
-Ie. click events, animations, footer appearance. Use defered loading for this - that is load it dynamically after the document load event. See this article: https://varvy.com/pagespeed/defer-loading-javascript.html
-
-It is not too bad to use jQuery, when it is truly defered, as the user will not notice that
-the browser is downloading and rendering more script. Your priority should therefore be to split
-the script into the mentioned parts and migrate the first part to picoQuery
-
-You can read more about this strategy here: https://varvy.com/pagespeed/render-blocking.html
-
-All this, just to explain why we here include picoQuery inline, instead of doing like this:
-
-
-
--->
-<!--<script src="http://picoquery.com/builder/picoquery.js.php?build=0.2-5-0-3000"></script>-->
-<!--
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
--->
 <script src="../../builder/0.2/build.php?build=5-ffff17"></script>
 <script>
-
-$.fn.bgColor = function(bgColor) {
-  this.css('background-color', bgColor);
-}
+var p$ = $;
+$ = undefined;
+</script>
+<script src="zepto.js"></script>
+<script>
+var z$ = $;
+</script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script>
 
 $(function() {
   
+//  alert('ready');
+//  $('span').filter(':nth-of-type(odd)').addClass('red-text');
 /*
   $('span').filter($('span:nth-of-type(odd)')).addClass('red-text');
   $('span').filter('*').addClass('red-text');
@@ -48,13 +27,35 @@ $(function() {
 
   console.log('jQuery');
   console.log($(document).parent());
-  console.log($(document).parent().filter('li'));
-  console.log($('li').parent());
+*/
+  // Now swap to zepto
+/*
+  $=z$;
+  console.log('zepto');
+
+  console.log($(document));
+  console.log($('html').parent());
+  console.log($('body').parent().parent());
+  console.log($('body').parent().parent().parent());
 */
 
-  $('li').bgColor('blue');
-//  return;
+  // Now swap to picoQuery
+  $=p$;
+/*
+  console.log('picoQuery');
+  console.log($(document).parent());
+  console.log($(document).parent().filter('li'));
+  console.log($('li').parent());
 
+
+//  console.log($('body').parent().parent().parent().parent());
+
+/*  console.log($('body').e[0]);
+  console.log($('body').e[0].parentElement);
+  console.log($('body').e[0].parentElement.parentElement);
+  console.log($('body').e[0].parentElement.parentElement.parentElement);*/
+
+//  return;
   $('#clickme').addClass('red-text');
 
   $('ul li').css('background-color', 'red');

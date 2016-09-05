@@ -1,23 +1,23 @@
 # picoQuery - A 1k alternative to jQuery
 
-picoQuery is a <i>ridicously small</i> DOM manipulation library. It has the same syntax as jQuery, so nothing new to learn. For IE8 and other older browsers, it automatically falls back to jQuery.
+picoQuery is a <i>ultra small</i> DOM manipulation library. It has the same syntax as jQuery, so nothing new to learn. For IE8 and other older browsers, it automatically falls back to jQuery.
 
 <h3>Why is this smart?</h3>
-There are other lightweight DOM manipulation libraries out there. They all face a dilemma of browser support. If they choose to drop support of old browsers, well, the webpages that uses the library won't work in older browsers. If they choose to include support of older browsers, well, the library isn't going to end up so lightweight after all (and a lot of effort has to go in to develop and test the library). picoQuery solves the dilemma by being a library created for modern browsers, but which provides a fallback for older browsers. As picoQuery is a subset of jQuery, it can use jQuery as fallback, the benefit being that jQuery is well tested for old browsers.
+- Because this strategy alows picoQuery to be written for modern browsers without leaving older browsers behind. For new browsers, the benefit is ultra small code. For old browsers, the benefit is that the webpage works.
 
-Further, of course, the benefit is that you probably already know jQuery. And if your project grows and turns out to require advanced features, migration to jQuery is just a swap away.
+Further, of course, the benefit is that you probably already know jQuery. And if your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery.
 
-<h3>picoQuery feature selector</h3>
-Another trick that allows picoQuery to be lightweight is that you can select just the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes.
+<h3>picoQuery web builder</h3>
+Another trick that allows picoQuery to be lightweight is that you can specify the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes.
 
 Take a look! 
 http://picoquery.com/builder/
 
 <h3>Before you get too excited</h3>
-I should mention that picoQuery currently only supports a small subset of jQuery functionality. I'm however working hard these days to expand it. And perhaps you want to join in? Or simply spread the word!
+I should mention that picoQuery currently only supports a small subset of jQuery functionality. It is however enough for basic DOM manipulation, and I'm working to expand it (perhaps you want to join in? Or simply spread the word!). Also, without too much efford, you can expand it yourself through $.fn (see the examples below)
 
 The following methods is currently supported: 
-.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .ready()
+.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .ready(), filter(), prev(), next(), parent().
 
 
 <h3>Examples of what you can currently do with picoQuery:</h3>
@@ -51,6 +51,18 @@ $('body').append('<b>bold</b>', '<i>italic</i>');
 var numItems = $('li').length;
 var firstItem = $('li')[0];
 
+// Filter results:
+$('span').filter(':nth-of-type(odd)').addClass('red-text');
+
+// Various tree traversal
+$('li').parent('ol').next().prev('ol');
+
+// Extend the prototype
+$.fn.bgColor = function(bgColor) {
+  this.css('background-color', bgColor);
+}
+$('li').bgColor('blue');
+
 </script>
 ```
 
@@ -78,11 +90,12 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 - In order to easily change picoQuery build on a project, there now is an URL in the top of the code, which loads the builder and initializes it with he selected build options (can be disabled)
 - Instead of a fine-grain selection of what which type of comments should be included and which parts that should be minified, you now select between 4 versions
 - Non-minified code is more readable
-- Optimization. Various tricks has been applied to get the code even smaller. In 0.1, gzip size of a full minified version was 743 bytes. In 0.2, if you disable the new features, gzip size is 734 bytes.
+- New methods: .filter(), .next(), .parent(), prev()
+- Optimization. Various tricks has been applied to get the code even smaller
 
 - TODO: CDN. Not just full versions - ALL combinations! (a pull server). It will probably be on URLs like these: https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js. I will also allow URLs like these: https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js. That is: You can specify the build options directly in the URL, so you don't have to go to the builder in order to add a feaure.
+- TODO: HTTPS, i guess
 
-- TODO: new methods: .filter(), .next(), .parent()
 
 <h3>Roadmap</h3>
 - 0.3: A lot of efford has already gone into making the library as small as possible. In version 0.3, focus will be on getting the gzip even smaller. Lessons learned can be applied when writing upcomming methods.
