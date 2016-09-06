@@ -13,12 +13,18 @@ Fully supported signatures:
  */
 children: function(selector) {
 
-  // Simple implementation using one forEach and concat()
+  // First map, then flatten-approach
+  var arr = this.e.map(function(a){return __TO_ARRAY__(a['children'])});
+  arr = [].concat.apply([], arr); // Flatten
+  return $(arr).filter(selector||'*');
+
+  // Simple implementation using one forEach and concating multiple times 
+/*
   var arr = [];
   this.e.forEach(function(el) {
     arr = arr.concat(__TO_ARRAY__(el.children));
   });
-  return $(arr).filter(selector||'*');
+  return $(arr).filter(selector||'*');*/
 
   // Simple implementation using two forEach
 /*
@@ -90,10 +96,25 @@ children: function(selector) {
 
 // OPTIMIZED_VERSION //
 children: function(a) {
-  z = [];
+  /* 
+  We have three different implementations to choose from.
+  The "first map, then flatten-approach" right now results in the heaviest
+  gzip. But it may change if other functions start using it*/
+
+  // First map, then flatten-approach (1034/550 bytes)
+  return $([].concat.apply([], this.e.map(function(a){return __TO_ARRAY__(a['children'])}))).filter(selector||'*');
+
+  // Simple implementation using one forEach and concating multiple times (1028/550 bytes)
+/*  z = [];
   this.e.forEach(function(b) {
     z = z.concat(__TO_ARRAY__(b.children));
   });
-  return $(z).filter(a||'*');
+  return $(z).filter(a||'*');*/
+
+  // Simple implementation using two forEach (1027/550 bytes)
+/*  z = [];
+  this.e.forEach(function(b) {__TO_ARRAY__(b.children).forEach(function(c) {z.push(c)})});
+  return $(z);*/
+
 }
 
