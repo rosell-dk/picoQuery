@@ -89,4 +89,4 @@ function P(a,b) {
 }
 
 // OPTIMIZED_VERSION //
-function P(a,b){if (!a){this.e = []}else if("s"<typeof a)if("<"==a[0]){z=d.createElement("div");z.innerHTML=a;this.e=[z.firstChild]}else this.e=__TO_ARRAY__((b||d).querySelectorAll(a));else{if(__IS_FUNCTION__(a))return $(d).ready(a);this.e=a.nodeType?[a]:a instanceof P?a.e:a.map?a:[a]}<?php if (isFeatureEnabled('arraylike')):?>for(z=0;z<this.e.length;z++)this[z]=this.e[z];this.length=this.e.length;this.splice = [].splice;<?php endif;?>};
+function P(a,b){if (!a){this.e = []}else if("s"<typeof a)if("<"==a[0]){z=d.createElement("div");z.innerHTML=a;this.e=[z.children]}else this.e=__TO_ARRAY__((b||d).querySelectorAll(a));else{if(__IS_FUNCTION__(a))return $(d).ready(a);this.e=a.nodeType?[a]:a instanceof P?a.e:a.map?a:[a]}<?php if (isFeatureEnabled('arraylike')):?>for(z=0;z<this.e.length;z++)this[z]=this.e[z];this.length=this.e.length;this.splice = [].splice;<?php endif;?>};

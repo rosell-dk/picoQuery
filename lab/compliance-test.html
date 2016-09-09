@@ -182,7 +182,7 @@ ok in all:
   testInAllFrameworks('$("*")', function() {return $("*");});
 
 */
-/*
+
   group('constructor');
   testInAllFrameworks('$([document, null])');
   testInAllFrameworks('$(null)');
@@ -308,7 +308,7 @@ ok in all:
   testInAllFrameworks('$("<div class=\ttest/>").addClass("t2").get(0).className');
   testInAllFrameworks('$("<div class=\'a b\'/>").addClass(function(a,b){return "b"+a+b}).get(0).className');
   testInAllFrameworks('$($("<div>text</div>").get(0).childNodes[0]).addClass("t").get(0).className');
-*/
+
   group('.removeClass( className )');
   testInAllFrameworks('$("<div class=\'test\'/>").removeClass("test").get(0).className');
   testInAllFrameworks('$("<div class=\'a b\'/>").removeClass("b").get(0).className');
