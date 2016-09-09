@@ -12,12 +12,18 @@ Fully supported signatures:
 
  */
 prev: function(selector) {
-  // If we were optimizing for speed, we would only make the filter call,
-  // when selector was supplied...
-  return $(this.e.map(function(el){return el['previousElementSibling']})).filter(selector||'*');
+  var arr = this.e.map(function(a){return a["previousElementSibling"]}); 
+
+  // Remove nulls
+  arr = arr.filter(function(item,i,r){return item != null});
+  return $(arr).filter(selector||"*");
 }
 
 // OPTIMIZED_VERSION //
 prev: function(a) {
-  return $(this.e.map(function(b){return b['previousElementSibling']})).filter(a||'*')
+  return $(this.e.map(function(b){
+    return b["previousElementSibling"]
+  }).filter(function(c){
+    return c != null
+  })).filter(a||"*")
 }

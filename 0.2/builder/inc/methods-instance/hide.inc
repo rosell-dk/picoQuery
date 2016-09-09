@@ -44,6 +44,6 @@ hide: function(a,b) {
   
 
 */
-  this.css('display','none');return this;
+  this.css("display","none");return this;
 }
 

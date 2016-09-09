@@ -183,6 +183,7 @@ ok in all:
 
 */
 
+
   group('constructor');
   testInAllFrameworks('$([document, null])');
   testInAllFrameworks('$(null)');
@@ -228,6 +229,10 @@ ok in all:
   group('.next()');
   testInAllFrameworks('$("li:first-child").next()');
   testInAllFrameworks('$("li:last-child").next()');
+
+  group('.prev()');
+  testInAllFrameworks('$("li:last-child").prev()');
+  testInAllFrameworks('$("li:first-child").prev()');
 
   group('.parent()');
   testInAllFrameworks('$("li#item3_2").parent()');
@@ -315,6 +320,10 @@ ok in all:
   testInAllFrameworks('$("<div class=\'a b c\'/>").removeClass("a b").get(0).className');
   testInAllFrameworks('$("<div class=\'a elephant\'/>").removeClass("phant").get(0).className');
 //elephant
+
+  group('.next()');
+  testInAllFrameworks('$("li:first-child").next()');
+  testInAllFrameworks('$("li:last-child").next()');
 
 });
 

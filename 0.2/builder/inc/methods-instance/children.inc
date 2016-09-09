@@ -103,7 +103,7 @@ children: function(a) {
   gzip. But it may change if other functions start using it*/
 
   // First map, then flatten-approach (1034/550 bytes)
-  return $([].concat.apply([], this.e.map(function(b){return __TO_ARRAY__(b['children'])}))).filter(a||'*');
+  return $([].concat.apply([], this.e.map(function(b){return __TO_ARRAY__(b["children"])}))).filter(a||"*");
 
   // Simple implementation using one forEach and concating multiple times (1028/550 bytes)
 /*  z = [];

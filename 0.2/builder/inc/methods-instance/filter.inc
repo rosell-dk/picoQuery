@@ -219,7 +219,7 @@ console.log([].slice.call(~(parent.querySelectorAll(selector)).indexOf(element))
 
 // OPTIMIZED_VERSION //
 filter: function(a) {
-  return (a=='*')?this:$(this.e.filter(function(b){
+  return (a=="*")?this:$(this.e.filter(function(b){
     return ~$(a, $(b).parent().e[0]).e.indexOf(b);
   }));
 }

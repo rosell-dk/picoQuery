@@ -44,6 +44,6 @@ parent: function(selector) {
 
 // OPTIMIZED_VERSION //
 parent: function(a) {
-  return $(this.e.map(function(b){return b['parentNode']}).filter(function(c,i,r){return c && r.indexOf(c) == i})).filter(a||'*');
+  return $(this.e.map(function(b){return b["parentNode"]}).filter(function(c,i,r){return c && r.indexOf(c) == i})).filter(a||"*");
 }
 
