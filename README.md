@@ -100,7 +100,8 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 
 
 <h3>Roadmap</h3>
-I'm currently finishing up the 0.2 version. Focus is on compliance.
+I'm currently finishing up the 0.2 version. Focus is on compliance. But I'm realizing that compliance costs in terms of lines of code, and that much of this compliance only is relevant in few projects. For example, one rarely needs addClass() to remove newline characters in the string or css() to add "px" to numeric values for you. So, I'm probably going to add a possibility favor size over strict compliance. Maybe just one build flag. Maybe one for each compliance.
+I'm probably also going to make it possible only to select some signatures.
 
 
 - 0.3: A lot of efford has already gone into making the library as small as possible. In version 0.3, focus will be on getting the gzip even smaller. Lessons learned can be applied when writing upcomming methods.
