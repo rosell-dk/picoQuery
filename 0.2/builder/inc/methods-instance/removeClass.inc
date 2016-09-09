@@ -279,7 +279,28 @@ removeClass: function(className) {
     // el.className = el.className.split(" ").filter(function(v){return (" " + className + " ").indexOf(v) >= 0}).join(" ");
 
 //    j='\\b';el.className=el.className.replace(new RegExp(j+className.replace(' ',j+'|'+j)+j,'g'),' ');
-    el.className=el.className.replace(new RegExp('\\b'+className.replace(' ','\\b|\\b')+'\\b','g'),' ');
+//    el.className=el.className.replace(new RegExp('\\b'+className.replace(' ','\\b|\\b')+'\\b','g'),' ');
+//el.className=el.className.replace;
+//    el.className=el.className.replace(new RegExp("\\b"+className.replace(" ","\\b|\\b")+"\\b","g")," ");
+
+
+    console.log(className.replace(' ','\\b|\\b')+'\\b');
+//el.className=el.className.replace(new RegExp('(^|\\b)'+className.replace(' ','(\\b|$)|(^|\\b)')+'(\\b|$)','g'),' ');
+
+    el.className=el.className.split(" ").filter(function(v){
+      // v is a classname currently in the element.
+      // now, determine if it should be kept.
+      // we must return true if it should be kept and false, if it should be removed
+      // if its not in the list of classnames that are going to be removed, we keep it
+
+      return className.split(" ").indexOf(v) < 0;
+
+//      return!(" "+className+" ").match(' '+v+' ')
+//      return(" "+className+" ").search(' '+v+' ')<0
+    }).join(" ");
+
+//    el.className=(' '+el.className+' ').replace(new RegExp('\\b'+className.replace(' ','\\b|\\b')+'\\b','g'),' ');
+
   });
   return this
 }
@@ -289,7 +310,9 @@ removeClass: function(className) {
 removeClass: function(b){
   return __EACH__(this,function(a){
     a.className = a.className.split(" ").filter(function(c) {
-      return!(" "+b+" ").match(' '+c+' ')}
+//      return!(" "+b+" ").match(' '+c+' ')}
+      return b.split(" ").indexOf(c) < 0;
+
     }).join(" ")
   })
 }*/
@@ -304,12 +327,20 @@ removeClass: function(a){
     b.className=b.className.replace(new RegExp("\\b"+a.replace(" ","\\b|\\b")+"\\b","g")," ")
 
     The "filter" version results in smaller zip, when .filter() is in the build
-    otherwise, the second version is smallest
+    otherwise, the second version is smallest.
+    BUT! it seems the regex version is broken!
+    AND! the new alternative filter-version with indexOf is even smaller, so it might always be shortest
+
     */
+  b.className=b.className.split(" ").filter(function(c){
+//    return!(" "+a+" ").match(' '+c+' ')  // 9 bytes longer in gzip
+      return 0 > a.split(" ").indexOf(c);
+  }).join(" ");
+
   <?php if (isFeatureEnabled('filter')):?>
-    b.className=b.className.split(" ").filter(function(c){return!(" "+a+" ").match(' '+c+' ')}).join(" ");
+//    b.className=b.className.split(" ").filter(function(c){return!(" "+a+" ").match(' '+c+' ')}).join(" ");
   <?php else:?>
-    b.className=b.className.replace(new RegExp("\\b"+a.replace(" ","\\b|\\b")+"\\b","g")," ")
+//    b.className=b.className.replace(new RegExp("\\b"+a.replace(" ","\\b|\\b")+"\\b","g")," ")
   <?php endif;?>
 
   });

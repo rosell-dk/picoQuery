@@ -1,0 +1,374 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>picoQuery compliance test</title>
+<script src="../../builder/0.2/build.php?build=5-ffff1f"></script>
+<script>
+var p$ = $;
+$ = undefined;
+</script>
+<script src="../../builder/0.2/build.php?build=0-ffff1f"></script>
+<script>
+var pmin$ = $;
+$ = undefined;
+</script>
+<script src="zepto.js"></script>
+<script>
+var z$ = $;
+</script>
+<script src="jquery-2.2.4.js"></script>
+<script>
+var j$ = $;
+</script>
+<script>
+function runInAllFrameworks(fn) {
+//  console.log('jQuery / zepto / picoQuery / picoQuery.min');
+
+  // Swap to jQuery
+  $ = j$;
+  console.log('jQuery');
+  fn.call();
+
+  // Swap to zepto
+  $ = z$;
+  console.log('zepto');
+  fn.call();
+
+  // Swap to picoQuery
+  $ = p$;
+  console.log('picoQuery');
+  fn.call();
+
+  // Swap to picoQuery optimized and minified
+  $ = pmin$;
+  console.log('picoQuery min');
+  fn.call();
+
+}
+
+window.testNumber = 0;
+function testInAllFrameworks(code,fn) {
+//  console.log('jQuery / zepto / picoQuery / picoQuery.min');
+
+  var testResults = [];
+  var frameworks = [j$, z$, p$, pmin$];
+
+  frameworks.forEach(function (framework) {
+    var result;
+    $ = framework;
+
+    try {
+//      result = fn.call();
+      eval("result = " + code);
+    }
+    catch (e) {
+      result = e;
+      console.log(e);
+    }
+    testResults.push(result);
+  });
+
+  $ = j$;
+
+  function toPrint(obj) {
+    switch (typeof obj) {
+      case 'object':
+        var html = '';
+        if (obj === null) {
+          return 'null';
+        }
+        var className = obj.constructor.toString().match(/function (\w*)/)[1];
+        if ((className == 'DOMException') || (className == 'TypeError')) {
+          html = '<span class="error" title="' + (obj['message'] ? obj.message : '') + '">' + obj.name + '<span>';
+        }
+        else if (className.match('^HTML[^E]*Element')) {
+          // Its an HTML Element
+          html = '<span class="tagname" title="' + className + '">' + obj.tagName.toLowerCase() + '</span>';
+          if (obj.id) {
+            html += '<span class="tagid">#' + obj.id + '</span>';
+          }
+          else if (obj.className) {
+            html += '<span class="tagclassname">.' + obj.className + '</span>';
+          }
+        }
+        else if (obj.splice) {
+          // Its an array (this is the same test as console.log performs)
+          var content = [];
+          for (var i=0; i<obj.length; i++) {
+            content.push(toPrint(obj[i]));
+          }
+          html = '<span class="array">[ ' + content.join(', ') + ' ]</span>';
+          if (obj.ready) {
+            
+          }
+          html = '$' + html;
+        }
+        else {
+          html = className;
+        }
+        return html;
+      default:
+        return '<span class="value">' + JSON.stringify(obj) + '</span>';
+    }
+  }
+  var tdContent = testResults.map(function(item) {
+//    return '';
+    var output = '';
+    for (var p in item) {
+      output += p + ': ' + item[p]+'; ';
+    }
+
+//    return '<td>' + output + '</td>';
+//    console.log(item);
+    return toPrint(item);
+  });
+
+  function htmlEscape(str) {
+      return str
+          .replace(/&/g, '&amp;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+  }
+
+  window.testNumber++;
+  var tr = '<tr>';
+  tr += '<td>' + window.testNumber + '</td>';
+  tr += '<td><div class="code" title="' + htmlEscape(code) + '">' + htmlEscape(code) + '</div></td>';
+  for (var i=0; i<tdContent.length; i++) {
+    tr += '<td' + ((tdContent[0] != tdContent[i]) ? ' class="mismatch"' : '') + '>' + tdContent[i] + '</td>';
+  }
+  tr += '</tr>';
+  // TODO: red backgrounds if td[2] != td[1]    
+  $('#testresults tbody').append(tr);
+//  console.log('Test #' + window.testNumber);
+//  console.log(testResults);
+}
+
+function group(caption) {
+  $('#testresults tbody').append('<tr class="group"><th colspan=6>' + caption + '</th></tr>');  
+  $('#testresults tbody').append('<tr><th>#</th><th>Code</th><th>jQuery 1.9.1 (ref)</th><th>zepto 1.2.0</th><th>picoQuery 0.2</th><th>picoQuery.min</th></tr>');
+}
+
+$(function() {
+  
+//  alert('ready');
+//  $('span').filter(':nth-of-type(odd)').addClass('red-text');
+
+//  $('span').filter($('span:nth-of-type(odd)')).addClass('red-text');
+//  $('span').filter('*').addClass('red-text');
+
+/*
+  runInAllFrameworks('$(1)', function() {
+    console.log($(document).parent());      // ok
+    console.log($([document]));             // ok
+    console.log($([document, null]));       // zepto fails to comply (it removes the null value)
+    console.log($([document, undefined]));  // zepto fails to comply (it removes the undefined value)
+    console.log($(1));                      // zepto fails to comply
+//    console.log($([1, 2]).first());         // zepto fails to comply, it returns '1', but it should be wrapped
+  });
+*/
+
+//    console.log($([document, null]));       // zepto fails to comply (it removes the null value)
+//  testInAllFrameworks('$([document, null])', function() {return $([document, null])});
+//eval('alert("hej")');
+
+/*
+ok in all:
+  testInAllFrameworks('$([document])', function() {return $([document]);});
+  testInAllFrameworks('$("*")', function() {return $("*");});
+
+*/
+/*
+  group('constructor');
+  testInAllFrameworks('$([document, null])');
+  testInAllFrameworks('$(null)');
+  testInAllFrameworks('$(0)');
+  testInAllFrameworks('$(1)');
+  testInAllFrameworks('$(false)');
+  testInAllFrameworks('$("")');
+  testInAllFrameworks('$(undefined)');
+  testInAllFrameworks('$([])');
+  testInAllFrameworks('$("a string")');
+  testInAllFrameworks('$(true)');
+  testInAllFrameworks('$([3,4])');
+  testInAllFrameworks('$($("<div>text</div>").get(0).childNodes)');
+  testInAllFrameworks('$($("<div>text</div>").get(0).childNodes[0])');
+  testInAllFrameworks('$("<div/>")');
+  testInAllFrameworks('$("<li id=one>1</li><li id=two>2</li>")');
+  testInAllFrameworks('$("li", $("ul"))');
+  testInAllFrameworks('$("li", $("ul").get())');
+  testInAllFrameworks('$("li", $("ul").get(0))');
+  testInAllFrameworks('$("ul > li:first-child")');
+  testInAllFrameworks('$([$("#item3").get()])');
+  testInAllFrameworks('$([$("#item3").get(0)])');
+  testInAllFrameworks('$("#item3").get()');
+  testInAllFrameworks('$("#item3").get(0)');
+  testInAllFrameworks('$("li", $("#item3").get())');
+  testInAllFrameworks('$("li", $("#item3").get(0))');
+  testInAllFrameworks('$("ul li:odd")');
+  testInAllFrameworks('$("<li><a></a></li>").children("a").end()'); // pushstack. Every traversal method creates a new jQuery set and builds a stack. Use .end() to get at the previous set.
+
+  group('.children()');
+  testInAllFrameworks('$("ul").children()');
+  testInAllFrameworks('$("ul").children(".odd")');
+
+  group('.first()');
+  testInAllFrameworks('$("ul li").first()');
+  testInAllFrameworks('$("ul li").first(".odd")');
+  testInAllFrameworks('$([3,4]).first()');
+  testInAllFrameworks('$([3,4]).first()');
+  testInAllFrameworks('$("ul.notexist").first()');
+  testInAllFrameworks('$(null).first()');
+  testInAllFrameworks('$(true).first()');
+
+  group('.next()');
+  testInAllFrameworks('$("li:first-child").next()');
+  testInAllFrameworks('$("li:last-child").next()');
+
+  group('.parent()');
+  testInAllFrameworks('$("li#item3_2").parent()');
+  testInAllFrameworks('$("li").parent()');
+  testInAllFrameworks('$(document).parent()');
+  testInAllFrameworks('$(document).parent().parent()');
+  testInAllFrameworks('$(1).parent()');
+  testInAllFrameworks('$([3,4]).parent()');
+
+  group('.map()');
+  testInAllFrameworks('$("li").map(function(i,elm) {return elm})');
+  testInAllFrameworks('$("li").map(function(i) {return i})');
+  testInAllFrameworks('$("li").map(function(i) {return this})');
+  testInAllFrameworks('$([3,4]).map(function(i) {return i})');
+  testInAllFrameworks('$([3,4]).map(function(i,elm) {return elm})');
+  testInAllFrameworks('$("li").map()');
+
+  group('.each()');
+  testInAllFrameworks('function(){var sum=0;$("li").each(function(i) {sum+=i});return sum}()');
+  testInAllFrameworks('function(){var els=[];$("li").each(function(i) {els.push(this)});return els}()');
+  testInAllFrameworks('function(){var els=[];$("li").each(function(i,el) {els.push(el)});return els}()');
+  testInAllFrameworks('function(){var els=[];$([3,4]).each(function(i,el) {els.push(el)});return els}()');
+
+  group('.get()');
+  testInAllFrameworks('$("li").get(0)');
+  testInAllFrameworks('$("li").get()');
+  testInAllFrameworks('$("li.noexist").get()');
+  testInAllFrameworks('$("li.noexist").get(0)');
+  testInAllFrameworks('$([0,1]).get(0)');
+  testInAllFrameworks('$(14).get(0)');
+  testInAllFrameworks('$("<div/>").get(0)');
+
+  group('.css(property)');
+  testInAllFrameworks('$("li.odd").css("font-style")');
+  testInAllFrameworks('$("li.odd").css("fontStyle")');
+  testInAllFrameworks('$("li#item2").css("font-style")');
+  testInAllFrameworks('$("li#item2").css("fontStyle")');
+  testInAllFrameworks('$("li#item2_1").css("font-style")');
+  testInAllFrameworks('$("li#item2_1").css("fontStyle")');
+  testInAllFrameworks('$("li#item4").css("font-style")');
+  testInAllFrameworks('$("li#item4").css("fontStyle")');
+  testInAllFrameworks('$("<div style=\'float:left\'/>").css("float")');
+  testInAllFrameworks('$("<div style=\'float:left\'/>").css("cssFloat")');
+  testInAllFrameworks('$().css("fontStyle")');
+  testInAllFrameworks('$("li#item4").css("font-size")');
+  testInAllFrameworks('$("li#item4").css("width")');
+
+  group('.css(property, value)');
+  testInAllFrameworks('$("<div/>").css("font-style", "italic").css("font-style")');
+  testInAllFrameworks('$("<div/>").css("fontStyle", "italic").css("font-style")');
+  testInAllFrameworks('$("<div/>").css("user-select", "none").css("user-select")');
+  testInAllFrameworks('$("<div/>").css("font-size", "10").css("font-size")');
+  testInAllFrameworks('$("<div/>").css("width", "123").css("width")');
+
+  testInAllFrameworks('$("<div class=italic/>").css("font-style", "normal").css("font-style")');
+  testInAllFrameworks('$("<div class=italic/>").css("fontStyle", "normal").css("font-style")');
+  testInAllFrameworks('$("<div/>").css("cssText", "color:blue;font-size:16px").css("font-size")');
+//  testInAllFrameworks('$("li").css("font-decoration", "underline")');
+//  testInAllFrameworks('$("li").css("font-decoration", "underline")');
+// TODO: add testing of cssHooks
+  // Visual insection:
+  //p$("li").css("text-decoration", "underline"); //  - ok
+  // p$("li").css("textDecoration", "underline"); - ok
+  // p$("li").css("cssText", "color:blue; text-decoration:underline"); // ok
+
+//  p$("li").css("-moz-user-select", "none");
+//  p$("li").css("width", 124);
+
+
+  group('.addClass( className )');
+  testInAllFrameworks('$("<div/>").addClass("test").get(0).className');
+  testInAllFrameworks('$("<div/>").addClass("test").addClass("test2").get(0).className');
+  testInAllFrameworks('$("<div/>").addClass("test ").get(0).className');
+  testInAllFrameworks('$("<div/>").addClass("test2 test2").get(0).className');
+  testInAllFrameworks('$("<div/>").addClass("test2").addClass("test2").get(0).className');
+  testInAllFrameworks('$("<div/>").addClass(" ").get(0).className');
+  testInAllFrameworks('$("<div/>").addClass("\t").get(0).className');
+  testInAllFrameworks('$("<div class=\ttest/>").addClass("t2").get(0).className');
+  testInAllFrameworks('$("<div class=\'a b\'/>").addClass(function(a,b){return "b"+a+b}).get(0).className');
+  testInAllFrameworks('$($("<div>text</div>").get(0).childNodes[0]).addClass("t").get(0).className');
+*/
+  group('.removeClass( className )');
+  testInAllFrameworks('$("<div class=\'test\'/>").removeClass("test").get(0).className');
+  testInAllFrameworks('$("<div class=\'a b\'/>").removeClass("b").get(0).className');
+  testInAllFrameworks('$("<div class=\'a b c\'/>").removeClass("a b").get(0).className');
+  testInAllFrameworks('$("<div class=\'a elephant\'/>").removeClass("phant").get(0).className');
+//elephant
+
+});
+
+</script>
+
+<style>
+table#testresults {border-collapse: collapse}
+tr.group {background-color:#9999cc; line-height:2em}
+tr.group th {font-style: normal; font-weight: bold; letter-spacing: 2px; text-align: left; padding-left: 20px} /*  text-transform: uppercase; */
+tr th {font-style: italic; font-weight: normal}
+td,th {vertical-align:top; border: 1px solid black;}
+td {background-color:white}
+td:nth-child(n+4) {background-color:#bbffbb}
+td.mismatch {background-color: #ffbbbb}
+.code {width:300px;overflow:hidden;text-overflow: ellipsis; white-space:nowrap;}
+.array {}
+.tagname {color: blue;}
+.tagid {color: darkblue;}
+.value {color: blue;}
+.erro {color: red;}
+
+.italic {
+  font-style: italic;  
+}
+li.odd {
+  font-style: italic;
+}
+</style>
+</head>
+
+<body>
+<h3>Comparison of the result of the same code executed in each framework</h3>
+<table id="testresults">
+  <tbody>
+  </tbody>
+</table>
+<p>You can also view the console for the same output</p>
+
+<div id="test">
+  <ul id="ul0">
+    <li id="item1" class="odd">item 1</li>
+    <li id="item2" style="font-style:italic">item 2
+      <ul id="ul2">
+        <li id="item2_1">item 2.1</li>
+      </ul>
+    </li>
+    <li id="item3" class="odd">item 3
+      <ul id="ul3">
+        <li id="item3_1">item 3.1</li>
+        <li id="item3_2">item 3.2</li>
+      </ul>
+    </li>
+    <li id="item4">item 4</li>
+  </ul>
+</div>
+</body>
+</html>

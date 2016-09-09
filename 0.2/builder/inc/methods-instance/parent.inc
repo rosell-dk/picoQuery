@@ -29,7 +29,7 @@ parent: function(selector) {
 //  arr = arr.filter(function(item,i,r){return item != null});
 
 
-  // Remove duplicats and nulls
+  // Remove duplicates and nulls
   arr = arr.filter(function(item,i,r){return item && r.indexOf(item) == i});
 
 

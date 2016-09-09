@@ -32,12 +32,13 @@ All this, just to explain why we here include picoQuery inline, instead of doing
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 -->
-<script src="../../builder/0.2/build.php?build=2-ffff1f"></script>
+<script src="../../builder/0.2/build.php?build=0-ffff1f"></script>
 <script>
 
 
 $.fn.bgColor = function(bgColor) {
   this.css('background-color', bgColor);
+//  alert('background color was:' + this.css('background-color') + '. Setting it to:' + bgColor);
 }
 
 $(function() {
@@ -61,7 +62,7 @@ $(function() {
 
   console.log($( "ul.level-2" ).children());
   $( "ul.level-2" ).children().css( "color", "green" );
-  return;
+//  return;
 
   $('li').bgColor('blue');
 //  return;
@@ -87,7 +88,7 @@ $(function() {
     alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
   });
   $('#hideme').hide();
-  $('ul li').css('background-color', 'brown');
+  $('ul li').css('text-decoration', 'underline');
 
 //  $('ul li').css('background-color', 'red').first().css('color', 'white');
   $('ul li:last-child').css('font-weight', 'bold');

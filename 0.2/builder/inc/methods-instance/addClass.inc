@@ -48,14 +48,55 @@ Support:
  *
  */
 addClass: function(value) {
-  return __EACH__(this, function(el) {
-    if (el.classList) {
-      el.classList.add(value);
-    } 
-    else {
-      el.className += ' ' + value;
+  this.e.forEach(function(el, i) {
+    //  For very very loose compliance, we could just do this:
+    //  el.className += ' ' + value;
+
+    // classList.add() is unfortunately not supported in IE9 and Safari 5.
+
+/*
+		if ( typeof value == "function" ) {
+			this.e.forEach(function(item, index){
+        $(
+      })
+    )
+      return this.each( function( j ) {
+				$( this ).addClass( value.call( this, j, getClass( this ) ) );
+			} );
+		}*/
+
+    if (el.nodeType === 1) {
+
+  //      el.className += ' ' + value;
+      var a = [];
+//      var s = el.className + ' ' + value;
+      var s = el.className + ' ' + ((typeof value == "function") ? value.call(el, i, el.className) : value);
+
+      // jQuery actually removes newlines, tabs, etc from the 'value'
+      // ( " " + curValue + " " ).replace( /[\t\r\n\f]/g, " " )
+      // I find it a bit over-the-top.
+      // But for strict compliance, we must... (maybe we can add a 
+      // "loose compliance" optimization flag) in the future
+      s = s.replace( /[\t\r\n\f]/g, " " );
+      var arr = s.split(' ');
+      arr.forEach(function(item){
+        if ((item!='') && a.indexOf(item)<0) {
+          a.push(item);
+        } 
+      });
+      el.className = a.join(' ');
+
+      /*
+      if (el.classList) {
+        value.split(' ').forEach(function(item){el.classList.add(item)});
+  //      el.classList.add(value);
+      } 
+      else {
+        el.className += ' ' + value;
+      }*/
     }
   });
+  return this;
 }
 
 /**
@@ -67,10 +108,37 @@ addClass: function(value) {
  * 
  */
 
+
 // OPTIMIZED_VERSION //
+/*
+  We could consider:
+    if (typeof value)[0] == "f" ) {
+  instead of 
+  	if ( typeof value == "function" ) {
+
+  But as "function" appears elsewhere in the code, the gzip is probably not much smaller
+
+/*
 addClass: function(a) {
-	__EACH__(this, function(b) {
-    b.classList ? b.classList.add(a) : b.className += " " + a
+  this.e.forEach(function(b,i) {
+    if (b.nodeType === 1) {
+      z=[];
+      (b.className + ' ' + ((typeof a == "function") ? a.call(b, i, b.className) : a)).replace(/[\t\r\n\f]/g, " " ).split(' ').forEach(function(c){
+        if ((c!='') && z.indexOf(c)<0) {
+          z.push(c);
+        } 
+      });
+      b.className = z.join(' ');
+    }
   });
-  return this
+  return this;
+}
+*/
+addClass:function(b) {
+  this.e.forEach(function(a, c) {
+    1 === a.nodeType && (z = [], (a.className + " " + ("function" == typeof b ? b.call(a, c, a.className) : b)).replace(/[\t\r\n\f]/g, " ").split(" ").forEach(function(a) {
+      "" != a && 0 > z.indexOf(a) && z.push(a);
+    }), a.className = z.join(" "));
+  });
+  return this;
 }

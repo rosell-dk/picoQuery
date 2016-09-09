@@ -14,13 +14,13 @@ Signatures:
     propertyNames [Array]: 
       An array of one or more CSS properties.
 
-  .css( propertyName, value ) => $
+  .css( propertyName, value ) => jQuery
     propertyName [String]: 
       A CSS property.
     value [String | Number]
       A value to set for the property.
 
-  .css( propertyName, function ) => $
+  .css( propertyName, function ) => jQuery
     propertyName [String]: 
       A CSS property.
     function [ Function( Integer index, String value ) => String or Number]
@@ -56,21 +56,81 @@ Support: Partial
  *
  */
 css: function(name, value) {
-  if (value === undefined) {
-    this.e[0].style[name];
+  // Considering if(!value). 
+  // - But I guess we should support setting a property to an empty string
+  if (__IS_UNDEFINED__(value)) {
+
+    // In picoQuery 0.1, we just return this.e[0].style[name]
+    // However, we need to support javascript properties as well
+
+    // There is a little quirk with 'float', because its a reserved word
+    // Therefore, its called 'cssFloat' instead of 'float' (its called styleFloat in IE8, but we
+    // needn't worry about that)
+    // http://stackoverflow.com/questions/606470/is-there-a-cross-browser-way-of-setting-style-float-in-javascript
+
+    // We should also support cssHooks, as plugins may add new ones: https://api.jquery.com/jQuery.cssHooks/
+//console.log(getComputedStyle(this.e[0]).getPropertyValue(name));
+
+    var computed = getComputedStyle(this.e[0]);   
+    if (!this.e[0]) return;
+    return this.e[0].style[name] || computed.getPropertyValue(name) || computed[name];
+
+    // TODO: zepto and jQuery camelCases the property. But it seems unneccessary, as
+    // getComputedStyle() returns an object with both ie "backgroundColor" and "background-color"
+    // console.log(getComputedStyle(this.e[0]));
+    // But does all modern browsers do that?
+    // getComputedStyle() also has the property 'float' - so no need to handle that (todo: browser-test it)
+
   } 
   else {
-    __EACH__(this, function(el) {
+    __ITERATE__(this.e, function(el) {
+      // Well, well, it seems that el.style has both variants (ie 'background-color' and 'backgroundColor')
+      // so we do not need to dasherize or camelCase.
+      // TODO: Browser-test it
+
+      // Although... this does not work with vender prefixes - there is ie no: el.style.-moz-user-select
+      // To set that, we need: el.style.MozUserSelect
+      // console.log(el.style);
+      //console.log (value + (typeof value));
+      //console.log ( == 'number' ? 'px' : '')
       el.style[name] = value;
+
+      // btw, zepto sets the style with style.cssText
+      // jQuery sets the style with el.style[camelCasedPropertyName]
     });
   }
   return this;
 }
 
 // OPTIMIZED_VERSION //
-css:function(a,b) {
-  __IS_UNDEFINED__(b)?this.e[0].style[a]:__EACH__(this,function(c) {
-    c.style[a]=b
+/*
+The following is handed over to Google Closure Compiler:
+
+css: function(name, value) {
+  if (__IS_UNDEFINED__(value)) {
+    z = getComputedStyle(this.e[0]);   
+
+    // if (!this.e[0]) return;
+    // return this.e[0].style[name] || computed.getPropertyValue(name) || computed[name];
+    // The above two lines can be optimized, and it results in a smaller gzip after Google Closure compiler
+
+    return (this.e[0] && (this.e[0].style[name] || z.getPropertyValue(name) || z[name]));
+  } 
+  else {
+    __ITERATE__(this.e, function(el) {
+      el.style[name] = value;
+    });
+  }
+  return this;
+}
+*/
+css:function(a, b) {
+  if (__IS_UNDEFINED__(b)) {
+    return z = getComputedStyle(this.e[0]), this.e[0] && (this.e[0].style[a] || z.getPropertyValue(a) || z[a]);
+  }
+  __ITERATE__(this.e, function(c) {
+    c.style[a] = b;
   });
   return this;
 }
+

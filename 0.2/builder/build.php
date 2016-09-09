@@ -202,7 +202,10 @@ if (isFeatureEnabled('appendTo')) {
 if (isFeatureEnabled('hide')) {
   enableFeatureByNameId('css');
 }
-if (isFeatureEnabled('next') || isFeatureEnabled('prev') || isFeatureEnabled('parent')) {
+if (isFeatureEnabled('next') || 
+    isFeatureEnabled('prev') ||
+    isFeatureEnabled('children') ||
+    isFeatureEnabled('parent')) {
   enableFeatureByNameId('filter');
 }
 if (isFeatureEnabled('filter')) {

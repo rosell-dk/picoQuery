@@ -9,11 +9,12 @@ Fully supported signatures:
   .first() => jQuery
 */
 first: function() {
-  return $(this.e[0]);
+//  return this.e[0];
+  return $(0<this.e.length ? this.e[0] : 0);
 }
 
 // OPTIMIZED_VERSION //
 first: function() {
-  return $(this.e[0]);
+  return $(0<this.e.length ? this.e[0] : 0);
 }
 

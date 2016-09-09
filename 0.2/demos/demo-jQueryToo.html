@@ -15,29 +15,38 @@ var z$ = $;
 </script>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script>
+var j$ = $;
+</script>
+<script>
+function testInAllFrameworks(fn) {
+  $ = j$;
+  console.log('jQuery');
+  fn.call();
+}
 
 $(function() {
   
 //  alert('ready');
 //  $('span').filter(':nth-of-type(odd)').addClass('red-text');
-/*
-  $('span').filter($('span:nth-of-type(odd)')).addClass('red-text');
-  $('span').filter('*').addClass('red-text');
+
+//  $('span').filter($('span:nth-of-type(odd)')).addClass('red-text');
+//  $('span').filter('*').addClass('red-text');
+
+  testInAllFrameworks(function() {
+    console.log($(document).parent());
+  });
 
 
   console.log('jQuery');
-  console.log($(document).parent());
-*/
+  console.log($([null,$('body').get()]).parent());
+
   // Now swap to zepto
-/*
+
   $=z$;
   console.log('zepto');
+  console.log($([null,$('body').get()]).parent());
 
-  console.log($(document));
-  console.log($('html').parent());
-  console.log($('body').parent().parent());
-  console.log($('body').parent().parent().parent());
-*/
+
 
   // Now swap to picoQuery
   $=p$;

@@ -17,7 +17,7 @@ http://picoquery.com/builder/
 I should mention that picoQuery currently only supports a small subset of jQuery functionality. It is however enough for basic DOM manipulation, and I'm working to expand it (perhaps you want to join in? Or simply spread the word!). Also, without too much efford, you can expand it yourself through $.fn (see the examples below)
 
 The following methods is currently supported: 
-.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .ready(), .filter(), .prev(), .next(), .parent(), .map()
+.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .ready(), .filter(), .prev(), .next(), .parent(), .map(), .children()
 
 
 <h3>Examples of what you can currently do with picoQuery:</h3>
@@ -87,19 +87,26 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 - Automatically falls back to jQuery (can be disabled in builder)
 - Defines $.fn, so you can easily extend the picoQuery prototype with yet unsupported methods
 - picoQuery object is now array-like, like jQuery (can be disabled)
-- In order to easily change picoQuery build on a project, there now is an URL in the top of the code, which loads the builder and initializes it with he selected build options (can be disabled)
+- In order to easily change picoQuery build on a project, there now is an URL in the beginning of the generated code, which loads the builder and initializes it with he selected build options (can be disabled)
 - Instead of a fine-grain selection of what which type of comments should be included and which parts that should be minified, you now select between 4 versions
 - Non-minified code is more readable
-- New methods: .filter(), .next(), .parent(), prev()
+- New methods: .filter(), .next(), .parent(), .prev(), .map(), .children()
 - Optimization. Various tricks has been applied to get the code even smaller
+- Created framework for testing compliance. picoquery.com/lab/compliance-test.html
+- Made existing methods more compliant
 
 - TODO: CDN. Not just full versions - ALL combinations! (a pull server). It will probably be on URLs like these: https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js. I will also allow URLs like these: https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js. That is: You can specify the build options directly in the URL, so you don't have to go to the builder in order to add a feaure.
-- TODO: HTTPS, i guess
+- TODO: HTTPS
 
 
 <h3>Roadmap</h3>
+I'm currently finishing up the 0.2 version. Focus is on compliance.
+
+
 - 0.3: A lot of efford has already gone into making the library as small as possible. In version 0.3, focus will be on getting the gzip even smaller. Lessons learned can be applied when writing upcomming methods.
 - 0.4: Focus will be unit tests
 - 0.5: Focus will be browser tests. I will apply for a free "open source" account on browsershack.com
 
+Ideas: 
+- Optimize for execution-speed / gzip size / balanced - option
 

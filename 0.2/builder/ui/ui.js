@@ -22,7 +22,7 @@ var methods_meta = {
     'http://api.jquery.com/addClass/',
     [
       ['.addClass( className ) => jQuery', FULL],
-      ['.addClass( function ) => jQuery', NONE],
+      ['.addClass( function ) => jQuery', FULL],
     ]
   ],
   'append': [
@@ -38,6 +38,12 @@ var methods_meta = {
       ['.appendTo( target ) => jQuery', FULL],
     ]
   ],
+  'children': [
+    'http://api.jquery.com/children/',
+    [
+      ['.children( [selector] ) => jQuery', FULL],
+    ]
+  ],
   'click': [
     'http://api.jquery.com/click/',
     [
@@ -49,9 +55,9 @@ var methods_meta = {
   'css': [
     'http://api.jquery.com/css/',
     [
-      ['.css( propertyName ) => String', FULL],
+      ['.css( propertyName ) => String', PARTIAL, 'jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported. Also, automatic using vendor prefixed version when available is not supported.' ],
       ['.css( propertyNames ) => String', NONE],
-      ['.css( propertyName, value ) => jQuery', FULL],
+      ['.css( propertyName, value ) => jQuery', PARTIAL, 'No cssHooks or automaticly using vendor prefixes. Also, we do not add "px" to any numbers .css("width", "123") sets width to 123px in jQuery, but not in picoQuery'],
       ['.css( propertyName, function ) => jQuery', NONE],
       ['.css( properties ) => jQuery', NONE],
     ]
@@ -500,7 +506,8 @@ function setBuildId(buildId) {
 }
 
 function getSizeString(sizeInBytes) {
-  return (sizeInBytes > 1024 ? '<span title="' + sizeInBytes +' bytes">' + (Math.round(sizeInBytes / 1024 * 10) / 10) + ' kb</span>' : sizeInBytes + ' bytes');
+  return sizeInBytes + ' bytes';
+//  return (sizeInBytes > 1024 ? '<span title="' + sizeInBytes +' bytes">' + (Math.round(sizeInBytes / 1024 * 10) / 10) + ' kb</span>' : sizeInBytes + ' bytes');
 }
 
 function generateCode() {

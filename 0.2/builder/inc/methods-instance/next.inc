@@ -14,7 +14,12 @@ Fully supported signatures:
 next: function(selector) {
   // If we were optimizing for speed, we would only make the filter call,
   // when selector was supplied...
-  return $(this.e.map(function(a){return a['nextElementSibling']})).filter(selector||'*');
+
+  var arr = this.e.map(function(a){return a['nextElementSibling']}); 
+
+  // Remove nulls
+  arr = arr.filter(function(item,i,r){return item != null});
+  return $(arr).filter(selector||'*');
 
   // Maybe it can be optimized like we do with standard events
 /*
@@ -57,5 +62,5 @@ next: function(selector) {
 
 // OPTIMIZED_VERSION //
 next: function(a) {
-  return $(this.e.map(function(b){return b['nextElementSibling']})).filter(a||'*')
+  return $(this.e.map(function(b){return b['nextElementSibling']}).filter(function(c){return c != null})).filter(a||'*')
 }
