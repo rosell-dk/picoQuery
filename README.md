@@ -92,7 +92,7 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 - Non-minified code is more readable
 - New methods: .filter(), .next(), .parent(), .prev(), .map(), .children()
 - Optimization. Various tricks has been applied to get the code even smaller
-- Created framework for testing compliance. picoquery.com/lab/compliance-test.html
+- Created framework for testing compliance. http://picoquery.com/lab/compliance-test.html
 - Made existing methods more compliant
 
 - TODO: CDN. Not just full versions - ALL combinations! (a pull server). It will probably be on URLs like these: https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js. I will also allow URLs like these: https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js. That is: You can specify the build options directly in the URL, so you don't have to go to the builder in order to add a feaure.
