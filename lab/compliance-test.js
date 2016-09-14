@@ -105,15 +105,21 @@ function testInAllFrameworks(code,fn) {
 //  tr += '<td>' + window.testNumber + '</td>';
 
   // html escape and insert zero width spaces in code
+//  var zws = '&#8203;';
+  var zws = 'ZWS';
   code = code
-      .replace(/&/g, '&amp;', 'g')
-      .replace('.', '&#8203;.', 'g')
-      .replace('(', '&#8203;(', 'g')
-      .replace(')', '&#8203;)', 'g')
-      .replace(/"/g, '&quot;', 'g')
-      .replace(/'/g, '&#39;', 'g')
-      .replace(/</g, '&lt;', 'g')
-      .replace(/>/g, '&gt;', 'g');
+      .replace(/&/g, '&amp;')
+      .replace(/\./g, zws + '.')
+      .replace(/\(/g, zws + '(')
+      .replace(/\)/g, zws + ')')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/ZWS/g, '&#8203;')
+//      .replace(/ZWS/g, '<span class="zero-width-space"> !!! </span>')
+
+
 
   tr += '<td><div class="code" title="' + '">' + code + '</div></td>';
   for (var i=0; i<tdContent.length; i++) {
