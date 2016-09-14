@@ -3,7 +3,7 @@
 picoQuery is a <i>ultra small</i> DOM manipulation library. It has the same syntax as jQuery, so nothing new to learn. For IE8 and other older browsers, it automatically falls back to jQuery.
 
 <h3>Why is this smart?</h3>
-&dash; Because this strategy alows picoQuery to be written for modern browsers without leaving older browsers behind. For new browsers, the benefit is ultra lightweight code (~1k). For old browsers, the benefit is simply that the webpage works (unlike other DOM-libraries written for modern browsers)
+&ndash; Because this strategy alows picoQuery to be written for modern browsers without leaving older browsers behind. For new browsers, the benefit is ultra lightweight code (~1k). For old browsers, the benefit is simply that the webpage works (unlike other DOM-libraries written for modern browsers)
 
 Further, of course, the benefit is that you probably already know jQuery. And if your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery. Also, jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light.
 
@@ -17,13 +17,14 @@ http://picoquery.com/builder/
 I should mention that picoQuery currently only supports a small subset of jQuery functionality. It is however enough for basic DOM manipulation, and I'm working to expand it (perhaps you want to join in? Or simply spread the word!). Also, without too much efford, you can expand it yourself through $.fn (see the examples below)
 
 The following methods is currently supported: 
-.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .ready(), .filter(), .prev(), .next(), .parent(), .map(), .children(), .attr(), .removeAttr(), .empty(), .html()
+.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .ready(), .filter(), .prev(), .next(), .parent(), .map(), .children(), .attr(), .removeAttr(), .empty(), .html(), find()
 
 
 <h3>Examples of what you can currently do with picoQuery:</h3>
 
 ```javascript
-// Construct from selector, HTML-text, DOM element, HTMLCollection or picoQuery object (cloning), and optionally with a context
+// Construct from selector, HTML-text, DOM element, HTMLCollection or picoQuery object (cloning)
+// , and optionally with a context
 $('#contact_form .column a');
 $('<p>some <b>HTML</b></p>');
 $(document.getElementById('main'));
@@ -90,7 +91,7 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 - In order to easily change picoQuery build on a project, there now is an URL in the beginning of the generated code, which loads the builder and initializes it with he selected build options (can be disabled)
 - Instead of a fine-grain selection of what which type of comments should be included and which parts that should be minified, you now select between 4 versions
 - Non-minified code is more readable
-- New methods: .filter(), .next(), .parent(), .prev(), .map(), .children(), attr(), removeAttr(), empty(), html()
+- New methods: .filter(), .next(), .parent(), .prev(), .map(), .children(), .attr(), .removeAttr(), .empty(), .html(), .find()
 - Optimization. Various tricks has been applied to get the code even smaller
 - Created framework for testing compliance. http://picoquery.com/lab/compliance-test.html
 - Made existing methods more compliant
