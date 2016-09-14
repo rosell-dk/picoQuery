@@ -104,68 +104,8 @@ elseif (isset($_GET['v'])) {
   // CDN URL, format #2:     https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js
   // Note that build id starts with "A"
 
-  // CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js
-
   // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
   // Builder URL, format #2: http://picoquery.com/builder/0.2/?addClass-css.min.js
-
-  // When sub-features arrives:
-  // CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-A2fa0-0112.min.js
-
-  // First 3 bits
-  //    tells how many bits [n+1] that should be used for referencing methods
-  //    when building a build id, the builder will try out all bit sizes,
-  //    and select the one that results in the most compact build id.
-  //    As zero bits hardly makes sense, 000 means n=1, 001 means n=2, etc
-  //    If for example every method 
-  // 
-  // For each method/build-option that has sub-functionality disabled:
-  //   First [n] bits
-  //     Tells how many items to skip in the list of build options included in the build.
-  //     This list is ordered by the index-id of the build-option (.addClass()=0, .css()=1, .get()=2, etc)
-  //     If for example only .addClass(), get() and .each() are included in the build,
-  //     the list will be: ['addClass', 'get', 'each']
-  //     Say that n=4 and that these methods had 4 subfeatures each, and we were encoding with 1 bit
-  //     build id would be this (no dashes): 
-  //     010 (to set n=4) 
-  //     0001 (skip one in the list - skips to "get"
-  //     1111 (all subfeatures of get is deselected)
-  //     0000 (skips to each. As each is right after 'get' in the list, the skip is 0)
-  //     1111 (all subfeatures of each is deselected)
-
-  //     All 1-bits has a special meaning. It means that the value of the next n bits
-  //     will be added as well.
-  //     for n=1, 0 will for example mean skip 0, 10 means skip 1, 111110 means skip 5
-  //     for n=8, 5 will for example mean skip 5, f0 means skip 15, f7 means skip (15+7)=22
-  //     By the way, jQuery has 314 methods
-
-  //  Next x bits
-  //     determines which of the subfeatures that are deselected
-  //     build.php knows how many bits that each method needs
-  //     Fun fact: Cannot be 0, as it would then mean that no sub-features where deselected
-  //               and then it should not be listed
-  //     To decide: Should subfeatures be selected or deselected?
-  //                If they are SELECTED, it means that when we add more sub-features in the
-  //                next version, they will be default unselected. The user may not notice these
-  //                new subfeatures
-  //               PRO DESELECTED: - User will not experience that an upgrade to the next version
-  //                                 makes existing features go away (BUT! we can prevent this
-  //                                 by ensuring that all stuff our methods currently can do are 
-  //                                 made into sub-features)
-  //                               - The next version will bring more compliance
-  //
-  //               PRO SELECTED:   - New sub-features may be brought into the word along with
-  //                                 new compatibility code, which actually (and often)
-  //                                 may be over-the-top
-  //                               - The next version will not bring larger codebase
-  //                               - Does the user really need more compliance? If it worked in 
-  //                                 previous version, there is no need for it.
-  //
-  //             It seems "SELECTED" (default: deselected) are in favour
-  
-  // The subfeatures can be part of the CDN URL like this:
-  // https://cdn.picoquery.com/picoquery0.2-addClass0010-css100.min.js
-
 
 
   //         http://picoquery.com/build?v=0.2&features=addclass-css-each
@@ -188,7 +128,6 @@ elseif (isset($_GET['v'])) {
   // or...https://picoquery.com/builder?v=0.2&comments=none&minify=functions,all&fallback=jquery&methods=addclass,css,each
   // CDN URL:     https://cdn.picoquery.com/picoquery0.2.5-0-2000.min.js
 
-  
   // comments: none | build_id | builder_url | compact_builder_url...
   // minify: none | functions | all
   // fallback: jquery | url to cdn?
@@ -469,6 +408,9 @@ function parseArgs($js) {
   /**
    * Get the tokens as an array, just like the php tokenizer token_get_all function
    */
+
+//print_r($js);
+//$js = 'alert("hej\\\\n")';
   $tokens = j_token_get_all( $js );
   $numOpenP = 0;
 
@@ -480,6 +422,7 @@ function parseArgs($js) {
 
   for ($i=0; $i<count($tokens); $i++) {
     $token = $tokens[$i];
+//print_r($token);
 
     switch ($token[0]) {
       case J_FUNCTION:
@@ -520,10 +463,7 @@ function parseArgs($js) {
             $extra .= $tokens[$i][1];
             $i++;
           }
-
-          // We have this weird problems with backslash
-          $extra = preg_replace('/\\\\/', '__BACKSLASH__', $extra);
-
+          $extra = preg_replace('/\\\\/', 'BACKSLASH', $extra);
           return array('args' => $args, 'extra' => $extra);
         }
       default:
@@ -648,10 +588,14 @@ function remove_unused_helpers($js) {
   //if ($helper[0] == 'EACH') {echo $parseResult['extra']; return;}
 
         $extra = ltrim($parseResult['extra']);
+//$extra = preg_replace('/BACKSLASH/', '\\\\\\\\', $extra);
   //if ($helper[0] == 'EACH') {echo $extra; return;}
         if (strlen($extra) > 0) $extra = substr($extra, 1);
 
         //$js = 'EXTRA' . $extra . 'EXTRA';
+
+//echo 'extra:\r\\\\n';
+//print_r($extra);
 
         $js = preg_replace('/__' . $helper[0] . '__\\s*\(.*\[\[END-INCLUDE\]\]/ms', $inline_code . $extra . '[[END-INCLUDE]]', $js);
 
@@ -712,7 +656,7 @@ function remove_unused_helpers($js) {
   $js = preg_replace('/\[\[HELPERS]\]/', $helper_js, $js);
   $js = preg_replace('/\[\[END-INCLUDE]\]/', '', $js);
 
-  $js = preg_replace('/__BACKSLASH__/', '\\\\', $js);
+  $js = preg_replace('/BACKSLASH/', '\\\\', $js);
 
   return $js;
 }
@@ -720,7 +664,7 @@ function remove_unused_helpers($js) {
 ?>
 (function(w,d,u,$<?php if ($use_optimized_methods) {echo ',z';} // TODO: Detect if u and z are used. u can be tested For example with the javascript parser ?>) {
 <?php if (isFeatureEnabled('fallback')):?>
-  if (Array.isArray) {
+  if ([].indexOf) {
 <?php endif;?>
     if (!w.$) {
 
@@ -802,19 +746,14 @@ https://istlsfastyet.com/
   Requirements:
     - querySelectorAll (core)   http://caniuse.com/#feat=queryselector
     - addEventListener (core)   http://caniuse.com/#feat=addeventlistener
-    - dispatchevent (trigger)   http://caniuse.com/#feat=dispatchevent
+    - dispatchevent (trigger)   http://caniuse.com/#feat=dispatchevent 
     - [].indexOf (filter, etc)  http://kangax.github.io/compat-table/es5/
-    - [].some (find)            http://kangax.github.io/compat-table/es5/
     - Element.children          https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children
 
     Right now, if above tables are correct, a single test is enough.
-    Any browser that supports Array.isArray also supports the other requirements
+    Any browser that supports [].indexOf also supports the other requirements
 
-    Browser support for isArray is: FF4+, IE9+, Safari 5+, Opera 10.5+, Konq 4.9+, Chrome 5+ and all modern browsers.
-    (https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray)
-
-    (except maybe Chrome 1-3 - this must be investigated)
-
+    Browser support is: FF4+, IE9+, Safari 4+, Opera 10.5+, Konq 4.9+ and all modern browsers.
 
     As a happy coincidence, IE8 is the only browser where querySelectorAll does not support CSS3 selectors. The criteria thus ensures that querySelectorAll is only used on browsers that supports CSS3 selectors.
     */
@@ -846,6 +785,8 @@ if (TRUE) {
   if (isFeatureEnabled('builderurl')) {
     echo "/* picoquery.com/builder/0.2/?" . $compactness . "-" . $hex . " */\n";
   }
+
+
 }
 echo $js;
 ?>

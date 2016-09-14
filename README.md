@@ -17,7 +17,7 @@ http://picoquery.com/builder/
 I should mention that picoQuery currently only supports a small subset of jQuery functionality. It is however enough for basic DOM manipulation, and I'm working to expand it (perhaps you want to join in? Or simply spread the word!). Also, without too much efford, you can expand it yourself through $.fn (see the examples below)
 
 The following methods is currently supported: 
-.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .ready(), .filter(), .prev(), .next(), .parent(), .map(), .children()
+.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .ready(), .filter(), .prev(), .next(), .parent(), .map(), .children(), .attr(), .removeAttr(), .empty(), .html()
 
 
 <h3>Examples of what you can currently do with picoQuery:</h3>
@@ -66,10 +66,10 @@ $('li').bgColor('blue');
 
 ```
 
-<h3>Usecase: Above-the-fold scripting</h3>
-When optimizing for performance, you want to avoid what is called 'render-blocking' javascript. When you put in a script-tag, be it in head or in body, the browser needs to get the script (download it or get it from cache) and parse it (this is always needed). Many times, you actually find that none of the things you do in your script is so critical, that it cannot wait til after onload. You can then just defer your javascript, and your good to go - the download and rendering is done after the page is displayed, and if the browser is running on some decent hardware, it will not affect the perceived performance.
+<h3>Usecase: picoQuery is your "jQuery" for render-blocking scripts</h3>
+There are times, when you want some of your script to manipulate the document before its displayed. This means that you will want you script to load, parse and execute very quickly. Its blocking the page rendering. People are waiting! Fastest load-time is achieved by keeping your script small and inlining it directly in the HTML. Fast parsing is also achieved by keeping the script small. To keep the script small, you of course need to move all the code that can be defered into another script. That defered script can use jQuery without noticable penalty, but you cannot afford to use jQuery for the render-blocking scripting. If you love the expressiveness and how quickly you get things done in jQuery, you will experience a loss. If you are optimizing a site that already uses jQuery, you will experience plain tediousness. But ta-dah, not anymore. You can now turn to picoQuery, as you can build your own little picoQuery, which suits your needs, and it will be very small. As the render-blocking scripting you need to do is probably limited, it is not too big a drawback that picoQuery currently only supports a small subset of jQuery.
 
-However, there are times, when you want some of your script to run before the page is displayed. If for example you create some of the elements dynamically, and they are placed in top of the document (meaning that they are in the viewport). What you do is split up the script in parts that needs to be done when DOM is ready, and parts that can be defered til after document is loaded. The bulk of the scripting can probably be defered. As it is not too bad for performance to use jQuery for the defered part, this means that most of your script can use jQuery. The first part is often so small, that it can be put inline in the HTML, in order to avoid making it render-blocking. You want to keep this script as small as possible, as it is downloaded on each page request. Until now, this has meant turning to vanilla javascript, probably pasting in some convinience functions for DOM manipulation. But with picoQuery, you have a library small enough to justify being inserted inline. And when set up with jQuery fallback, you have full browser compatibility, and you have the convinience of working with a syntax you already learned. As the above-the-fold scripting you need to do is probably limited, it is not too big a drawback, that picoQuery currently only have a small subset of jQuery implemented.
+They say that you should avoid render-blocking scripts, but actually, when your script can get the job done quickly, you here have a tool to increase the overall performance of your site. Imagine the unlikely case that you want to display the current time in the top of the document. Dynamic content is much more expensive for the server than static content. Say that you do it in a Wordpress theme - you will then effectively have ruined the possibility to use page caching, which is one of the most effective ways to boost up the speed of a Wordpress site. Also, browsers cannot be allowed to cache the page either. But push the job to the client, and your servers will serve you well. Using cookies, you can maintain sessions and store things such as the content of a shopping cart.
 
 <h3>Usecase: Limiting bandwith usage on mobile browsers</h3>
 jQuery is quite a download (37k compressed). If you want to be friendly to your mobile users, and you do not have too much coding to do, you may want to do everything in picoQuery. Or you may perhaps be able to limit jQuery usage to some pages. 
@@ -90,24 +90,31 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 - In order to easily change picoQuery build on a project, there now is an URL in the beginning of the generated code, which loads the builder and initializes it with he selected build options (can be disabled)
 - Instead of a fine-grain selection of what which type of comments should be included and which parts that should be minified, you now select between 4 versions
 - Non-minified code is more readable
-- New methods: .filter(), .next(), .parent(), .prev(), .map(), .children()
+- New methods: .filter(), .next(), .parent(), .prev(), .map(), .children(), attr(), removeAttr(), empty(), html()
 - Optimization. Various tricks has been applied to get the code even smaller
 - Created framework for testing compliance. http://picoquery.com/lab/compliance-test.html
 - Made existing methods more compliant
 
-- TODO: CDN. Not just full versions - ALL combinations! (a pull server). It will probably be on URLs like these: https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js. I will also allow URLs like these: https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js. That is: You can specify the build options directly in the URL, so you don't have to go to the builder in order to add a feaure.
-- TODO: HTTPS
 
 
 <h3>Roadmap</h3>
-I'm currently finishing up the 0.2 version. Focus is on compliance. But I'm realizing that compliance costs in terms of lines of code, and that much of this compliance only is relevant in few projects. For example, one rarely needs addClass() to remove newline characters in the string or css() to add "px" to numeric values for you. So, I'm probably going to add a possibility favor size over strict compliance. Maybe just one build flag. Maybe one for each compliance.
-I'm probably also going to make it possible only to select some signatures.
+I'm currently finishing up the 0.2 version.
+
+Features planned for 0.2:
+- CDN. Not just full versions - ALL combinations! (a pull server). It will probably be on URLs like these: https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js. I will also allow URLs like these: https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js. That is: You can specify the build options directly in the URL, so you don't have to go to the builder in order to add a feaure.
+- picoQuery.com and the CDN must run on HTTPS
 
 
-- 0.3: A lot of efford has already gone into making the library as small as possible. In version 0.3, focus will be on getting the gzip even smaller. Lessons learned can be applied when writing upcomming methods.
-- 0.4: Focus will be unit tests
-- 0.5: Focus will be browser tests. I will apply for a free "open source" account on browsershack.com
+Features planned for 0.3:
+- Option to granularly downgrade functionality for each method. If you know you never use certain signatures/features of a method, you can deselect the signature/feature in order to get size down. It will also be visible when there are features that picoQuery does not support.
+- Possibility to see the code that will be generated for each method, depending on what sub-functionality are selected
+- Browser tests. I will apply for a free "open source" account on browsershack.com
+- build id will change. Right now, the selected methods are encoded with 4 bits (0-f). It will be increased to 6 bits in order to get even shorter URLs. Also, they must include additional information of degrations of methods.
 
-Ideas: 
-- Optimize for execution-speed / gzip size / balanced - option
+Features planned for 0.4:
+- Optionally optimize library for execution speed rather than gzip size.
+
+
+
+
 

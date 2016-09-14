@@ -11,85 +11,57 @@ Supported signatures:
      className [String]: 
         One or more space-separated classes to be removed to the class attribute of each matched element.
 
-Unupported signatures:
   .removeClass( ) => jQuery
      Removes all classes in the set of matched elements
 
-  .addClass( function ) => jQuery
+  .removeClass( function ) => jQuery
      function [Function( Integer index, String currentClassName ) => String]:
        A function returning one or more space-separated class names to be removed. 
        Receives the index position of the element in the set and the old class value as arguments.
 
 
-*/
-/**
- * Remove a single class, multiple classes, or all classes from each element in the set of matched elements.
- *
- * @feature .removeClass()
- * @support_level partial
- *
- * @param {(string|function(number,String))} arg1
- * @return {!jQuery}
- *
- */
-removeClass: function(className) {
-  __EACH__(this, function(el) {
-    // In version 0.1, we tested for el.classList support, and used that feature if available
-    // Like this:
-    //  if (el.classList)
-    //    el.classList.remove(className);
-    // 
-    // - and we used the regexp below in order to support the browsers that have no ".classList" support.
-    // Substracting browsers that falls back to jQuery, this amounted to these browsers:
-    // IE9, Firefox 3.5, Chrome 4-7, Safari 3.1 - 5, Opera 10.1 - 11.5, iOS Safari 3.2 - 4.3, 
-    // Opera Mini 8, Android Browser 2.1 - 2.3
+    In version 0.1, we tested for el.classList support, and used that feature if available
+    Like this:
+     if (el.classList)
+       el.classList.remove(className);
 
-    // HOWEVER,
-    // This is problematic, because el.classList is only partially supported in some browsers
-    // - for example IE10 and IE11. (http://caniuse.com/#feat=classlist)
-    // In these browsers, classList does not work on SVG elements and MathML elements.
+    - and we used the regexp below in order to support the browsers that have no ".classList" support.
+    HOWEVER,
+      This is problematic, because el.classList is only partially supported in some browsers
+      - for example IE10 and IE11. (http://caniuse.com/#feat=classlist)
+      In these browsers, classList does not work on SVG elements and MathML elements.
+    ALSO
+      IE10/11 and Firefox < 26 only supports removing ONE element at a time
+      (according to: https://developer.mozilla.org/en/docs/Web/API/Element/classList)
 
-    // ALSO
-    // IE10/11 and Firefox < 26 only supports removing ONE element at a time
-    // (according to: https://developer.mozilla.org/en/docs/Web/API/Element/classList)
+    To circumvent this, we use the previous fallback for ALL browsers
+    This also produces less code (which is reason enough)
+    And we cannot rely on solely on el.classList support, as IE9 doesn't support it (as well as other
+    browsers that we are supporting)
+    Youmightnotneedjquery uses this code: http://youmightnotneedjquery.com/
+    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
 
-    // To circumvent this, we use the previous fallback for ALL browsers
-    // This also produces less code (which is reason enough)
+    But this has a serious flaw.
+    When multiple classes are replaced, it will ie change the class "elephant" to "ele", if you call removeClass("test phant")
+     /(^|\b)MyClass|phant(\b|$)/gi does that
+    Also jQuery does not ignore case (and neither does classList.remove), so we should not ignore case
+    Also, className.split(' ').join('|') can be shortened to: className.replace(' ', '|')
+    In order to circumvent the elephant problem, we need a regex pattern like this: 
+    (^|\b)classname1(\b|$))|((^|\b)classname2(\b|$)
+    resulting in code:
+    el.className=el.className.replace(new RegExp('(^|\\b)'+className.replace(' ','(\\b|$)|(^|\\b)')+'(\\b|$)','g'),' ');
+    We can however make the code a bit smaller with a little trick:
+    el.className=(' '+el.className+' ').replace(new RegExp('\\b'+className.replace(' ','\\b|\\b')+'\\b','g'),' ');
+    Optimized regex-version:
+    removeClass: function(b){return __EACH__(this,function(a){a.className=(" "+a.className+" ").replace(new RegExp("\\b"+b.replace(" ","\\b|\\b")+"\\b","g")," ")})}
+    The code above can produce strings that start or end with space.
+    We could remove it with .trim() (http://www.w3schools.com/jsref/jsref_trim_string.asp)
+    - But we take the chance that the extra space does not pose problems in any browser
+    alternative idea: Use array.filter
+    Browser support: (IE9+), so good enough (according to http://www.w3schools.com/jsref/jsref_filter.asp)
+    this way of doing it seems less prone to error than the regex above, and it does not add spaces 
+    However, it is a few bytes longer (actually just five bytes longer, when optimized)
 
-    // Youmightnotneedjquery uses this code: http://youmightnotneedjquery.com/
-    // el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-
-    // But this has a serious flaw.
-    // When multiple classes are replaced, it will ie change the class "elephant" to "ele", if you call removeClass("test phant")
-    //  /(^|\b)MyClass|phant(\b|$)/gi does that
-
-    // Also jQuery does not ignore case (and neither does classList.remove), so we should not ignore case
-
-    // Also, className.split(' ').join('|') can be shortened to: className.replace(' ', '|')
-
-    // In order to circumvent the elephant problem, we need a regex pattern like this: 
-    // (^|\b)classname1(\b|$))|((^|\b)classname2(\b|$)
-    // resulting in code:
-    // el.className=el.className.replace(new RegExp('(^|\\b)'+className.replace(' ','(\\b|$)|(^|\\b)')+'(\\b|$)','g'),' ');
-
-    // We can however make the code a bit smaller with a little trick:
-    // el.className=(' '+el.className+' ').replace(new RegExp('\\b'+className.replace(' ','\\b|\\b')+'\\b','g'),' ');
-
-  
-    //
-    // Optimized regex-version:
-    // removeClass: function(b){return __EACH__(this,function(a){a.className=(" "+a.className+" ").replace(new RegExp("\\b"+b.replace(" ","\\b|\\b")+"\\b","g")," ")})}
-
-
-    // The code above can produce strings that start or end with space.
-    // We could remove it with .trim() (http://www.w3schools.com/jsref/jsref_trim_string.asp)
-    // - But we take the chance that the extra space does not pose problems in any browser
-
-    // alternative idea: Use array.filter
-    // Browser support: (IE9+), so good enough (according to http://www.w3schools.com/jsref/jsref_filter.asp)
-    // this way of doing it seems less prone to error than the regex above, and it does not add spaces 
-    // However, it is a few bytes longer (actually just five bytes longer, when optimized)
-    /*
     el.className=el.className.split(" ").filter(function(v){
       // v is a classname currently in the element.
       // now, determine if it should be kept.
@@ -138,7 +110,7 @@ removeClass: function(className) {
     Alternatively, we could define a general junk-variable in the helper-section. It costs 2 bytes: ",j"
     With that in place, there is no need for the "var " - 4 bytes are saved
     j=' ';el.className=el.className.split(j).filter(function(v){return!(j+className+j).match(j+v+j)}).join(j);
-    
+
 
     We could of course also aply these tricks on the regex-version:
 
@@ -190,7 +162,7 @@ removeClass: function(className) {
 
     in our case, we may find some reuse...
 
-    TODO: fiddle with Array.indexOf. It may result in shorter code overall, because it may be 
+    DONE: fiddle with Array.indexOf. It may result in shorter code overall, because it may be 
     more friendly to reuse array helper functions
 
     it requires ECMAScript 5. Check if that is ok requirement here:
@@ -198,15 +170,14 @@ removeClass: function(className) {
 
     Here somebody made a array_intersect in javascript:
     http://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
-    
 
-    TODO: 
-    When builder supports custom browser-support, we can use this for very modern browsers:
+
+    When and if builder supports custom browser-support, we can use this for very modern browsers:
       el.classList.remove(className)
     When builder supports custom tweaking, we can have these tweaks:
       - Only support one classname (with IE10/11, we can use classList - with default support, we can get smaller code)
       - Accept that it does not work on SVG / MathML elments
-    
+
 
     What is the shortest possible function when we do not need to support multiple classnames?
 
@@ -242,7 +213,7 @@ removeClass: function(className) {
     - So it only makes sense, if its used at least 4 times.
     When the framework is there, we can make a helper, and mark that the treshold between inline or not is 4
     That is - if we find this can ever be the case.
-   
+
     Or even combine with the "m"-function:
 
     function m(obj, name, cb) {
@@ -259,34 +230,53 @@ removeClass: function(className) {
     minified:
     m(a,'className',R,'\\b'+b+'\\b', ' ');
 
-    */
+
+    However, lets wait with this until we have the builder ready for
+    selecting partial support
+    el.className=el.className.split(" ").filter(function(v){return (" "+className+" ").indexOf(v)==-1}).join(" ");
+    el.className = el.className.split(" ").filter(function(v){return (" " + className + " ").indexOf(v) >= 0}).join(" ");
+    j='\\b';el.className=el.className.replace(new RegExp(j+className.replace(' ',j+'|'+j)+j,'g'),' ');
+    el.className=el.className.replace(new RegExp('\\b'+className.replace(' ','\\b|\\b')+'\\b','g'),' ');
+    el.className=el.className.replace;
+    el.className=el.className.replace(new RegExp("\\b"+className.replace(" ","\\b|\\b")+"\\b","g")," ");
+    Very barebone version:
+    - only one class name may be removed at at time
+    - only allows one class name to be specified
+    - may result in unwanted spaces
+    - does not remove several instances (only removes one of the "a"'s in class="a a b")
+    el.className=el.className.replace(new RegExp("\\b"+className+"\\b"),"");
+    Barebone version:
+    - only one class name may be removed at at time
+    - only allows one class name to be specified
+    - may result in unwanted spaces
+    + removes several instances (removes both "a"'s in class="a a b")
+    el.className=el.className.replace(new RegExp("\\b"+className+"\\b","g"),"");
+    Less barebone version:
+    - only one class name may be removed at at time
+    + there will be no unwanted spaces
+    + removes several instances (removes both "a"'s in class="a a b")
+    (trim() is not enough, if we dont want to risk double spaces between class names)
+    el.className=el.className.replace(new RegExp("\\b"+a+"\\b","g"),"").replace(/\s\s/,' ').trim();
+    el.className=el.className.split(" ").filter(function(c){return c!=className;}).join(" ");
+    Alternative version:
+    + several class names can be removed in one go (space seperated)
+    - may result in unwanted spaces
+    + removes several instances (removes both "a"'s in class="a a b")
+    el.className=el.className.replace(new RegExp("\\b"+className.replace(" ","\\b|\\b")+"\\b","g")," ");
+    Deluxe version:
+    + several class names can be removed in one go (space seperated)
+    + there will be no unwanted spaces
+    + removes several instances (removes both "a"'s in class="a a b")
+    el.className=el.className.split(" ").filter(function(c){return!(" "+className+" ").match(' '+c+' ')}).join(" ");
+    el.className=el.className.split(" ").filter(function(c){return 0>className.split(" ").indexOf(c);}).join(" ");
 
 
-    // TODO:
-    // In order to support signature without parameters, we can 
-    // do like this:
-/*
-      if (!className) {
-        el.className = '';
-      }
-      else {*/
-
-    // However, lets wait with this until we have the builder ready for
-    // selecting partial support
 
 
-//    el.className=el.className.split(" ").filter(function(v){return (" "+className+" ").indexOf(v)==-1}).join(" ");
-    // el.className = el.className.split(" ").filter(function(v){return (" " + className + " ").indexOf(v) >= 0}).join(" ");
 
-//    j='\\b';el.className=el.className.replace(new RegExp(j+className.replace(' ',j+'|'+j)+j,'g'),' ');
-//    el.className=el.className.replace(new RegExp('\\b'+className.replace(' ','\\b|\\b')+'\\b','g'),' ');
-//el.className=el.className.replace;
-//    el.className=el.className.replace(new RegExp("\\b"+className.replace(" ","\\b|\\b")+"\\b","g")," ");
-
-
-    console.log(className.replace(' ','\\b|\\b')+'\\b');
+    //console.log(className.replace(' ','\\b|\\b')+'\\b');
 //el.className=el.className.replace(new RegExp('(^|\\b)'+className.replace(' ','(\\b|$)|(^|\\b)')+'(\\b|$)','g'),' ');
-
+/*
     el.className=el.className.split(" ").filter(function(v){
       // v is a classname currently in the element.
       // now, determine if it should be kept.
@@ -302,22 +292,58 @@ removeClass: function(className) {
 //    el.className=(' '+el.className+' ').replace(new RegExp('\\b'+className.replace(' ','\\b|\\b')+'\\b','g'),' ');
 
   });
+  return this*/
+
+removeClass: function(a) {
+  __ITERATE__(this.e, function(el, index){
+    if (!a) {
+      // remove all classes
+//      el.setAttribute("class", "");
+      el.className = "";
+    }
+    else {
+      var z = __IS_FUNCTION__(a) ? a.call(null, index, el.className) : a;
+
+      el.className=el.className.split(" ").filter(function(c){
+    //    return!(" "+a+" ").match(' '+c+' ')  // 9 bytes longer in gzip
+          return 0 > z.split(" ").indexOf(c);
+      }).join(" ");
+
+    }
+  });
   return this
 }
 
 // OPTIMIZED_VERSION //
 /*
-removeClass: function(b){
-  return __EACH__(this,function(a){
-    a.className = a.className.split(" ").filter(function(c) {
-//      return!(" "+b+" ").match(' '+c+' ')}
-      return b.split(" ").indexOf(c) < 0;
+  // Barebone version:
+  // - only one class name may be removed at at time
+  // - only allows one class name to be specified
+  // - may result in unwanted spaces
+  // + removes several instances (removes both "a"'s in class="a a b")
+//  b.className=b.className.replace(new RegExp("\\b"+a+"\\b","g"),"");
 
-    }).join(" ")
-  })
-}*/
-removeClass: function(a){
-  __EACH__(this,function(b){
+  // Less barebone version:
+  // - only one class name may be removed at at time
+  // + there will be no unwanted spaces
+  // + removes several instances (removes both "a"'s in class="a a b")
+  // (trim() is not enough, if we dont want to risk double spaces between class names)
+//  b.className=b.className.replace(new RegExp("\\b"+a+"\\b","g"),"").replace(/\s\s/,' ').trim();
+//  b.className=b.className.split(" ").filter(function(c){return c!=a;}).join(" ");
+
+  // Alternative version:
+  // + several class names can be removed in one go (space seperated)
+  // - may result in unwanted spaces
+  // + removes several instances (removes both "a"'s in class="a a b")
+//  b.className=b.className.replace(new RegExp("\\b"+a.replace(" ","\\b|\\b")+"\\b","g")," ");
+
+  // Deluxe version:
+  // + several class names can be removed in one go (space seperated)
+  // + there will be no unwanted spaces
+  // + removes several instances (removes both "a"'s in class="a a b")
+//  b.className=b.className.split(" ").filter(function(c){return!(" "+a+" ").match(' '+c+' ')}).join(" ");
+//  b.className=b.className.split(" ").filter(function(c){return 0>a.split(" ").indexOf(c);}).join(" ");
+
     // Actually, the junk variable-version produces bigger gzip
     // So we do not do this:
     // z='\\b';b.className=b.className.replace(new RegExp(z+a.replace(' ',z+'|'+z)+z,'g'),' ');    
@@ -328,22 +354,55 @@ removeClass: function(a){
 
     The "filter" version results in smaller zip, when .filter() is in the build
     otherwise, the second version is smallest.
-    BUT! it seems the regex version is broken!
-    AND! the new alternative filter-version with indexOf is even smaller, so it might always be shortest
-
-    */
-  b.className=b.className.split(" ").filter(function(c){
-//    return!(" "+a+" ").match(' '+c+' ')  // 9 bytes longer in gzip
-      return 0 > a.split(" ").indexOf(c);
-  }).join(" ");
-
+    BUT! the new alternative filter-version with indexOf is even smaller, so it might always be shortest
+    AND! the first version produces extra spaces in className
   <?php if (isFeatureEnabled('filter')):?>
 //    b.className=b.className.split(" ").filter(function(c){return!(" "+a+" ").match(' '+c+' ')}).join(" ");
   <?php else:?>
 //    b.className=b.className.replace(new RegExp("\\b"+a.replace(" ","\\b|\\b")+"\\b","g")," ")
   <?php endif;?>
+    */
+/*
+Input to Google Closure Compiler:
 
+removeClass: function(a){
+  __ITERATE__(this.e, function(b, c){
+    if (__IS_UNDEFINED__(a)) {
+      // remove all classes
+      // b.setAttribute("class", "");
+      b.className = "";
+    }
+    else {
+      z = __IS_FUNCTION__(a) ? a.call(null, c, b.className) : a;
+
+      b.className=b.className.split(" ").filter(function(c){
+    //    return!(" "+a+" ").match(' '+c+' ')  // 9 bytes longer in gzip
+          return 0 > z.split(" ").indexOf(c);
+      }).join(" ");
+
+    }
   });
   return this
 }
+*/
+removeClass:function(a) {
+  __ITERATE__(this.e, function(b, c) {
+    a ? (z = __IS_FUNCTION__(a) ? a.call(null, c, b.className) : a, b.className = b.className.split(" ").filter(function(a) {
+      return 0 > z.split(" ").indexOf(a);
+    }).join(" ")) : b.className = "";
+  });
+  return this;
+}
+/* 
+Alternative, using __IS_UNDEFINED__(a)
+  removeClass only: 2 bytes longer (620 bytes versus 618 bytes)
+  all methods: 1 byte smaller (1730 versus 1371)
 
+removeClass:function(a) {
+  __ITERATE__(this.e, function(b, c) {
+    __IS_UNDEFINED__(a) ? b.className = "" : (z = __IS_FUNCTION__(a) ? a.call(null, c, b.className) : a, b.className = b.className.split(" ").filter(function(a) {
+      return 0 > z.split(" ").indexOf(a);
+    }).join(" "));
+  });
+  return this;
+}*/

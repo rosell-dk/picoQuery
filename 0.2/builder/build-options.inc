@@ -3,7 +3,7 @@
 // Define all build options
 // Note that the place in the array is important, because its used fo
 // generate the buildId.
-$buildoptions_nameids = array('addClass', 'css', 'get', 'each', 'append', 'appendTo', 'first', 'on', 'removeClass', 'trigger', 'click', 'focus', 'keyup', 'hide', 'ready', 'parent', 'next', 'fallback', 'arraylike', 'builderurl', 'filter', 'prev', 'map', 'children');
+$buildoptions_nameids = array('addClass', 'css', 'get', 'each', 'append', 'appendTo', 'first', 'on', 'removeClass', 'trigger', 'click', 'focus', 'keyup', 'hide', 'ready', 'parent', 'next', 'fallback', 'arraylike', 'builderurl', 'filter', 'prev', 'map', 'children', 'attr', 'empty', 'html', 'removeAttr', 'find');
 
 $build_options_static_methods = array();  // array('grep')
 

@@ -38,6 +38,15 @@ var methods_meta = {
       ['.appendTo( target ) => jQuery', FULL],
     ]
   ],
+  'attr': [
+    'http://api.jquery.com/attr/',
+    [
+      ['.attr( attributeName ) => String', FULL],
+      ['.attr( attributeName, value ) => jQuery', FULL],
+      ['.attr( attributes ) => jQuery', FULL],
+      ['.attr( attributeName, function ) => jQuery', FULL],
+    ]
+  ],
   'children': [
     'http://api.jquery.com/children/',
     [
@@ -68,6 +77,12 @@ var methods_meta = {
       ['.each( function ) => jQuery', FULL],
     ]
   ],
+  'empty': [
+    'http://api.jquery.com/empty/',
+    [
+      ['.empty() => jQuery', FULL],
+    ]
+  ],
   'filter': [
     'http://api.jquery.com/filter/',
     [
@@ -75,6 +90,14 @@ var methods_meta = {
       ['.filter(elements) => jQuery', FULL],
       ['.filter(selection) => jQuery', FULL],
       ['.filter(function) => jQuery', NONE],
+    ],
+  ],
+  'find': [
+    'http://api.jquery.com/find/',
+    [
+      ['.find( selector [String] ) => jQuery', FULL],
+      ['.find( selector [jQuery] ) => jQuery', FULL],
+      ['.find( selector [Element] ) => jQuery', FULL],
     ],
   ],
   'first': [
@@ -102,10 +125,18 @@ var methods_meta = {
     'http://api.jquery.com/hide/',
     [
       ['.hide( ) => jQuery', FULL],
-      ['.hide( [ duration ][, complete ]) => jQuery', NONE],
-      ['.hide( options) => jQuery', NONE],
-      ['.hide( [ duration ][, easing][, complete ]) => jQuery', NONE],
+      ['.hide( [ duration ][, complete ] ) => jQuery', NONE],
+      ['.hide( options ) => jQuery', NONE],
+      ['.hide( [ duration ][, easing][, complete ] ) => jQuery', NONE],
     ],
+  ],
+  'html': [
+    'http://api.jquery.com/html/',
+    [
+      ['.html() => String', FULL],
+      ['.html( htmlString ) => jQuery', FULL],
+      ['.html( function) => jQuery', FULL],
+    ]
   ],
   'keyup': [
     'http://api.jquery.com/keyup/',
@@ -155,12 +186,18 @@ var methods_meta = {
     ],
   'This is not just an alias for .on("DOMContentLoaded"). As in jQuery, handler is also called in cases where the DOMContentLoaded event has already fired at the time this method is called'
   ],
+  'removeAttr': [
+    'http://api.jquery.com/removeAttr/',
+    [
+      ['.removeAttr( attributeName ) => jQuery', FULL],
+    ]
+  ],
   'removeClass': [
     'http://api.jquery.com/prev/',
     [
       ['.removeClass( className ) => jQuery', FULL],
-      ['.removeClass( ) => jQuery', NONE],
-      ['.removeClass( function ) => jQuery', NONE],
+      ['.removeClass( ) => jQuery', FULL],
+      ['.removeClass( function ) => jQuery', FULL],
     ]
   ],
   'trigger': [
@@ -169,7 +206,8 @@ var methods_meta = {
       ['.trigger( eventType ) => jQuery', FULL],
       ['.trigger( eventType, extraParameters ) => jQuery', NONE],
     ]
-  ]
+  ],
+
 
 }
 

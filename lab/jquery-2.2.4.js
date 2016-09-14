@@ -6151,13 +6151,13 @@ jQuery.extend( {
 				style[ name ] = "inherit";
 			}
 
-console.log('hm' + value);
+//console.log('hm' + value);
 
 			// If a hook was provided, use that value, otherwise just set the specified value
 			if ( !hooks || !( "set" in hooks ) ||
 				( value = hooks.set( elem, value, extra ) ) !== undefined ) {
 
-console.log(value);
+//console.log(value);
 				style[ name ] = value;
 
 			}
