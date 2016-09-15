@@ -247,12 +247,29 @@ if (isset($compactness)) {
   $comments_build_id = $compactness <= 1;
 }
 
-// Calculate feature flags.
-// This variable used in the end of this file for the builder url comment
-$feature_flags = array();
-foreach ($buildoptions_nameids as $i => $feat) {
-  $feature_flags[] = isFeatureEnabled($feat)?1:0;
+
+if (isFeatureEnabled('builderurl')) {
+  // Calculate builder url
+  // This variable used in the end of this file for the builder url comment
+
+  $feature_flags = array();
+  foreach ($buildoptions_nameids as $i => $feat) {
+    $feature_flags[] = (isFeatureEnabled($feat) xor isFeatureDefaultEnabled($feat))?1:0;
+  }
+
+  // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
+  // Builder URL, format #2: http://picoquery.com/builder/0.2/?addClass-css.min.js
+
+  $hex = '';
+  $length = count($feature_flags);
+  for ($i=0; $i<$length; $i+=4) {
+    $fourflags = implode('', array_reverse(array_slice($feature_flags, $i, 4)));
+//print_r(array_slice($flags, $i, 4));
+    $hex .= dechex(intval($fourflags, 2));
+  }
+  $builder_url = "picoquery.com/builder/0.2/?" . $compactness . "-" . $hex;
 }
+
 
 // Dependencies
 enableFeatureByNameId('ready'); // Constructor is dependent on this
@@ -831,21 +848,8 @@ if ($minify_all) {
 
 }
 //if ($comments_build_id) {
-if (TRUE) {
-  // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
-  // Builder URL, format #2: http://picoquery.com/builder/0.2/?addClass-css.min.js
-
-  $hex = '';
-  $length = count($feature_flags);
-  for ($i=0; $i<$length; $i+=4) {
-    $fourflags = implode('', array_reverse(array_slice($feature_flags, $i, 4)));
-//print_r(array_slice($flags, $i, 4));
-    $hex .= dechex(intval($fourflags, 2));
-  }
-
-  if (isFeatureEnabled('builderurl')) {
-    echo "/* picoquery.com/builder/0.2/?" . $compactness . "-" . $hex . " */\n";
-  }
+if (isFeatureEnabled('builderurl')) {
+  echo '/* ' . $builder_url . " */\n";
 }
 echo $js;
 ?>
