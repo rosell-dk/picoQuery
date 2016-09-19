@@ -6,7 +6,7 @@ picoQuery implements a subset of the jQuery API and aims to be as small as almos
 Compared to other ultra small DOM-libraries, the benefits are:
 - If you know jQuery, there is nothing new to learn
 - If your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery
-- jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light
+- jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light. Plus you get the job done quickly with "jQuery"
 - The fallback to jQuery ensures that it also works in older browsers
 
 <h3>Lets get started!</h3>
