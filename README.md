@@ -1,23 +1,22 @@
-# picoQuery - A 1k alternative to jQuery
+# picoQuery - A down to 1k "jQuery"
 
-picoQuery is a <i>ultra small</i> DOM manipulation library. It has the same syntax as jQuery, so nothing new to learn. For IE8 and other older browsers, it automatically falls back to jQuery.
+picoQuery implements a subset of the jQuery API and aims to be as small as almost theoretically possible. In the online builder, you can specify exactly which parts of the subset you need. Its written for modern browsers. For IE8 and other older browsers, it falls back to jQuery. picoQuery is your "jQuery" when size really matters, ie. in render-blocking scripts.
 
 <h3>Why is this smart?</h3>
-&ndash; Because this strategy alows picoQuery to be written for modern browsers without leaving older browsers behind. For new browsers, the benefit is ultra lightweight code (~1k). For old browsers, the benefit is simply that the webpage works (unlike other DOM-libraries written for modern browsers)
+Compared to other ultra small DOM-libraries, the benefits are:
+- If you know jQuery, there is nothing new to learn
+- If your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery
+- jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light
+- The fallback to jQuery ensures that it also works in older browsers
 
-Further, of course, the benefit is that you probably already know jQuery. And if your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery. Also, jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light.
-
-<h3>picoQuery web builder</h3>
-Another trick that allows picoQuery to be lightweight is that you can specify the subset of jQuery functionality you need. If you need only very basic DOM manipulation, the size will be as small as 600 bytes gzipped.
-
-Take a look! 
-http://picoquery.com/builder/
+<h3>Lets get started!</h3>
+You build your picoQuery here: http://picoquery.com/builder/
 
 <h3>Before you get too excited</h3>
 I should mention that picoQuery currently only supports a small subset of jQuery functionality. It is however enough for basic DOM manipulation, and I'm working to expand it (perhaps you want to join in? Or simply spread the word!). Also, without too much efford, you can expand it yourself through $.fn (see the examples below)
 
 The following methods is currently supported: 
-.addClass(), .css(), .get(), .each(), .append(), .appendTo(), .first(), .on(), .removeClass(), .trigger(), .click(), .ready(), .filter(), .prev(), .next(), .parent(), .map(), .children(), .attr(), .removeAttr(), .empty(), .html(), find()
+.addClass(), .append(), .appendTo(), .attr(), .children(), .click(), .css(), .each(), .empty(), .first(), .find(), .focous(), .get(), .hide(), .html(), .keyup(), .map(), .next(), .on(), .parent()., .prev(), .ready(), .removeAttr(), .removeClass(), .trigger()
 
 
 <h3>Examples of what you can currently do with picoQuery:</h3>

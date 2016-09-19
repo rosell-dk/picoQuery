@@ -145,28 +145,37 @@ elseif (isset($_GET['v'])) {
   //     Fun fact: Cannot be 0, as it would then mean that no sub-features where deselected
   //               and then it should not be listed
   //     To decide: Should subfeatures be selected or deselected?
-  //                If they are SELECTED, it means that when we add more sub-features in the
-  //                next version, they will be default unselected. The user may not notice these
-  //                new subfeatures
-  //               PRO DESELECTED: - User will not experience that an upgrade to the next version
-  //                                 makes existing features go away (BUT! we can prevent this
-  //                                 by ensuring that all stuff our methods currently can do are 
-  //                                 made into sub-features)
-  //                               - The next version will bring more compliance
+  //                This only matters, if a user upgrades to next picoQuery by simply changing the url
+  //                Ie, in 0.2 he has this URL: https://cdn.picoquery.com/picoquery0.2.0-A2fa0.min.js
+  //                When 0.3 arrives, he changes it to: https://cdn.picoquery.com/picoquery0.3.0-A2fa0.min.js
+  //                Should we support this? - ie must old build ID's work in new versions?
+  //                It is possible. The "A" in "picoquery0.2.0-A2fa0.min.js" can designate the encoding
+  //                of the build id. (A = picoQuery 0.2.x, B=picoQuery 0.3.x)
+  //                It will however require some work. This new "subfeature" encoding relies on build.php to
+  //                know how many bits a method needs. So build.php will have to know how many bits each method
+  //                requires FOR EACH version of picoQuery.
   //
-  //               PRO SELECTED:   - New sub-features may be brought into the word along with
-  //                                 new compatibility code, which actually (and often)
-  //                                 may be over-the-top
-  //                               - The next version will not bring larger codebase
-  //                               - Does the user really need more compliance? If it worked in 
-  //                                 previous version, there is no need for it.
+  //                What does the user hope to gain by changing the URL directly? (instead of upgrading through
+  //                the builder). The user will not gain access to new build options this way.
+  //                He certainly will expect code optimizations and bug fixes (though bugfixes must also be
+  //                available in 0.2.x).
   //
-  //             It seems "SELECTED" (default: deselected) are in favour
+  //                The important question is: Does he expect/want methods to be improved in terms of compliance?
+  //                PRO YES:  - The next version will be better in terms of compliance
+  //                PRO NO:   - The next version will not bring larger codebase
+  //                I guess no - because compliance was probably good enough for his project in 0.2.
+  //                If we choose "no", we will ensure that the upgrade will only bring good things - optimization
+  //                and not bad things (larger code).
+  //                However, if we choose "no", we will have to take meassures that no existing features go away
+  //                ALL the stuff our methods currently does must be made into sub features.
+  //
+  //                So, its "NO" then. That means subfeatures are selected. New subfeatures are default unselected
   
   // The subfeatures can be part of the CDN URL like this:
-  // https://cdn.picoquery.com/picoquery0.2-addClass0010-css100.min.js
-
-
+  // https://cdn.picoquery.com/picoquery0.3-addClass0010-css100.fast.min.js
+  // or base 8: https://cdn.picoquery.com/picoquery0.3-addClass2-css8-each17.small.min.js
+  // But few people are used to base 8, and do not want to go base 16, because it contains letters. So base 2 is
+  // best, I guess.
 
   //         http://picoquery.com/build?v=0.2&features=addclass-css-each
   // Builder URL: http://picoquery.com/builder/0.2/basic-click-nofallback.min.js
