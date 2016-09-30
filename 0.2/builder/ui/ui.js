@@ -230,6 +230,8 @@ function versionChanged() {
   setBuildId(tokens.join('-'));
 }*/
 
+var version = location.pathname.match(/builder\/(\d\.\d(\.\d)?)/)[1];
+
 function populateOptionsPanel(buildoptions) {
 //alert(JSON.stringify(buildoptions));
 console.log(buildoptions);
@@ -569,7 +571,7 @@ function generateCode() {
 
     $('#code-link').attr('href', url);
     $('#code-url').val(url);
-    $('#compliancetest-link').attr('href', '/lab/compliance-test/?frameworks=jquery-1.9.1.min.js,picoquery-0.2-' + buildId.split('-')[1] + '.js');
+    $('#compliancetest-link').attr('href', '/lab/compliance-test/?frameworks=jquery-1.9.1.min.js,picoquery-' + version + '-' + buildId.split('-')[1] + '.js');
     $('#code-warning').html('');
 
   })
@@ -585,6 +587,7 @@ function generateCode() {
 
 $(document).ready(function() {
 
+  $('body > h1').text('picoQuery builder v'+ version);
 /*
   $('#compactness_slider').slider({
     range: "max",
