@@ -38,9 +38,7 @@ function P(a,b) {
 
     // jQuery( selector )
     else {
-
       b = (b instanceof P ? b.e[0] : b);
-
       this.e = __TO_ARRAY__((b||d).querySelectorAll(a));
     }
   }

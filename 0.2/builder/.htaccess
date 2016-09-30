@@ -2,3 +2,19 @@
 <ifmodule mod_deflate.c>
 AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
 </ifmodule>
+
+
+# Bugfix-rewrites
+
+# If we for example want bugfix #1 to use another index.html, we can do like this:
+# RewriteRule ^[1-9]\/index\.html$  index-bugfix1.html [L]
+
+# bugfix version >=1: 
+# RewriteRule ^[1-9]\/inc\/constructor.js\.html$  index-bugfix1.html [L]
+
+
+# /builder/[bugfix]/xxx => builder/xxx
+RewriteRule ^\d\/(.*)$  $1 [L]
+RewriteRule ^(.*)$  $1 [L]
+
+

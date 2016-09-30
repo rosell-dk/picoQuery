@@ -173,6 +173,13 @@ var methods_meta = {
       ['.parent( [selector] ) => jQuery', FULL, 'Note though, as with all selectors in picoQuery, only standard CSS3 selectors are supported. The special JQuery selectors, such as ":button", etc are not supported'],
     ]
   ],
+  'prepend': [
+    'http://api.jquery.com/prepend/',
+    [
+      ['.prepend( content [,content] ) => jQuery', FULL],
+      ['.prepend( function ) => jQuery', NONE],
+    ]
+  ],
   'prev': [
     'http://api.jquery.com/prev/',
     [
@@ -550,6 +557,7 @@ function getSizeString(sizeInBytes) {
 
 function generateCode() {
 //alert('generating code...');
+  var buildId = buildBuildId();
   var url = 'build.php?build=' + buildBuildId();
   var jqXHR = $.ajax(url)
   .done(function() {
@@ -561,6 +569,7 @@ function generateCode() {
 
     $('#code-link').attr('href', url);
     $('#code-url').val(url);
+    $('#compliancetest-link').attr('href', '/lab/compliance-test/?frameworks=jquery-1.9.1.min.js,picoquery-0.2-' + buildId.split('-')[1] + '.js');
     $('#code-warning').html('');
 
   })

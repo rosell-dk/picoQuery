@@ -72,7 +72,7 @@ h3.panel-title {
 }
 
 #code_panel textarea {
-  height: 500px;
+  height: 300px;
   width: 100%;
   width: calc(100% - 20px);
 }

@@ -5,21 +5,20 @@ window.complianceTests = [
       {
         name: '.addClass( className )',
         tests: [
-          ['$("<div/>").addClass("test").get(0).className', ""],
-          ['$("<div/>").addClass("test").addClass("test2").get(0).className', ""],
-          ['$("<div/>").addClass("test ").get(0).className', ""],
-          ['$("<div/>").addClass("test2 test2").get(0).className', ""],
-          ['$("<div/>").addClass("test2").addClass("test2").get(0).className', ""],
-          ['$("<div/>").addClass(" ").get(0).className', ""],
-          ['$("<div/>").addClass("\t").get(0).className', ""],
-          ['$("<div class=\ttest/>").addClass("t2").get(0).className', ""],
-          ['$($("<div>text</div>").get(0).childNodes[0]).addClass("t").get(0).className', ""],
+          ['$("<div/>").addClass("test")', ""],
+          ['$("<div/>").addClass("test").addClass("test2")', ""],
+          ['$("<div/>").addClass("test ")', ""],
+          ['$("<div/>").addClass("test2 test2")', ""],
+          ['$("<div/>").addClass("test2").addClass("test2")', ""],
+          ['$("<div/>").addClass(" ")', ""],
+          ['$("<div/>").addClass("\t")', ""],
+          ['$("<div class=\ttest/>").addClass("t2")', ""],
         ]
       },
       {
         name: '.addClass( function )',
         tests: [
-          ['$("<div class=\'a b\'/>").addClass(function(a,b){return "b"+a+b}).get(0).className', ""],
+          ['$("<div class=\'a b\'/>").addClass(function(a,b){return "b"+a+b})', ""],
         ]
       }
     ]
@@ -30,11 +29,26 @@ window.complianceTests = [
       {
         name: '.append( content [,content] )',
         tests: [
+          ['$("<p></p>").append("<b></b>")', "[ htmlString ]"],
+          ['$("<p>text</p>").append("<b></b>")', "[ htmlString ]"],
+          ['$("<div><p></p></div>").append($("<b></b>"))', "[ jQuery ]"],
+          ['$("<div><p></p></div>").append(makeElement("<b></b>"))', "[ Element ]"],
+          ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Text Node ]"],
+          ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Array of text nodes]"],
+          ['$("<div><p></p></div>").append([makeTextNode("text"), makeElement("<i>italic</i>")])', "[ Array of text nodes / elements ]"],
+          ['$("<div><p></p></div>").append("<b></b>").append("<i></i>")', "Chaining"],
+          ['$("<div><p></p></div>").append([makeElement("<i>italic</i><b>bold</b>")])', "[ Array of elements ]"],
         ]
       },
       {
         name: '.append( function )',
         tests: [
+        ]
+      },
+      {
+        name: 'Unspecified cases',
+        tests: [
+          ['$("<div><p></p></div>").append([$("<i>italic</i>")])', "[ Array of jQuery objects ]"],
         ]
       },
     ]
@@ -127,44 +141,133 @@ window.complianceTests = [
     name: 'constructor',
     tests: [
       {
-        name: '',
+        name: 'jQuery( selector )',
         tests: [
-          ['$([document, null])', ""],
-          ['$(null)', ""],
-          ['$(0)', ""],
-          ['$(1)', ""],
-          ['$(false)', ""],
-          ['$("")', ""],
-          ['$(undefined)', ""],
-          ['$([])', ""],
-          ['$("a string")', ""],
-          ['$(true)', ""],
-          ['$([3,4])', ""],
-          ['$("<div class=div1/><div class=div2/>")', ""],
-          ['$($("<div>text</div>").get(0).childNodes)', ""],
-          ['$($("<div>text</div>").get(0).childNodes[0])', ""],
-          ['$("<div/>")', ""],
-          ['$("<li id=one>1</li><li id=two>2</li>")', ""],
-          ['$("li", $("ul"))', ""],
-          ['$("li", $("ul").get())', ""],
-          ['$("li", $("ul").get(0))', ""],
-          ['$("ul > li:first-child")', ""],
+          ['$("#item3")', "Standard"],
+          ['$("ul ul li:nth-child(odd)")', "<i>selector</i> is a CSS3 selector"],
+          ['$("ul ul li:odd")', "<i>selector</i> is a special jQuery selector"],
+        ]
+      },
+      {
+        name: '.jQuery( selector, context [ Element ] )',
+        tests: [
+          ['$("li", jq$("#item3").get(0))', "Standard"],
+          ['$("li#item1", jq$("ul#ul2").get(0))', "selector is not in the decendant tree"],
+          ['$("#item3", jq$("#item3").get(0))', "selector matches root of context"],
+          ['$("body li", jq$("#item3").get(0))', "selector begins with something outside of context. Its different in picoQuery because picoQuery uses Element.querySelecorAll, and here <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector'>the entire hierarchy counts</a>. In newer browsers, you can will get the compliant behaviour with the :scope pseudo-class.<a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll'>[1]</a> - but this probably causes syntax error in other browsers (havent tested yet). Btw, here is a <a href='https://github.com/lazd/scopedQuerySelectorShim'>shim</a>, and btw: picoQuery has same problem with find()"],
+          ['$(":scope body li", jq$("#item3").get(0))', "Applying the :scope pseudo-class."],
+          ['$("#item3 li", jq$("#item3").get(0))', "selector begins with something outside of context"],
+        ]
+      },
+      {
+        name: '.jQuery( selector, context [ jQuery ] )',
+        tests: [
+          ['$("#item3", $("body"))', "Standard"],
+          ['$("li#item1", $("ul#ul2"))', "selector is not in the decendant tree"],
+          ['$("#item3", $("#item3"))', "selector matches root of context"],
+          ['$("#item3_1", $("ul ul"))', "context has several 'roots'"],
+          ['$("li", $("<ul></ul><ul><li></li></ul>"))', "context has several 'roots'"],
+
+          ['$("#item3 li", $("#item3"))', ""],
+          ['$("body", $("body"))', ""],
+          ['$("body li.odd", $("body"))', ""],
+          ['$("ul ul li.odd", $("ul"))', ""],
+          ['$("li.odd", $("ul"))', ""],
+        ]
+      },
+      {
+        name: '.jQuery( element )',
+        tests: [
+          ['$(jq$("#item3").get(0))', "Standard - <i>element</i> is an Element node"],
+        ]
+      },
+      {
+        name: '.jQuery( elementArray )',
+        tests: [
           ['$([$("#item3").get()])', ""],
+        ]
+      },
+      {
+        name: '.jQuery( object [PlainObject] )',
+        tests: [
+        ]
+      },
+      {
+        name: '.jQuery( selection [jQuery] )',
+        tests: [
+          ['$($("li"))', "Cloning"],
+        ]
+      },
+      {
+        name: '.jQuery( )',
+        tests: [
+          ['$()', ""],
+        ]
+      },
+      {
+        name: '.jQuery( html )',
+        tests: [
+          ['$("<li id=one>1</li><li id=two>2</li>")', ""],
+        ]
+      },
+      {
+        name: '.jQuery( html, ownerDocument )',
+        tests: [
+        ]
+      },
+      {
+        name: '.jQuery( html, attributes )',
+        tests: [
+        ]
+      },
+      {
+        name: '.jQuery( callback )',
+        tests: [
+        ]
+      },
+      {
+        name: 'Misc',
+        tests: [
+          ['$("<div class=div1/><div class=div2/>")', ""],
+          ['$(jq$("<div>text</div>").get(0).childNodes)', ""],
+          ['$("li", $("ul").get(0))', ""],
           ['$([$("#item3").get(0)])', ""],
           ['$("#item3").get()', ""],
           ['$("#item3").get(0)', ""],
           ['$("li", $("#item3").get())', ""],
-          ['$("li", $("#item3").get(0))', ""],
-          ['$("ul li:odd")', ""],
           ['$("<li><a></a></li>").children("a").end()', "pushstack. Every traversal method creates a new jQuery set and builds a stack. Use .end() to get at the previous set."],
-          ['function() {var li=document.createElement("li", "var frag=document.createDocumentFragment();frag.appendChild(li);return $(frag)}()', "Document Fragment"],
-          ['$($("li"))', "selector is a jQuery object"],
-          ['$("li#item1", $("ul#ul2").get(0))', "selector is not in the decendant tree"],
-          ['$("li#item1", $("ul#ul2"))', "selector is not in the decendant tree"],
-          ['$($("li#item1").get(0), $("ul#ul2").get(0))', "selector is Element, and we have context (which is ignored)"],
-          ['$($("li#item1"), $("ul#ul2").get(0))', "selector is jQuery, and we have context (which is ignored)"],
         ]
-      }
+      },
+      {
+        name: 'Edge cases',
+        tests: [
+          ['$("li", $("ul").get())', ""],
+          ['$("<div/>")', "Invalid tag syntax?"],
+        ]
+      },
+      {
+        name: 'Outside specification',
+        tests: [
+          ['$(jq$("<div>text</div>").get(0).childNodes[0])', "jQuery([Text Node])"],
+          ['$("#item3", document)', "jQuery( selector, [HTMLDocument]"],
+          ['$(document)', "jQuery( [HTMLDocument] )"],
+          ['$($("li#item1").get(0), $("ul#ul2"))', "selector is Element, and we provide a second argument"],
+          ['function() {var li=document.createElement("li"),frag=document.createDocumentFragment();frag.appendChild(li);return $(frag)}()', "jQuery( [DocumentFragment] )"],
+          ['$(null)', ""],
+          ['$(0)', ""],
+          ['$(1)', ""],
+          ['$(undefined)', ""],
+          ['$([document, null])', ""],
+          ['$(false)', ""],
+          ['$("")', ""],
+          ['$([])', ""],
+          ['$("a string")', ""],
+          ['$(true)', ""],
+          ['$([3,4])', ""],
+          ['$(":scopepy body li", jq$("#item3").get(0))', "Applying non-existant pseudy-class."],
+          ['$(":scopydoodlydoo body li", jq$("#item3"))', "Applying non-existant pseudy-class."],
+        ]
+      },
     ]
   },
   {
@@ -292,11 +395,13 @@ window.complianceTests = [
         name: '.find( selector [String] )',
         tests: [
           ['$("ul").find("li")', " "],
+          ['$("ul").find("li")', " "],
           ['$("ul#ul0").find("li")', " "],
           ['$("ul#ul2").find("li")', " "],
           ['$("ul#ul2,ul#ul3").find("li")', " "],
 
           ['$("ul#ul2").find("li#item1")', "selector is not in the decendant tree"],
+          ['$("#item3").find("body li")', "selector begins with something outside of context."],
         ]
       },
       {
@@ -408,6 +513,7 @@ window.complianceTests = [
         tests: [
           ['$("li").html()', " "],
           ['$().html()', " "],
+          ['$("#testhtml form").html()', " "],
         ]
       },
       {
@@ -524,6 +630,27 @@ window.complianceTests = [
           ['$("li").parent(".level1")', ""],
         ]
       }
+    ]
+  },
+  {
+    name: '.prepend()',
+    tests: [
+      {
+        name: '.prepend( content [,content] )',
+        tests: [
+          ['$("<p></p>").prepend("<b></b>").children()', "[ htmlString ]"],
+          ['$("<div><p></p></div>").prepend($("<b></b>")).children()', "[ jQuery ]"],
+          ['$("<div><p></p></div>").prepend($("<b></b>").get(0)).children()', "[ Element ]"],
+          ['$("<div><p></p></div>").prepend($("<b>text</b>").get(0).childNodes[0]).get(0).innerHTML', "[ Text Node ]"],
+          ['$("<div><p></p></div>").prepend([$("<b>text</b>").get(0).childNodes[0], $("<i>italic</i>")]).get(0).innerHTML', "[ Array of text nodes / elements ]"],
+          ['$("<div><p></p></div>").prepend("<b></b>").prepend("<i></i>").children()', "Chaining"],
+        ]
+      },
+      {
+        name: '.prepend( function )',
+        tests: [
+        ]
+      },
     ]
   },
   {

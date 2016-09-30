@@ -82,7 +82,7 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 - Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
 - There exists a library called *Zepto.js*, which also implements a subset of jQuery. *Zepto.js* implements almost the full jQuery api. Its also modular, but the feature selector is not as fine grained as picoquery, and its not possible to get below ~10k gzipped (picoQuery is ~1k, jQuery 1.9.1 is ~37k). http://zeptojs.com/
 
-<h3>New in 0.2</h3>
+<h3>New in 0.2.0</h3>
 - Uses "$" instead of "p$", so picoQuery can be a drop-in replacement of jQuery
 - Automatically falls back to jQuery (can be disabled in builder)
 - Defines $.fn, so you can easily extend the picoQuery prototype with yet unsupported methods
@@ -92,26 +92,26 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 - Non-minified code is more readable
 - New methods: .filter(), .next(), .parent(), .prev(), .map(), .children(), .attr(), .removeAttr(), .empty(), .html(), .find()
 - Optimization. Various tricks has been applied to get the code even smaller
-- Created framework for testing compliance. http://picoquery.com/lab/compliance-test.html
+- Created framework for testing compliance. http://picoquery.com/lab/compliance-test/
 - Made existing methods more compliant
 
+<h3>0.2.1 bugfix release</h3>
+- Scope. When .find() is based on querySelectorAll, special meassurements has to be taken, otherwise code like the following unexpectedly finds nodes: $​("body li", $​("li"​)​.get​(0​)​). It also affects .find(), as it uses the constructor, so this did also return nodes: $​("li"​)​.find​("body li"​). I basically implemented the following shim to fix it (without actually shimming): https://github.com/lazd/scopedQuerySelectorShim
 
 
 <h3>Roadmap</h3>
-I'm currently finishing up the 0.2 version.
-
-Features planned for 0.2:
+Features planned for 0.3:
+- more api! - jQuery.noConflict(), .remove(), .closest(), .before(), .replaceWith(), and probably more. Please let me know if there is a method you think should be included
+- build id will change. Right now, the selected methods are encoded with 4 bits (0-f). It will be increased to 6 bits in order to get even shorter URLs.
 - CDN. Not just full versions - ALL combinations! (a pull server). It will probably be on URLs like these: https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js. I will also allow URLs like these: https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js. That is: You can specify the build options directly in the URL, so you don't have to go to the builder in order to add a feaure.
 - picoQuery.com and the CDN must run on HTTPS
 
-
-Features planned for 0.3:
+Features planned for 0.4:
 - Option to granularly downgrade functionality for each method. If you know you never use certain signatures/features of a method, you can deselect the signature/feature in order to get size down. It will also be visible when there are features that picoQuery does not support.
 - Possibility to see the code that will be generated for each method, depending on what sub-functionality are selected
 - Browser tests. I will apply for a free "open source" account on browsershack.com
-- build id will change. Right now, the selected methods are encoded with 4 bits (0-f). It will be increased to 6 bits in order to get even shorter URLs. Also, they must include additional information of degrations of methods.
 
-Features planned for 0.4:
+Features planned for 0.5:
 - Optionally optimize library for execution speed rather than gzip size.
 
 

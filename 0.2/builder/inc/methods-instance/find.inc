@@ -22,6 +22,11 @@ find: function(selector) {
     });
 
     // Remove duplicates
+    // Note that this code does not work with prototype 1.7.
+    // (see parent.inc)
+    // Here is a prototype 1.7 compatible variant:
+    // arr = arr.filter(function(item,i,r){return arr.indexOf(item) == i});
+
     arr = arr.filter(function(item,i,r){return r.indexOf(item) == i});
 
     return $(arr);

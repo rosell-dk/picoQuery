@@ -1,0 +1,32 @@
+
+# Redirect for example "src/picoquery0.2-full-nofallback.min.js" to "0.2/builder/build.php?full.nofallback.min.js"
+#                   or "src/picoquery0.2-full-nofallback.min.js" to "0.2/builder/build.php?file=picoquery0.2-full.nofallback.min.js"
+#                   or "src/picoquery0.2-full-nofallback.min.js" to "0.2/builder/build.php?v=0.2&compactness=0&features=full.nofallback.min.js"
+#RewriteRule ^src/picoquery([\d\.]+)(.*)  $1/builder/build.php?file=picoquery$2 [L]
+
+#RewriteRule ^src/picoquery([\d\.]+)-(.*)\.min\.js  $1/builder/build.php?v=$1&compactness=0&features=$2 [L]
+#RewriteRule ^src/picoquery([\d\.]+)-(.*)\.optimized\.js  $1/builder/build.php?v=$1&compactness=3&features=$2 [L]
+#RewriteRule ^src/picoquery([\d\.]+)-(.*)\.devel\.js  $1/builder/build.php?v=$1&compactness=9&features=$2 [L]
+#RewriteRule ^src/picoquery-(\d\.\d)(\.(\d))?-(.*)\.js  $1/builder/$3/build.php?build=5-$4 [L]
+#RewriteRule ^src/picoquery([\d\.]+)-(.*)\.js  $1/builder/build.php?v=$1&compactness=5&features=$2 [L]
+
+
+
+#RewriteRule ^picoquery-(\d\.\d)(\.(\d))?-(.*)\.js  builder/$3/build.php?build=5-$4 [L,R=302]
+
+RewriteRule ^(.*)  builder/$1 [L,R=302]
+
+# RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.js  ../builder/$3/build.php?build=5-$4 [L,R=302]
+
+
+
+
+# Redirect for example "picoquery-0.1-4-1-10f.js" to "/builder/build.php?build=0.1-4-1-10f"
+
+# RewriteRule ^picoquery-([\d\.]+-[a-f\d]+-[a-f\d]+-[a-f\d]+)\.js  ../builder/build.php?build=$1 [L]
+
+
+</IfModule>
+
+
+

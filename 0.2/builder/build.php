@@ -2,6 +2,25 @@
 header("Content-type: application/javascript;charset=UTF-8");
 require_once('build-options.inc');
 
+//  echo $_SERVER['REQUEST_URI'];
+
+//preg_match('/.*builder\/([\d\.]*).*/', $_SERVER['REQUEST_URI'], $matches);
+if (preg_match('/.*builder\/((\d)\.(\d)(\.(\d))?).*/', $_SERVER['REQUEST_URI'], $matches)) {
+}
+else if (preg_match('/\/src\/picoquery-((\d)\.(\d)(\.(\d))?).*/', $_SERVER['REQUEST_URI'], $matches)) {
+//  /src/picoquery-0.2-addclass.js
+}
+  $major_version = $matches[2];
+  $minor_version = $matches[3];
+  if (count($matches) >= 5) {
+    $bugfix_version = $matches[5];
+  }
+  else {
+    $bugfix_version = '0';
+  }
+
+  $version = $matches[1];
+
 
 function hexstr2binstr($hexstr) {
   $binstr = '';
@@ -276,7 +295,8 @@ if (isFeatureEnabled('builderurl')) {
 //print_r(array_slice($flags, $i, 4));
     $hex .= dechex(intval($fourflags, 2));
   }
-  $builder_url = "picoquery.com/builder/0.2/?" . $compactness . "-" . $hex;
+
+  $builder_url = "picoquery.com/builder/" . $version . "/?" . $compactness . "-" . $hex;
 }
 
 
@@ -367,7 +387,20 @@ function indent($js, $indent_levels = 0, $indent_first_line = FALSE) {
 
 function include_javascript($filename) {
   ob_start();
-  include($filename);
+  global $bugfix_version;
+  
+/*  $bugfixes = [
+    'constructor.js' => array(
+      'version' => 1,
+      'filename' => 'constructor-bugfix-scoped.js'
+    )
+  ]*/
+  if (($bugfix_version=='1') && (file_exists($filename . '.bugfix1'))) {
+    include($filename . '.bugfix1');
+  }
+  else {
+    include($filename);
+  }
   $js = trim(ob_get_clean());
 
   $readable_version = preg_replace('/\/\/\\s*OPTIMIZED_VERSION\\s*\/\/.*/ms', '', $js);
@@ -802,7 +835,19 @@ include_methods('instance');
 <?php endif;?>
 })(window,document);<?php
 /*
-We could save a few bytes by changing to protocol-relative url. (src=//code.jquery..)
+We could save a few bytes by hosting jQuery on picoQuery.com or "hosting" a 301 redirect
+ie src="https://picoquery.com/j"
+(the string "picoquery.com" is already in the src, as it starts with a comment like this:
+"picoquery.com/builder/0.2.1/?5-ff")
+As we also later will have the string "jQuery" in the src, it wont cost much more to do this:
+src="https://picoquery.com/jQuery"
+We could also consider this
+ie src="https://picoquery.com/jquery1.9.1.min.js"
+CON: If one day I should become a bad guy, I could change the file to contain malicious code.
+(joke aside, if someone should gain access to my webserver, they could change the file)
+
+
+We could also save a few bytes by changing to protocol-relative url. (src=//code.jquery..)
 But then it will not work on local files (the file:// protocol).
 Also, according to paul irish, its now an anti-pattern; https should always be used.
 1) for the security, 2) even when website is in http, its better security, 3) there are no

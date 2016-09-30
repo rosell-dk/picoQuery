@@ -15,7 +15,8 @@ Unsupported signatures:
 */
 
 append: function() {
-  var a=arguments;
+  var a = __TO_ARRAY__(arguments);
+
   __EACH__(this, function(el) {
 
 //    [].forEach.call($.e, f)

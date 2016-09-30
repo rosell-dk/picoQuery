@@ -1,0 +1,92 @@
+
+
+jquery-1.9.1.min.js   ~ 30 ms
+picoquery0.2-full.js  ~ 1.2 ms
+jquery-2.2.4.min.js   ~ 33 ms
+zepto1.2.0.min.js     ~ 11 ms
+angular1.5.7.min.js   ~ 53 ms
+
+
+
+just-include.php
+=================
+
+I opened i Chromium on my desktop (Core I7-3770 3.4 GHz, 2 x 4 GB DDR3 SDRAM 1866 MHz, Socket 1155 ASRock B75M) and looked in timeline, and noted the time that the 
+"Parse HTML" block took for pages just-include.php?index=0, just-include.php?index=1 etc
+
+
+
+jquery-1.9.1.min.js   ~ 30 ms
+jquery-2.2.4.min.js   ~ 33 ms
+zepto1.2.0.min.js     ~ 11 ms
+picoquery0.2-full.js  ~ 1.2 ms
+
+
+
+
+index.php
+=============
+Results for index.php?index=0, index.php?index=1 etc
+
+Chrome results, my desktop computer
+jquery-1.9.1.min.js   ~ 9ms (first: 13ms)
+jquery-2.2.4.min.js   ~ 9ms (first: 27ms)
+zepto1.2.0.min.js     ~ 3ms (first: 7ms)
+picoquery0.2-full.js  ~ 0.2ms (first: 0.18ms)
+
+iPad results (Safari)
+jquery-1.9.1.min.js   ~ 9ms (first: 88ms)
+jquery-2.2.4.min.js   ~ 21ms (first: 27ms)
+zepto1.2.0.min.js     ~ 5ms (first: 7ms)
+picoquery0.2-full.js  ~ 0.5ms (first: 0.18ms)
+
+Samsung results (Chrome)
+jquery-1.9.1.min.js   ~ 38-50ms (first: 68ms)
+jquery-2.2.4.min.js   ~ 36-100ms (first: 223ms)
+zepto1.2.0.min.js     ~ 5-25ms (first: 50ms)
+picoquery0.2-full.js  ~ 0.05-0.06ms (first: 1.7ms)
+
+Samsung results ("Internet")
+jquery-1.9.1.min.js   ~ ms (first: 93ms)
+jquery-2.2.4.min.js   ~ ms (first: 111ms)
+zepto1.2.0.min.js     ~ ms (first: 33ms)
+picoquery0.2-full.js  ~ ms (first: 2ms)
+
+
+gzip size:
+============
+jquery-1.9.1.min.js   91 KB
+jquery-2.2.4.min.js   84 KB
+zepto1.2.0.min.js     26 KB
+picoquery0.2-full.js  7  KB
+
+
+CPU resources gzipping
+======================
+http://www.itworld.com/article/2693941/cloud-computing/why-it-doesn-t-make-sense-to-gzip-all-content-from-your-web-server.html
+
+
+
+download speed
+===============
+Avg connection speed across contries varies between 1.8 Mb/s and 26.7 Mb/s (Mb = mega-bit)
+https://en.wikipedia.org/wiki/List_of_countries_by_Internet_connection_speeds
+
+At 2 Mb/s:
+
+jquery-1.9.1.min.js   364 ms
+jquery-2.2.4.min.js   336 ms
+zepto1.2.0.min.js     104 ms
+picoquery0.2-full.js  12 ms
+
+The server is however often the bottleneck.
+The server which picoQuery uses is one of the faster shared hosts around.
+Receiving jquery-1.9.1.min on my internet connection took 90 ms (plus 31 ms in "waiting" state - so totally: 120 ms), but receiving it from google cdn took 30 ms. (plus 105 ms in "blocking" state and 37 ms in "waiting" state, so total: 172 ms (i'm surprised - the CDN is slower)) - so it seems domaindirect.dk delivers with 8 Mb/s.
+
+An example of a slow host could be the one this website is hosted on: http://detfortællendeteater.dk/
+Here, we get a 83KB image delivered in 400ms (sometimes in 4 seconds!)
+So they deliver with just 1.6 Mb/s (sometimes 0.2 Mb/s !)
+
+
+
+
