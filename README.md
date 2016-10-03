@@ -1,9 +1,9 @@
 # picoQuery - A down to 1k "jQuery"
 
-picoQuery implements a subset of the jQuery API and aims to be as small as almost theoretically possible. In the online builder, you can specify exactly which parts of the subset you need. Its written for modern browsers. For IE8 and other older browsers, it falls back to jQuery. picoQuery is your "jQuery" when size really matters, ie. in render-blocking scripts.
+picoQuery is a customizable subset of jQuery. Its written for modern browsers and automatically falls back to jQuery on older browsers.
 
-<h3>Why is this smart?</h3>
-Compared to other ultra small DOM-libraries, the benefits are:
+This approach has several benefits:
+- picoQuery is <i>ultra</i>-light. Even if you choose the largest subset currently available (29 methods), its only 1.7kb zipped
 - If you know jQuery, there is nothing new to learn
 - If your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery
 - jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light. Plus you get the job done quickly with "jQuery"
