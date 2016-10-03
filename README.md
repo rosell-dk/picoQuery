@@ -1,6 +1,6 @@
-# picoQuery - A down to 1k "jQuery"
+# picoQuery - A customizable subset of jQuery
 
-picoQuery is a customizable subset of jQuery. Its written for modern browsers and automatically falls back to jQuery on older browsers.
+picoQuery implements a customizable subset of jQuery. Its written for modern browsers and automatically falls back to jQuery on older browsers.
 
 This approach has several benefits:
 - picoQuery is <i>ultra</i>-light. Even if you choose the largest subset currently available (29 methods), its only 1.7kb zipped
