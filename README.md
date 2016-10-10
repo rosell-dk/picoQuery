@@ -39,52 +39,6 @@ $('li').bgColor('blue');
 You can learn more about compliance by running our online compliance test: http://picoquery.com/lab/compliance-test/
 
 
-<h3>Examples of what you can currently do with picoQuery:</h3>
-
-```javascript
-// Construct from selector, HTML-text, DOM element, HTMLCollection or picoQuery object (cloning)
-// , and optionally with a context
-$('#contact_form .column a');
-$('<p>some <b>HTML</b></p>');
-$(document.getElementById('main'));
-$(document.getElementsByTagName('div'));
-$($('div .column'));
-$('li', $('#math').get(0));
-
-// Chaining:
-$('.some-class').css('color', 'blue').first().removeClass('some-class');
-
-// Each loop:
-$('div .column').each(function(i, elm) {
-	$(elm).addClass('big');
-})
-
-// Add event handler:
-$('#clickme').click(function(e) {
-	alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
-});
-
-// Append with "appendTo()" and "append()"
-$('<b>bold</b>').appendTo($('body'));
-$('body').append('<b>bold</b>', '<i>italic</i>');
-
-// Access the jQuery object like an array
-var numItems = $('li').length;
-var firstItem = $('li')[0];
-
-// Filter results:
-$('span').filter(':nth-of-type(odd)').addClass('red-text');
-
-// Various tree traversal
-$('li').parent('ol').next().prev('ol');
-
-// Extend the prototype
-$.fn.bgColor = function(bgColor) {
-  this.css('background-color', bgColor);
-}
-$('li').bgColor('blue');
-
-```
 
 <h3>Usecase: picoQuery is your "jQuery" for render-blocking scripts</h3>
 There are times, when you want some of your script to manipulate the document before its displayed. This means that you will want you script to load, parse and execute very quickly. Its blocking the page rendering. People are waiting! Fastest load-time is achieved by keeping your script small and inlining it directly in the HTML. Fast parsing is also achieved by keeping the script small. To keep the script small, you of course need to move all the code that can be defered into another script. That defered script can use jQuery without noticable penalty, but you cannot afford to use jQuery for the render-blocking scripting. If you love the expressiveness and how quickly you get things done in jQuery, you will experience a loss. If you are optimizing a site that already uses jQuery, you will experience plain tediousness. But ta-dah, not anymore. You can now turn to picoQuery, as you can build your own little picoQuery, which suits your needs, and it will be very small. As the render-blocking scripting you need to do is probably limited, it is not too big a drawback that picoQuery currently only supports a small subset of jQuery.
@@ -142,6 +96,53 @@ Features planned for 0.5:
 
 Features planned for 0.6:
 - Optionally optimize library for execution speed rather than gzip size.
+
+<h3>Examples of what you can currently do with picoQuery:</h3>
+
+```javascript
+// Construct from selector, HTML-text, DOM element, HTMLCollection or picoQuery object (cloning)
+// , and optionally with a context
+$('#contact_form .column a');
+$('<p>some <b>HTML</b></p>');
+$(document.getElementById('main'));
+$(document.getElementsByTagName('div'));
+$($('div .column'));
+$('li', $('#math').get(0));
+
+// Chaining:
+$('.some-class').css('color', 'blue').first().removeClass('some-class');
+
+// Each loop:
+$('div .column').each(function(i, elm) {
+	$(elm).addClass('big');
+})
+
+// Add event handler:
+$('#clickme').click(function(e) {
+	alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
+});
+
+// Append with "appendTo()" and "append()"
+$('<b>bold</b>').appendTo($('body'));
+$('body').append('<b>bold</b>', '<i>italic</i>');
+
+// Access the jQuery object like an array
+var numItems = $('li').length;
+var firstItem = $('li')[0];
+
+// Filter results:
+$('span').filter(':nth-of-type(odd)').addClass('red-text');
+
+// Various tree traversal
+$('li').parent('ol').next().prev('ol');
+
+// Extend the prototype
+$.fn.bgColor = function(bgColor) {
+  this.css('background-color', bgColor);
+}
+$('li').bgColor('blue');
+
+```
 
 
 
