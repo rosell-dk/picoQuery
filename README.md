@@ -10,8 +10,9 @@ This approach has several benefits:
 - The fallback to jQuery 1.12.4 ensures that it works in older browsers, such as IE6-8
 
 <h3>How to use</h3>
-First you build your picoQuery here: http://picoquery.com/builder/<br>
-Then you simply include your custom build instead of jQuery.
+
+1. Build your picoQuery here: http://picoquery.com/builder/<br>
+2. Simply include that custom script instead of jQuery.
 
 <h3>Current subset</h3>
 The following methods is currently supported: 
