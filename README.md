@@ -7,16 +7,36 @@ This approach has several benefits:
 - If you know jQuery, there is nothing new to learn
 - If your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery
 - jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light. Plus you get the job done quickly with "jQuery"
-- The fallback to jQuery ensures that it also works in older browsers
+- The fallback to jQuery 1.12.4 ensures that it works in older browsers, such as IE6-8
 
 <h3>Lets get started!</h3>
 You build your picoQuery here: http://picoquery.com/builder/
 
-<h3>Before you get too excited</h3>
-I should mention that picoQuery currently only supports a small subset of jQuery functionality. It is however enough for basic DOM manipulation, and I'm working to expand it (perhaps you want to join in? Or simply spread the word!). Also, without too much efford, you can expand it yourself through $.fn (see the examples below)
+<h3>How to use</h3>
+Simply include your custom picoQuery build instead of jQuery
 
+<h3>Current subset</h3>
 The following methods is currently supported: 
 .addClass(), .append(), .appendTo(), .attr(), .children(), .click(), .css(), .each(), .empty(), .first(), .find(), .focous(), .get(), .hide(), .html(), .keyup(), .map(), .next(), .on(), .parent()., .prev(), .ready(), .removeAttr(), .removeClass(), .trigger()
+
+In the upcomming 0.3 release, the folowing methods will be supported:
+.addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .each(), .empty(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .ready(), .remove(), .removeAttr(), .removeClass(), .text(), .trigger()
+
+Focus in the 0.4 release will be to support even more of the jQuery API. Please let me know if there is a specific method you wish to be supported.
+
+If you cannot wait for support of a certain method, you can expand picoQuery like this:
+
+```javascript
+// Add "bgColor" method
+$.fn.bgColor = function(bgColor) {
+  this.css('background-color', bgColor);
+}
+
+// Use the new "bgColor" method
+$('li').bgColor('blue');
+```
+
+You can learn more about compliance by running our online compliance test: http://picoquery.com/lab/compliance-test/
 
 
 <h3>Examples of what you can currently do with picoQuery:</h3>
