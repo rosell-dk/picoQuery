@@ -101,14 +101,15 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 
 <h3>Roadmap</h3>
 Features planned for 0.3:
-- More API: .after(), .before(), .closest(), .eq(), .insertAfter(), .insertBefore(), .remove(), .replaceWith(), .text(), .prependTo(), jQuery.noConflict() -and probably more. Please let me know if there is a method you would like to see included
+- More API: jQuery.noConflict(), .after(), .before(), .closest(), .eq(), .insertAfter(), .insertBefore(), .offset(), .remove(), .replaceWith(), .text(), .prependTo() - and probably more. Please let me know if there is a method you would like to see included
 - Improved compatibility of .append(), .appendTo, and .prepend()
 - build id will change. Right now, the selected methods are encoded with 4 bits (0-f). It will be increased to 6 bits in order to get even shorter URLs.
 - CDN. Not just full versions - ALL combinations! (a pull server). It will probably be on URLs like these: https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js. I will also allow URLs like these: https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js. That is: You can specify the build options directly in the URL, so you don't have to go to the builder in order to add a feaure.
 - picoQuery.com and the CDN must run on HTTPS
+- picoQuery no longer cowardly steps aside when $ is already defined. It now overwrites $ like jQuery, and like in jQuery, you can get $ restored with jQuery.noConflict(). The philosophy behind this is that picoQuery should behave exactly like jQuery, so they can be used interchangably (which is required for the jQuery fallback to work)
 
 The supported api for 0.3 will be:
-.addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .each(), .empty(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.noConflict(), .keyup(), .map(), .next(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .ready(), .remove(), .removeAttr(), .removeClass(), .text(), .trigger()
+.addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .each(), .empty(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .ready(), .remove(), .removeAttr(), .removeClass(), .text(), .trigger()
 
 Features planned for 0.4:
 - Option to granularly downgrade functionality for each method. If you know you never use certain signatures/features of a method, you can deselect the signature/feature in order to get size down. It will also be visible when there are features that picoQuery does not support.
