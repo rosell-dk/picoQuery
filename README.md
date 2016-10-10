@@ -9,11 +9,8 @@ This approach has several benefits:
 - jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light. Plus you get the job done quickly with "jQuery"
 - The fallback to jQuery 1.12.4 ensures that it works in older browsers, such as IE6-8
 
-<h3>Lets get started!</h3>
-You build your picoQuery here: http://picoquery.com/builder/
-
 <h3>How to use</h3>
-Simply include your custom picoQuery build instead of jQuery
+Simply include your custom picoQuery build instead of jQuery. You build your picoQuery here: http://picoquery.com/builder/
 
 <h3>Current subset</h3>
 The following methods is currently supported: 
