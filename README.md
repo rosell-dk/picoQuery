@@ -55,22 +55,6 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 - Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
 - There exists a library called *Zepto.js*, which also implements a subset of jQuery. *Zepto.js* implements almost the full jQuery api. Its also modular, but the feature selector is not as fine grained as picoquery, and its not possible to get below ~10k gzipped (picoQuery is ~1k, jQuery 1.9.1 is ~37k). http://zeptojs.com/
 
-### New in 0.2.0
-- Uses "$" instead of "p$", so picoQuery can be a drop-in replacement of jQuery
-- Automatically falls back to jQuery (can be disabled in builder)
-- Defines $.fn, so you can easily extend the picoQuery prototype with yet unsupported methods
-- picoQuery object is now array-like, like jQuery (can be disabled)
-- In order to easily change picoQuery build on a project, there now is an URL in the beginning of the generated code, which loads the builder and initializes it with he selected build options (can be disabled)
-- Instead of a fine-grain selection of what which type of comments should be included and which parts that should be minified, you now select between 4 versions
-- Non-minified code is more readable
-- New methods: .filter(), .next(), .parent(), .prev(), .map(), .children(), .attr(), .removeAttr(), .empty(), .html(), .find(), .prepend()
-- Optimization. Various tricks has been applied to get the code even smaller
-- Created framework for testing compliance. http://picoquery.com/lab/compliance-test/
-- Made existing methods more compliant
-
-### 0.2.1 bugfix release
-- Scope. When .find() is based on querySelectorAll, special meassurements has to be taken, otherwise code like the following unexpectedly finds nodes: $​("body li", $​("li"​)​.get​(0​)​). It also affects .find(), as it uses the constructor, so this did also return nodes: $​("li"​)​.find​("body li"​). I basically implemented the following shim to fix it (without actually shimming): https://github.com/lazd/scopedQuerySelectorShim
-
 
 ### Roadmap
 #### Features planned for 0.3:
