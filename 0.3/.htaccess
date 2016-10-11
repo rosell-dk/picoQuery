@@ -2,14 +2,16 @@
 RewriteEngine On
 
 # here, we have jquery cdn style urls,
-# ie. /src/picoquery-0.2.1-fe7000.min.js
-# which will map to ie: https://cdn.picoquery.com/picoquery-0.2.1-fe7000.min.js
+# ie. /src/picoquery-0.3.0-Bfe7000.min.js
+# which will map to ie: https://cdn.picoquery.com/picoquery-0.3.0-Bfe7000.min.js
 
-RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.small\.min\.js  builder/$3/build.php?build=0-$4 [L]
-RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.min\.js  builder/$3/build.php?build=0-$4 [L]
-RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.small\.js  builder/$3/build.php?build=3-$4 [L]
-RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.devel\.js  builder/$3/build.php?build=9-$4 [L]
-RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.js  builder/$3/build.php?build=5-$4 [L]
+RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)  builder/$3/build.php?bid=$4 [L]
+
+#RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.small\.min\.js  builder/$3/build.php?build=0-$4 [L]
+#RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.min\.js  builder/$3/build.php?build=0-$4 [L]
+#RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.small\.js  builder/$3/build.php?build=3-$4 [L]
+#RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.devel\.js  builder/$3/build.php?build=9-$4 [L]
+#RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.js  builder/$3/build.php?build=5-$4 [L]
 
 # actually, it may be better with google cdn style urls
 # ie. /src/0.2.1/picoquery-fe7000.min.js

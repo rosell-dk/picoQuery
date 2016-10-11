@@ -61,9 +61,9 @@ jQuery is quite a download (37k compressed). If you want to be friendly to your 
 - More API: jQuery.noConflict(), .after(), .before(), .closest(), .eq(), .insertAfter(), .insertBefore(), .offset(), .offsetParent(), .remove(), .replaceWith(), .text(), .prependTo()
 - picoQuery now defines window.jQuery, and overwrites it if it exist. Also, picoQuery no longer cowardly steps aside when $ is already defined. Like in jQuery, you can get $ restored with jQuery.noConflict(). The philosophy behind this change is that picoQuery should behave exactly like jQuery, so they can be used interchangably. This ensures that swapping between jQuery and picoQuery really is just a matter of changing the library and also ensures that there will be no unpleasant surprises when picoQuery falls back to jQuery.
 - Improved compatibility of .append(), .appendTo, .prepend() and constructor
+- build id will change. In v0.2, options are encoded in base 16. In v0.3, they are encoded in base 64. So in v0.3, we get a bit shorter URLs.
 
 ##### TODO:
-- build id will change. Right now, the selected methods are encoded with 4 bits (0-f). It will be increased to 6 bits in order to get even shorter URLs. **Work in progress**
 - CDN. Not just full versions - ALL combinations! (a pull server). It will probably be on URLs like these: https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js. I will also allow URLs like these: https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js. That is: You can specify the build options directly in the URL, so you don't have to go to the builder in order to add a feaure.
 - Maybe a bit more API
 

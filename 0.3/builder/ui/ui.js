@@ -534,6 +534,60 @@ function buildBuildId() {
     return hex;
   }
 
+  function dec2base64(dec) {
+    function chr(charCode) {
+      return String.fromCharCode(charCode);
+    }
+    function charCode(char) {
+      return char.charCodeAt(0);
+    }
+
+    if (dec <= 9) {
+      return chr(charCode('0') + dec);
+    }
+    if (dec <= 35) {
+      return chr(charCode('a') + dec-10);
+    }
+    if (dec <= 61) {
+      return chr(charCode('A') + dec-36);
+    }
+    if (dec == 62) {
+      return '_';
+    }
+    if (dec == 63) {
+      return '*';
+    }
+    return '?';
+  }
+  function calculateBase64FromCheckboxes($checkboxes) {
+    var flags = [];
+    var maxI = 0;
+    $checkboxes.each(function() {
+      var i = $(this).val() - 1;
+      maxI = Math.max(i, maxI);
+
+      var invertFlag = ($(this).attr('default_enabled') == 'true');
+      if (invertFlag^$(this).is(':checked')) {
+        flags[i] = '1';
+      }
+//      flags += ($(this).is(':checked') ? '1' : '0');
+    });
+    for (var i=0; i<maxI; i++) {
+      if (flags[i] != '1') {
+        flags[i] = '0';
+      }
+    }
+
+    // convert flags to base64 string
+    var result = '';
+    for (var i=0; i<flags.length; i+=6) {
+      var sixflags = flags.slice(i, i+6).reverse().join('');
+      result += dec2base64(parseInt(sixflags, 2));
+    }
+    result = result.replace(/0*$/g,"")
+    return result;
+  }
+
   // Comments
 //  var commentFlagsHex = calculateHexFromCheckboxes($('#commenting_panel .checkbox-list input'));
   
@@ -543,6 +597,7 @@ function buildBuildId() {
   // Compactness
   var compactnessFlagsHex = '';
 
+/*
   switch ($('input[name="compactness"]:checked').attr('value')) {
     case 'min':
       compactnessFlagsHex = '0';
@@ -557,12 +612,19 @@ function buildBuildId() {
       compactnessFlagsHex = '9';
       break;
   }
+*/
+  var ext = $('input[name="compactness"]:checked').attr('value');
 
   // buildoptions
-  var buildoptionsHex = calculateHexFromCheckboxes($('.buildoption > input'));
+//  var buildoptionsHex = calculateHexFromCheckboxes($('.buildoption > input'));
+//  bid = compactnessFlagsHex + '-A' + buildoptionsHex;
+
+  var buildoptions64 = calculateBase64FromCheckboxes($('.buildoption > input'));
+  bid = 'B' + buildoptions64 + '.' + ext;
+
+  
 
 //  bid = v + '-' + commentFlagsHex + '-' + minFlagsHex + '-' + buildoptionsHex;
-  bid = compactnessFlagsHex + '-' + buildoptionsHex;
   return bid;
 }
 
@@ -589,6 +651,50 @@ function setBuildId(buildId) {
     return flags;
   }
 
+  function base64dec(char) {
+    function charCode(char) {
+      return char.charCodeAt(0);
+    }
+    var cc = char.charCodeAt(0);
+
+    if ((cc >= charCode('0')) && (cc <= charCode('9'))) {
+      return cc - charCode('0');
+    }
+    if ((cc >= charCode('a')) && (cc <= charCode('z'))) {
+      return 10 + cc - charCode('a');
+    }
+    if ((cc >= charCode('A')) && (cc <= charCode('Z'))) {
+      return 36 + cc - charCode('A');
+    }
+    if (char == '_') {
+      return 62;
+    }
+    if (char == '*') {
+      return 63;
+    }
+    return 0;
+  }
+
+  function base64str2flagsarray(str,minLength) {
+    var flags = [];
+    var chars = str
+    for (var i=0; i<str.length; i++) {
+      var six_flags = base64dec(str.charAt(i));
+      for (var j=0; j<6; j++) {
+        if ((six_flags & Math.pow(2, j)) > 0) {
+          flags.push(true);
+        }
+        else {
+          flags.push(false);
+        }
+      }
+    }
+    while (flags.length < minLength) {
+      flags.push(false);
+    }
+    return flags;
+  }
+
   /* Requires that the checkboxes has the "value" attributes set to 1, 2, 3, etc */
   function setCheckboxesByFlags($checkboxes, flags) {
     $checkboxes.each(function() {
@@ -601,7 +707,12 @@ function setBuildId(buildId) {
     });
   }
 
-  var tokens = buildId.split('-');
+//  var tokens = buildId.split('-');
+  var re = /(.*)\.(.*)/g
+  var result = re.exec(buildId);
+  var encodedOptionString = result[1];
+  var ext = result[2];
+
 
   // Version
 //  var version = tokens[0];
@@ -612,20 +723,8 @@ function setBuildId(buildId) {
 //  setCheckboxesByFlags($('#commenting_panel .checkbox-list input'), commentsFlags);
 
   // compactness
-  switch (tokens[0]) {
-    case '0':
-      $('input[name="compactness"][value="min"]').prop("checked", true);
-      break;
-    case '2':
-      $('input[name="compactness"][value="optimized"]').prop("checked", true);
-      break;
-    case '5':
-      $('input[name="compactness"][value="default"]').prop("checked", true);
-      break;
-    case '9':
-      $('input[name="compactness"][value="devel"]').prop("checked", true);
-      break;
-  }
+  $('input[name="compactness"][value="' + ext + '"]').prop("checked", true);
+
 
   // Minify
 /*
@@ -634,8 +733,18 @@ function setBuildId(buildId) {
   setCheckboxesByFlags($('#minify_panel .checkbox-list input'), minifyFlags);*/
 
   // buildoptions
-  var buildoptions = tokens[1];
-  var buildOptionFlags = hexstr2flagsarray(buildoptions, 0);
+
+  var encoding = encodedOptionString[0];
+  var code = encodedOptionString.substr(1);
+
+  switch (encoding) {
+    case 'A':
+      var buildOptionFlags = hexstr2flagsarray(code, 0);
+      break;
+    case 'B':
+      var buildOptionFlags = base64str2flagsarray(code, 0);
+      break;
+  }
 
 //  function loadBuildOptions(v, cb) {
   function loadBuildOptions(cb) {
@@ -664,7 +773,7 @@ function getSizeString(sizeInBytes) {
 function generateCode() {
 //alert('generating code...');
   var buildId = buildBuildId();
-  var url = 'build.php?build=' + buildBuildId();
+  var url = 'build.php?bid=' + buildId;
   var jqXHR = $.ajax({
     url: url,
     dataType: "text"
@@ -679,7 +788,7 @@ function generateCode() {
 
     $('#code-link').attr('href', url);
     $('#code-url').val(url);
-    $('#compliancetest-link').attr('href', '/lab/compliance-test/?frameworks=jquery-1.12.4.min.js,picoquery-' + version + '-' + buildId.split('-')[1] + '.js');
+    $('#compliancetest-link').attr('href', '/lab/compliance-test/?frameworks=jquery-1.12.4.min.js,picoquery-' + version + '-' + bid);
     $('#code-warning').html('');
 
   })
@@ -758,29 +867,10 @@ $(document).ready(function() {
 
   if ((location.search) && (location.search.indexOf('?') == 0)) {
 //      alert(location.search.charAt(1));
-    if (!isNaN(location.search.charAt(1))) {
-      // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
-      setBuildId(location.search.substr(1));
-
-    }
-    else {
-      var a = location.search.substr(1).split('.');
-      var compactness = 5;
-      switch (a[1]) {
-        case 'min':
-          compactness = 0;
-          break;
-        case 'optimized':
-          compactness = 3;
-          break;
-        case 'devel':
-          compactness = 9;
-          break;
-      }
-    }
+    setBuildId(location.search.substr(1));
   }
   else {
-    setBuildId('5-0000');
+    setBuildId('5-B0');
   }
 
 

@@ -2,24 +2,22 @@
 header("Content-type: application/javascript;charset=UTF-8");
 require_once('build-options.inc');
 
-//  echo $_SERVER['REQUEST_URI'];
 
-//preg_match('/.*builder\/([\d\.]*).*/', $_SERVER['REQUEST_URI'], $matches);
 if (preg_match('/.*builder\/((\d)\.(\d)(\.(\d))?).*/', $_SERVER['REQUEST_URI'], $matches)) {
 }
 else if (preg_match('/\/src\/picoquery-((\d)\.(\d)(\.(\d))?).*/', $_SERVER['REQUEST_URI'], $matches)) {
 //  /src/picoquery-0.2-addclass.js
 }
-  $major_version = $matches[2];
-  $minor_version = $matches[3];
-  if (count($matches) >= 5) {
-    $bugfix_version = $matches[5];
-  }
-  else {
-    $bugfix_version = '0';
-  }
+$major_version = $matches[2];
+$minor_version = $matches[3];
+if (count($matches) >= 5) {
+  $bugfix_version = $matches[5];
+}
+else {
+  $bugfix_version = '0';
+}
 
-  $version = $matches[1];
+$version = $matches[1];
 
 
 function hexstr2binstr($hexstr) {
@@ -60,6 +58,74 @@ function hexstr2flagsarray($hexstr, $min_length = 0) {
   return $flags;
 }
 
+/*
+convert a base64 char to dec
+Our base64 table is made such that it is URL-friendly https://en.wikipedia.org/wiki/Query_string
+   0-9 (10 chars)
+   a-z (26 chars) (10-35)
+   A-Z (26 chars) (36-61)
+   _*   (2 chars) (62-63)    */
+function base64dec($char) {
+  $cc = ord($char);
+
+  if (($cc >= ord('0')) && ($cc <= ord('9'))) {
+    return $cc - ord('0');
+  }
+  if (($cc >= ord('a')) && ($cc <= ord('z'))) {
+    return 10 + $cc - ord('a');
+  }
+  if (($cc >= ord('A')) && ($cc <= ord('Z'))) {
+    return 36 + $cc - ord('A');
+  }
+  if ($char == '_') {
+    return 62;
+  }
+  if ($char == '*') {
+    return 63;
+  }
+  return 0;
+}
+
+function decbase64($dec) {
+  if ($dec <= 9) {
+    return chr(ord('0') + $dec);
+  }
+  if ($dec <= 35) {
+    return chr(ord('a') + $dec-10);
+  }
+  if ($dec <= 61) {
+    return chr(ord('A') + $dec-36);
+  }
+  if ($dec == 62) {
+    return '_';
+  }
+  if ($dec == 63) {
+    return '*';
+  }
+  return '?';
+}
+
+function base64str2flagsarray($str, $min_length = 0) {
+  $flags = array();
+  foreach (str_split($str) as $i => $char) {
+    $six_flags = base64dec($char);
+//    echo $six_flags . '<br>';
+    for ($j=0; $j<6; $j++) {
+      if (($six_flags & pow(2,$j)) > 0) {
+        $flags[] = TRUE;
+      }
+      else {
+        $flags[] = FALSE;
+      }
+    }
+  }
+  while (count($flags) < $min_length) {
+    $flags[] = 0;
+  }
+//  print_r($flags);
+  return $flags;
+}
+
 function flagnames2flagsarray($flag_names, $selected_flags) {
   /* usage: 
     $comment_flags = array('build_id', 'method_signatures');
@@ -79,16 +145,19 @@ $use_optimized_methods = TRUE;
 $include_helpers_as_var = FALSE;
 $inline_all_helpers = FALSE;
 
+function decodeOptions($encodeOptionsString) {
+  $encoding = substr($encodeOptionsString, 0, 1);
+  $code = substr($encodeOptionsString, 1);
 
-if (isset($_GET['build'])) {
-  $tokens = explode('-', $_GET['build']);
-//  list($compactness, $min, $features_to_include) = $tokens;
-  list($compactness, $features_to_include) = $tokens;
+  switch ($encoding) {
+    case 'A':
+      $features_to_include = hexstr2flagsarray($code);
+      break;
+    case 'B':
+      $features_to_include = base64str2flagsarray($code);
+      break;
+  }
 
-  $features_to_include = hexstr2flagsarray($features_to_include);
-
-//global $features_by_id;
-//  foreach ($features_to_include as $index => $flag) {
   global $buildoptions_nameids;
   foreach ($buildoptions_nameids as $index => $nameid) {
     $nameid = getFeatureNameIdByIndex($index);
@@ -107,9 +176,45 @@ if (isset($_GET['build'])) {
     }
   }
 
+}
+
+if (isset($_GET['build'])) {
+//  $tokens = explode('-', $_GET['build']);
+  list($compactness, $features_to_include) = $tokens;
+
+  decodeOptions($features_to_include);
+
+//global $features_by_id;
+//  foreach ($features_to_include as $index => $flag) {
+
+
 //  list($comments_build_id, $comments_method_signatures, $comments_method_description, $comments_inline, $comments_devel_notes) = hexstr2flagsarray($comments, 5);
 
 //  list($minify_functions, $minify_all) = hexstr2flagsarray($min, 2);
+
+}
+elseif (isset($_GET['bid'])) {
+  $bid = $_GET['bid'];
+  $parts = explode('.', $bid, 2);
+  $features_to_include = $parts[0];
+  $ext = $parts[1];
+  decodeOptions($features_to_include);
+
+  switch ($ext) {
+    case 'small.min.js':
+    case 'min.js':
+      $compactness = 0;
+      break;
+    case 'small.js':
+      $compactness = 3;
+      break;
+    case 'js':
+      $compactness = 5;
+      break;
+    case 'devel.js':
+      $compactness = 9;
+      break;
+  }
 
 }
 
@@ -119,14 +224,26 @@ elseif (isset($_GET['file'])) {
 elseif (isset($_GET['v'])) {
 //  print_r($_GET);
 
-  // CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js
-  // CDN URL, format #2:     https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js
-  // Note that build id starts with "A"
+  /*
+  CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js
+  CDN URL, format #2:     https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js
+  Note that build id starts with on uppercase letter, which specifyes the encoding
+  Encodings currently available:
+  "A": 
+     16 bit encoding of options.
+     One bit per option, the option order is the one specified in build-options.inc
+     The last trail of 0's can be omitted. Ie "A3" is an encoding for "addClass" and "css"
+  "B": 
+     64 bit encoding of options.
+     Same rules as "A" encoding
 
-  // CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js
+  */
+  // CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.3-A2fa0.min.js
 
-  // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
-  // Builder URL, format #2: http://picoquery.com/builder/0.2/?addClass-css.min.js
+  // Builder URL, format #1: http://picoquery.com/builder/0.3.0/?5-A2fa0
+  // OR                    : http://picoquery.com/builder/0.3.0/?A2fa0.min.js
+
+  // Builder URL, format #2: http://picoquery.com/builder/0.3.0/?addClass-css.min.js
 
   // When sub-features arrives:
   // CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-A2fa0-0112.min.js
@@ -288,15 +405,30 @@ if (isFeatureEnabled('builderurl')) {
   // Builder URL, format #1: http://picoquery.com/builder/0.2/?5-2fa0
   // Builder URL, format #2: http://picoquery.com/builder/0.2/?addClass-css.min.js
 
-  $hex = '';
+  $code = 'B';
   $length = count($feature_flags);
-  for ($i=0; $i<$length; $i+=4) {
-    $fourflags = implode('', array_reverse(array_slice($feature_flags, $i, 4)));
+  for ($i=0; $i<$length; $i+=6) {
+    $sixflags = implode('', array_reverse(array_slice($feature_flags, $i, 6)));
 //print_r(array_slice($flags, $i, 4));
-    $hex .= dechex(intval($fourflags, 2));
+    $code .= decbase64(intval($sixflags, 2));
   }
+  $code = rtrim($code, '0');
 
-  $builder_url = "picoquery.com/builder/" . $version . "/?" . $compactness . "-" . $hex;
+  $ext = 'js';
+  switch ($compactness) {
+    case 0:
+      $ext = 'min.js';
+      break;
+    case 3:
+      $ext = 'small.js';
+      break;
+    case 5:
+      $ext = 'js';
+      break;
+  }
+    
+  $bid = $code . '.' . $ext;
+  $builder_url = "picoquery.com/builder/" . $version . "/?" . $bid;
 }
 
 
