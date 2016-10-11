@@ -23,20 +23,24 @@ In the upcoming 0.3 release, the following methods will be supported:
 
 Focus in the 0.4 release will be to support even more of the jQuery API. Please let me know if there is a specific method you wish to be supported.
 
-If you cannot wait for support of a certain method, you can expand picoQuery like this:
+If you cannot wait for support of a certain method, you can add instance methods this way:
 
 ```javascript
-// Add "bgColor" method
-$.fn.bgColor = function(bgColor) {
-  this.css('background-color', bgColor);
+// Add ".animate" method
+$.fn.animate = function() {
+  // Implement animate method.
+  // You can of course take advantage of existing methods, such as this.each()
 }
-
-// Use the new "bgColor" method
-$('li').bgColor('blue');
 ```
 
-You can learn more about compliance by running our online compliance test: http://picoquery.com/lab/compliance-test/
+### Compliance
+Generally all signatures of the methods are implemented, but there are a few exceptions. In the builder, you can learn more about these exceptions by hovering the small warning icon next to partially supported methods.
 
+picoQuery does not support the special [jQuery-selectors](http://api.jquery.com/category/selectors/jquery-selector-extensions/), such as :visible. It does all CSS selectors, including [CSS3 selectors](http://www.456bereastreet.com/archive/200601/css_3_selectors_explained/), such as :enabled
+
+When nodes are cloned, event handlers are not copied. Beware that cloning can happen behind the scene if you for example .append() the same content to several nodes.
+
+You can learn more about compliance by running our online compliance test: http://picoquery.com/lab/compliance-test/
 
 
 ### Usecase: picoQuery is your "jQuery" for render-blocking scripts
