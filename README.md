@@ -83,6 +83,7 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 ##### TODO:
 - build id will change. Right now, the selected methods are encoded with 4 bits (0-f). It will be increased to 6 bits in order to get even shorter URLs. **Work in progress**
 - CDN. Not just full versions - ALL combinations! (a pull server). It will probably be on URLs like these: https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js. I will also allow URLs like these: https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js. That is: You can specify the build options directly in the URL, so you don't have to go to the builder in order to add a feaure.
+- Maybe a bit more API
 
 #### Features planned for 0.4:
 - Even more API! Please let me know if there is a particular method you wish to be included
