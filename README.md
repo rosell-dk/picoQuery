@@ -9,12 +9,12 @@ This approach has several benefits:
 - jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light. Plus you get the job done quickly with "jQuery"
 - The fallback to jQuery 1.12.4 ensures that it works in older browsers, such as IE6-8
 
-<h3>How to use</h3>
+### How to use
 
 1. Build your picoQuery here: http://picoquery.com/builder/<br>
 2. Simply include that custom script instead of jQuery.
 
-<h3>Current subset</h3>
+### Current subset
 The following methods is currently supported: 
 .addClass(), .append(), .appendTo(), .attr(), .children(), .click(), .css(), .each(), .empty(), .first(), .find(), .focous(), .get(), .hide(), .html(), .keyup(), .map(), .next(), .on(), .parent()., .prev(), .ready(), .removeAttr(), .removeClass(), .trigger()
 
@@ -39,23 +39,23 @@ You can learn more about compliance by running our online compliance test: http:
 
 
 
-<h3>Usecase: picoQuery is your "jQuery" for render-blocking scripts</h3>
+### Usecase: picoQuery is your "jQuery" for render-blocking scripts
 There are times, when you want some of your script to manipulate the document before its displayed. This means that you will want you script to load, parse and execute very quickly. Its blocking the page rendering. People are waiting! Fastest load-time is achieved by keeping your script small and inlining it directly in the HTML. Fast parsing is also achieved by keeping the script small. To keep the script small, you of course need to move all the code that can be defered into another script. That defered script can use jQuery without noticable penalty, but you cannot afford to use jQuery for the render-blocking scripting. If you love the expressiveness and how quickly you get things done in jQuery, you will experience a loss. If you are optimizing a site that already uses jQuery, you will experience plain tediousness. But ta-dah, not anymore. You can now turn to picoQuery, as you can build your own little picoQuery, which suits your needs, and it will be very small. As the render-blocking scripting you need to do is probably limited, it is not too big a drawback that picoQuery currently only supports a small subset of jQuery.
 
 They say that you should avoid render-blocking scripts, but actually, when your script can get the job done quickly, you here have a tool to increase the overall performance of your site. Imagine the unlikely case that you want to display the current time in the top of the document. Dynamic content is much more expensive for the server than static content. Say that you do it in a Wordpress theme - you will then effectively have ruined the possibility to use page caching, which is one of the most effective ways to boost up the speed of a Wordpress site. Also, browsers cannot be allowed to cache the page either. But push the job to the client, and your servers will serve you well. Using cookies, you can maintain sessions and store things such as the content of a shopping cart.
 
-<h3>Usecase: Limiting bandwith usage on mobile browsers</h3>
+### Usecase: Limiting bandwith usage on mobile browsers
 jQuery is quite a download (37k compressed). If you want to be friendly to your mobile users, and you do not have too much coding to do, you may want to do everything in picoQuery. Or you may perhaps be able to limit jQuery usage to some pages. 
 
-<h3>A beer challenge</h3>
+### A beer challenge
 picoQuery aims to be as lightweight as almost theoretically possible. I literally spend hours to find ways to save a few bytes - it's become a sport. Find a way to squeze more bytes out, and I'll buy you a beer! - Write me: beerchallenge[at]rosell.dk
 
-<h3>Links</h3>
+### Links
 - picoQuery is originally based on picoCSS, available here: https://github.com/vladocar/picoCSS
 - Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
 - There exists a library called *Zepto.js*, which also implements a subset of jQuery. *Zepto.js* implements almost the full jQuery api. Its also modular, but the feature selector is not as fine grained as picoquery, and its not possible to get below ~10k gzipped (picoQuery is ~1k, jQuery 1.9.1 is ~37k). http://zeptojs.com/
 
-<h3>New in 0.2.0</h3>
+### New in 0.2.0
 - Uses "$" instead of "p$", so picoQuery can be a drop-in replacement of jQuery
 - Automatically falls back to jQuery (can be disabled in builder)
 - Defines $.fn, so you can easily extend the picoQuery prototype with yet unsupported methods
@@ -68,20 +68,20 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 - Created framework for testing compliance. http://picoquery.com/lab/compliance-test/
 - Made existing methods more compliant
 
-<h3>0.2.1 bugfix release</h3>
+### 0.2.1 bugfix release
 - Scope. When .find() is based on querySelectorAll, special meassurements has to be taken, otherwise code like the following unexpectedly finds nodes: $​("body li", $​("li"​)​.get​(0​)​). It also affects .find(), as it uses the constructor, so this did also return nodes: $​("li"​)​.find​("body li"​). I basically implemented the following shim to fix it (without actually shimming): https://github.com/lazd/scopedQuerySelectorShim
 
 
-<h3>Roadmap</h3>
+### Roadmap
 #### Features planned for 0.3:
 
-** Completed: **
+**Completed:**
 - More API: jQuery.noConflict(), .after(), .before(), .closest(), .eq(), .insertAfter(), .insertBefore(), .offset(), .offsetParent(), .remove(), .replaceWith(), .text(), .prependTo()
 - Improved compatibility of .append(), .appendTo, .prepend() and constructor
 - build id will change. Right now, the selected methods are encoded with 4 bits (0-f). It will be increased to 6 bits in order to get even shorter URLs.
 - picoQuery now defines window.jQuery, and overwrites it if it exist. Also, picoQuery no longer cowardly steps aside when $ is already defined. Like in jQuery, you can get $ restored with jQuery.noConflict(). The philosophy behind this change is that picoQuery should behave exactly like jQuery, so they can be used interchangably. This ensures that swapping between jQuery and picoQuery really is just a matter of changing the library and also ensures that there will be no unpleasant surprises when picoQuery falls back to jQuery.
 
-** Work in progress: **
+**Work in progress:**
 - CDN. Not just full versions - ALL combinations! (a pull server). It will probably be on URLs like these: https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js. I will also allow URLs like these: https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js. That is: You can specify the build options directly in the URL, so you don't have to go to the builder in order to add a feaure.
 
 #### Features planned for 0.4:
