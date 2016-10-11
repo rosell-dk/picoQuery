@@ -47,14 +47,6 @@ They say that you should avoid render-blocking scripts, but actually, when your 
 ### Usecase: Limiting bandwith usage on mobile browsers
 jQuery is quite a download (37k compressed). If you want to be friendly to your mobile users, and you do not have too much coding to do, you may want to do everything in picoQuery. Or you may perhaps be able to limit jQuery usage to some pages. 
 
-### A beer challenge
-picoQuery aims to be as lightweight as almost theoretically possible. I literally spend hours to find ways to save a few bytes - it's become a sport. Find a way to squeze more bytes out, and I'll buy you a beer! - Write me: beerchallenge[at]rosell.dk
-
-### Links
-- picoQuery is originally based on picoCSS, available here: https://github.com/vladocar/picoCSS
-- Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
-- There exists a library called *Zepto.js*, which also implements a subset of jQuery. *Zepto.js* implements almost the full jQuery api. Its also modular, but the feature selector is not as fine grained as picoquery, and its not possible to get below ~10k gzipped (picoQuery is ~1k, jQuery 1.9.1 is ~37k). http://zeptojs.com/
-
 
 ### Roadmap
 #### Features planned for 0.3:
@@ -81,6 +73,13 @@ picoQuery aims to be as lightweight as almost theoretically possible. I literall
 #### Features planned for 0.6:
 - Optionally optimize library for execution speed rather than gzip size.
 
+### Links
+- picoQuery is originally based on picoCSS, available here: https://github.com/vladocar/picoCSS
+- Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
+- There exists a library called *Zepto.js*, which also implements a subset of jQuery. *Zepto.js* implements almost the full jQuery api. Its also modular, but the feature selector is not as fine grained as picoquery, and its not possible to get below ~10k gzipped (picoQuery is ~1k, jQuery 1.9.1 is ~37k). http://zeptojs.com/
+
+### A beer challenge
+picoQuery aims to be as lightweight as almost theoretically possible. I literally spend hours to find ways to save a few bytes - it's become a sport. Find a way to squeze more bytes out, and I'll buy you a beer! - Write me: beerchallenge[at]rosell.dk
 
 ### Examples of what you can currently do with picoQuery:
 
