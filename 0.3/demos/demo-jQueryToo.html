@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>picoQuery demo</title>
+<script src="../../builder/0.2/build.php?build=5-ffff17"></script>
+<script>
+var p$ = $;
+$ = undefined;
+</script>
+<script src="zepto.js"></script>
+<script>
+var z$ = $;
+</script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script>
+var j$ = $;
+</script>
+<script>
+function testInAllFrameworks(fn) {
+  $ = j$;
+  console.log('jQuery');
+  fn.call();
+}
+
+$(function() {
+  
+//  alert('ready');
+//  $('span').filter(':nth-of-type(odd)').addClass('red-text');
+
+//  $('span').filter($('span:nth-of-type(odd)')).addClass('red-text');
+//  $('span').filter('*').addClass('red-text');
+
+  testInAllFrameworks(function() {
+    console.log($(document).parent());
+  });
+
+
+  console.log('jQuery');
+  console.log($([null,$('body').get()]).parent());
+
+  // Now swap to zepto
+
+  $=z$;
+  console.log('zepto');
+  console.log($([null,$('body').get()]).parent());
+
+
+
+  // Now swap to picoQuery
+  $=p$;
+/*
+  console.log('picoQuery');
+  console.log($(document).parent());
+  console.log($(document).parent().filter('li'));
+  console.log($('li').parent());
+
+
+//  console.log($('body').parent().parent().parent().parent());
+
+/*  console.log($('body').e[0]);
+  console.log($('body').e[0].parentElement);
+  console.log($('body').e[0].parentElement.parentElement);
+  console.log($('body').e[0].parentElement.parentElement.parentElement);*/
+
+//  return;
+  $('#clickme').addClass('red-text');
+
+  $('ul li').css('background-color', 'red');
+//alert($('ul li').css('background-color'));
+
+  $('<b>bold</b>').appendTo($('body'));
+
+//	var div = $( "<div>hej</div>" ).appendTo( "body" );
+
+  $('body').append('<b>bold</b>', '<i>italic</i>');
+
+  $('li').each(function (i, el) {
+//    alert(i);
+//    alert(el);
+  });
+
+  $('.clickable').css('cursor', 'pointer').css('background-color', '#ccc');
+  $('#clickme').click(function(e) {
+    alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
+  });
+  $('#hideme').hide();
+  $('ul li').css('background-color', 'brown');
+
+  $('ul li').css('background-color', 'red').first().css('color', 'white');
+  $('ul li:last-child').css('font-weight', 'bold');
+
+  
+  $('#clickmetoo').click(function(e) {
+    var colorOfFirstLI = $('li').first().css('color');
+    alert(colorOfFirstLI);
+    
+  });
+
+  $('#clickmethree').click(function(e) {
+    $('#clickme').click();
+  });
+
+  var $li = $('li');
+//alert($li.length);
+
+  for (var i=0; i<$li.length; i++) {
+    $($li[i]).css('text-decoration', 'underline')
+  }
+  console.log($li);
+
+});
+
+</script>
+
+
+<style>
+#clickme {cursor:pointer; background-color: #ccc}
+.red-text {color:red;}
+</style>
+</head>
+<body>
+  <span id="clickme" class="clickable">Click me</span><br>
+  <span id="hideme">picoQuery has hidden me</span><br>
+  <ul class="list">
+    <li>One</li>
+    <li>Two</li>
+    <li>Three</li>
+  </ul>
+  <span id="clickmetoo" class="clickable">Click me to view the value of a css property</span><br>
+  <span id="clickmethree" class="clickable">Click me to trigger an event</span><br>
+
+Note: "trigger" isn't well tested across browsers. I got the code from youmightnotneedjquery.com, so its probably pretty ok.
+</body>
+</html>

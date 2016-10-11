@@ -1,0 +1,35 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# here, we have jquery cdn style urls,
+# ie. /src/picoquery-0.2.1-fe7000.min.js
+# which will map to ie: https://cdn.picoquery.com/picoquery-0.2.1-fe7000.min.js
+
+RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.small\.min\.js  builder/$3/build.php?build=0-$4 [L]
+RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.min\.js  builder/$3/build.php?build=0-$4 [L]
+RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.small\.js  builder/$3/build.php?build=3-$4 [L]
+RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.devel\.js  builder/$3/build.php?build=9-$4 [L]
+RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)\.js  builder/$3/build.php?build=5-$4 [L]
+
+# actually, it may be better with google cdn style urls
+# ie. /src/0.2.1/picoquery-fe7000.min.js
+# which will map to ie: https://cdn.picoquery.com/0.2.1/picoquery-fe7000.min.js
+# or maybe: https://cdn.picoquery.com/0.2.1/min/picoquery-fe7000.min.js
+# or maybe: https://cdn.picoquery.com/0.2.1/min/picoquery0.2.1-fe7000.min.js
+# One advantage to have "min" in path would be if we should want to invalidate
+# minified versions only (invalidate path: "/0.2.1/min*")
+# http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html
+# Note that we can invalidate versions also with jQuery CDN style
+# (invalidate path: "/picoquery-0.2.1*")
+# But perhaps its a problem for the CDN to have a huge number of files in same directory?
+# (my guess is: no)
+
+#RewriteRule ^src/picoquery([\d\.]+)-(.*)\.min\.js  $1/builder/build.php?v=$1&compactness=0&features=$2 [L]
+#RewriteRule ^src/picoquery([\d\.]+)-(.*)\.optimized\.js  $1/builder/build.php?v=$1&compactness=3&features=$2 [L]
+#RewriteRule ^src/picoquery([\d\.]+)-(.*)\.devel\.js  $1/builder/build.php?v=$1&compactness=9&features=$2 [L]
+#RewriteRule ^src/picoquery-(\d\.\d)(\.(\d))?-(.*)\.js  $1/builder/$3/build.php?build=5-$4 [L]
+#RewriteRule ^src/picoquery([\d\.]+)-(.*)\.js  $1/builder/build.php?v=$1&compactness=5&features=$2 [L]
+
+
+</IfModule>
+
