@@ -18,7 +18,7 @@ This approach has several benefits:
 The following methods is currently supported: 
 .addClass(), .append(), .appendTo(), .attr(), .children(), .click(), .css(), .each(), .empty(), .first(), .find(), .focous(), .get(), .hide(), .html(), .keyup(), .map(), .next(), .on(), .parent()., .prev(), .ready(), .removeAttr(), .removeClass(), .trigger()
 
-In the upcoming 0.3 release, the following methods will be supported:
+In the upcoming 0.3 release (**ETA: tomorrow!**), the following methods will be supported:
 .addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .each(), .empty(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .ready(), .remove(), .removeAttr(), .removeClass(), .text(), .trigger()
 
 Focus in the 0.4 release will be to support even more of the jQuery API. Please let me know if there is a specific method you wish to be supported.
@@ -55,17 +55,15 @@ jQuery is quite a download (37k compressed). If you want to be friendly to your 
 
 
 ### Roadmap
-#### Features planned for 0.3:
+#### 0.3 
 
-##### Completed:
+**0.3 is *almost* complete. I expect it to be released tomorrow.**
+
 - More API: jQuery.noConflict(), .after(), .before(), .closest(), .eq(), .insertAfter(), .insertBefore(), .offset(), .offsetParent(), .remove(), .replaceWith(), .text(), .prependTo()
 - picoQuery now defines window.jQuery, and overwrites it if it exist. Also, picoQuery no longer cowardly steps aside when $ is already defined. Like in jQuery, you can get $ restored with jQuery.noConflict(). The philosophy behind this change is that picoQuery should behave exactly like jQuery, so they can be used interchangably. This ensures that swapping between jQuery and picoQuery really is just a matter of changing the library and also ensures that there will be no unpleasant surprises when picoQuery falls back to jQuery.
 - Improved compatibility of .append(), .appendTo, .prepend() and constructor
 - build id will change. In v0.2, options are encoded in base 16. In v0.3, they are encoded in base 64. So in v0.3, we get a bit shorter URLs.
 - CDN... Yes CDN!... -- but with picoQuery, there are literally millions of possible builds! I know. Its a good thing picoQuery is so small, otherwise it might get expensive. I have set up a "pull server", which means that when an uncached build is requested, the CDN grabs the builder result from picoquery.com. While best practice is that you either inline picoquery directly in HTML or concatenate it with your other scripts, its often handy just to point to a CDN. The real point of providing a CDN though, is to offload the online builder and protect the server against some site with many visitors linking directly to the build script. The builds will be available on URLs like this: http://cdn.picoquery.com/picoquery0.3.0-B2ga.min.js when 0.3 is released. I implemented in 0.2 too. I have set cache time to 100 years, so you can rely on CDN working even if the builder is temporarily down
-
-##### TODO:
-- Maybe a bit more API
 
 #### Features planned for 0.4:
 - Even more API! Please let me know if there is a particular method you wish to be included
