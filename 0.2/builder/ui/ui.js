@@ -234,7 +234,7 @@ var version = location.pathname.match(/builder\/(\d\.\d(\.\d)?)/)[1];
 
 function populateOptionsPanel(buildoptions) {
 //alert(JSON.stringify(buildoptions));
-console.log(buildoptions);
+//console.log(buildoptions);
   buildoptions.sort(function (a, b) {
     if (a.nameid < b.nameid) {
       return -1;
@@ -438,19 +438,23 @@ function buildBuildId() {
 
   // Compactness
   var compactnessFlagsHex = '';
-
+  var ext = '';
   switch ($('input[name="compactness"]:checked').attr('value')) {
     case 'min':
       compactnessFlagsHex = '0';
+      ext = 'min.js';
       break;
     case 'optimized':
       compactnessFlagsHex = '3';
+      ext = 'small.js';
       break;
     case 'default':
       compactnessFlagsHex = '5';
+      ext = 'js';
       break;
     case 'devel':
       compactnessFlagsHex = '9';
+      ext = 'devel.js';
       break;
   }
 
@@ -458,7 +462,8 @@ function buildBuildId() {
   var buildoptionsHex = calculateHexFromCheckboxes($('.buildoption > input'));
 
 //  bid = v + '-' + commentFlagsHex + '-' + minFlagsHex + '-' + buildoptionsHex;
-  bid = compactnessFlagsHex + '-' + buildoptionsHex;
+//  bid = compactnessFlagsHex + '-' + buildoptionsHex;
+  bid = buildoptionsHex + '.' + ext;
   return bid;
 }
 
@@ -560,28 +565,36 @@ function getSizeString(sizeInBytes) {
 function generateCode() {
 //alert('generating code...');
   var buildId = buildBuildId();
-  var url = 'build.php?build=' + buildBuildId();
-  var jqXHR = $.ajax(url)
-  .done(function() {
-    $('#code').html(jqXHR.responseText);
+//  var url = 'build.php?build=' + buildBuildId();
+  var filename = 'picoquery-' + version + '-' + buildBuildId();
+  var url = 'http://cdn.picoquery.com/' + filename;
+  $('#code').html('...building...');
+  $('#code-link').attr('href', url);
+  $('#code-url').val(url);
+  $('#compliancetest-link').attr('href', '/lab/compliance-test/?frameworks=jquery-1.9.1.min.js,' + filename);
 
-    var compressedSize = parseInt(jqXHR.getResponseHeader('Content-Length'),10);
-    var uncompressedSize = jqXHR.responseText.length;
-    $('#code_size').html('(' + getSizeString(compressedSize) + ' gzipped) <span style="font-size:9px;">(' + getSizeString(uncompressedSize) + ' uncompressed - but remember, <a style="color:black" href="https://www.tjvantoll.com/2014/01/27/only-the-gzip-size-matters/">only the gzip size matters</a>)</span>');
+  var jqXHR = $.ajax('get-build-from-cdn.php?filename=' + filename, {
+    dataType: 'text',
+    success: function (data, textStatus, jqXHR) {
+      $('#code').html(jqXHR.responseText);
 
-    $('#code-link').attr('href', url);
-    $('#code-url').val(url);
-    $('#compliancetest-link').attr('href', '/lab/compliance-test/?frameworks=jquery-1.9.1.min.js,picoquery-' + version + '-' + buildId.split('-')[1] + '.js');
-    $('#code-warning').html('');
+      var compressedSize = parseInt(jqXHR.getResponseHeader('Content-Length'),10);
+      var uncompressedSize = jqXHR.responseText.length;
+      $('#code_size').html('(' + getSizeString(compressedSize) + ' gzipped) <span style="font-size:9px;">(' + getSizeString(uncompressedSize) + ' uncompressed - but remember, <a style="color:black" href="https://www.tjvantoll.com/2014/01/27/only-the-gzip-size-matters/">only the gzip size matters</a>)</span>');
 
-  })
-  .fail(function( jqXHR, textStatus, errorThrown) {
-//    alert('failed generating picoquery.js');
-    $('#code-url').val(url);
-    $('#code-warning').html(textStatus + ': ' + errorThrown);
-    $('#code-link').attr('href', url);
-    $('#code').html(jqXHR.responseText);
-  })  
+      $('#code-warning').html('');
+
+    },
+    error: function( jqXHR, textStatus, errorThrown) {
+  //    alert('failed generating picoquery.js');
+//      alert('error');
+//      console.log('error', textStatus, errorThrown);
+      $('#code-url').val(url);
+      $('#code-warning').html(textStatus + ': ' + errorThrown);
+      $('#code-link').attr('href', url);
+      $('#code').html(jqXHR.responseText);
+    }
+  });
 }
 
 

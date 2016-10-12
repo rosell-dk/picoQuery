@@ -72,7 +72,7 @@ h3.panel-title {
 }
 
 #code_panel textarea {
-  height: 300px;
+  height: 200px;
   width: 100%;
   width: calc(100% - 20px);
 }
@@ -289,3 +289,7 @@ h3.panel-title {
 }
 .icon-info:hover {
 }
+/*
+#compliancetest-link {
+  font-size: 18px;
+}*/
