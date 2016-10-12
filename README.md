@@ -55,9 +55,9 @@ jQuery is quite a download (37k compressed). If you want to be friendly to your 
 
 
 ### Roadmap
-#### 0.3 
+#### Version 0.3:
 
-**0.3 is *almost* complete. I expect it to be released tomorrow.**
+*0.3 is *almost* complete. I expect it to be released tomorrow.*
 
 - More API: jQuery.noConflict(), .after(), .before(), .closest(), .eq(), .insertAfter(), .insertBefore(), .offset(), .offsetParent(), .remove(), .replaceWith(), .text(), .prependTo()
 - picoQuery now defines window.jQuery, and overwrites it if it exist. Also, picoQuery no longer cowardly steps aside when $ is already defined. Like in jQuery, you can get $ restored with jQuery.noConflict(). The philosophy behind this change is that picoQuery should behave exactly like jQuery, so they can be used interchangably. This ensures that swapping between jQuery and picoQuery really is just a matter of changing the library and also ensures that there will be no unpleasant surprises when picoQuery falls back to jQuery.
