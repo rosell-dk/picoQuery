@@ -35,6 +35,12 @@ function testInAllFrameworks(code, description) {
     function makeElement(html) {
       return j$(html).get(0);
     }
+    function makeNodeList(html) {
+      if (!html) {
+        html = '<span>text<p>node</p></span>';
+      }
+      return j$(html).get(0).childNodes;
+    }
 
     try {
 //      result = fn.call();
@@ -55,6 +61,11 @@ function testInAllFrameworks(code, description) {
         var html = '';
         if (obj === null) {
           return 'null';
+        }
+        if (!obj.constructor) {
+          console.log('object without constructor?', obj);
+          return 'object without constructor?';
+  
         }
         var className = obj.constructor.toString().match(/function (\w*)/)[1];
         if ((className == 'DOMException') || (className == 'TypeError') || (className == 'ReferenceError') || (className == 'Error')) {
@@ -89,7 +100,13 @@ function testInAllFrameworks(code, description) {
           }
           // hm... how to test if its a jQuery / zepto / picoQuery?
 //          html += className;
-          if ((obj instanceof window.jQuery) ||
+          var isJquery = false;
+          for (var i=0; i<frameworks.length; i++) {
+            if (obj instanceof frameworks[i][2]) {
+              isJquery = true;
+            }
+          }
+          if (isJquery ||
             (window.Zepto && obj instanceof Zepto.zepto.Z) ||
             (obj.e)) {
             html = '$' + html;
@@ -98,7 +115,29 @@ function testInAllFrameworks(code, description) {
             html = className + html;
           }
         }
+        else if ((Object.getPrototypeOf(obj) == Object.prototype ) ||
+          (className == 'NodeList2')
+        ) {
+          var content = [];
+          for (var prop in obj) {
+            content.push(prop + ':' + toPrint(obj[prop]));
+          }
+          html = '<span class="obj">{ ' + content.join('<span class="comma">,</span>') + ' }</span></span>';
+//          html = className;
+        }
+        else if (className == 'Text') {
+//          html = className + '{' + toPrint(obj.childNodes) + '}';
+          html = className + '{"' + obj.wholeText + '"}';
+
+        }
+        else if (className == 'NodeList') {
+//          html = className + '{' + toPrint(obj.childNodes) + '}';
+          html = className + '{' + toPrint([].slice.call(obj)) + '}';
+
+        }
         else {
+          // Some kind of object, ie 'HTMLDocument', 'DocumentFragment', 'Text', 'NodeList', etc
+          // we only show the class name for unknown objects
           html = className;
         }
         return html;
@@ -221,7 +260,7 @@ function displayTestGroupLinks(groupsToShow) {
     $('#groups').append('<h3>Choose what to test:</h3>');
   }
 
-console.log(frameworks.forEach);
+//console.log(frameworks.forEach);
   var frameworksSearch = [];
   frameworks.forEach(function(framework) {
     frameworksSearch.push(framework[1]);
@@ -283,11 +322,15 @@ function runTest(id) {
 
 j$(function($) {
   var availableFrameworks = [
-//    ['jQuery 1.9.1', 'jquery-1.9.1.min.js'], 
-    ['zepto 1.2.0', 'zepto1.2.0.min.js'],
+    ['jQuery 1.9.1', 'jquery-1.9.1.min.js'], 
+    ['jQuery 1.12.4', 'jquery-1.12.4.min.js'], 
+    ['zepto 1.2.0.min.js', 'zepto1.2.0.min.js'],
+    ['zepto 1.2.0.js', 'zepto1.2.0.js'],
     ['angularjs 1.5.7 (jqLite)', 'angularjs-1.5.7.min.js'],
     ['picoQuery 0.2.1-ffff1fff.min.js', 'picoquery-0.2.1-ffff1fff.min.js'],
     ['picoQuery 0.2.1-ffff1fff.js', 'picoquery-0.2.1-ffff1fff.js'],
+    ['picoQuery 0.3.0-BU******3.min.js', 'picoQuery 0.3.0-BU******3.min.js'],
+    ['picoQuery 0.3.0-BU******3.js', 'picoQuery 0.3.0-BU******3.js'],
   ];
   var af = availableFrameworks.map(function(item) {return item[1]});
   frameworks.slice(1).forEach(function (item) {

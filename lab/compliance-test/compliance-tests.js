@@ -5,20 +5,122 @@ window.complianceTests = [
       {
         name: '.addClass( className )',
         tests: [
-          ['$("<div/>").addClass("test")', ""],
-          ['$("<div/>").addClass("test").addClass("test2")', ""],
-          ['$("<div/>").addClass("test ")', ""],
-          ['$("<div/>").addClass("test2 test2")', ""],
-          ['$("<div/>").addClass("test2").addClass("test2")', ""],
-          ['$("<div/>").addClass(" ")', ""],
-          ['$("<div/>").addClass("\t")', ""],
-          ['$("<div class=\ttest/>").addClass("t2")', ""],
+          ['$("<p></p>").addClass("test")', "Add a single class name"],
+          ['$("<p></p>").addClass("one two")', "Addding two class names in one go"],
+          ['$("<p></p>").addClass("test").addClass("test2")', "Chaining"],
+          ['$("<p></p>").addClass("test ")', "Trailing space"],
+          ['$("<p></p>").addClass("test2 test2")', "Adding same class twice"],
+          ['$("<p></p>").addClass("test2").addClass("test2")', "Adding same class twice in another way"],
+          ['$("<p class=\'one two\'></p>").addClass("two")', "Adding same class in yet another way"],
+          ['$("<p class=\ttest></p>").addClass("t2")', "HTML contains tab character"],
+          ['$("<p class=one\ttwo></p>").addClass("three")', "HTML contains tab character between class names"],
         ]
       },
       {
         name: '.addClass( function )',
         tests: [
           ['$("<div class=\'a b\'/>").addClass(function(a,b){return "b"+a+b})', ""],
+        ]
+      },
+      {
+        name: 'Edge cases',
+        tests: [
+          ['$("<p></p>").addClass(" ")', "Adding empty string"],
+          ['$("<p></p>").addClass(" ")', "Adding just a space"],
+          ['$("<p></p>").addClass("\t")', "Adding just a tab"],
+          ['$("<p></p>").addClass()', "Adding nothing"],
+        ]
+      }
+    ]
+  },
+  {
+    name: '.before()',
+    tests: [
+      {
+        name: '.before( content )',
+        tests: [
+          ['$("<div><b></b></div>").children().before("<i></i>").parent()', "[ HTML string ]"],
+          ['$("<div><b></b></div>").children().before($("<one></one><two></two>")).parent()', "[ HTML string with several elements]"],
+          ['$("<div><b></b></div>").children().before($("<i></i>")).parent()', "[ jQuery ]"],
+          ['$("<div><b></b></div>").children().before($("<i></i>").get(0)).parent()', "[ Element ]"],
+          ['$("<div><b></b><p></p></div>").children().before("<i></i>").parent()', "multiple targets"],
+          ['$("<div><b></b></div>").children().before("hello").parent()', "Text"],
+          ['$("<div><b></b></div>").children().before($("<b>text</b>").get(0).childNodes[0]).parent()', "[ Text Node ]"],
+          ['$("<div><p></p></div>").children().before("<b></b>").before("<i></i>").parent()', "Chaining"],
+
+//          ['$("<ul><li>1</li><li>2</li></ul>").children().before("<i></i><p></p>").parent()', "[ HTML string with several elements]"],
+          ['$("<ul><li>1</li><li>2</li></ul>").children().before($("<i></i>")).parent()', "[ jQuery with several elements]"],
+//          ['$("<ul><li>1</li></ul>").children().before("<i></i><p></p>").parent()', "[ jQuery with several elements]"],
+//          ['$("<ul><li>1</li><li>2</li></ul>").children().before("<i></i><p></p>").parent()', "[ jQuery with several"],
+        ]
+      },
+      {
+        name: '.before( content, content, ... )',
+        tests: [
+          ['$("<div><b></b></div>").children().before("<i></i>", "<p></p>").parent()', ""],
+          ['$("<ul><li>1</li><li>2</li></ul>").children().before("<i></i><b></b>", "<p></p>").parent()', ""],
+        ]
+      },
+      {
+        name: '.before( function )',
+        tests: [
+          ['$("<div><b></b><p></p></div>").children().before(function(index){return "<i>" + index + "</i>"}).parent()', "function receives index"],
+          ['$("<div><b></b><p></p></div>").children().before(function(index){return "<i>" + this + "</i>"}).parent()', "value of this"],
+          ['$("<div><b></b><p></p></div>").children().before(function(index){return "hello"}).parent()', "return string"],
+          // todo: return element, jquery
+        ]
+      },
+      {
+        name: '.before( function-html ) (jQuery 1.10+)',
+        tests: [
+          ['$("<div><p>hello</p></div>").children().before(function(index, oldHtml){return "<i>" + oldHtml + "</i>"}).parent()', "get old html"],
+        ]
+      }
+    ]
+  },
+  {
+    name: '.after()',
+    tests: [
+      {
+        name: '.after( content )',
+        tests: [
+          ['$("<div><b></b></div>").children().after("<i></i>").parent()', "[ HTML string ]"],
+          ['$("<div><b></b></div>").children().after($("<one></one><two></two>")).parent()', "[ HTML string with several elements]"],
+          ['$("<div><b></b></div>").children().after($("<i></i>")).parent()', "[ jQuery ]"],
+          ['$("<div><b></b></div>").children().after($("<i></i>").get(0)).parent()', "[ Element ]"],
+          ['$("<div><b></b><p></p></div>").children().after("<i></i>").parent()', "multiple targets"],
+          ['$("<div><b></b></div>").children().after("hello").parent()', "Text"],
+          ['$("<div><b></b></div>").children().after($("<b>text</b>").get(0).childNodes[0]).parent()', "[ Text Node ]"],
+          ['$("<div><p></p></div>").children().after("<b></b>").after("<i></i>").parent()', "Chaining"],
+
+//          ['$("<ul><li>1</li><li>2</li></ul>").children().after("<i></i><p></p>").parent()', "[ HTML string with several elements]"],
+          ['$("<ul><li>1</li><li>2</li></ul>").children().after($("<i></i>")).parent()', "[ jQuery with several elements]"],
+          ['$("<div><b></b><i></i></div>").children("b").after($("<one></one><two></two>")).parent()', ""],
+          ['$("<div><b></b><i></i></div>").children("b").after("<one></one>", "<two></two>").parent()', ""],
+//          ['$("<ul><li>1</li></ul>").children().after("<i></i><p></p>").parent()', "[ jQuery with several elements]"],
+//          ['$("<ul><li>1</li><li>2</li></ul>").children().after("<i></i><p></p>").parent()', "[ jQuery with several"],
+        ]
+      },
+      {
+        name: '.after( content, content, ... )',
+        tests: [
+          ['$("<div><b></b></div>").children().after("<i></i>", "<p></p>").parent()', ""],
+          ['$("<ul><li>1</li><li>2</li></ul>").children().after("<i></i><b></b>", "<p></p>").parent()', ""],
+        ]
+      },
+      {
+        name: '.after( function )',
+        tests: [
+          ['$("<div><b></b><p></p></div>").children().after(function(index){return "<i>" + index + "</i>"}).parent()', "function receives index"],
+          ['$("<div><b></b><p></p></div>").children().after(function(index){return "<i>" + this + "</i>"}).parent()', "value of this"],
+          ['$("<div><b></b><p></p></div>").children().after(function(index){return "hello"}).parent()', "return string"],
+          // todo: return element, jquery
+        ]
+      },
+      {
+        name: '.after( function-html ) (jQuery 1.10+)',
+        tests: [
+          ['$("<div><p>hello</p></div>").children().after(function(index, oldHtml){return "<i>" + oldHtml + "</i>"}).parent()', "get old html"],
         ]
       }
     ]
@@ -59,6 +161,13 @@ window.complianceTests = [
       {
         name: '.appendTo( target )',
         tests: [
+          ['$("<a></a><b>b</b>")', ""],
+          ['$("<p>hello</p>").appendTo($("<div></div>"))', ""],
+          ['$("<one>1</one><two>2</two>").appendTo($("<div></div>"))', ""],
+          ['$("<i>hello</i>").appendTo($("<a></a><b>b</b>"))', ""],
+          ['$("<i>hello</i>").appendTo($("<a></a><b>b</b>")).parent()', ""],
+          ['(function(){$("<i class=hello>hello</i>").appendTo($("#item3 li")); var clone=$("#item3").clone();$("#item3 .hello").remove(); return clone})()', "In the jQuery implementation, the actual operation is a side effect. This test inspects the side effect"],
+ //         ['$("<one>1</one><two>2</two>").appendTo($("<a></a><b></b>"))', ""],
         ]
       },
     ]
@@ -106,6 +215,65 @@ window.complianceTests = [
     ]
   },
   {
+    name: '.before()',
+    tests: [
+      {
+        name: '.before( content )',
+        tests: [
+          ['$("<div><b></b></div>").children().before("<i></i>").parent()', "[ HTML string ]"],
+          ['$("<div><b></b></div>").children().before($("<one></one><two></two>")).parent()', "[ HTML string with several elements]"],
+          ['$("<div><b></b></div>").children().before($("<i></i>")).parent()', "[ jQuery ]"],
+          ['$("<div><b></b></div>").children().before($("<i></i>").get(0)).parent()', "[ Element ]"],
+          ['$("<div><b></b><p></p></div>").children().before("<i></i>").parent()', "multiple targets"],
+          ['$("<div><b></b></div>").children().before("hello").parent()', "Text"],
+          ['$("<div><b></b></div>").children().before($("<b>text</b>").get(0).childNodes[0]).parent()', "[ Text Node ]"],
+          ['$("<div><p></p></div>").children().before("<b></b>").before("<i></i>").parent()', "Chaining"],
+
+//          ['$("<ul><li>1</li><li>2</li></ul>").children().before("<i></i><p></p>").parent()', "[ HTML string with several elements]"],
+          ['$("<ul><li>1</li><li>2</li></ul>").children().before($("<i></i>")).parent()', "[ jQuery with several elements]"],
+//          ['$("<ul><li>1</li></ul>").children().before("<i></i><p></p>").parent()', "[ jQuery with several elements]"],
+//          ['$("<ul><li>1</li><li>2</li></ul>").children().before("<i></i><p></p>").parent()', "[ jQuery with several"],
+        ]
+      },
+      {
+        name: '.before( content, content, ... )',
+        tests: [
+          ['$("<div><b></b></div>").children().before("<i></i>", "<p></p>").parent()', ""],
+          ['$("<ul><li>1</li><li>2</li></ul>").children().before("<i></i><b></b>", "<p></p>").parent()', ""],
+        ]
+      },
+      {
+        name: '.before( function )',
+        tests: [
+          ['$("<div><b></b><p></p></div>").children().before(function(index){return "<i>" + index + "</i>"}).parent()', "function receives index"],
+          ['$("<div><b></b><p></p></div>").children().before(function(index){return "<i>" + this + "</i>"}).parent()', "value of this"],
+          ['$("<div><b></b><p></p></div>").children().before(function(index){return "hello"}).parent()', "return string"],
+          // todo: return element, jquery
+        ]
+      },
+      {
+        name: '.before( function-html ) (jQuery 1.10+)',
+        tests: [
+          ['$("<div><p>hello</p></div>").children().before(function(index, oldHtml){return "<i>" + oldHtml + "</i>"}).parent()', "get old html"],
+        ]
+      }
+    ]
+  },
+/*
+  {
+    name: '.before2()',
+    tests: [
+      {
+        name: '.before( content )',
+        tests: [
+//          ['$("hello dolly")', "Text"],
+//          ['$("<div><b></b></div>").children().before("<i></i>").parent()', "[ HTML string ]"],
+          ['$("<div><b></b></div>").children().before("hello").parent()', "Text"],
+        ]
+      },
+    ]
+  },*/
+  {
     name: '.children()',
     tests: [
       {
@@ -138,6 +306,63 @@ window.complianceTests = [
     ]
   },
   {
+    name: '.clone()',
+    tests: [
+      {
+        name: '.clone( )',
+        tests: [
+          ['$("#item2_1").clone()', ""],
+        ]
+      },
+      {
+        name: '.clone( withDataAndEvents )',
+        tests: [
+        ]
+      },
+      {
+        name: '.clone( withDataAndEvents, deepWithDataAndEvents )',
+        tests: [
+        ]
+      },
+    ]
+  },
+  {
+    name: '.closest()',
+    tests: [
+      {
+        name: '.closest( selector )',
+        tests: [
+          ['$("li#item2_1").closest("ul")', "Closest is direct parent"],
+          ['$("li#item2_1").parent().closest("ul")', "Closests is the element itself"],
+          ['$("li#item2_1").closest("div")', "Closest is a distant anchestor"],
+          ['$("li#item2_1, li#item3_1").closest("ul")', "Get closest of several items"],
+        ]
+      },
+      {
+        name: '.closest( selector, context )',
+        tests: [
+          ['$("li#item2_1").closest("ul", $("#ul0").get(0))', ""],
+          ['$("li#item2_1").closest("ul", $("#ul2").get(0))', "Context is selection"],
+          ['$("li").closest("ul", $("#ul0").get(0))', ""],
+          ['$("li").closest("#ul0", $("#ul2").get(0))', "Selection isnt in context. The jQuery result may be somewhat surprising. The doc says about context: A DOM element within which a matching element may be found. Yet, the element returned by jQuery is not found in the context"],
+          ['$("li").closest("li#item2_1", $("body").get(0))', ""],
+        ]
+      },
+      {
+        name: '.closest( selection )',
+        tests: [
+          ['$("li").closest($("ul"))', ""],
+        ]
+      },
+      {
+        name: '.closest( element )',
+        tests: [
+          ['$("li").closest($("ul").get(0))', ""],
+        ]
+      }
+    ]
+  },
+  {
     name: 'constructor',
     tests: [
       {
@@ -145,11 +370,11 @@ window.complianceTests = [
         tests: [
           ['$("#item3")', "Standard"],
           ['$("ul ul li:nth-child(odd)")', "<i>selector</i> is a CSS3 selector"],
-          ['$("ul ul li:odd")', "<i>selector</i> is a special jQuery selector"],
+          ['$("ul ul li:odd")', "<i>selector</i> is a special jQuery selector. Currently unsupported"],
         ]
       },
       {
-        name: '.jQuery( selector, context [ Element ] )',
+        name: 'jQuery( selector, context [ Element ] )',
         tests: [
           ['$("li", jq$("#item3").get(0))', "Standard"],
           ['$("li#item1", jq$("ul#ul2").get(0))', "selector is not in the decendant tree"],
@@ -157,10 +382,11 @@ window.complianceTests = [
           ['$("body li", jq$("#item3").get(0))', "selector begins with something outside of context. Its different in picoQuery because picoQuery uses Element.querySelecorAll, and here <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector'>the entire hierarchy counts</a>. In newer browsers, you can will get the compliant behaviour with the :scope pseudo-class.<a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll'>[1]</a> - but this probably causes syntax error in other browsers (havent tested yet). Btw, here is a <a href='https://github.com/lazd/scopedQuerySelectorShim'>shim</a>, and btw: picoQuery has same problem with find()"],
           ['$(":scope body li", jq$("#item3").get(0))', "Applying the :scope pseudo-class."],
           ['$("#item3 li", jq$("#item3").get(0))', "selector begins with something outside of context"],
+          ['$("#item3", document)', "jQuery( selector, [HTMLDocument]"],
         ]
       },
       {
-        name: '.jQuery( selector, context [ jQuery ] )',
+        name: 'jQuery( selector, context [ jQuery ] )',
         tests: [
           ['$("#item3", $("body"))', "Standard"],
           ['$("li#item1", $("ul#ul2"))', "selector is not in the decendant tree"],
@@ -176,60 +402,78 @@ window.complianceTests = [
         ]
       },
       {
-        name: '.jQuery( element )',
+        name: 'jQuery( selector, context [ Array ] )',
         tests: [
-          ['$(jq$("#item3").get(0))', "Standard - <i>element</i> is an Element node"],
+          ['$("li", $("#item3").get())', "jQuery( selector, [ Array ] )"],
+          ['$("li", [$("#item3").get(0), $("#item2").get(0)])', "jQuery( selector, [ Array of [Element]] ).<br><br>Whoopsidasie, the order is different in picoQuery. It seems to get the order right, picoQuery must first do an unscoped search and then filter the results such that items outside the context are removed"],
         ]
       },
       {
-        name: '.jQuery( elementArray )',
+        name: 'jQuery( element )',
+        tests: [
+          ['$(jq$("#item3").get(0))', "Standard - <i>element</i> is an Element node"],
+          ['$(makeTextNode("text"))', "[ Text Node ]"],
+          ['$(makeElement("<i>italic</i>"))', "[ Element ]"],
+          ['$(makeNodeList())', "[ NodeList ]"],
+
+        ]
+      },
+      {
+        name: 'jQuery( elementArray )',
         tests: [
           ['$([$("#item3").get()])', ""],
         ]
       },
       {
-        name: '.jQuery( object [PlainObject] )',
+        name: 'jQuery( object [PlainObject] )',
         tests: [
         ]
       },
       {
-        name: '.jQuery( selection [jQuery] )',
+        name: 'jQuery( selection [jQuery] )',
         tests: [
           ['$($("li"))', "Cloning"],
         ]
       },
       {
-        name: '.jQuery( )',
+        name: 'jQuery( )',
         tests: [
           ['$()', ""],
         ]
       },
       {
-        name: '.jQuery( html )',
+        name: 'jQuery( html )',
         tests: [
           ['$("<li id=one>1</li><li id=two>2</li>")', ""],
         ]
       },
       {
-        name: '.jQuery( html, ownerDocument )',
+        name: 'jQuery( html, ownerDocument )',
         tests: [
         ]
       },
       {
-        name: '.jQuery( html, attributes )',
+        name: 'jQuery( html, attributes )',
         tests: [
         ]
       },
       {
-        name: '.jQuery( callback )',
+        name: 'jQuery( callback )',
         tests: [
         ]
       },
       {
         name: 'Misc',
         tests: [
-          ['$("<div class=div1/><div class=div2/>")', ""],
+          ['$("<div class=div1/><div class=div2/>")', "Invalid self-closing tag (http://stackoverflow.com/questions/3558119/are-self-closing-tags-valid-in-html5)"],
+          ['$("<hr />")', "Valid self-closing tag"],
+          ['$(jq$("<div>text</div>"))', ""],
+          ['$(jq$("<div>text</div>").get(0))', ""],
           ['$(jq$("<div>text</div>").get(0).childNodes)', ""],
+          ['jq$("<div>text</div>").get(0)', ""],
+          ['jq$("<div>text</div>").get(0).childNodes', ""],
+          ['makeNodeList()', ""],
+          ['$(jq$("<span>text<p>node</p></span>").get(0).childNodes)', ""],
           ['$("li", $("ul").get(0))', ""],
           ['$([$("#item3").get(0)])', ""],
           ['$("#item3").get()', ""],
@@ -257,6 +501,8 @@ window.complianceTests = [
           ['$(0)', ""],
           ['$(1)', ""],
           ['$(undefined)', ""],
+          ['$("li", undefined)', ""],
+          ['$("li", [undefined])', ""],
           ['$([document, null])', ""],
           ['$(false)', ""],
           ['$("")', ""],
@@ -270,6 +516,25 @@ window.complianceTests = [
       },
     ]
   },
+/*
+  {
+    name: '.constructor2()',
+    tests: [
+      {
+        name: 'testing...',
+        tests: [
+          ['$("li", jq$("#item3").get(0))', "Standard"],
+          ['$("#item3", document)', "jQuery( selector, [HTMLDocument]"],
+//          ['jq$("<b>hej</b>").get(0)', ""],
+//          ['$(jq$("<b>hej</b>"))', ""],
+//            ['$("#item3").get()', ""],
+//          ['$(makeNodeList())', "[ NodeList ]"],
+        ]
+      }
+    ]
+  },*/
+
+
   {
     name: '.css()',
     tests: [
@@ -361,6 +626,29 @@ window.complianceTests = [
           ['$("<li>1</li><li>2</li>").empty().children()', ""],
         ]
       }
+    ]
+  },
+  {
+    name: '.eq()',
+    tests: [
+      {
+        name: '.eq( index )',
+        tests: [
+          ['$("<li>1</li><li>2</li><li>3</li>").eq(0)', " "],
+          ['$("<li>1</li><li>2</li><li>3</li>").eq(1)', " "],
+          ['$("<li>1</li><li>2</li><li>3</li>").eq(2)', " "],
+          ['$("<li>1</li><li>2</li><li>3</li>").eq(3)', " "],
+        ]
+      },
+      {
+        name: '.eq( indexFromEnd )',
+        tests: [
+          ['$("<li>1</li><li>2</li><li>3</li>").eq(-1)', " "],
+          ['$("<li>1</li><li>2</li><li>3</li>").eq(-2)', " "],
+          ['$("<li>1</li><li>2</li><li>3</li>").eq(-3)', " "],
+          ['$("<li>1</li><li>2</li><li>3</li>").eq(-4)', " "],
+        ]
+      },
     ]
   },
   {
@@ -531,6 +819,30 @@ window.complianceTests = [
     ]
   },
   {
+    name: '.insertAfter()',
+    tests: [
+      {
+        name: '.insertAfter( target )',
+        tests: [
+          ['(function(){$("<i class=hello>hello</i>").insertAfter($("#item3 li")); var clone=$("#item3").clone();$("#item3 .hello").remove(); return clone})()', "In the jQuery implementation, the actual operation is a side effect. This test inspects the side effect"],
+ //         ['$("<one>1</one><two>2</two>").insertBefore($("<a></a><b></b>"))', ""],
+        ]
+      },
+    ]
+  },
+  {
+    name: '.insertBefore()',
+    tests: [
+      {
+        name: '.insertBefore( target )',
+        tests: [
+          ['(function(){$("<i class=hello>hello</i>").insertBefore($("#item3 li")); var clone=$("#item3").clone();$("#item3 .hello").remove(); return clone})()', "In the jQuery implementation, the actual operation is a side effect. This test inspects the side effect"],
+ //         ['$("<one>1</one><two>2</two>").insertBefore($("<a></a><b></b>"))', ""],
+        ]
+      },
+    ]
+  },
+  {
     name: '.keyup()',
     tests: [
       {
@@ -586,6 +898,44 @@ window.complianceTests = [
     ]
   },
   {
+    name: '.offset()',
+    tests: [
+      {
+        name: '.offset( )',
+        tests: [
+          ['$("#item2_1").offset()', " "],
+        ]
+      },
+      {
+        name: '.offset( coordinates )',
+        tests: [
+        ]
+      },
+      {
+        name: '.offset( function )',
+        tests: [
+        ]
+      },
+    ]
+  },
+  {
+    name: '.offsetParent()',
+    tests: [
+      {
+        name: '.offsetParent()',
+        tests: [
+//          ['$("<div><p></p></div>").children().offsetParent()', " "],
+//          ['$("<div style=\'position:static\'><p></p></div>").children().offsetParent()', " "],
+          ['$("input").offsetParent()', " "],
+          ['$("#item3_1, input").offsetParent()', "Two"],
+          ['typeof $("#hidden_li").offsetParent()', "Element is hidden"]
+//          ['$("h1").offsetParent()', " "],
+// TODO: Read: https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
+        ]
+      },
+    ]
+  },
+  {
     name: '.on()',
     tests: [
       {
@@ -629,6 +979,12 @@ window.complianceTests = [
         tests: [
           ['$("li").parent(".level1")', ""],
         ]
+      },
+      {
+        name: 'Edge cases',
+        tests: [
+          ['$("<div><b></b></div>").parent()', ""],
+        ]
       }
     ]
   },
@@ -649,6 +1005,23 @@ window.complianceTests = [
       {
         name: '.prepend( function )',
         tests: [
+        ]
+      },
+    ]
+  },
+  {
+    name: '.prependTo()',
+    tests: [
+      {
+        name: '.prependTo( target )',
+        tests: [
+          ['$("<a></a><b>b</b>")', ""],
+          ['$("<p>hello</p>").prependTo($("<div></div>"))', ""],
+          ['$("<one>1</one><two>2</two>").prependTo($("<div></div>"))', ""],
+          ['$("<i>hello</i>").prependTo($("<a></a><b>b</b>"))', ""],
+          ['$("<i>hello</i>").prependTo($("<a></a><b>b</b>")).parent()', ""],
+          ['(function(){$("<i class=hello>hello</i>").prependTo($("#item3 li")); var clone=$("#item3").clone();$("#item3 .hello").remove(); return clone})()', "In the jQuery implementation, the actual operation is a side effect. This test inspects the side effect"],
+ //         ['$("<one>1</one><two>2</two>").prependTo($("<a></a><b></b>"))', ""],
         ]
       },
     ]
@@ -678,6 +1051,28 @@ window.complianceTests = [
       {
         name: '.ready()',
         tests: [
+        ]
+      },
+    ]
+  },
+  {
+    name: '.remove()',
+    tests: [
+      {
+        name: '.remove()',
+        tests: [
+          ['$("<div><b></b><i></i></div>").children("b").remove()', ""],
+          ['$("<div><b></b><i></i></div>").children("b").remove().parent()', ""],
+          ['function(){$("body").append("<div id=testing><b>test</b><i></i></div>"); $("#testing b").remove();var els = $("#testing").get(); $("#testing").remove(); return els}()', ""],
+        ]
+      },
+      {
+        name: '.remove( selector )',
+        tests: [
+          ['$("<div><b></b><i></i></div>").children().remove("b")', ""],
+          ['$("<div><b></b><i></i></div>").children().remove("b").parent()', ""],
+          ['$("<div><b></b><i></i></div>").children().remove("b i")', ""],
+          ['$("<div><b></b><i></i></div>").children().remove("b i").parent()', ""],
         ]
       },
     ]
@@ -742,6 +1137,59 @@ window.complianceTests = [
           ['$("<div class=\'a b c\'></div>").removeClass(function(index,currentClassName){return "b"})', " "],
         ]
       }
+    ]
+  },
+  {
+    name: '.replaceWith()',
+    tests: [
+      {
+        name: '.replaceWith( newContent )',
+        tests: [
+          ['$("<div><h1>text</h1></div>").children().replaceWith("<h2>new heading</h2>")', ""],
+          ['function(){$("body").append("<div id=test2><h1>text</h1></div>");$("#test2").children().replaceWith("<h2>new heading</h2>");return $("#test2").remove()}()', ""],
+// ; 
+        ]
+      },
+      {
+        name: '.replaceWith( function )',
+        tests: [
+        ]
+      },
+    ]
+  },
+  {
+    name: '.text()',
+    tests: [
+      {
+        name: '.text(  )',
+        tests: [
+          ['$("#item2_1").text()', "Single item"],
+          ['$("#item2").text()', "Parent item"],
+          ['$("#testhtml").text()', "Parent item"],
+          ['$("li").text()', "Multiple items"],
+          ['$(makeTextNode("text")).text()', "[ Text Node ]"],
+          ['$([makeTextNode("text"), makeElement("<i>italic</i>")]).text()', "[ Array of mixed content ]"],
+          ['$().text()', "Empty"],
+/*          ['$("<div><p></p></div>").append(makeElement("<b></b>"))', "[ Element ]"],
+          ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Text Node ]"],
+          ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Array of text nodes]"],
+          ['$("<div><p></p></div>").append([makeTextNode("text"), makeElement("<i>italic</i>")])', "[ Array of text nodes / elements ]"],*/
+        ]
+      },
+      {
+        name: '.text( text )',
+        tests: [
+          ['$("<div></div>").text("test")', "Single item"],
+          ['$("<div></div><li></li>").text("test")', "Multiple items"],
+        ]
+      },
+      {
+        name: '.text( function )',
+        tests: [
+          ['$("<one>One</one><two>Two</two>").text(function(idx,oldVal){return oldVal + idx})', ""],
+          ['$("<one>One</one>").text(function(idx,oldVal){return this})', "Value of this"],
+        ]
+      },
     ]
   },
 /*

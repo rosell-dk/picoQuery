@@ -8,7 +8,9 @@ var frameworks = [];
 </script>
 
 <?php
-$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-1.9.1.min.js', 'picoquery-0.2-ffff1fff.min.js', 'picoquery-0.2-ffff1fff.js');
+$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-1.9.1.min.js', 'picoquery-0.2.1-ffff1fff.min.js', 'picoquery-0.2.1-ffff1fff.js');
+
+//$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-1.12.4.min.js', 'picoquery-0.3.0-BU******3.min.js', 'picoquery-0.3.0-BU******3.js');
 
 //$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-2.2.4.js');
 // frameworks=picoquery-0.2-1100.js,zepto1.2.0
@@ -21,7 +23,7 @@ else {
 }
 
 function pushFramework($framework) {
-  echo '<script>frameworks.push([window.$, "' . $framework . '"]); window.$=undefined</script>' . "\n";
+  echo '<script>frameworks.push([window.$, "' . $framework . '", window.jQuery]); window.$=undefined</script>' . "\n";
 }
 foreach ($frameworks as $index => $framework) {
   if (strpos($framework, "jquery") === 0 ) {
@@ -39,16 +41,26 @@ foreach ($frameworks as $index => $framework) {
     pushFramework($framework);
   }
   if (strpos($framework, "pico") === 0 ) {
-    echo '<script src="/src/' . $framework . '"></script>' . "\n";
+    if ($_SERVER['HTTP_HOST'] == 'picoquery.com') {
+      // Use CDN when on live server
+      echo '<script src="http://cdn.picoquery.com/' . $framework . '"></script>' . "\n";
+    }
+    else {
+      echo '<script src="/src/' . $framework . '"></script>' . "\n";
+    }    
     pushFramework($framework);
   }
 
-  if (strpos($framework, "zepto") === 0 ) {
+  if ($framework == "zepto") {
     $framework = "zepto1.2.0.min.js";
     $frameworks[$index] = $framework;
   }
-  if (strpos($framework, "zepto1.2.0.min.js") === 0 ) {
+  if ($framework == "zepto1.2.0.min.js") {
     echo '<script src="zepto.min.js"></script>' . "\n";
+    pushFramework($framework);
+  }
+  if ($framework == "zepto1.2.0.js") {
+    echo '<script src="zepto.js"></script>' . "\n";
     pushFramework($framework);
   }
   if (strpos($framework, "angularjs") === 0 ) {
@@ -177,9 +189,9 @@ for ($i = count($frameworks)+2; $i>0; $i--) {
 </table>
 <!--<p>You can also view the console for the same output</p>-->
 
-<div id="testhtml">
+<div id="testhtml" style="position:relative">
   <b>This HTML is here for the tests:</b>
-  <div id="test">
+  <div id="test" >
     <ul id="ul0" class="level0">
       <li id="item1" class="odd">item 1</li>
       <li id="item2" class="even" style="font-style:italic">item 2
@@ -187,16 +199,17 @@ for ($i = count($frameworks)+2; $i>0; $i--) {
           <li id="item2_1" class="odd">item 2.1</li>
         </ul>
       </li>
-      <li id="item3" class="odd">item 3
+      <li id="item3" class="odd" style="position:relative">item 3
         <ul id="ul3" class="level1">
           <li id="item3_1" class="odd">item 3.1</li>
           <li id="item3_2" class="even">item 3.2</li>
         </ul>
       </li>
       <li id="item4" class="even">item 4</li>
+      <li id="hidden_li" class="odd" style="display:none">hidden item</li>
     </ul>
   </div>
-  <form>
+  <form style="position:absolute">
     <b>test</b>
     <input id="submitbtn" name="Submit" value="Submit" type="button">
   </form>
