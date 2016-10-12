@@ -1,6 +1,8 @@
 var bid = '';
 
 var FULL=0, PARTIAL=1, NONE=2;
+var onLiveServer = (location.host == 'picoquery.com');
+var useCDN = onLiveServer;
 
 var general_meta = {
   'arraylike': [
@@ -773,9 +775,26 @@ function getSizeString(sizeInBytes) {
 function generateCode() {
 //alert('generating code...');
   var buildId = buildBuildId();
-  var url = 'build.php?bid=' + buildId;
+
+  var filename = 'picoquery-' + version + '-' + buildBuildId();
+
+  var localBuildUrl = 'build.php?bid=' + buildId;
+  var localBuildUrlSrc = '/src/' + filename;
+  var cdnUrl = 'http://cdn.picoquery.com/' + filename;
+  var cdnUrlProxy = 'get-build-from-cdn.php?filename=' + filename;
+
+  var urlLink = (useCDN ? cdnUrl : localBuildUrlSrc);
+  var buildUrl = (useCDN ? cdnUrlProxy : localBuildUrl);
+
+
+  $('#code').html('...building...');
+  $('#code-link').attr('href', urlLink);
+  $('#code-url').val(urlLink);
+  $('#compliancetest-link').attr('href', '/lab/compliance-test/?frameworks=jquery-1.12.4.min.js,' + filename);
+
+
   var jqXHR = $.ajax({
-    url: url,
+    url: buildUrl,
     dataType: "text"
   })
   .done(function() {
@@ -786,17 +805,12 @@ function generateCode() {
     var uncompressedSize = jqXHR.responseText.length;
     $('#code_size').html('(' + getSizeString(compressedSize) + ' gzipped) <span style="font-size:9px;">(' + getSizeString(uncompressedSize) + ' uncompressed - but remember, <a style="color:black" href="https://www.tjvantoll.com/2014/01/27/only-the-gzip-size-matters/">only the gzip size matters</a>)</span>');
 
-    $('#code-link').attr('href', url);
-    $('#code-url').val(url);
-    $('#compliancetest-link').attr('href', '/lab/compliance-test/?frameworks=jquery-1.12.4.min.js,picoquery-' + version + '-' + bid);
     $('#code-warning').html('');
 
   })
   .fail(function( jqXHR, textStatus, errorThrown) {
 //    alert('failed generating picoquery.js');
-    $('#code-url').val(url);
     $('#code-warning').html(textStatus + ': ' + errorThrown);
-    $('#code-link').attr('href', url);
     $('#code').html(jqXHR.responseText);
   })
 }
@@ -809,6 +823,9 @@ function positionElements() {
 $(document).ready(function() {
 
   $('body > h1').text('picoQuery builder v'+ version);
+  if (!useCDN) {
+    $('#url_panel > h3:first-child').text('Url');
+  }
 /*
   $('#compactness_slider').slider({
     range: "max",
@@ -870,7 +887,7 @@ $(document).ready(function() {
     setBuildId(location.search.substr(1));
   }
   else {
-    setBuildId('5-B0');
+    setBuildId('B0.js');
   }
 
 
