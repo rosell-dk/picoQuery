@@ -146,54 +146,160 @@ $include_helpers_as_var = FALSE;
 $inline_all_helpers = FALSE;
 
 function decodeOptions($encodeOptionsString) {
-  $encoding = substr($encodeOptionsString, 0, 1);
-  $code = substr($encodeOptionsString, 1);
 
-  switch ($encoding) {
-    case 'A':
-      $features_to_include = hexstr2flagsarray($code);
-      break;
-    case 'B':
-      $features_to_include = base64str2flagsarray($code);
-      break;
-  }
+  $firstChar = substr($encodeOptionsString, 0, 1);
 
-  global $buildoptions_nameids;
-  foreach ($buildoptions_nameids as $index => $nameid) {
-    $nameid = getFeatureNameIdByIndex($index);
-    if (!isset($features_to_include[$index])) {
-      $features_to_include[$index] = FALSE;
-    }
-    if (isFeatureDefaultEnabled($nameid)) {
-      if ($features_to_include[$index] == TRUE) {
-        disableFeatureByNameId($nameid);
-      }
-    }
-    else {
-      if ($features_to_include[$index] == TRUE) {
-        enableFeatureByNameId($nameid);
-      }
+  // ie 'addClass-css'  (/src/picoquery-0.3.0-addClass-css.min.js)
+  if (($firstChar >= 'a') && ($firstChar <= 'a')) {
+    $features = explode('-', $encodeOptionsString);
+    foreach ($features as $index => $feature_nameid) {
+      enableFeatureByNameId($feature_nameid);
     }
   }
+  else {
+    $code = substr($encodeOptionsString, 1);
 
+    switch ($firstChar) {
+      case 'A':
+        $features_to_include = hexstr2flagsarray($code);
+        break;
+      case 'B':
+        $features_to_include = base64str2flagsarray($code);
+        break;
+    }
+
+    global $buildoptions_nameids;
+    foreach ($buildoptions_nameids as $index => $nameid) {
+      $nameid = getFeatureNameIdByIndex($index);
+      if (!isset($features_to_include[$index])) {
+        $features_to_include[$index] = FALSE;
+      }
+      if (isFeatureDefaultEnabled($nameid)) {
+        if ($features_to_include[$index] == TRUE) {
+          disableFeatureByNameId($nameid);
+        }
+      }
+      else {
+        if ($features_to_include[$index] == TRUE) {
+          enableFeatureByNameId($nameid);
+        }
+      }
+    }
+  }
 }
 
-if (isset($_GET['build'])) {
-//  $tokens = explode('-', $_GET['build']);
-  list($compactness, $features_to_include) = $tokens;
+/*
+CDN URL, format #1:     http://cdn.picoquery.com/picoquery0.3.0-A2fa0.min.js
+CDN URL, format #2:     http://cdn.picoquery.com/picoquery0.3.0-addClass-css.min.js
+Note that build id starts with on uppercase letter, which specifyes the encoding
+Encodings currently available:
+"A": 
+   16 bit encoding of options.
+   One bit per option, the option order is the one specified in build-options.inc
+   The last trail of 0's can be omitted. Ie "A3" is an encoding for "addClass" and "css"
+"B": 
+   64 bit encoding of options.
+   Same rules as "A" encoding
 
-  decodeOptions($features_to_include);
+*/
+// Builder URL, format #1: http://picoquery.com/builder/0.3.0/?A2fa0.min.js
+// Builder URL, format #2: http://picoquery.com/builder/0.3.0/?addClass-css.min.js
 
-//global $features_by_id;
-//  foreach ($features_to_include as $index => $flag) {
+// When sub-features arrives:
+// CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-A2fa0-0112.min.js
+
+// First 3 bits
+//    tells how many bits [n+1] that should be used for referencing methods
+//    when building a build id, the builder will try out all bit sizes,
+//    and select the one that results in the most compact build id.
+//    As zero bits hardly makes sense, 000 means n=1, 001 means n=2, etc
+//    If for example every method 
+// 
+// For each method/build-option that has sub-functionality disabled:
+//   First [n] bits
+//     Tells how many items to skip in the list of build options included in the build.
+//     This list is ordered by the index-id of the build-option (.addClass()=0, .css()=1, .get()=2, etc)
+//     If for example only .addClass(), get() and .each() are included in the build,
+//     the list will be: ['addClass', 'get', 'each']
+//     Say that n=4 and that these methods had 4 subfeatures each, and we were encoding with 1 bit
+//     build id would be this (no dashes): 
+//     010 (to set n=4) 
+//     0001 (skip one in the list - skips to "get"
+//     1111 (all subfeatures of get is deselected)
+//     0000 (skips to each. As each is right after 'get' in the list, the skip is 0)
+//     1111 (all subfeatures of each is deselected)
+
+//     All 1-bits has a special meaning. It means that the value of the next n bits
+//     will be added as well.
+//     for n=1, 0 will for example mean skip 0, 10 means skip 1, 111110 means skip 5
+//     for n=8, 5 will for example mean skip 5, f0 means skip 15, f7 means skip (15+7)=22
+//     By the way, jQuery has 314 methods
+
+//  Next x bits
+//     determines which of the subfeatures that are deselected
+//     build.php knows how many bits that each method needs
+//     Fun fact: Cannot be 0, as it would then mean that no sub-features where deselected
+//               and then it should not be listed
+//     To decide: Should subfeatures be selected or deselected?
+//                This only matters, if a user upgrades to next picoQuery by simply changing the url
+//                Ie, in 0.2 he has this URL: https://cdn.picoquery.com/picoquery0.2.0-A2fa0.min.js
+//                When 0.3 arrives, he changes it to: https://cdn.picoquery.com/picoquery0.3.0-A2fa0.min.js
+//                Should we support this? - ie must old build ID's work in new versions?
+//                It is possible. The "A" in "picoquery0.2.0-A2fa0.min.js" can designate the encoding
+//                of the build id. (A = picoQuery 0.2.x, B=picoQuery 0.3.x)
+//                It will however require some work. This new "subfeature" encoding relies on build.php to
+//                know how many bits a method needs. So build.php will have to know how many bits each method
+//                requires FOR EACH version of picoQuery.
+//
+//                What does the user hope to gain by changing the URL directly? (instead of upgrading through
+//                the builder). The user will not gain access to new build options this way.
+//                He certainly will expect code optimizations and bug fixes (though bugfixes must also be
+//                available in 0.2.x).
+//
+//                The important question is: Does he expect/want methods to be improved in terms of compliance?
+//                PRO YES:  - The next version will be better in terms of compliance
+//                PRO NO:   - The next version will not bring larger codebase
+//                I guess no - because compliance was probably good enough for his project in 0.2.
+//                If we choose "no", we will ensure that the upgrade will only bring good things - optimization
+//                and not bad things (larger code).
+//                However, if we choose "no", we will have to take meassures that no existing features go away
+//                ALL the stuff our methods currently does must be made into sub features.
+//
+//                So, its "NO" then. That means subfeatures are selected. New subfeatures are default unselected
+
+// The subfeatures can be part of the CDN URL like this:
+// https://cdn.picoquery.com/picoquery0.3-addClass0010-css100.fast.min.js
+// or base 8: https://cdn.picoquery.com/picoquery0.3-addClass2-css8-each17.small.min.js
+// But few people are used to base 8, and do not want to go base 16, because it contains letters. So base 2 is
+// best, I guess.
+
+//         http://picoquery.com/build?v=0.2&features=addclass-css-each
+// Builder URL: http://picoquery.com/builder/0.2/basic-click-nofallback.min.js
+
+// Alternative code URLs
+// https://picoquery.com/code?v=0.2&comments=none&minify=functions,all&fallback=jquery&methods=addclass,css,each
+// or...        https://picoquery.com/code?v=0.2&compactness=8&methods=addclass,css,each
+// or...        https://picoquery.com/src/picoquery0.2-addclass-css-each.min.js [min.js | max.js | readable.js]
+// or...        https://picoquery.com/src/picoquery0.2-full.min.js [min.js | max.js | readable.js]
+// or...        https://picoquery.com/src/picoquery0.2-full-nofallback.min.js [min.js | max.js | readable.js]
+// or...        https://picoquery.com/src/picoquery0.2-basic-click.min.js [min.js | compact.js | .js | max.js]
+// or...        https://picoquery.com/build?v=0.2&features=addclass-css-each
+
+// http://github.e-sites.nl/zeptobuilder/
+// maybe uglify ?
+
+// Builder URL: https://picoquery.com/builder/0.2/basic-click-nofallback.min.js
+
+// or...https://picoquery.com/builder?v=0.2&comments=none&minify=functions,all&fallback=jquery&methods=addclass,css,each
+// CDN URL:     https://cdn.picoquery.com/picoquery0.2.5-0-2000.min.js
 
 
-//  list($comments_build_id, $comments_method_signatures, $comments_method_description, $comments_inline, $comments_devel_notes) = hexstr2flagsarray($comments, 5);
+// comments: none | build_id | builder_url | compact_builder_url...
+// minify: none | functions | all
+// fallback: jquery | url to cdn?
+// methods: addclass | css | each | ...  ()
 
-//  list($minify_functions, $minify_all) = hexstr2flagsarray($min, 2);
-
-}
-elseif (isset($_GET['bid'])) {
+if (isset($_GET['bid'])) {
   $bid = $_GET['bid'];
   $parts = explode('.', $bid, 2);
   $features_to_include = $parts[0];
@@ -217,127 +323,13 @@ elseif (isset($_GET['bid'])) {
   }
 
 }
-
+/*
 elseif (isset($_GET['file'])) {
   print_r($_GET);
-}
+}*/
 elseif (isset($_GET['v'])) {
 //  print_r($_GET);
 
-  /*
-  CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-A2fa0.min.js
-  CDN URL, format #2:     https://cdn.picoquery.com/picoquery0.2-addClass-css.min.js
-  Note that build id starts with on uppercase letter, which specifyes the encoding
-  Encodings currently available:
-  "A": 
-     16 bit encoding of options.
-     One bit per option, the option order is the one specified in build-options.inc
-     The last trail of 0's can be omitted. Ie "A3" is an encoding for "addClass" and "css"
-  "B": 
-     64 bit encoding of options.
-     Same rules as "A" encoding
-
-  */
-  // CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.3-A2fa0.min.js
-
-  // Builder URL, format #1: http://picoquery.com/builder/0.3.0/?5-A2fa0
-  // OR                    : http://picoquery.com/builder/0.3.0/?A2fa0.min.js
-
-  // Builder URL, format #2: http://picoquery.com/builder/0.3.0/?addClass-css.min.js
-
-  // When sub-features arrives:
-  // CDN URL, format #1:     https://cdn.picoquery.com/picoquery0.2-A2fa0-0112.min.js
-
-  // First 3 bits
-  //    tells how many bits [n+1] that should be used for referencing methods
-  //    when building a build id, the builder will try out all bit sizes,
-  //    and select the one that results in the most compact build id.
-  //    As zero bits hardly makes sense, 000 means n=1, 001 means n=2, etc
-  //    If for example every method 
-  // 
-  // For each method/build-option that has sub-functionality disabled:
-  //   First [n] bits
-  //     Tells how many items to skip in the list of build options included in the build.
-  //     This list is ordered by the index-id of the build-option (.addClass()=0, .css()=1, .get()=2, etc)
-  //     If for example only .addClass(), get() and .each() are included in the build,
-  //     the list will be: ['addClass', 'get', 'each']
-  //     Say that n=4 and that these methods had 4 subfeatures each, and we were encoding with 1 bit
-  //     build id would be this (no dashes): 
-  //     010 (to set n=4) 
-  //     0001 (skip one in the list - skips to "get"
-  //     1111 (all subfeatures of get is deselected)
-  //     0000 (skips to each. As each is right after 'get' in the list, the skip is 0)
-  //     1111 (all subfeatures of each is deselected)
-
-  //     All 1-bits has a special meaning. It means that the value of the next n bits
-  //     will be added as well.
-  //     for n=1, 0 will for example mean skip 0, 10 means skip 1, 111110 means skip 5
-  //     for n=8, 5 will for example mean skip 5, f0 means skip 15, f7 means skip (15+7)=22
-  //     By the way, jQuery has 314 methods
-
-  //  Next x bits
-  //     determines which of the subfeatures that are deselected
-  //     build.php knows how many bits that each method needs
-  //     Fun fact: Cannot be 0, as it would then mean that no sub-features where deselected
-  //               and then it should not be listed
-  //     To decide: Should subfeatures be selected or deselected?
-  //                This only matters, if a user upgrades to next picoQuery by simply changing the url
-  //                Ie, in 0.2 he has this URL: https://cdn.picoquery.com/picoquery0.2.0-A2fa0.min.js
-  //                When 0.3 arrives, he changes it to: https://cdn.picoquery.com/picoquery0.3.0-A2fa0.min.js
-  //                Should we support this? - ie must old build ID's work in new versions?
-  //                It is possible. The "A" in "picoquery0.2.0-A2fa0.min.js" can designate the encoding
-  //                of the build id. (A = picoQuery 0.2.x, B=picoQuery 0.3.x)
-  //                It will however require some work. This new "subfeature" encoding relies on build.php to
-  //                know how many bits a method needs. So build.php will have to know how many bits each method
-  //                requires FOR EACH version of picoQuery.
-  //
-  //                What does the user hope to gain by changing the URL directly? (instead of upgrading through
-  //                the builder). The user will not gain access to new build options this way.
-  //                He certainly will expect code optimizations and bug fixes (though bugfixes must also be
-  //                available in 0.2.x).
-  //
-  //                The important question is: Does he expect/want methods to be improved in terms of compliance?
-  //                PRO YES:  - The next version will be better in terms of compliance
-  //                PRO NO:   - The next version will not bring larger codebase
-  //                I guess no - because compliance was probably good enough for his project in 0.2.
-  //                If we choose "no", we will ensure that the upgrade will only bring good things - optimization
-  //                and not bad things (larger code).
-  //                However, if we choose "no", we will have to take meassures that no existing features go away
-  //                ALL the stuff our methods currently does must be made into sub features.
-  //
-  //                So, its "NO" then. That means subfeatures are selected. New subfeatures are default unselected
-  
-  // The subfeatures can be part of the CDN URL like this:
-  // https://cdn.picoquery.com/picoquery0.3-addClass0010-css100.fast.min.js
-  // or base 8: https://cdn.picoquery.com/picoquery0.3-addClass2-css8-each17.small.min.js
-  // But few people are used to base 8, and do not want to go base 16, because it contains letters. So base 2 is
-  // best, I guess.
-
-  //         http://picoquery.com/build?v=0.2&features=addclass-css-each
-  // Builder URL: http://picoquery.com/builder/0.2/basic-click-nofallback.min.js
-
-  // Alternative code URLs
-  // https://picoquery.com/code?v=0.2&comments=none&minify=functions,all&fallback=jquery&methods=addclass,css,each
-  // or...        https://picoquery.com/code?v=0.2&compactness=8&methods=addclass,css,each
-  // or...        https://picoquery.com/src/picoquery0.2-addclass-css-each.min.js [min.js | max.js | readable.js]
-  // or...        https://picoquery.com/src/picoquery0.2-full.min.js [min.js | max.js | readable.js]
-  // or...        https://picoquery.com/src/picoquery0.2-full-nofallback.min.js [min.js | max.js | readable.js]
-  // or...        https://picoquery.com/src/picoquery0.2-basic-click.min.js [min.js | compact.js | .js | max.js]
-  // or...        https://picoquery.com/build?v=0.2&features=addclass-css-each
-
-  // http://github.e-sites.nl/zeptobuilder/
-  // maybe uglify ?
-
-  // Builder URL: https://picoquery.com/builder/0.2/basic-click-nofallback.min.js
-
-  // or...https://picoquery.com/builder?v=0.2&comments=none&minify=functions,all&fallback=jquery&methods=addclass,css,each
-  // CDN URL:     https://cdn.picoquery.com/picoquery0.2.5-0-2000.min.js
-
-  
-  // comments: none | build_id | builder_url | compact_builder_url...
-  // minify: none | functions | all
-  // fallback: jquery | url to cdn?
-  // methods: addclass | css | each | ...  ()
 
   $v = $_GET['v'];
 
@@ -368,14 +360,6 @@ elseif (isset($_GET['v'])) {
     */
   }
 
-  $features = $_GET['features'];
-  if (isset($features)) {
-    $features = explode('-', $features);
-//    print_r($features);
-    foreach ($features as $index => $feature_nameid) {
-      enableFeatureByNameId($feature_nameid);
-    }
-  }
 }
 
 if (isset($compactness)) {
