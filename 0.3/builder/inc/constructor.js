@@ -162,44 +162,45 @@ function P(a,b) {
 }
 
 // OPTIMIZED_VERSION //
-function P(a, b) {
-  if (a) {
-    if ("s" < typeof a) {
-      if ("<" == a[0]) {
-        var e = d.createElement("div");
-        e.innerHTML = a;
-        this.e = [].slice.call(e.children);
+function P(b, a) {
+  if (b) {
+    if ("s" < typeof b) {
+      if ("<" == b[0]) {
+        var c = d.createElement("div");
+        c.innerHTML = b;
+        this.e = [].slice.call(c.children);
       } else {
-        if (b) {
-          var f = [];
-          (b instanceof P ? b.e : [b]).forEach(function(c) {
-            var b;
-            c.parentNode || (b = document.createElement("div"), b.appendChild(c));
-            c.id ? f = f.concat([].slice.call(c.parentNode.querySelectorAll("#" + c.id + " " + a))) : (c.id = "querySelectorAllinnerHTML", f = f.concat([].slice.call(c.parentNode.querySelectorAll("#" + c.id + " " + a))), c.removeAttribute("id"));
-            b && b.removeChild(c);
+        if (a) {
+          a.documentElement && (a = a.documentElement);
+          var e = [];
+          (a instanceof P ? a.e : a instanceof Array ? a : [a]).forEach(function(a) {
+            var c;
+            a.parentNode || (c = document.createElement("div"), c.appendChild(a));
+            a.id ? e = e.concat([].slice.call(a.parentNode.querySelectorAll("#" + a.id + " " + b))) : (a.id = "querySelectorAllinnerHTML", e = e.concat([].slice.call(a.parentNode.querySelectorAll("#" + a.id + " " + b))), a.removeAttribute("id"));
+            c && c.removeChild(a);
           });
-          this.e = f = f.filter(function(a, b, e) {
-            return e.indexOf(a) == b;
+          this.e = e = e.filter(function(a, b, c) {
+            return c.indexOf(a) == b;
           });
         } else {
-          b = b instanceof P ? b.e[0] : b, this.e = [].slice.call(d.querySelectorAll(a));
+          a = a instanceof P ? a.e[0] : a, this.e = [].slice.call(d.querySelectorAll(b));
         }
       }
     } else {
-      if ("function" == typeof a) {
-        return $(d).ready(a);
+      if ("function" == typeof b) {
+        return $(d).ready(b);
       }
-      this.e = a.nodeType ? [a] : a instanceof P ? a.e : a.map ? a : [a];
+      this.e = b.nodeType ? [b] : b instanceof P ? b.e : b.map ? b : b instanceof NodeList ? [].slice.call(b) : [b];
     }
   } else {
     this.e = [];
   }
   <?php if (isFeatureEnabled('arraylike')):?>
-  for (e = 0;e < this.e.length;e++) {
-    this[e] = this.e[e];
+  for (c = 0;c < this.e.length;c++) {
+    this[c] = this.e[c];
   }
   this.length = this.e.length;
   this.splice = [].splice;
   <?php endif;?>
-}
+};
 

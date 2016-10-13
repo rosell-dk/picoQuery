@@ -23,4 +23,6 @@ replaceWith: function(newContent) {
 
 // OPTIMIZED_VERSION //
 replaceWith:function(a,aa,aaa) {
+  this.before(a).remove();
+  return this;
 }

@@ -67,6 +67,14 @@ text: function(a) {
 }
 
 // OPTIMIZED_VERSION //
-
-text:function() {
+text:function(b) {
+  if (__IS_UNDEFINED__(b)) {
+    return __MAP__(this.e, function(a) {
+      return a.textContent;
+    }).join("");
+  }
+  __ITERATE__(this.e, function(a, c) {
+    a.textContent = __IS_FUNCTION__(b) ? b.call(a, c, a.textContent) : b;
+  });
+  return this;
 }

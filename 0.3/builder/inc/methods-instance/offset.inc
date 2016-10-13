@@ -32,6 +32,7 @@ offset: function(a) {
 }
 
 // OPTIMIZED_VERSION //
-offset:function(a,aa,aaa) {
-  return 0;
+offset:function(a) {
+  a = this.e[0].getBoundingClientRect();
+  return {top:a.top + window.pageYOffset, left:a.left + window.pageXOffset};
 }

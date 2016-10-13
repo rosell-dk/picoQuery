@@ -59,6 +59,8 @@ offsetParent: function(a) {
 }
 
 // OPTIMIZED_VERSION //
-offsetParent:function(a,aa,aaa) {
-  return this;
+offsetParent:function(b) {
+  return $(__MAP__(this.e, function(a) {
+    return a.offsetParent || a.ownerDocument.documentElement;
+  }));
 }

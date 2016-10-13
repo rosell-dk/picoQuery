@@ -237,6 +237,12 @@ var methods_meta = {
       ['.offset( function ) => jQuery', NONE, ''],
     ]
   ],
+  'offsetParent': [
+    'http://api.jquery.com/offsetParent/',
+    [
+      ['.offsetParent( ) => jQuery', FULL, ''],
+    ]
+  ],
   'parent': [
     'http://api.jquery.com/parent/',
     [
