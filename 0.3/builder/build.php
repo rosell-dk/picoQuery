@@ -150,7 +150,7 @@ function decodeOptions($encodeOptionsString) {
   $firstChar = substr($encodeOptionsString, 0, 1);
 
   // ie 'addClass-css'  (/src/picoquery-0.3.0-addClass-css.min.js)
-  if (($firstChar >= 'a') && ($firstChar <= 'a')) {
+  if (($firstChar >= 'a') && ($firstChar <= 'z')) {
     $features = explode('-', $encodeOptionsString);
     foreach ($features as $index => $feature_nameid) {
       enableFeatureByNameId($feature_nameid);
@@ -842,7 +842,7 @@ function _process_helpers($js, $step) {
         if (el.classList) {
           el.classList.add(value);
         } 
-        else {
+        else {picoquery-0.3
           el.className += ' ' + value;
         }
       }););
@@ -955,10 +955,9 @@ function _process_helpers($js, $step) {
 <?php endif;?>
 (function(w,d,u,$<?php if ($use_optimized_methods) {echo ',z';} // TODO: Detect if u and z are used. u can be tested For example with the javascript parser ?>) {
 <?php if (isFeatureEnabled('jQuery.noConflict')) {
-  echo '  var _$ = window.$;';
+  echo '  var _$ = window.$;' . "\n";
 }
 ?>
-
 <?php
 prepare_helpers();
 ?>
