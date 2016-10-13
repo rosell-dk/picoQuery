@@ -18,7 +18,7 @@ This approach has several benefits:
 The following methods is currently supported: 
 .addClass(), .append(), .appendTo(), .attr(), .children(), .click(), .css(), .each(), .empty(), .first(), .find(), .focous(), .get(), .hide(), .html(), .keyup(), .map(), .next(), .on(), .parent()., .prev(), .ready(), .removeAttr(), .removeClass(), .trigger()
 
-In the upcoming 0.3 release (**ETA: tomorrow!**), the following methods will be supported:
+In the upcoming 0.3 release (**ETA: a couple of hours!**), the following methods will be supported:
 .addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .each(), .empty(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .ready(), .remove(), .removeAttr(), .removeClass(), .text(), .trigger()
 
 Focus in the 0.4 release will be to support even more of the jQuery API. Please let me know if there is a specific method you wish to be supported.
@@ -57,7 +57,7 @@ jQuery is quite a download (37k compressed). If you want to be friendly to your 
 ### Roadmap
 #### Version 0.3:
 
-**0.3 is *almost* complete. I expect it to be released today.**
+**0.3 is *almost* complete. I expect it to be released in a couple of hours.**
 
 - More API: jQuery.noConflict(), .after(), .before(), .closest(), .eq(), .insertAfter(), .insertBefore(), .offset(), .offsetParent(), .remove(), .replaceWith(), .text(), .prependTo()
 - picoQuery now defines window.jQuery, and overwrites it if it exist. Also, picoQuery no longer cowardly steps aside when $ is already defined. Like in jQuery, you can get $ restored with jQuery.noConflict(). The philosophy behind this change is that picoQuery should behave exactly like jQuery, so they can be used interchangably. This ensures that swapping between jQuery and picoQuery really is just a matter of changing the library and also ensures that there will be no unpleasant surprises when picoQuery falls back to jQuery.
