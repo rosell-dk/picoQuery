@@ -3,7 +3,7 @@
 picoQuery is a customizable subset of jQuery. Its written for modern browsers and automatically falls back to jQuery on older browsers.
 
 This approach has several benefits:
-- picoQuery is <i>ultra</i>-light. Even if you choose the largest subset currently available (29 methods), its only 1.7kb zipped
+- picoQuery is <i>ultra</i>-light. Even if you choose the largest subset currently available (41 methods), its only 2.4kb zipped
 - If you know jQuery, there is nothing new to learn
 - If your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery
 - jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light. Plus you get the job done quickly with "jQuery"
