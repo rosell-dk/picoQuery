@@ -329,8 +329,8 @@ j$(function($) {
     ['angularjs 1.5.7 (jqLite)', 'angularjs-1.5.7.min.js'],
     ['picoQuery 0.2.1-ffff1fff.min.js', 'picoquery-0.2.1-ffff1fff.min.js'],
     ['picoQuery 0.2.1-ffff1fff.js', 'picoquery-0.2.1-ffff1fff.js'],
-    ['picoQuery 0.3.0-BU******3.min.js', 'picoQuery 0.3.0-BU******3.min.js'],
-    ['picoQuery 0.3.0-BU******3.js', 'picoQuery 0.3.0-BU******3.js'],
+    ['picoQuery 0.3.0-full.min.js', 'picoquery-0.3.0-full.min.js'],
+    ['picoQuery 0.3.0-full.js', 'picoquery-0.3.0-full.js'],
   ];
   var af = availableFrameworks.map(function(item) {return item[1]});
   frameworks.slice(1).forEach(function (item) {

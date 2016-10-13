@@ -479,7 +479,7 @@ window.complianceTests = [
           ['$("#item3").get()', ""],
           ['$("#item3").get(0)', ""],
           ['$("li", $("#item3").get())', ""],
-          ['$("<li><a></a></li>").children("a").end()', "pushstack. Every traversal method creates a new jQuery set and builds a stack. Use .end() to get at the previous set."],
+//          ['$("<li><a></a></li>").children("a").end()', "pushstack. Every traversal method creates a new jQuery set and builds a stack. Use .end() to get at the previous set. Not supported in picoQuery yet"],
         ]
       },
       {

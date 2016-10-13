@@ -18,7 +18,7 @@ RewriteRule ^src/(picoquery-(\d\.\d)(\.(\d))?-(.*)\.js)  /$2/src/$1 [L]
 
 # ---- LATEST VERSION ----
 # Redirect to LATEST version of builder
-RewriteRule ^builder/$  /builder/0.2.1/ [L,R=302]
+RewriteRule ^builder/$  /builder/0.3.0/ [L,R=302]
 
 
 </IfModule>

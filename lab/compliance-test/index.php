@@ -8,9 +8,9 @@ var frameworks = [];
 </script>
 
 <?php
-$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-1.9.1.min.js', 'picoquery-0.2.1-ffff1fff.min.js', 'picoquery-0.2.1-ffff1fff.js');
+//$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-1.9.1.min.js', 'picoquery-0.2.1-ffff1fff.min.js', 'picoquery-0.2.1-ffff1fff.js');
 
-//$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-1.12.4.min.js', 'picoquery-0.3.0-BU******3.min.js', 'picoquery-0.3.0-BU******3.js');
+$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-1.12.4.min.js', 'picoquery-0.3.0-full.min.js', 'picoquery-0.3.0-full.js');
 
 //$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-2.2.4.js');
 // frameworks=picoquery-0.2-1100.js,zepto1.2.0
