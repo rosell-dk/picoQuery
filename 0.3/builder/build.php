@@ -992,8 +992,8 @@ include_methods('instance');
   */
 ?>
   ;['<?php echo implode("', '", $enabled_event_methods) ?>'].forEach(function(a) {
-    $.fn[a] = function(b){
-      return b ? this.on(a,b) : this.trigger(a)
+    $.fn[a] = function(b,bb){
+      return b ? this.on(a,null,b,bb) : this.trigger(a)
     }
   });
 

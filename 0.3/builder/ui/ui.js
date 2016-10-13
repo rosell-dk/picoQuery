@@ -77,9 +77,9 @@ var methods_meta = {
   'click': [
     'http://api.jquery.com/click/',
     [
-      ['.click( handler ) => jQuery', FULL],
-      ['.click( eventData, handler ) => jQuery', NONE],
-      ['.click() => jQuery', FULL],
+      ['.click( handler ) => jQuery', PARTIAL, 'See .on() method for compliance notes'],
+      ['.click( eventData, handler ) => jQuery', PARTIAL, 'See .on() method for compliance notes'],
+      ['.click() => jQuery', PARTIAL, 'See .on() method for compliance notes'],
     ]
   ],
   'closest': [
@@ -152,9 +152,9 @@ var methods_meta = {
   'focus': [
     'http://api.jquery.com/focus/',
     [
-      ['.focus( handler ) => jQuery', FULL],
-      ['.focus( eventData, handler ) => jQuery', NONE],
-      ['.focus() => jQuery', FULL],
+      ['.focus( handler ) => jQuery', PARTIAL, 'See .on() method for compliance notes'],
+      ['.focus( eventData, handler ) => jQuery', PARTIAL, 'See .on() method for compliance notes'],
+      ['.focus() => jQuery', PARTIAL, 'See .on() method for compliance notes'],
     ]
   ],
   'get': [
@@ -203,9 +203,9 @@ var methods_meta = {
   'keyup': [
     'http://api.jquery.com/keyup/',
     [
-      ['.keyup( handler ) => jQuery', FULL],
-      ['.keyup( [eventData], handler ) => jQuery', NONE],
-      ['.keyup() => jQuery', FULL],
+      ['.keyup( handler ) => jQuery', PARTIAL, 'See .on() method for compliance notes'],
+      ['.keyup( [eventData], handler ) => jQuery', PARTIAL, 'See .on() method for compliance notes'],
+      ['.keyup() => jQuery', PARTIAL, 'See .on() method for compliance notes'],
     ]
   ],
   'map': [
@@ -223,10 +223,12 @@ var methods_meta = {
   'on': [
     'http://api.jquery.com/on/',
     [
-      ['.on( events, handler ) => jQuery', PARTIAL, 'Multiple events are NOT SUPPORTED - only one event name may be specified. Namespaces such as "keydown.myPlugin" are not supported.'],
+      ['.on( events, handler ) => jQuery', PARTIAL, 'Multiple events are NOT SUPPORTED - only one event name may be specified. Namespaces such as "keydown.myPlugin" are not supported. Event propagation may not be correct'],
       ['.on( events ) => jQuery', PARTIAL, 'Same restrictions as above apply'],
-      ['.on( events [,selector] [,data], handler ) => jQuery', NONE],
-      ['.on( events [,selector] [,data] ) => jQuery', NONE],
+      ['.on( events, data, handler ) => jQuery', PARTIAL, 'Same restrictions as above apply'],
+      ['.on( events, selector, data , handler ) => jQuery', NONE],
+      ['.on( events, selector, handler ) => jQuery', NONE],
+      ['.on( events, selector, data ) => jQuery', NONE],
     ]
   ],
   'offset': [
