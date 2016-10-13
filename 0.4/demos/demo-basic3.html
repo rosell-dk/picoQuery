@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>picoQuery demo</title>
+<!--
+For best performance, a webpage should ideally split the scripts needed in two.
+
+First part is for the bare essentials for viewing the part of the page that is initially visible.
+This part is best put *directly* in the HTML (that is, inline - between <script>-tags).
+The reason is that you want minimize the number of requests required to finish before the browser
+is allowed to show anything. picoQuery is made small enough so you can include it inline for this purpose.
+
+The second part of the script is for stuff that does not need to be there for the first render.
+Ie. click events, animations, footer appearance. Use defered loading for this - that is load it dynamically after the document load event. See this article: https://varvy.com/pagespeed/defer-loading-javascript.html
+
+It is not too bad to use jQuery, when it is truly defered, as the user will not notice that
+the browser is downloading and rendering more script. Your priority should therefore be to split
+the script into the mentioned parts and migrate the first part to picoQuery
+
+You can read more about this strategy here: https://varvy.com/pagespeed/render-blocking.html
+
+All this, just to explain why we here include picoQuery inline, instead of doing like this:
+
+
+
+-->
+<!--<script src="http://picoquery.com/builder/picoquery.js.php?build=0.2-5-0-3000"></script>-->
+<!--
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+-->
+<script>
+/* picoquery.com/builder/0.3.0/?5-000000008 */
+if (Array.isArray) {
+(function(w,d,u,$) {
+    if (!w.$) {
+
+    var _$ = window.$;
+
+
+      w.$ = $ = function() {
+        // Allow to create new instances without new
+        return function(a,b) {
+          return new P(a,b);
+        };
+      }();
+
+      // constructor
+      function P(a,b){if(!a){this.e=[]}else if(typeof a>'s'){if(a[0]=='<'){var el=d.createElement('div');el.innerHTML=a;this.e=[].slice.call(el.children)}else{if(b){var roots=(b instanceof P?b.e:[b]);var arr=[];roots.forEach(function(b){var container,gaveContainer;if(!b.parentNode){container=document.createElement('div');console.log('appending:');console.log(b);console.log('eoappending');container.appendChild(b)}if(!b.id){b.id='querySelectorAllinnerHTML';arr=arr.concat([].slice.call(b.parentNode.querySelectorAll('#'+b.id+' '+a)));b.removeAttribute('id')}else{arr=arr.concat([].slice.call(b.parentNode.querySelectorAll('#'+b.id+' '+a)))}if(container){container.removeChild(b)}});arr=arr.filter(function(item,i,r){return r.indexOf(item)==i});this.e=arr}else{b=(b instanceof P?b.e[0]:b);this.e=[].slice.call(d.querySelectorAll(a))}}}else if(typeof a == "function"){return $(d).ready(a)}else if(a.nodeType){this.e=[a]}else if(a instanceof P){this.e=a.e}else if(a.map){this.e=a}else{this.e=[a]}for(var i=0;i<this.e.length;i++){this[i]=this.e[i]}this.length=this.e.length;this.splice=[].splice}
+
+      // methods
+      $.fn = P.prototype = {
+        on:function(events,handler){return this.e.forEach(function(el){el.addEventListener(events,handler,false)})},
+        ready:function(handler){if(/^u|ng/.test(document.readyState))this.on('DOMContentLoaded',function(){handler($)});else{handler($)}return this}
+      }
+    }        
+})(window,document);
+  }
+  else {
+    // jQuery fallback 
+    document.write('<scrip' + 't src=https://code.jquery.com/jquery-1.12.4.min.js><' + '/script>');
+  }
+</script>
+<script>
+//alert((Array.isArray ? 'yes' : 'no'));
+
+$.fn.bgColor = function(bgColor) {
+  this.css('background-color', bgColor);
+//  alert('background color was:' + this.css('background-color') + '. Setting it to:' + bgColor);
+}
+
+$(function() {
+/*
+  $('span').filter($('span:nth-of-type(odd)')).addClass('red-text');
+  $('span').filter('*').addClass('red-text');
+
+
+  console.log('jQuery');
+  console.log($(document).parent());
+  console.log($(document).parent().filter('li'));
+  console.log($('li').parent());
+*/
+
+  $map = $( "[type=checkbox]" ).map(function(i,item) {
+//    console.log('hi from callback. index:' + i + ', item:' + item + 'this:' + this + this.id);
+    return this.id;
+  });
+//  console.log($map);
+//  console.log($map.get().join());
+
+//  console.log($( "ul.level-2" ).children());
+  $( "ul.level-2" ).children().css( "color", "green" );
+//  return;
+
+  $('li').bgColor('blue');
+//  return;
+
+  $('#clickme').addClass('red-text');
+
+//  $('ul li').css('background-color', 'red');
+//alert($('ul li').css('background-color'));
+
+  $('<b>bold</b>').appendTo($('body'));
+
+//	var div = $( "<div>hej</div>" ).appendTo( "body" );
+
+  $('body').append('<b>bold</b>', '<i>italic</i>');
+
+  $('li').each(function (i, el) {
+//    alert(i);
+//    alert(el);
+  });
+
+  $('.clickable').css('cursor', 'pointer').css('background-color', '#ccc');
+  $('#clickme').click(function(e) {
+    alert('thanks, man.\n\nThe event object is same as in jQuery: ' + e);
+  });
+  $('#hideme').hide();
+  $('ul li').css('text-decoration', 'underline');
+
+//  $('ul li').css('background-color', 'red').first().css('color', 'white');
+  $('ul li:last-child').css('font-weight', 'bold');
+
+  
+  $('#clickmetoo').click(function(e) {
+    var colorOfFirstLI = $('li').first().css('color');
+    alert(colorOfFirstLI);
+    
+  });
+
+  $('#clickmethree').click(function(e) {
+    $('#clickme').click();
+  });
+
+  var $li = $('li');
+//alert($li.length);
+
+  for (var i=0; i<$li.length; i++) {
+    $($li[i]).css('text-decoration', 'underline')
+  }
+//  console.log($li);
+
+});
+
+</script>
+
+
+<style>
+#clickme {cursor:pointer; background-color: #ccc}
+.red-text {color:red;}
+</style>
+</head>
+<body>
+  <span id="clickme" class="clickable">Click me</span><br>
+  <span id="hideme">picoQuery has hidden me</span><br>
+  <ul class="list">
+    <li>One</li>
+    <li>Two</li>
+    <li>Three</li>
+  </ul>
+  <span id="clickmetoo" class="clickable">Click me to view the value of a css property</span><br>
+  <span id="clickmethree" class="clickable">Click me to trigger an event</span><br>
+
+<ul class="level-1">
+  <li class="item-i">I</li>
+  <li class="item-ii">II
+    <ul class="level-2">
+      <li class="item-a">A</li>
+      <li class="item-b">B
+        <ul class="level-3">
+          <li class="item-1">1</li>
+          <li class="item-2">2</li>
+          <li class="item-3">3</li>
+        </ul>
+      </li>
+      <li class="item-c">C</li>
+    </ul>
+  </li>
+  <li class="item-iii">III</li>
+</ul>
+
+<form method="post" action="">
+  <fieldset>
+    <div>
+      <label for="two">2</label>
+      <input type="checkbox" value="2" id="two" name="number[]">
+    </div>
+    <div>
+      <label for="four">4</label>
+      <input type="checkbox" value="4" id="four" name="number[]">
+    </div>
+    <div>
+      <label for="six">6</label>
+      <input type="checkbox" value="6" id="six" name="number[]">
+    </div>
+    <div>
+      <label for="eight">8</label>
+      <input type="checkbox" value="8" id="eight" name="number[]">
+    </div>
+  </fieldset>
+</form>
+
+</body>
+</html>

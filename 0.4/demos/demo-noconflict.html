@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>picoQuery demo: jQuery.noConflict()</title>
+<!--
+<script src="../../builder/0.3/build.php?build=0-ffff1ffff"></script>
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js"></script>
+<script src="../../builder/0.3/build.php?build=5-f04008008"></script>
+<script>
+
+// Of course, for this to work, you must select "jQuery.noConflict()" in the build options.
+var p$ = jQuery.noConflict();
+console.log('reverted $ to:', $);
+console.log('picoQuery is available as p$:', p$);
+/*
+$(function () {
+  $('p').addClass('red');
+})
+*/
+document.addEventListener("DOMContentLoaded", function() {
+
+  // Make message bold, using prototype
+  $('msg').addClassName('bold');
+
+  // Make message blue, using picoQuery
+  p$('#msg').addClass('blue');
+})
+</script>
+
+<style>
+.blue {color: blue}
+.bold {font-weight: bold}
+</style>
+</head>
+<body>
+The source shows how to use picoQuery along another library that uses $ as a shortcut. (The method is identical to jQuery's method).
+
+<p>The following message is turned bold with prototypejs and blue with picoQuery</p>
+<p id="msg">view the source...</p>
+</body>
+</html>

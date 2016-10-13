@@ -1,0 +1,24 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# ------ FULL VERSION -------- 
+# Redirect: "src/picoquery-[version]-full.*"
+# to:       "builder/[version]/build.php?bid=BU******3.*"
+
+RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-full\.(.*)  builder/$3/build.php?bid=BU******3.$4 [L]
+
+
+
+# ------ SRC -------- 
+# Redirect: "src/picoquery-[version]-*"
+# to:       "builder/[version]/build.php?bid=*"
+
+# ie. 'src/picoquery-0.3.0-Bfe7000.min.js' maps to  'builder/0.3.0/build.php?bid=Bfe7000.min.js'
+# and 'src/picoquery-0.3.0-addClass.min.js' maps to 'builder/0.3.0/build.php?bid=addClass.min.js'
+
+RewriteRule ^src\/picoquery-(\d\.\d)(\.(\d))?-(.*)  builder/$3/build.php?bid=$4 [L]
+
+
+
+</IfModule>
+
