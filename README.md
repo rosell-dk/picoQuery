@@ -64,9 +64,9 @@ jQuery is quite a download (37k compressed). If you want to be friendly to your 
 - Improved compatibility of .append(), .appendTo, .prepend() and constructor
 - build id will change. In v0.2, options are encoded in base 16. In v0.3, they are encoded in base 64. So in v0.3, we get a bit shorter URLs.
 - CDN... Yes CDN!... -- but with picoQuery, there are literally millions of possible builds! I know. Its a good thing picoQuery is so small, otherwise it might get expensive. I have set up a "pull server", which means that when an uncached build is requested, the CDN grabs the builder result from picoquery.com. While best practice is that you either inline picoquery directly in HTML or concatenate it with your other scripts, its often handy just to point to a CDN. The real point of providing a CDN though, is to offload the online builder and protect the server against some site with many visitors linking directly to the build script. The builds will be available on URLs like this: http://cdn.picoquery.com/picoquery0.3.0-B2ga.min.js when 0.3 is released. I implemented in 0.2 too. I have set cache time to 100 years, so you can rely on CDN working even if the builder is temporarily down
+- New handy CDN URL format. Ie, to create a build which has .addClass() and .css(), you enter: http://cdn.picoquery.com/picoquery0.3.0-addClass-css.min.js. Should you later want to use ie the .attr() method, you simply change src to cdn.picoquery.com/picoquery0.3.0-addClass-css-attr.min.js
 
 ##### TODO:
-- New handy CDN URL format. Ie, to create a build which has .addClass() and .css(), you enter: http://cdn.picoquery.com/picoquery0.3.0-addClass-css.min.js. Should you later want to use ie the .attr() method, you simply change src to cdn.picoquery.com/picoquery0.3.0-addClass-css-attr.min.js
 - Final testing
 
 #### Features planned for 0.4:
