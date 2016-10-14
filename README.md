@@ -30,6 +30,9 @@ $.fn.animate = function() {
 }
 ```
 
+If you *do* implement methods this way, please consider sharing them on [this page](https://github.com/rosell-dk/picoQuery/wiki/Shared-code) on the wiki
+
+
 ### Compliance
 Generally all signatures of the methods are implemented, but there are a few exceptions. In the builder, you can learn more about these exceptions by hovering the small warning icon next to partially supported methods.
 
