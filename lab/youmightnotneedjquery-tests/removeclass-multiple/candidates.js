@@ -61,6 +61,23 @@ function removeClass(el, className) {
   el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');    
 }
   },
+  {
+    title: 'angularjs',
+    shortname: 'angularjs',
+    description: 'Based on angularjs implementation. Not exactly compact, but might turn out to be more reliable in some circumstances yet to discover. Does not remove classnames defined multiple times',
+    implementation:
+function removeClass(el, className) {
+  if (className && el.setAttribute) {
+    className.split(' ').forEach(function(cname) {
+        el.setAttribute('class', 
+          (' ' + (el.getAttribute('class') || '') + ' ')
+          .replace(/[\n\t]/g, ' ')
+          .replace(' ' + cname.trim() + ' ', ' ').trim()
+        );
+    });
+  }
+}
+  },
 
 
 /*

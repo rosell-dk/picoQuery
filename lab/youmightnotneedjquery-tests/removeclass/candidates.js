@@ -166,6 +166,21 @@ function removeClass(el, className) {
   el.className = classes;
 }
   },
+  {
+    title: 'angularjs',
+    shortname: 'angularjs',
+    description: 'Based on angularjs implementation. Not exactly compact, but might turn out to be more reliable in some circumstances yet to discover. Does not remove classnames defined multiple times',
+    implementation:
+function removeClass(el, className) {
+  if (className && el.setAttribute) {
+    el.setAttribute('class', 
+      (' ' + (el.getAttribute('class') || '') + ' ')
+      .replace(/[\n\t]/g, ' ')
+      .replace(' ' + className.trim() + ' ', ' ').trim()
+    );
+  }
+}
+  },
 
 /*
   // Current implementation on http://youmightnotneedjquery.com/

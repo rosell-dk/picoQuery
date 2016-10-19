@@ -42,8 +42,13 @@ window.testsGrouped = [
         html: '<div class="a a b"></div>',
         code: 'removeClass(el, "a")',
       },
-      {
+/*      {
         description: 'Remove a lot of class names',
+        html: '<div class="a b c d e f g h i"></div>',
+        code: 'removeClass(el, "a c d f g i")',
+      },*/
+      {
+        description: 'Remove a classname that is defined lots of times',
         html: '<div class="a b a a e a a h a"></div>',
         code: 'removeClass(el, "a")',
       },
@@ -59,8 +64,13 @@ window.testsGrouped = [
       },
       {
         description: 'Extra spaces in HTML',
-        html: '<div class="a b    c"></div>',
-        code: 'removeClass(el, "a")',
+        html: '<div class="a  b    c"></div>',
+        code: 'removeClass(el, "b")',
+      },
+      {
+        description: 'HTML contains newline',
+        html: '<div class="a b\n c"></div>',
+        code: 'removeClass(el, "b")',
       },
     ]
   }

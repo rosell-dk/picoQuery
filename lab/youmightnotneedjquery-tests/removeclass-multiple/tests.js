@@ -3,7 +3,7 @@ window.testsGrouped = [
     name: 'Remove multiple class names',
     tests: [
       {
-        description: 'Remove multiple class names',
+        description: 'Remove first and last class name',
         html: '<div class="a b c"></div>',
         code: 'removeClass(el, "a c")',
       },
@@ -13,12 +13,12 @@ window.testsGrouped = [
         code: 'removeClass(el, "a c d f")',
       },
       {
-        description: 'Remove a lot of class names',
+        description: 'Remove a lot of class names #1',
         html: '<div class="a b c d e f g h i"></div>',
         code: 'removeClass(el, "a c d f g i")',
       },
       {
-        description: 'Remove a lot of class names',
+        description: 'Remove a lot of class names #2',
         html: '<div class="abel banana car d e f g h i"></div>',
         code: 'removeClass(el, "b banana car abel f g")',
       },

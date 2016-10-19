@@ -25,6 +25,31 @@ else {
 function pushFramework($framework) {
   echo '<script>frameworks.push([window.$, "' . $framework . '", window.jQuery]); window.$=undefined</script>' . "\n";
 }
+
+// Angular needs to be included before jQuery / picoQuery
+foreach ($frameworks as $index => $framework) {
+  if (strpos($framework, "angularjs") === 0 ) {
+
+    $found = preg_match('/angularjs-([0-9.]*)\.(.*)/i', $framework, $matches);
+    $version = $matches[1];
+    $ext = $matches[2];
+
+    echo '<script src="https://ajax.googleapis.com/ajax/libs/angularjs/' . $version . '/angular.' . $ext . '"></script>' . "\n";
+//    echo '<script src="jqLite1.5.7.js"></script>' . "\n";
+    echo '<script>window.$ = window.jQuery = angular.element</script>';
+    echo '<script>console.log("angular", window.$);</script>';
+
+
+//    $framework = 'jqLite 1.5.7';
+    $frameworks[$index] = $framework;
+    pushFramework($framework);
+
+    // article about jqLite:
+    // https://docs.angularjs.org/api/ng/function/angular.element
+    // http://www.informit.com/articles/article.aspx?p=2271482&seqNum=10
+  }
+}
+
 foreach ($frameworks as $index => $framework) {
   if (strpos($framework, "jquery") === 0 ) {
 //    jQuery's CDN didn't seem quite stable (21 SEP 2016), so we use Google's instead
@@ -64,22 +89,8 @@ foreach ($frameworks as $index => $framework) {
     pushFramework($framework);
   }
   if (strpos($framework, "angularjs") === 0 ) {
-    $found = preg_match('/angularjs-([0-9.]*)\.(.*)/i', $framework, $matches);
-    $version = $matches[1];
-    $ext = $matches[2];
-
-    echo '<script src="https://ajax.googleapis.com/ajax/libs/angularjs/' . $version . '/angular.' . $ext . '"></script>' . "\n";
-//    echo '<script src="jqLite1.5.7.js"></script>' . "\n";
-    echo '<script>window.$ = angular.element</script>';
-//    $framework = 'jqLite 1.5.7';
-    $frameworks[$index] = $framework;
-    pushFramework($framework);
-
-    // article about jqLite:
-    // https://docs.angularjs.org/api/ng/function/angular.element
-    // http://www.informit.com/articles/article.aspx?p=2271482&seqNum=10
+    continue;
   }
-  
 
 
 }

@@ -1114,14 +1114,28 @@ window.complianceTests = [
       {
         name: '.removeClass( className )',
         tests: [
-          ['$("<div class=\'test\'/>").removeClass("test").get(0).className', ""],
-          ['$("<div class=\'a b\'/>").removeClass("b").get(0).className', ""],
-          ['$("<div class=\'a b c\'/>").removeClass("b").get(0).className', ""],
-          ['$("<div class=\'b b c\'/>").removeClass("b").get(0).className', "remove multiple classes"],
-          ['$("<div class=\'a b c\'/>").removeClass("a b").get(0).className', ""],
-          ['$("<div class=\'a b c\'/>").removeClass("a c").get(0).className', ""],
-          ['$("<div class=\'a b c d\'/>").removeClass("b c").get(0).className', ""],
-          ['$("<div class=\'a elephant\'/>").removeClass("phant").get(0).className', ""],
+          ['$("<div class=\'test\'/>").removeClass("test").get(0).className', "Remove the only class name defined"],
+          ['$("<div class=\'a b c\'/>").removeClass("a").get(0).className', "Remove first classname"],
+          ['$("<div class=\'a b c\'/>").removeClass("b").get(0).className', "Remove middle classname"],
+          ['$("<div class=\'a b c\'/>").removeClass("c").get(0).className', "Remove last classname"],
+          ['$("<div class=\'my-class\'/>").removeClass("my-class").get(0).className', "Remove hyhened classname"],
+          ['$("<div class=\'banana\'/>").removeClass("BANANA").get(0).className', "iGnOrE case?"],
+          ['$("<div class=\'elephant ele-phant\'/>").removeClass("phant").get(0).className', "Remove a classname that does not exist (but there is another classname which contains the string)"],
+          ['$("<div class=\'a a b\'/>").removeClass("a").get(0).className', "Remove a classname that is defined twice"],
+          ['$("<div class=\'a b c d e f g h i\'/>").removeClass("a c d f g i").get(0).className', "Remove a lot of class names"],
+          ['$("<div class=\'a b a a e a a h a\'/>").removeClass("a c d f g i").get(0).className', "Remove a classname that is defined lots of times"],
+          ['$("<div class=\'a\tb\tc\'/>").removeClass("b").get(0).className', "HTML contains tab char instead of space"],
+          ['$("<div class=\'a\nb c\'/>").removeClass("b").get(0).className', "HTML contains newline"],
+          ['$("<div class=\' a  b    c \'/>").removeClass("b").get(0).className', "Extra spaces in HTML"],
+        ]
+      },
+      {
+        name: '.removeClass( multipleClassNames )',
+        tests: [
+          ['$("<div class=\'a b c\'/>").removeClass("a c").get(0).className', "Remove first and last class names"],
+          ['$("<div class=\'a b c d e f g h i\'/>").removeClass("a c d f g i").get(0).className', "Remove a lot of class names #1"],
+          ['$("<div class=\'abel banana car d e f g h i\'/>").removeClass("b banana car abel f g").get(0).className', "Remove a lot of class names #2"],
+          ['$("<div class=\'test elephant ele-phant\'/>").removeClass("test phant").get(0).className', "Remove a classname that does not exist (but there exists a classname which contains the string)"],
         ]
       },
       {
