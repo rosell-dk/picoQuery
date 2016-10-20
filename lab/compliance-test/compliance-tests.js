@@ -25,7 +25,7 @@ window.complianceTests = [
       {
         name: 'Edge cases',
         tests: [
-          ['$("<p></p>").addClass(" ")', "Adding empty string"],
+          ['$("<p></p>").addClass("")', "Adding empty string"],
           ['$("<p></p>").addClass(" ")', "Adding just a space"],
           ['$("<p></p>").addClass("\t")', "Adding just a tab"],
           ['$("<p></p>").addClass()', "Adding nothing"],
@@ -766,6 +766,25 @@ window.complianceTests = [
           ['$("<div></div><p></p>").get()', ""],
         ]
       }
+    ]
+  },
+  {
+    name: '.hasClass()',
+    tests: [
+      {
+        name: '.hasClass( className )',
+        tests: [
+          ['$("<div class=\'a\'></div>").hasClass("a")', ""],
+//          ['$("#item1").hasClass("odd")', ""],
+          ['$("<b class=\'a\'></b><b class=\'b\'></b>").hasClass("b")', "Test multiple elements"],
+          ['$("<b class=\'elephant ele-phant\'>").hasClass("phant")', "Test part of classname"],
+          ['$("<b class=\'banana\'>").hasClass("bAnAnA")', "iGnOrE case?"],
+          ['$("<b class=\'a\\tb\\tc\'>").hasClass("b")', "HTML contains tab char instead of space"],
+          ['$("<b class=\'a  b    c\'>").hasClass("b")', "Extra spaces in HTML"],
+          ['$("<b class=\'a b c\\n\'>").hasClass("b")', "Newlines in HTML"],
+
+        ]
+      },
     ]
   },
   {
