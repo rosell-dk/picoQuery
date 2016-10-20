@@ -463,6 +463,14 @@ if (count($enabled_event_methods) > 0) {
   enableFeatureByNameId('trigger');
 }
 
+/*if (isFeatureEnabled('show')) {
+  enableFeatureByNameId('data');
+}*/
+
+if (isFeatureEnabled('data')) {
+  enableFeatureByNameId('attr');
+}
+
 
 
 if ($minify_functions || $minify_all) {
