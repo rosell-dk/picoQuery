@@ -603,6 +603,46 @@ window.complianceTests = [
     ]
   },
   {
+    name: '.data()',
+    tests: [
+      {
+        name: '.data( key )',
+        tests: [
+          ['$("<div data-monkey=\'chimpanse\' ></div>").data("monkey")', ""],
+          ['$("<div data-options=\'{number:42}\'></div>").data("options")', ""],
+
+
+        ]
+      },
+      {
+        name: '.data( key, value )',
+        tests: [
+          ['$("<div></div>").data("obj", {a:42}).get(0)', ""],
+          ['$("<div></div>").data("obj", {a:42}).data("obj")', ""],
+          ['$("<div></div>").data("obj2", {"a":"42"}).data("obj2")', ""],
+        ]
+      },
+      {
+        name: '.data( obj )',
+        tests: [
+          ['$("<div></div>").data({a:42,b:[]}).get(0)', ""],
+          ['$("<div></div>").data({a:42,b:[]}).data("a")', ""],
+          ['$("<div></div>").data({a:42,b:[0,1]}).data("b")', ""],
+          ['$("<div data-monkey=\'chimpanse\' ></div>").data("a",42).data({b:42,c:[0,1]}).data()', "Existing removed? - no!"],
+          ['$("<div data-monkey=\'chimpanse\' ></div>").data("a",42).data({a:12,chimpanse:[0,1]}).data()', "Existing updated? - yes of course"],
+        ]
+      },
+      {
+        name: '.data( )',
+        tests: [
+          ['$("<div></div>").data({a:42,b:[0,1]}).data()', ""],
+          ['$("<div data-monkey=\'chimpanse\' ></div>").data("b",43).data("a", 42).data()', "Order"],
+          ['$("<div data-monkey=\'chimpanse\' ></div>").data({b:42,a:[0,1]}).data()', "Order"],
+        ]
+      },
+    ]
+  },
+  {
     name: '.each()',
     tests: [
       {
