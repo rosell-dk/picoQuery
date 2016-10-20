@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# ---- redirect subdir to compliance-test.php?method=subdir  -----
+# Redirect: "builder/[bugfix-version]/*" 
+# to:       "builder/xxx"
+
+RewriteRule ^([^/]+)/$  compliance-test.php?method=$1 [L]
+
+</IfModule>
+
