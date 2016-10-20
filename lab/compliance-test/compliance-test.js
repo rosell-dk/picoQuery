@@ -50,6 +50,8 @@ function testInAllFrameworks(code, description) {
 //      console.log(e);
       result = e;
     }
+//    console.log('Test #' + window.testNumber, result);
+
     testResults.push(result);
   });
 
@@ -78,6 +80,19 @@ function testInAllFrameworks(code, description) {
           // http://stackoverflow.com/questions/5744207/jquery-outer-html
 //          html = '<span class="element-html">' + htmlEscapeEtc($(obj).wrapAll('<parent>').parent().html()) + '</span>';
           html = '<span class="element-html">' + htmlEscapeEtc(obj.outerHTML) + '</span>';
+
+          // Show all object properties
+
+/*
+          var content = [];
+          var props = [];
+          for (var prop in obj) {
+//            content.push(prop + ':' + toPrint(obj[prop]));
+            props.push(prop);
+          }
+//          html += '<span class="obj">{ ' + content.join('<span class="comma">,</span>') + ' }</span></span>';
+          html += '<span class="obj">{ ' + props.join(', ') + '</span>';*/
+
 
 /*
           if (obj.id) {
@@ -211,7 +226,7 @@ function testInAllFrameworks(code, description) {
   tr += '</tr>';
   // TODO: red backgrounds if td[2] != td[1]    
   $('#testresults tbody').append(tr);
-//  console.log('Test #' + window.testNumber);
+//  console.log('Test #' + window.testNumber, testResults);
 //  console.log(testResults);
 }
 
