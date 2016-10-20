@@ -164,6 +164,12 @@ var methods_meta = {
       ['.get( ) => Elements', FULL],
     ],
   ],
+  'hasClass': [
+    'http://api.jquery.com/hasClass/',
+    [
+      ['.hasClass( className ) => Boolean', FULL],
+    ],
+  ],
   'hide': [
     'http://api.jquery.com/hide/',
     [

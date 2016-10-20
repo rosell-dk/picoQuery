@@ -80,6 +80,8 @@ addClass: function(value) {
       s = s.replace( /[\t\r\n\f]/g, " " );
       var arr = s.split(' ');
       arr.forEach(function(item){
+        // When there are no classes defined, s will begin with a space, and item will be empty string.
+        // Therefore we test that item is not empty string
         if ((item!='') && a.indexOf(item)<0) {
           a.push(item);
         } 
