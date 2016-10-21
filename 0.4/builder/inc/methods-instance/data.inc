@@ -30,14 +30,46 @@ Description:
 
 */
 data: function(key, value) {
+  var i, attrs, name, elem;
   if (__IS_UNDEFINED__(key)) {
-    // TODO: Add data-attr to object
-    return this.e[0]['_data_data_'];    
+    elem = this.e[0];
+    if(!elem['_picoquerydata']) {
+      elem['_picoquerydata'] = {};
+    }
+    // Private data
+    if(!elem['__picoquerydata']) {
+      elem['__picoquerydata'] = {};
+    }
+
+    // Copy all data-attributes into the data object
+    // - unless its already copied  (we set a flag in private data after copy. FLAG#0)
+
+		if ( elem.nodeType === 1 && (!elem['__picoquerydata'][0] ) ) {
+      attrs = elem.attributes;
+			i = attrs.length;
+			while ( i-- ) {
+
+				// Support: IE11+
+				// The attrs elements can be null (#14894)
+				if ( attrs[ i ] ) {
+					name = attrs[ i ].name;
+					if ( name.indexOf( "data-" ) === 0 ) {
+						name = jQuery.camelCase( name.slice( 5 ) );
+//						dataAttr( elem, name, data[ name ] );
+            elem['_picoquerydata'][name] = attrs[ i ].value;
+					}
+				}
+			}
+  	  elem['__picoquerydata'][0] = 1;
+		}
+
+
+    return elem['_picoquerydata'];    
   }
   if (__IS_UNDEFINED__(value) && (__IS_STRING__(key))) {
     // Check if data has been registred on this node, with this key
-    if (this.e[0]['_data_data_'] && this.e[0]['_data_data_'].hasOwnProperty(key)) {
-      return this.e[0]['_data_data_'][key];
+    if (this.e[0]['_picoquerydata'] && this.e[0]['_picoquerydata'].hasOwnProperty(key)) {
+      return this.e[0]['_picoquerydata'][key];
     }
     else {
       // No data has been registred. Return the data-[key] attribute
@@ -53,17 +85,19 @@ data: function(key, value) {
     __ITERATE__(this.e, function(el) {
       // We store data in an expando property on the node
       // jQuery also stores on an expando property
-      if(!el['_data_data_']) {
-        el['_data_data_'] = {};
+      // TODO: Beware of memory leaks
+      // https://developers.google.com/speed/articles/optimizing-javascript
+      if(!el['_picoquerydata']) {
+        el['_picoquerydata'] = {};
       }
 	    if ( typeof key == "object" ) {
+        // Shallow copy
 		    Object.keys(key).forEach(function(k) {
-          console.log('key', k, key[k]);
-          el['_data_data_'][k] = key[k];
+          el['_picoquerydata'][k] = key[k];
 		    });
 	    }
       else {      
-        el['_data_data_'][key] = value;
+        el['_picoquerydata'][key] = value;
       }
     });
     return this;
@@ -71,17 +105,33 @@ data: function(key, value) {
 }
 
 // OPTIMIZED_VERSION //
-data:function(a, b) {
-  if (__IS_UNDEFINED__(b)) {
-    if (this.e[0]["_data_key_" + a]) {
-      return this.e[0]["_data_" + a];
+data:function(c, f) {
+  var b, d, e, a;
+  if (__IS_UNDEFINED__(c)) {
+    a = this.e[0];
+    a._picoquerydata || (a._picoquerydata = {});
+    a.__picoquerydata || (a.__picoquerydata = {});
+    if (1 === a.nodeType && !a.__picoquerydata[0]) {
+      d = a.attributes;
+      for (b = d.length;b--;) {
+        d[b] && (e = d[b].name, 0 === e.indexOf("data-") && (e = jQuery.camelCase(e.slice(5)), a._picoquerydata[e] = d[b].value));
+      }
+      a.__picoquerydata[0] = 1;
     }
-    var d = "data-" + a.replace(/([A-Z])/g, "-$1").toLowerCase();
-    return this.attr(d);
+    return a._picoquerydata;
   }
-  __ITERATE__(this.e, function(c) {
-    c["_data_key_" + a] = !0;
-    c["_data_" + a] = b;
+  if (__IS_UNDEFINED__(f) && __IS_STRING__(c)) {
+    if (this.e[0]._picoquerydata && this.e[0]._picoquerydata.hasOwnProperty(c)) {
+      return this.e[0]._picoquerydata[c];
+    }
+    b = "data-" + c.replace(/([A-Z])/g, "-$1").toLowerCase();
+    return this.attr(b);
+  }
+  __ITERATE__(this.e, function(a) {
+    a._picoquerydata || (a._picoquerydata = {});
+    "object" == typeof c ? Object.keys(c).forEach(function(b) {
+      a._picoquerydata[b] = c[b];
+    }) : a._picoquerydata[c] = f;
   });
   return this;
 }

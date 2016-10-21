@@ -469,6 +469,7 @@ if (count($enabled_event_methods) > 0) {
 
 if (isFeatureEnabled('data')) {
   enableFeatureByNameId('attr');
+  enableFeatureByNameId('jQuery.camelCase');
 }
 
 

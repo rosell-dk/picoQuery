@@ -107,6 +107,15 @@ var methods_meta = {
       ['.css( properties ) => jQuery', NONE],
     ]
   ],
+  'data': [
+    'http://api.jquery.com/data/',
+    [
+      ['.data( key, value ) => jQuery', PARTIAL, 'Complies, but risk for memoryleak'],
+      ['.data( obj ) => jQuery', PARTIAL, 'Complies, but risk for memoryleak'],
+      ['.data( key ) => Object', FULL],
+      ['.data( ) => Object', FULL],
+    ]
+  ],
   'each': [
     'http://api.jquery.com/each/',
     [
@@ -197,6 +206,21 @@ var methods_meta = {
     'http://api.jquery.com/insertBefore/',
     [
       ['.insertAfter( target ) => jQuery', FULL],
+    ]
+  ],
+  'jQuery.camelCase': [
+    '',
+    [
+      ['jQuery.camelCase( string ) => String', FULL],
+    ]
+  ],
+  'jQuery.data': [
+    'http://api.jquery.com/jQuery.data/',
+    [
+      ['jQuery.data( element, key, value ) => jQuery', PARTIAL, 'Complies, but risk for memoryleak'],
+      ['jQuery.data( element, obj ) => jQuery', PARTIAL, 'Complies, but risk for memoryleak'],
+      ['jQuery.data( element, key ) => Object', FULL],
+      ['jQuery.data( element ) => Object', FULL],
     ]
   ],
   'jQuery.noConflict': [
