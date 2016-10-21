@@ -223,6 +223,12 @@ var methods_meta = {
       ['jQuery.data( element ) => Object', FULL],
     ]
   ],
+  'jQuery.merge': [
+    'http://api.jquery.com/jQuery.merge/',
+    [
+      ['jQuery.merge( first, second ) => Array', FULL],
+    ]
+  ],
   'jQuery.noConflict': [
     'http://api.jquery.com/jQuery.noConflict/',
     [

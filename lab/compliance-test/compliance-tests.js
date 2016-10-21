@@ -914,6 +914,22 @@ window.complianceTests = [
     ]
   },
   {
+    name: 'jQuery.merge()',
+    tests: [
+      {
+        name: 'jQuery.merge( first, second )',
+        tests: [
+          ['jQuery.merge([1,2],[3,4])', ""],
+          ['jQuery.merge(jQuery.merge([],[1,2]),[3,4])', ""],
+          ['function() {var a=[1,2], b=[3,4], c=jQuery.merge(a,b); a.pop(); return c}()', ""],
+          ['function() {var a=[1,2], b=[3,4], c=jQuery.merge(jQuery.merge([],a),b); a.pop(); return c}()', ""],
+          ['jQuery.merge($(".odd"),$(".even"))', "Merge jQuery objects"],
+          ['jQuery.merge($(".odd").get(),$(".even"))', "Merge jQuery objects"],
+        ]
+      },
+    ]
+  },  
+  {
     name: '.keyup()',
     tests: [
       {
