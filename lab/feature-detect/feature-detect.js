@@ -1,65 +1,140 @@
-//console.log($.fn);
+(function() {
 
-//var j$ = $;
+  var usedApiFeatures = [], usedApiFeaturesLookup = {};
+ 
+  // expose some functions
+  window.featuredetect = {};
+  window.featuredetect.clearLog = function() {
+    console.log('clearing log')
+    usedApiFeatures = [];
+    usedApiFeaturesLookup = {};
+  };
 
-// 
 
-var usedApiFeatures = [], usedApiFeaturesLookup = {};
-
-var fncopy = jQuery.extend({}, jQuery.fn);
-
-var items = [];
-for (var item in fncopy) {
-  switch (item) {
-    // jquery fiddles with the prototype of init, which
-    // prevents us from hijacking init()
-    case 'init':
-    case 'jquery':
-//    case 'constructor':
+  // Hijack instance methods
+  // =======================
+  var fncopy = jQuery.extend(true, {}, jQuery.fn);
+  var items = [];
+  for (var item in fncopy) {
+    if (typeof fncopy[item] != 'function') {
       continue;
-  }
-  items.push(item);
-}
-console.log(fncopy);
-
-//items = ['css'];
-items.forEach(function(methodName) {
-  jQuery.fn[methodName] = function() {
-    console.log('fncopy:' + methodName);
-//    console.log(fncopy);
-    var v = fncopy[methodName].apply(this, arguments);
-//    console.log('ok');
-//    console.log(methodName, arguments, '=>', v);
-//    console.log(methodName + ' called');
-    if (!usedApiFeaturesLookup[methodName]) {
-      usedApiFeatures.push(methodName)
     }
-    usedApiFeaturesLookup[methodName] = true;
-    return v;
+    switch (item) {
+      // jquery fiddles with the prototype of init, which
+      // prevents us from hijacking init()
+      case 'init':
+      case 'constructor':
+        continue;
+    }
+    items.push(item);
   }
-});
+  //console.log('hijacking the following fn-methods:', items);
+  //console.log(fncopy);
+
+  //items = ['css'];
+  items.forEach(function(methodName) {
+    // Copy any sub functions / properties
+    // ie jQuery.ready.promise needs to be copied
+    var subProperties = jQuery.extend(true, {}, jQuery.fn[methodName]);
+
+    jQuery.fn[methodName] = function() {
+//      console.log(methodName + ' was called', arguments);
+//      console.log(fncopy[methodName]);
+      var v = fncopy[methodName].apply(this, arguments);
+      if (!usedApiFeaturesLookup[methodName]) {
+        usedApiFeatures.push(methodName)
+      }
+      usedApiFeaturesLookup[methodName] = true;
+      return v;
+    }
+
+    // Copy sub functions / properties back (ie jQuery.ready.promise needs to be copied back)
+    jQuery.extend(true, jQuery.fn[methodName], subProperties);
+
+  });
+
+  // Hijack jquery methods
+  // =======================
+  var jqcopy = jQuery.extend(true, {}, jQuery);
+  var items = [];
+  for (var item in jqcopy) {
+    if (typeof jqcopy[item] != 'function') {
+      continue;
+    }
+    switch (item) {
+      case 'fn':
+      case 'Event':
+        // Event is a bit special, and can't be copied right off
+        continue;
+    }
+    items.push(item);
+  }
+//  console.log('hijacking the following jquery methods:', items);
+
+  items.forEach(function(methodName) {
+  //  console.log('hijacking:' + methodName);
+
+    // Copy any sub functions / properties
+    // ie jQuery.ready.promise needs to be copied
+    var subProperties = jQuery.extend(true, {}, jQuery[methodName]);
+
+    jQuery[methodName] = function() {
+//      console.log(methodName + ' was called', arguments);
+//      console.log(fncopy[methodName]);
+      var v = jqcopy[methodName].apply(this, arguments);
+
+      if (!usedApiFeaturesLookup['jQuery.' + methodName]) {
+        usedApiFeatures.push('jQuery.' + methodName)
+      }
+      usedApiFeaturesLookup['jQuery.' + methodName] = true;
+      return v;
+    }
+
+    // Copy sub functions / properties back (ie jQuery.ready.promise needs to be copied back)
+    jQuery.extend(true, jQuery[methodName], subProperties);
+    
+  });
+
+  // Timed logging
+  // =======================
+
+  function logUsedFeatures() {
+    console.log('used methods:', usedApiFeatures);
+  }
+  logUsedFeatures();
+  window.setTimeout(logUsedFeatures, 100);
+
+  // In the beginning, log used features every second
+  var tid = window.setInterval(logUsedFeatures, 1000);
+
+  // After 5 seconds, log only every 3rd second
+  window.setTimeout(function() {
+    window.clearInterval(tid)
+    tid = window.setInterval(logUsedFeatures, 3000);
+  }, 5000);
+
+  // After 20 seconds, log only every 10th second
+  window.setTimeout(function() {
+    window.clearInterval(tid);
+    tid = window.setInterval(logUsedFeatures, 10000);
+  }, 20000);
+
+  // After 60 seconds, stop logging
+  window.setTimeout(function() {
+    window.clearInterval(tid);
+  }, 60000);
+
+})();
+
 
 //console.log('little test');
 
 //console.log(jQuery( document ).constructor);
-console.log('done hijack');
+//console.log('done hijack');
 
-/*
-function logUsedFeatures() {
-  console.log(usedApiFeatures);
-}
-//window.setTimeout(logUsedFeatures, 2000);
-var tid = window.setInterval(logUsedFeatures, 3000);
 
-window.setTimeout(function() {
-  window.clearInterval(tid)
-  tid = window.setInterval(logUsedFeatures, 3000);
-}, 2000);
 
-window.setTimeout(function() {
-  window.clearInterval(tid);
-}, 10000);
-*/
+
 /*
   console.log(item);
   $.fn[item] = function() {

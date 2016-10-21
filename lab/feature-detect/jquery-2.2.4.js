@@ -3588,6 +3588,7 @@ jQuery.ready.promise();
 // Multifunctional method to get and set values of a collection
 // The value/s can optionally be executed if it's a function
 var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
+
 	var i = 0,
 		len = elems.length,
 		bulk = key == null;
@@ -6305,6 +6306,8 @@ jQuery.each( {
 
 jQuery.fn.extend( {
 	css: function( name, value ) {
+    console.log('CSS WAS CALLED!', getStyles)
+
 		return access( this, function( elem, name, value ) {
 			var styles, len,
 				map = {},

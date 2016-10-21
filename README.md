@@ -53,8 +53,17 @@ They say that you should avoid render-blocking scripts, but actually, when your 
 ### Usecase: Limiting bandwith usage on mobile browsers
 jQuery is quite a download (37k compressed). If you want to be friendly to your mobile users, and you do not have too much coding to do, you may want to do everything in picoQuery. Or you may perhaps be able to limit jQuery usage to some pages. 
 
-#### New in 0.3:
+### Future usecase: Run jQuery plugins on picoQuery
+When more API is supported, it will be possible to run jQuery plugins on picoQuery. To ease this process, you can use the feature-detect tool which logs the jQuery methods used in an application real-time
 
+### Future usecase: Vanilla versions of jQuery plugins
+When more API is supported, it will be possible for plugin developers to create a vanilla version of their jQuery plugin, by bundling their plugin with with picoQuery
+
+#### Tools
+- I have build a small tool that logs the jQuery methods used in an application real-time. Its available [here](picoquery.com/lab/feature-detect/). The purpose is of course to find out what methods are required in the picoQuery build. For the tool to be more useful, I plan to have it calculate the picoquery build id (right now it just outputs the methods used). It consist of a script that you include after you include jQuery. The script intercepts all jQuery methods in order to record the usage.
+- Future tool: A tool to merge two build ids.
+
+#### New in 0.3:
 - More API: jQuery.noConflict(), .after(), .before(), .closest(), .eq(), .insertAfter(), .insertBefore(), .offset(), .offsetParent(), .remove(), .replaceWith(), .text(), .prependTo()
 - picoQuery now defines window.jQuery, and overwrites it if it exist. Also, picoQuery no longer cowardly steps aside when $ is already defined. Like in jQuery, you can get $ restored with jQuery.noConflict(). The philosophy behind this change is that picoQuery should behave exactly like jQuery, so they can be used interchangably. This ensures that swapping between jQuery and picoQuery really is just a matter of changing the library and also ensures that there will be no unpleasant surprises when picoQuery falls back to jQuery.
 - Improved compatibility of constructor, .append(), .appendTo, .prepend() and events
