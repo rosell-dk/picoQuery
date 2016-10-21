@@ -54,10 +54,10 @@ They say that you should avoid render-blocking scripts, but actually, when your 
 jQuery is quite a download (37k compressed). If you want to be friendly to your mobile users, and you do not have too much coding to do, you may want to do everything in picoQuery. Or you may perhaps be able to limit jQuery usage to some pages. 
 
 ### Future usecase: Run jQuery plugins on picoQuery
-When more API is supported, it will be possible to run jQuery plugins on picoQuery. To ease this process, you can use the feature-detect tool which logs the jQuery methods used in an application real-time
+When more API is supported, it will be possible to run jQuery plugins on picoQuery. To ease this process, you can use the feature-detect tool which logs the jQuery methods used in an application real-time. When your application requires multiple plugins, you will be able to merge build ids with a new tool.
 
 ### Future usecase: Vanilla versions of jQuery plugins
-When more API is supported, it will be possible for plugin developers to create a vanilla version of their jQuery plugin, by bundling their plugin with with picoQuery
+When more API is supported, it will be possible for plugin developers to create a vanilla version of their jQuery plugin, by bundling their plugin with with picoQuery (using the .noConflict() method)
 
 #### Tools
 - I have build a small tool that logs the jQuery methods used in an application real-time. Its available [here](picoquery.com/lab/feature-detect/). The purpose is of course to find out what methods are required in the picoQuery build. For the tool to be more useful, I plan to have it calculate the picoquery build id (right now it just outputs the methods used). It consist of a script that you include after you include jQuery. The script intercepts all jQuery methods in order to record the usage.
