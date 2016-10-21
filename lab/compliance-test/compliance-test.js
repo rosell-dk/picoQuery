@@ -28,6 +28,7 @@ function testInAllFrameworks(code, description) {
   frameworks.forEach(function (framework) {
     var result;
     $ = framework[0];
+    jQuery = framework[2];
     jq$ = j$;
     function makeTextNode(text) {
       return j$("<b>" + text + "</b>").get(0).childNodes[0];    

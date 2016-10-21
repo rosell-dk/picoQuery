@@ -23,7 +23,7 @@ else {
 }
 
 function pushFramework($framework) {
-  echo '<script>frameworks.push([window.$, "' . $framework . '", window.jQuery]); window.$=undefined</script>' . "\n";
+  echo '<script>frameworks.push([window.$, "' . $framework . '", window.jQuery]); window.$=undefined; window.jQuery=undefined;</script>' . "\n";
 }
 
 // Angular needs to be included before jQuery / picoQuery

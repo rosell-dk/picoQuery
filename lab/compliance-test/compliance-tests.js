@@ -610,6 +610,7 @@ window.complianceTests = [
         tests: [
           ['$("<div data-monkey=\'chimpanse\' ></div>").data("monkey")', ""],
           ['$("<div data-options=\'{number:42}\'></div>").data("options")', ""],
+          ['$("<div></div>").data("non-existing-data")', "Try to get unset data"],
 
 
         ]
@@ -638,6 +639,17 @@ window.complianceTests = [
           ['$("<div></div>").data({a:42,b:[0,1]}).data()', ""],
           ['$("<div data-monkey=\'chimpanse\' ></div>").data("b",43).data("a", 42).data()', "Order"],
           ['$("<div data-monkey=\'chimpanse\' ></div>").data({b:42,a:[0,1]}).data()', "Order"],
+          ['function(){var $div = $("<div data-monkey=\'chimpanse\' ></div>").data("a", 42);$div.data();$div.data("b",43);return $div.data()}();', "Order. The attribute data is added to data object the moment data() is called the first time."],
+          ['function(){var $div = $("<div></div>").attr("data-monkey", "chimpanse");$div.data("a", 42);$div.data();$div.data("b",43);return $div.data()}();', "(alse when attribute is set)"],
+          ['function(){var $div = $("<div></div>");$div.data("a",42);$div.data();$div.attr("data-monkey", "chimpanse").data("b",43);return $div.data()}();', "Data-attributes set after first call to data() will not be counted in"],
+          ['$("<div></div>").data()', "Try to get data, though none is set"],
+        ]
+      },
+      {
+        name: 'jQuery.data( )',
+        tests: [
+          ['function(){var $div = $("<div data-monkey=\'chimpanse\'></div>");$div.data("a",42);return jQuery.data($div.get(0))}();', "jQuery.data does *not* retrieve the data-* attributes unless the more convenient .data() method has already retrieved them (in this case: NOT)"],
+          ['function(){var $div = $("<div data-monkey=\'chimpanse\'></div>");$div.data("a",42);$div.data();return jQuery.data($div.get(0))}();', "jQuery.data does *not* retrieve the data-* attributes unless the more convenient .data() method has already retrieved them (in this case, it has)"],
         ]
       },
     ]
