@@ -813,6 +813,7 @@ function prepare_helpers() {
 }
 
 function process_helpers($js) {
+//  return $js;
 
   $js = _process_helpers($js, 1);
 //  $js = '[[HELPERS]]' . $js;
@@ -859,10 +860,19 @@ function _process_helpers($js, $step) {
 //      $inline_all_helpers = TRUE;
     }
     if (($inline_all_helpers) || (($numCallsToHelper > 0) && ($numCallsToHelper <= $treshold))) {
-      // Inline the helper
-      // Ie. "if(__IS_FUNCTION__(value))" will become: "if(typeof value == "function")
 
-      /* Multiline:
+      /* 
+
+      Inline the helper
+
+      This isn't easy-peasy, and its this process that takes most of the build time
+
+      What we do here is transform ie:
+      before: if(__IS_FUNCTION__(value))
+      after:  if(typeof value == "function")
+      
+      And it also works with multiline, and with multiple arguments:
+
       return __EACH__(this, function(el) {
         if (el.classList) {
           el.classList.add(value);
@@ -892,8 +902,9 @@ function _process_helpers($js, $step) {
         // Next, we substitute "[[ARG1]]" with the name of the first argument, ect.
 
         // The hardest part of doing this is finding the values supplied to the function call.
-        // But we have a helper for this, which is lenient enough that it works even though 
-        // the string it gets has more code than the list of arguments.
+        // This hard part is handled by the "parseArgs" helper (which uses jtokenizer)
+        // Even finding out where the arguments stop is hard. But parseArgs also does this for us,
+        // by returning the code after the arguments in an "extra" property
         preg_match('/__' . $helper[0] . '__\\s*\((.*)\[\[END-INCLUDE\]\]/ms', $js, $matches);
         if (count($matches) == 0) {
           echo 'Whoops:' . '/__' . $helper[0] . '__\\s*\((.*)\[\[END-INCLUDE\]\]/ms did not find anything in this string:' . $js;
@@ -941,7 +952,7 @@ function _process_helpers($js, $step) {
     }
 
   }
-
+return $js;
   $helper_js = '';
   global $include_helpers_as_var;
   if ($include_helpers_as_var) {
