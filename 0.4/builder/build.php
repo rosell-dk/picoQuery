@@ -952,7 +952,7 @@ function _process_helpers($js, $step) {
     }
 
   }
-return $js;
+
   $helper_js = '';
   global $include_helpers_as_var;
   if ($include_helpers_as_var) {
