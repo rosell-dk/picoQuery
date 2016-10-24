@@ -40,10 +40,16 @@
     jQuery.fn[methodName] = function() {
 //      console.log(methodName + ' was called', arguments);
 //      console.log(fncopy[methodName]);
-      var v = fncopy[methodName].apply(this, arguments);
-      if (!usedApiFeaturesLookup[methodName]) {
+      if (!this.depth) {
+        this.depth = 0;
+      }
+      this.depth++;
+      if ((!usedApiFeaturesLookup[methodName]) && (this.depth == 1)) {
         usedApiFeatures.push(methodName)
       }
+      var v = fncopy[methodName].apply(this, arguments);
+//      console.log(methodName + ' was called', this.depth, arguments);
+      this.depth--;
       usedApiFeaturesLookup[methodName] = true;
       return v;
     }
