@@ -548,9 +548,10 @@ function include_javascript($filename) {
 
   $js = trim(ob_get_clean());
 
-  $readable_version = preg_replace('/\/\/\\s*OPTIMIZED_VERSION\\s*\/\/.*/ms', '', $js);
-  $optimized_version = trim(preg_replace('/(.*\/\/\\s*OPTIMIZED_VERSION\\s*\/\/\\s*)/ms', '', $js));
 
+//  $readable_version = preg_replace('/\/\/\\s*OPTIMIZED_VERSION\\s*\/\/.*/ms', '', $js);
+//  $optimized_version = trim(preg_replace('/(.*\/\/\\s*OPTIMIZED_VERSION\\s*\/\/\\s*)/ms', '', $js));
+/*
 //  $readable_version = $optimized_version = $js;
 
   global $use_optimized_methods;
@@ -560,7 +561,7 @@ function include_javascript($filename) {
   else {
     $js = $readable_version;
   }
-
+*/
 
   global $minify_functions;
   global $comments_inline;
@@ -580,7 +581,14 @@ function include_javascript($filename) {
 
 
 function include_method($feat_nameid, $type = 'instance') {
-  $js = include_javascript('inc/methods-' . $type . '/' . $feat_nameid . '.inc');
+  global $use_optimized_methods;
+  
+  if ($use_optimized_methods) {
+    $js = include_javascript('inc/methods/' . $feat_nameid . '/' . $feat_nameid . '.min.js');
+  }
+  else {
+    $js = include_javascript('inc/methods/' . $feat_nameid . '/' . $feat_nameid . '.js');
+  }
 
   // If "array-like" feature isn't disabled, substitute "this.e[...]" with "this[...]"
   // TODO: Create the feature, and check it.
@@ -592,10 +600,28 @@ function include_method($feat_nameid, $type = 'instance') {
 }
 
 function include_methods($type = 'instance') {
-  $files = scandir(getcwd() . '/inc/methods-' . $type);
 
   $methods = array();
 
+  global $buildoptions_nameids;
+  foreach ($buildoptions_nameids as $feat_nameid) {
+//    if (!isFeatureEnabledMethod($feat_nameid)) continue;
+    if ($type == 'instance') {
+      if (!isFeatureEnabledInstanceMethod($feat_nameid)) continue;
+    }
+    if ($type == 'static') {
+      if (!isFeatureEnabledStaticMethod($feat_nameid)) continue;
+    }
+
+    // Do not include standard event methods
+    // - we include them after the prototype declaration
+    global $enabled_event_methods;
+    if (in_array($feat_nameid, $enabled_event_methods)) continue;
+    $methods[] = $feat_nameid;
+  }
+
+/*
+  $files = scandir(getcwd() . '/inc/methods-' . $type);
   foreach ($files as $i => $filename) {
     $m = array();
     // Only include inc files
@@ -618,7 +644,7 @@ function include_methods($type = 'instance') {
     $methods[] = $feat_nameid;
 //    echo $feat_id;
   }
-
+*/
   if (count($methods) > 0) {
     if ($type == 'instance') {
       echo "\n\n  // methods\n";
