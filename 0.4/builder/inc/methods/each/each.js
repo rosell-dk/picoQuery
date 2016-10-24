@@ -13,9 +13,9 @@ Fully supported signatures:
      
 */
 each: function(fn) {    
-  __EACH__(this, function(el, index) {
+  __ITERATE__(<@ this.e @>, <@ function(el, index) {
     fn.call(el, index, el);
-  });
+  } @>);
   return this
 }
 

@@ -31,7 +31,7 @@ Description:
 */
 data: function(key, value) {
   var i, attrs, name, elem;
-  if (__IS_UNDEFINED__(key)) {
+  if (__IS_UNDEFINED__(<@ key @>)) {
     elem = this.e[0];
     if(!elem['_picoquerydata']) {
       elem['_picoquerydata'] = {};
@@ -66,7 +66,7 @@ data: function(key, value) {
 
     return elem['_picoquerydata'];    
   }
-  if (__IS_UNDEFINED__(value) && (__IS_STRING__(key))) {
+  if (__IS_UNDEFINED__(<@ value @>) && (__IS_STRING__(<@ key @>))) {
     // Check if data has been registred on this node, with this key
     if (this.e[0]['_picoquerydata'] && this.e[0]['_picoquerydata'].hasOwnProperty(key)) {
       return this.e[0]['_picoquerydata'][key];
@@ -82,7 +82,7 @@ data: function(key, value) {
     }
   }
   else {
-    __ITERATE__(this.e, function(el) {
+    __ITERATE__(<@ this.e @>, <@ function(el) {
       // We store data in an expando property on the node
       // jQuery also stores on an expando property
       // TODO: Beware of memory leaks
@@ -99,7 +99,7 @@ data: function(key, value) {
       else {      
         el['_picoquerydata'][key] = value;
       }
-    });
+    } @>);
     return this;
   };
 }

@@ -77,7 +77,13 @@ When more API is supported, it will be possible for plugin developers to create 
 ### Roadmap
 
 #### Features planned for 0.4:
-- Even more API! Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishes-for-new-methods-in-0.4) on the wiki. Done: .hasClass(), .data(), jQuery.data(), jQuery.camelCase(), jQuery.merge() (though the data methods involves risk for memory leak)
+- Even more API! Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishes-for-new-methods-in-0.4) on the wiki.
+
+Done:
+- Restructure of include files: optimized code is moved to separate file
+- Much faster build time (optimization of code which inlines helpers)
+- .hasClass(), .data(), jQuery.data(), jQuery.camelCase(), jQuery.merge() (though the data methods involves risk for memory leak)
+
 
 #### Features planned for 0.5:
 - Option to granularly downgrade functionality for each method. If you know you never use certain signatures/features of a method, you can deselect the signature/feature in order to get size down. It will also be visible when there are features that picoQuery does not support.

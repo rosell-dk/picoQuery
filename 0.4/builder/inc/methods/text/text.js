@@ -25,13 +25,13 @@ text: function(a) {
 
   // It seems we have met something similar to this entire structure.
   // Perhaps it can be reused
-  if (__IS_UNDEFINED__(a)) {
-    return __MAP__(this.e, function(el){return el.textContent}).join(""); 
+  if (__IS_UNDEFINED__(<@ a @>)) {
+    return __MAP__(<@ this.e @>, <@ function(el){return el.textContent} @>).join(""); 
   }
   else {
-    __ITERATE__(this.e, function(item, index) {
-      item.textContent = __IS_FUNCTION__(a) ? a.call(item, index, item.textContent) : a;
-    });
+    __ITERATE__(<@ this.e @>, <@ function(item, index) {
+      item.textContent = __IS_FUNCTION__(<@ a @>) ? a.call(item, index, item.textContent) : a;
+    } @>);
     return this;
   }
 

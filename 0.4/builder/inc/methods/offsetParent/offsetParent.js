@@ -15,7 +15,7 @@ offsetParent: function(a) {
     var el = this.e[0];
     return $(el.offsetParent || el);*/
 
-  return $(__MAP__(this.e, function(el) {
+  return $(__MAP__(<@ this.e @>, <@ function(el) {
 
     // youmightnotneedjquery.com says we can do this:
     // return (el.offsetParent || el);
@@ -27,7 +27,7 @@ offsetParent: function(a) {
     // OTHER than static (http://www.w3schools.com/jsref/prop_element_offsetparent.asp)
 
     return (el.offsetParent || el.ownerDocument.documentElement);
-  }));
+  } @>));
 
   /* 
   jQuery implementation:

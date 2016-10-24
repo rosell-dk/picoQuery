@@ -16,9 +16,9 @@ Fully supported signatures (TODO: test):
 */
 
 prepend: function(a) {
-  __DOM_MANIP__(this, arguments, 1, function(elem) {
+  __DOM_MANIP__(<@ this @>, <@ arguments @>, <@ 1 @>, <@ function(elem) {
 		return elem.firstChild;
-	});
+	} @>);
   return this;
 }
 

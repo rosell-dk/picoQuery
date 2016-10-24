@@ -15,10 +15,10 @@ prependTo: function(target) {
   return this;
 
   or this;
-  __ITERATE__(this.e, function(el) {      
+  __ITERATE__(<@ this.e @>, <@ function(el) {      
       $(target).prepend(el);
     });
-  }); 
+  } @>); 
   return this;
 
   The tricky part of supporting multiple targets is that all nodes, except the
@@ -36,11 +36,11 @@ prependTo: function(target) {
     last = arr.length - 1,
     elems;
 
-  __ITERATE__(arr, function(t, idx) {
+  __ITERATE__(<@ arr @>, <@ function(t, idx) {
     elems = (idx == last ? me.clone(1) : me);
     $(t).prepend(elems);
     Array.prototype.push.apply(ret, elems);    
-  });
+  } @>);
   return $(ret);
 
 
@@ -84,14 +84,14 @@ prependTo: function(target) {
 
 
 /*
-  __ITERATE__(this.e, function(el) {
+  __ITERATE__(<@ this.e @>, <@ function(el) {
       console.log('prependTo', target, $(target));
-    __ITERATE__($(target).e, function(t) {
+    __ITERATE__(<@ $(target).e @>, <@ function(t) {
       console.log('prepending', t, $(t), el);
       $(t).prepend(el.cloneNode(true));
       console.log('result', t.innerHTML)
-    });
-  }); 
+    } @>);
+  } @>); 
   console.log('final result', this.e, target);
   return $(target);
 **/

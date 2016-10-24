@@ -295,14 +295,14 @@ Supported signatures:
   return this*/
 
 removeClass: function(a) {
-  __ITERATE__(this.e, function(el, index){
+  __ITERATE__(<@ this.e @>, <@ function(el, index){
     if (!a) {
       // remove all classes
 //      el.setAttribute("class", "");
       el.className = "";
     }
     else {
-      var z = __IS_FUNCTION__(a) ? a.call(null, index, el.className) : a;
+      var z = __IS_FUNCTION__(<@ a @>) ? a.call(null, index, el.className) : a;
 
       el.className=el.className.split(/\s/).filter(function(c){
     //    return!(" "+a+" ").match(' '+c+' ')  // 9 bytes longer in gzip
@@ -310,7 +310,7 @@ removeClass: function(a) {
       }).join(" ");
 
     }
-  });
+  } @>);
   return this
 }
 

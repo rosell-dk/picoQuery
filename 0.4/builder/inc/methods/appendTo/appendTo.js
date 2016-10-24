@@ -16,11 +16,11 @@ Fully supported signatures:
 */
 appendTo: function(a) {
   var c = [], d = this, g = $(a).e, e = g.length - 1, b;
-  __ITERATE__(g, function(a, f) {
+  __ITERATE__(<@ g @>, <@ function(a, f) {
     b = f == e ? d.clone(1) : d;
     $(a).append(b);
     Array.prototype.push.apply(c, b);
-  });
+  } @>);
   return $(c);
 }
 

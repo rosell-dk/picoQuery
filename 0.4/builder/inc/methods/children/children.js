@@ -14,7 +14,7 @@ Fully supported signatures:
 children: function(selector) {
 
   // First map, then flatten-approach
-  var arr = this.e.map(function(a){return __TO_ARRAY__(a['children'])});
+  var arr = this.e.map(function(a){return __TO_ARRAY__(<@ a['children'] @>)});
   arr = [].concat.apply([], arr); // Flatten
   return $(arr).filter(selector||'*');
 
@@ -22,7 +22,7 @@ children: function(selector) {
 /*
   var arr = [];
   this.e.forEach(function(el) {
-    arr = arr.concat(__TO_ARRAY__(el.children));
+    arr = arr.concat(__TO_ARRAY__(<@ el.children @>));
   });
   return $(arr).filter(selector||'*');*/
 
@@ -31,7 +31,7 @@ children: function(selector) {
 /*
   var arr = [];
   this.e.forEach(function(el) {
-    __TO_ARRAY__(el.children).forEach(function(child) {
+    __TO_ARRAY__(<@ el.children @>).forEach(function(child) {
       arr.push(child);
     })
   });
@@ -39,7 +39,7 @@ children: function(selector) {
 
   // Attempt at zepto approach
   // Map elements to their children node
-//  var arr = this.e.map(function(a){return __TO_ARRAY__(a['children'])});
+//  var arr = this.e.map(function(a){return __TO_ARRAY__(<@ a['children'] @>)});
 
 
   // zepto implementation:
@@ -59,7 +59,7 @@ children: function(selector) {
   // https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children
 
   // Map elements to their children node
-//  var arr = this.e.map(function(a){return __TO_ARRAY__(a['children'])});
+//  var arr = this.e.map(function(a){return __TO_ARRAY__(<@ a['children'] @>)});
 
   // Flatten
 //  arr = arr.concat

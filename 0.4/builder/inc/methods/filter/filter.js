@@ -94,7 +94,7 @@ filter: function(selector) {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
     // Its a bit better supported (as above, but FF2+, SF 3.2+)
 
-    var match = (__TO_ARRAY__(parent.querySelectorAll(selector)).indexOf(element) >= 0);
+    var match = (__TO_ARRAY__(<@ parent.querySelectorAll(selector) @>).indexOf(element) >= 0);
     if (noParent) {
       parent.removeChild(element)
     }

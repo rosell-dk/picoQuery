@@ -15,9 +15,9 @@ Unsupported signatures:
 */
 
 append: function(a) {
-  __DOM_MANIP__(this, arguments, 1, function(elem) {
+  __DOM_MANIP__(<@ this @>, <@ arguments @>, <@ 1 @>, <@ function(elem) {
 		return null;
-	});
+	} @>);
   return this;
 }
 

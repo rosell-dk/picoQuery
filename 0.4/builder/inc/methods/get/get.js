@@ -15,6 +15,6 @@ Fully supported signatures:
 
 */
 get: function(index) {
-  return __IS_UNDEFINED__(index) ? this.e : this.e[index];
+  return __IS_UNDEFINED__(<@ index @>) ? this.e : this.e[index];
 }
 

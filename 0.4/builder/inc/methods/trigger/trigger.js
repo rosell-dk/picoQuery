@@ -28,7 +28,7 @@ trigger: function(eventType) {
     // http://stackoverflow.com/questions/2490825/how-to-trigger-event-in-javascript
     // https://www.google.dk/search?q=cross+browser+trigger+event&oq=cross+browser+trigger&aqs=chrome.1.69i57j0l2.3983j0j7&client=ubuntu&sourceid=chrome&es_sm=93&ie=UTF-8
 
-  __EACH__(this, function(el) {
+  __ITERATE__(<@ this.e @>, <@ function(el) {
     // Trigger native event
     // This code is from http://youmightnotneedjquery.com/
     /*   var ev = document.createEvent('HTMLEvents');
@@ -102,7 +102,7 @@ trigger: function(eventType) {
   }
 
 */
-  });
+  } @>);
   return this;
 }
 

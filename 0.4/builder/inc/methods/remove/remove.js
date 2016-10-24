@@ -35,7 +35,7 @@ remove: function(selector) {
   });
   return this;
   
-//  var arr = this.e.map(function(item){return __TO_ARRAY__(a['children'])});
+//  var arr = this.e.map(function(item){return __TO_ARRAY__(<@ a['children'] @>)});
 
 
 //  return $(arr).filter(selector||'*');

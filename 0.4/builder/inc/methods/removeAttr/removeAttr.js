@@ -14,14 +14,14 @@ Fully supported signatures:
 removeAttr: function(name) {
   // Requirement: no attributeName supplied => nothing happens
   if (name) {
-    __ITERATE__(this.e, function(node) {
+    __ITERATE__(<@ this.e @>, <@ function(node) {
 
       // If no requirement for space-seperated list:
   //    node.removeAttribute(name);
-      __ITERATE__(name.split(' '), function(attr) {
+      __ITERATE__(<@ name.split(' ') @>, <@ function(attr) {
           node.removeAttribute(attr);
-        });
-    });
+        } @>);
+    } @>);
   }
   return this;
 }

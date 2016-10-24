@@ -13,7 +13,7 @@ jQuery.data( element )
 */
 $.data = function(elem, key, value) {
   var i, attrs, name;
-  if (__IS_UNDEFINED__(key)) {
+  if (__IS_UNDEFINED__(<@ key @>)) {
     if(!elem['_picoquerydata']) {
       elem['_picoquerydata'] = {};
     }
@@ -24,7 +24,7 @@ $.data = function(elem, key, value) {
 
     return elem['_picoquerydata'];    
   }
-  if (__IS_UNDEFINED__(value) && (__IS_STRING__(key))) {
+  if (__IS_UNDEFINED__(<@ value @>) && (__IS_STRING__(<@ key @>))) {
     // Check if data has been registred on this node, with this key
     if (elem['_picoquerydata'] && elem['_picoquerydata'].hasOwnProperty(key)) {
       return elem['_picoquerydata'][key];

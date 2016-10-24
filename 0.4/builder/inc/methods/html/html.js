@@ -16,11 +16,11 @@ Fully supported signatures:
 
 */
 html: function( value ) {
-  if (__IS_UNDEFINED__(value)) {
+  if (__IS_UNDEFINED__(<@ value @>)) {
     // Return undefined if no item
     return (this.e[0] && this.e[0].innerHTML);
   }
-  __ITERATE__(this.e, function(item, index) {
+  __ITERATE__(<@ this.e @>, <@ function(item, index) {
     // TODO: Our constructor should support wrapMap functionality (search for "wrapMap" in jQuery source)
     // When it does, we should use that
 
@@ -33,13 +33,13 @@ html: function( value ) {
       // When these tags are found in source, or tag should be wrapped, jQuery reverts to:
 			// this.empty().append( value );
 
-    if (__IS_FUNCTION__(value)) {
+    if (__IS_FUNCTION__(<@ value @>)) {
       item.innerHTML = value.call(item, index, item.innerHTML);
     }
     else {
   		item.innerHTML = value;
     }
-  });
+  } @>);
   return this;
 }
 

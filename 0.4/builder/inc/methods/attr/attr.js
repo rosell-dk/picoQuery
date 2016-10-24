@@ -33,7 +33,7 @@ Fully supported signatures:
 
 */
 attr: function(name, value) {
-  if (__IS_UNDEFINED__(value)) {
+  if (__IS_UNDEFINED__(<@ value @>)) {
     // if Requirement: Return undefined on empty set (do not throw error)
     if (!(0 in this.e)) {
       return undefined;
@@ -57,7 +57,7 @@ attr: function(name, value) {
 
   }
   else {
-    __ITERATE__(this.e, function(node, index) {
+    __ITERATE__(<@ this.e @>, <@ function(node, index) {
 //      if (node.nodeType !== 1) return
 
 
@@ -77,7 +77,7 @@ attr: function(name, value) {
         }
       }
       else {
-        if (__IS_FUNCTION__(value)) {
+        if (__IS_FUNCTION__(<@ value @>)) {
           
           setOrRemoveAttribute(node, name, value.call(node, index, $(node).attr(name)));
         }
@@ -85,7 +85,7 @@ attr: function(name, value) {
           setOrRemoveAttribute(node, name, value);
         }
       }
-    });
+    } @>);
     return this;
   }
   

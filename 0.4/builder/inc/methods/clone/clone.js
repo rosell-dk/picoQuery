@@ -21,9 +21,9 @@ clone: function() {
 //  return this;
 
   var arr = [];
-  __ITERATE__(this.e, function(item) {
+  __ITERATE__(<@ this.e @>, <@ function(item) {
     arr.push(item.cloneNode(true));
-  });
+  } @>);
   return $(arr);
 
   /* Zepto implementation:

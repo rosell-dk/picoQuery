@@ -32,7 +32,7 @@ function P(a,b) {
       // Need we test for ending '>' like jQuery does?
       var el = d.createElement('div');
       el.innerHTML = a;
-      this.e = __TO_ARRAY__(el.children);
+      this.e = __TO_ARRAY__(<@ el.children @>);
 
 /*      this.e = __MAP__(this.e, function(item) {
         if (item.children) {
@@ -78,14 +78,14 @@ function P(a,b) {
             // Give temporary ID (we use strings found nearby to make small gzip)
             b.id = 'querySelectorAllinnerHTML';
         
-            arr = arr.concat(__TO_ARRAY__(b.parentNode.querySelectorAll('#'+b.id+' '+a)));
+            arr = arr.concat(__TO_ARRAY__(<@ b.parentNode.querySelectorAll('#'+b.id+' '+a) @>));
 
             // Reset the ID
 //            b.id = '';
             b.removeAttribute('id');
           }
           else {
-            arr = arr.concat(__TO_ARRAY__(b.parentNode.querySelectorAll('#'+b.id+' '+a)));
+            arr = arr.concat(__TO_ARRAY__(<@ b.parentNode.querySelectorAll('#'+b.id+' '+a) @>));
           }
 
           if (container) {
@@ -104,12 +104,12 @@ function P(a,b) {
       }
       else {
         b = (b instanceof P ? b.e[0] : b);
-        this.e = __TO_ARRAY__(d.querySelectorAll(a));
+        this.e = __TO_ARRAY__(<@ d.querySelectorAll(a) @>);
       }
     }
   }
   // jQuery( callback )
-  else if (__IS_FUNCTION__(a)) {
+  else if (__IS_FUNCTION__(<@ a @>)) {
     // TODO: we might consider implementing ready functionality right here instead of delegating it
     // to the .ready() method, and always having 'ready' as a dependency. The .ready() method could then utilize it
     return $(d).ready(a);
@@ -136,7 +136,7 @@ function P(a,b) {
   // jQuery ( NodeList )
   else if (a instanceof NodeList) {
 //    console.log('html', a, a instanceof NodeList);
-    this.e = __TO_ARRAY__(a);
+    this.e = __TO_ARRAY__(<@ a @>);
   }
   // TODO: support jQuery (plainObject)
   else {
@@ -160,47 +160,4 @@ function P(a,b) {
   <?php endif;?>
 
 }
-
-// OPTIMIZED_VERSION //
-function P(b, a) {
-  if (b) {
-    if ("s" < typeof b) {
-      if ("<" == b[0]) {
-        var c = d.createElement("div");
-        c.innerHTML = b;
-        this.e = [].slice.call(c.children);
-      } else {
-        if (a) {
-          a.documentElement && (a = a.documentElement);
-          var e = [];
-          (a instanceof P ? a.e : a instanceof Array ? a : [a]).forEach(function(a) {
-            var c;
-            a.parentNode || (c = document.createElement("div"), c.appendChild(a));
-            a.id ? e = e.concat([].slice.call(a.parentNode.querySelectorAll("#" + a.id + " " + b))) : (a.id = "querySelectorAllinnerHTML", e = e.concat([].slice.call(a.parentNode.querySelectorAll("#" + a.id + " " + b))), a.removeAttribute("id"));
-            c && c.removeChild(a);
-          });
-          this.e = e = e.filter(function(a, b, c) {
-            return c.indexOf(a) == b;
-          });
-        } else {
-          a = a instanceof P ? a.e[0] : a, this.e = [].slice.call(d.querySelectorAll(b));
-        }
-      }
-    } else {
-      if ("function" == typeof b) {
-        return $(d).ready(b);
-      }
-      this.e = b.nodeType ? [b] : b instanceof P ? b.e : b.map ? b : b instanceof NodeList ? [].slice.call(b) : [b];
-    }
-  } else {
-    this.e = [];
-  }
-  <?php if (isFeatureEnabled('arraylike')):?>
-  for (c = 0;c < this.e.length;c++) {
-    this[c] = this.e[c];
-  }
-  this.length = this.e.length;
-  this.splice = [].splice;
-  <?php endif;?>
-};
 

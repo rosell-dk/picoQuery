@@ -13,9 +13,9 @@ after: function(a) {
 		}
 	});
 */
-  __DOM_MANIP__(this, arguments, 0, function(elem) {
+  __DOM_MANIP__(<@ this @>, <@ arguments @>, <@ 0 @>, <@ function(elem) {
 		return elem.nextSibling;
-	});
+	} @>);
   return this;
 }
 

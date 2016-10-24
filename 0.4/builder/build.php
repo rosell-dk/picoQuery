@@ -671,8 +671,17 @@ function include_methods($type = 'instance') {
 
 
 function include_constructor() {
-  $js = include_javascript('inc/constructor.js');
-  $js = indent($js, 1, TRUE);
+  global $use_optimized_methods;
+  
+  if ($use_optimized_methods) {
+    $js = include_javascript('inc/constructor.min.js');
+    $js = indent($js, 1, TRUE);
+  }
+  else {
+    $js = include_javascript('inc/constructor.js');
+    $js = indent($js, 1, TRUE);
+  }
+
   echo $js;
 }
 
@@ -704,13 +713,107 @@ $helpers = array(
 $helpers_output = array();
 $helpers_inline = array();
 
+// parse javascript arguments - even multiline.
+// ie: "<@ value @>, <@ 'tejst' @>, <@ function(el) {} @>" => ['args'=>['value', "'text'", 'function(el) {}']]
+// If input string has extra code after the last argument, it will be returned in "extra"
+/*
+  And it also works with nested
+  return __EACH__(<@ this.e @>, <@ function(el) {
+    return __EACH__(<@ el.parentNode @>, <@ function(el) {
+      // do something
+    } @>);
+  } @>);
+*/
+function parseArgs($helper, $js) {
+  if (substr($js, 0, 2) != '<@') {
+    echo 'Could not parse args for ' . $helper;
+    print_r($js);
+//    return $js;
+    return parseArgsOld($js);
+    print_r($helper);
+    return $js;
+  }
+
+  $args = array();
+  $pos = 0;
+  $inArg = FALSE;
+
+  $maxIt = 100;
+  $it = 0;
+  while (TRUE) {
+    if ($it++ > $maxIt) {
+      echo 'MAXED OUT!' . $helper . $js;
+      return;
+    }
+    // We are before first argument, between arguments, or after last argument
+    // So we expect: new argument, comma or end parenthesis
+    if (substr($js, $pos, 2) == '<@') {
+//      echo 'PARSING ARGUMENT';
+      // Start parsing an argument.
+      // We are looking for an @>. But as functions can be nested, its not
+      // neccesarily the first one.
+      // If we meet a <@, we must skip to next @>
+
+      $pos = $pos+2;
+      $argPos = $pos;
+
+      $depth = 1;
+      while ($depth > 0) {
+        $posEnd = strpos(substr($js, $pos), '@>');
+        $posBegin = strpos(substr($js, $pos), '<@');
+
+        if (($posBegin === FALSE) || ($posEnd < $posBegin)) {
+          // We found @>
+          $depth--;
+
+          $pos = $pos + $posEnd + 2;
+//  echo 'FOUND endtag' . $pos . ':' . substr($js, $pos);
+
+          if ($depth == 0) {
+            $args[] = substr($js, $argPos, $pos - $argPos - 2);
+//            echo 'FOUND:' . substr($js, $argPos, $pos - $argPos ) . '!!';
+            $depth = 0;
+//            $pos += $argPos;
+//            echo 'REST:' . substr($js, $pos);
+          }
+
+//          $pos += $posEnd+2;
+  //        echo 'left:' . substr($js, $pos);
+        }
+        else if ($posBegin !== FALSE) {
+          // We found <@
+          $depth++;
+          $pos = $pos + $posBegin + 2;
+//  echo 'FOUND beginning. skip' . $pos . ':' . substr($js, $pos) . '/skip';
+        }
+      }
+    }
+    else if (substr($js, $pos, 1) == ')') {
+      // done
+//      echo 'DONE';
+//      print_r(array('args' => $args, 'extra' => substr($js, $pos)));
+      return array('args' => $args, 'extra' => substr($js, $pos));
+    }
+    else if (substr($js, $pos, 1) == ',') {
+//      echo 'FOUND COMMA';
+      $pos++;
+    }
+    else if (substr($js, $pos, 1) == ' ') {
+      $pos++;
+    }
+  }
+//  echo 'PARSEARGS' . $js;
+}
+
+
 // jparser-1-0-0 http://timwhitlock.info/blog/2009/11/jparser-and-jtokenizer-released/
 // alternative parsers, tokenizers: http://stackoverflow.com/questions/3571303/is-there-a-javascript-lexer-tokenizer-in-php/36030252#36030252
 require '../../lib/jtokenizer1.0.0.php';
+
 // parse javascript arguments - even multiline.
 // ie: "value, 'tejst', function(el) {}" => ['args'=>['value', "'text'", 'function(el) {}']]
 // If input string has extra code after the last argument, it will be returned in "extra"
-function parseArgs($js) {
+function parseArgsOld($js) {
 
   /**
    * Get the tokens as an array, just like the php tokenizer token_get_all function
@@ -823,6 +926,11 @@ function process_helpers($js) {
 
   $js = preg_replace('/__BACKSLASH__/', '\\\\', $js);
 
+  // Those helper calls that were not inlined still have special markings around the arguments
+  // - remove them!
+  $js = preg_replace('/<@/', '', $js);
+  $js = preg_replace('/@>/', '', $js);
+
   return $js;
 }
 
@@ -833,7 +941,8 @@ function _process_helpers($js, $step) {
 
   $helpers_needed = [];
 //echo $js;
-//$js = 'STPE:' . $step . "\n" . $js;
+//$js = 'STEP:' . $step . "\n" . $js;
+
   foreach ($helpers as $i => $helper) {
 
     // Find out if a call to the helper is in the sourcecode
@@ -892,6 +1001,13 @@ function _process_helpers($js, $step) {
         }
       }););
 
+      And it also works with nested
+      return __EACH__(this.e, function(el) {
+        return __EACH__(el.parentNode, function(el) {
+          // do something
+        }
+      }
+
       */
 
       for ($x = 0; $x < $numCallsToHelper; $x++) {
@@ -913,7 +1029,10 @@ function _process_helpers($js, $step) {
   // if ($helper[0] == 'EACH') {echo $matches[1]; return;}
 
         // A little quirk: We add ' ', because otherwise an ending "}" is eaten (when methods are minimized)
-        $parseResult = parseArgs($matches[1] . ' ');
+        $parseResult = parseArgs($helper[0], $matches[1] . ' ');
+//echo $helper[0] . '\n';
+//print_r($matches[1]);
+//print_r($parseResult);
         $args = $parseResult['args'];
         
         for ($j=0; $j<count($args); $j++) {

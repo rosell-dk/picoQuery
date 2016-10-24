@@ -58,7 +58,7 @@ Support: Partial
 css: function(name, value) {
   // Considering if(!value). 
   // - But I guess we should support setting a property to an empty string
-  if (__IS_UNDEFINED__(value)) {
+  if (__IS_UNDEFINED__(<@ value @>)) {
 
     // In picoQuery 0.1, we just return this.e[0].style[name]
     // However, we need to support javascript properties as well
@@ -83,7 +83,7 @@ css: function(name, value) {
 
   } 
   else {
-    __ITERATE__(this.e, function(el) {
+    __ITERATE__(<@ this.e @>, <@ function(el) {
       // Well, well, it seems that el.style has both variants (ie 'background-color' and 'backgroundColor')
       // so we do not need to dasherize or camelCase.
       // TODO: Browser-test it
@@ -97,7 +97,7 @@ css: function(name, value) {
 
       // btw, zepto sets the style with style.cssText
       // jQuery sets the style with el.style[camelCasedPropertyName]
-    });
+    } @>);
   }
   return this;
 }

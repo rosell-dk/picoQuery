@@ -17,9 +17,9 @@ find: function(selector) {
   if (typeof selector == "string") {
     // First shot:
     var arr=[];
-    __ITERATE__(this.e, function(item) {
+    __ITERATE__(<@ this.e @>, <@ function(item) {
       arr = arr.concat($(selector, item).e);      
-    });
+    } @>);
 
     // Remove duplicates
     // Note that this code does not work with prototype 1.7.
@@ -55,13 +55,13 @@ find: function(selector) {
        (ignoring that "element.contains()" isn't supported in all our targetted browsers) */
     /*
     var arr = [];
-    __ITERATE__(this.e, function(searchInItem) {
-      __ITERATE__(selector.e, function(searchForItem) {
+    __ITERATE__(<@ this.e @>, <@ function(searchInItem) {
+      __ITERATE__(<@ selector.e @>, <@ function(searchForItem) {
         if (searchInItem.contains(searchForItem)) {
           arr.push(searchForItem);
         }
-      });
-    });
+      } @>);
+    } @>);
     return $(arr);
     */
 
@@ -69,13 +69,13 @@ find: function(selector) {
 /*
     var arr = [];
     var searchInItems = this.e;
-    __ITERATE__(selector.e, function(searchForItem) {
-      __ITERATE__(searchInItems, function(searchInItem) {
+    __ITERATE__(<@ selector.e @>, <@ function(searchForItem) {
+      __ITERATE__(<@ searchInItems @>, <@ function(searchInItem) {
         if (searchInItem.contains(searchForItem)) {
           arr.push(searchForItem);
         }
-      });
-    });
+      } @>);
+    } @>);
     return $(arr);*/
         
     // Instead of first loop, we can use filter
@@ -84,11 +84,11 @@ find: function(selector) {
     var searchInItems = this.e;
     var arr = selector.e.filter(function(element) {
       var inAnyParents = false;
-      __ITERATE__(searchInItems, function(searchInItem) {
+      __ITERATE__(<@ searchInItems @>, <@ function(searchInItem) {
         if (searchInItem.contains(element)) {
           inAnyParents = true;
         }      
-      });
+      } @>);
       return inAnyParents;
     });
     return $(arr);
