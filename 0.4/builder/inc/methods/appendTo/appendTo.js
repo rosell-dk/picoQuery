@@ -21,6 +21,7 @@ appendTo: function(a) {
     $(a).append(b);
     Array.prototype.push.apply(c, b);
   } @>);
-  return $(c);
+//  return $(c);
+  return __PUSH_STACK__(<@ c @>)
 }
 

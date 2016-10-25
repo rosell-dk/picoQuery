@@ -19,7 +19,9 @@ Signatures:
 */
 
 eq: function(a) {
-  return $(this.e[a<0?this.e.length+a:a]);
+  return __PUSH_STACK_SINGLE__(<@ this.e[a<0?this.e.length+a:a] @>);
+
+//  return $(this.e[a<0?this.e.length+a:a]);
 /* zepto implementation:
       return idx === -1 ? this.slice(idx) : this.slice(idx, + idx + 1)
 */

@@ -17,18 +17,10 @@ Partially supported signatures:
 
 */
 clone: function() {
-//  __MAP__(this.e, function(item){ return item.cloneNode(true) });
-//  return this;
-
   var arr = [];
   __ITERATE__(<@ this.e @>, <@ function(item) {
     arr.push(item.cloneNode(true));
   } @>);
-  return $(arr);
-
-  /* Zepto implementation:
-     -- (I don't get this. Mapping destroys the original elements...)
-  return this.map(function(){ return this.cloneNode(true) })
-  */
+  return __PUSH_STACK__(<@ arr @>)
 }
 

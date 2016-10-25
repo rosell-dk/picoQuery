@@ -82,7 +82,7 @@ When more API is supported, it will be possible for plugin developers to create 
 Done:
 - Restructure of include files: optimized code is moved to separate file
 - Much faster build time (optimization of code which inlines helpers)
-- .hasClass(), .data(), jQuery.data(), jQuery.camelCase(), jQuery.merge() (though the data methods involves risk for memory leak)
+- .hasClass(), .data(), jQuery.data(), .show(), .toArray(), jQuery.camelCase(), jQuery.merge() (though the data methods involves risk for memory leak)
 
 
 #### Features planned for 0.5:

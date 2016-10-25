@@ -1,51 +1,51 @@
-  /* If we only support .on(events, handler), the following is sufficient: */
-  /*
+If we only support .on(events, handler), the following is sufficient: */
+
 on:function(events, handler) {
-  return __EACH__(this, function(el) {
+  return __ITERATE__(this.e, function(el) {
     // The third parameter "useCapture" is according to web standards optional and defaults to false.
     // However, in Firefox 2-6, it is non-optional
     el.addEventListener(events, handler, false);
   });
 }
 */
-/* zepto implementation:
-  $.fn.on = function(event, selector, data, callback, one){
-    var autoRemove, delegator, $this = this
-    if (event && !isString(event)) {
-      $.each(event, function(type, fn){
-        $this.on(type, selector, data, fn, one)
-      })
-      return $this
+
+### zepto implementation:
+$.fn.on = function(event, selector, data, callback, one){
+  var autoRemove, delegator, $this = this
+  if (event && !isString(event)) {
+    $.each(event, function(type, fn){
+      $this.on(type, selector, data, fn, one)
+    })
+    return $this
+  }
+
+  if (!isString(selector) && !isFunction(callback) && callback !== false)
+    callback = data, data = selector, selector = undefined
+  if (callback === undefined || data === false)
+    callback = data, data = undefined
+
+  if (callback === false) callback = returnFalse
+
+  return $this.each(function(_, element){
+    if (one) autoRemove = function(e){
+      remove(element, e.type, callback)
+      return callback.apply(this, arguments)
     }
 
-    if (!isString(selector) && !isFunction(callback) && callback !== false)
-      callback = data, data = selector, selector = undefined
-    if (callback === undefined || data === false)
-      callback = data, data = undefined
-
-    if (callback === false) callback = returnFalse
-
-    return $this.each(function(_, element){
-      if (one) autoRemove = function(e){
-        remove(element, e.type, callback)
-        return callback.apply(this, arguments)
+    if (selector) delegator = function(e){
+      var evt, match = $(e.target).closest(selector, element).get(0)
+      if (match && match !== element) {
+        evt = $.extend(createProxy(e), {currentTarget: match, liveFired: element})
+        return (autoRemove || callback).apply(match, [evt].concat(slice.call(arguments, 1)))
       }
+    }
 
-      if (selector) delegator = function(e){
-        var evt, match = $(e.target).closest(selector, element).get(0)
-        if (match && match !== element) {
-          evt = $.extend(createProxy(e), {currentTarget: match, liveFired: element})
-          return (autoRemove || callback).apply(match, [evt].concat(slice.call(arguments, 1)))
-        }
-      }
+    add(element, event, callback, data, selector, delegator || autoRemove)
+  })
+}
 
-      add(element, event, callback, data, selector, delegator || autoRemove)
-    })
-  }
-*/
 
-/*
-jQuery implementation:
+### jQuery implementation:
 function on( elem, types, selector, data, fn, one ) {
 	var origFn, type;
 

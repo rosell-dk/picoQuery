@@ -31,6 +31,8 @@ closest: function(selector, context) {
     return item && r.indexOf(item) == i
   });
   // Wrap
-  return $(arr);
+//  return $(arr);
+  return __PUSH_STACK__(<@ arr @>)
+
 }
 

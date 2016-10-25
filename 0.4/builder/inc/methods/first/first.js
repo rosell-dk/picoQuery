@@ -9,6 +9,6 @@ Fully supported signatures:
   .first() => jQuery
 */
 first: function() {
-  return $(this.e[0]);
+  return __PUSH_STACK_SINGLE__(<@ this.e[0] @>);
 }
 

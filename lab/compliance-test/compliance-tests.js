@@ -34,51 +34,6 @@ window.complianceTests = [
     ]
   },
   {
-    name: '.before()',
-    tests: [
-      {
-        name: '.before( content )',
-        tests: [
-          ['$("<div><b></b></div>").children().before("<i></i>").parent()', "[ HTML string ]"],
-          ['$("<div><b></b></div>").children().before($("<one></one><two></two>")).parent()', "[ HTML string with several elements]"],
-          ['$("<div><b></b></div>").children().before($("<i></i>")).parent()', "[ jQuery ]"],
-          ['$("<div><b></b></div>").children().before($("<i></i>").get(0)).parent()', "[ Element ]"],
-          ['$("<div><b></b><p></p></div>").children().before("<i></i>").parent()', "multiple targets"],
-          ['$("<div><b></b></div>").children().before("hello").parent()', "Text"],
-          ['$("<div><b></b></div>").children().before($("<b>text</b>").get(0).childNodes[0]).parent()', "[ Text Node ]"],
-          ['$("<div><p></p></div>").children().before("<b></b>").before("<i></i>").parent()', "Chaining"],
-
-//          ['$("<ul><li>1</li><li>2</li></ul>").children().before("<i></i><p></p>").parent()', "[ HTML string with several elements]"],
-          ['$("<ul><li>1</li><li>2</li></ul>").children().before($("<i></i>")).parent()', "[ jQuery with several elements]"],
-//          ['$("<ul><li>1</li></ul>").children().before("<i></i><p></p>").parent()', "[ jQuery with several elements]"],
-//          ['$("<ul><li>1</li><li>2</li></ul>").children().before("<i></i><p></p>").parent()', "[ jQuery with several"],
-        ]
-      },
-      {
-        name: '.before( content, content, ... )',
-        tests: [
-          ['$("<div><b></b></div>").children().before("<i></i>", "<p></p>").parent()', ""],
-          ['$("<ul><li>1</li><li>2</li></ul>").children().before("<i></i><b></b>", "<p></p>").parent()', ""],
-        ]
-      },
-      {
-        name: '.before( function )',
-        tests: [
-          ['$("<div><b></b><p></p></div>").children().before(function(index){return "<i>" + index + "</i>"}).parent()', "function receives index"],
-          ['$("<div><b></b><p></p></div>").children().before(function(index){return "<i>" + this + "</i>"}).parent()', "value of this"],
-          ['$("<div><b></b><p></p></div>").children().before(function(index){return "hello"}).parent()', "return string"],
-          // todo: return element, jquery
-        ]
-      },
-      {
-        name: '.before( function-html ) (jQuery 1.10+)',
-        tests: [
-          ['$("<div><p>hello</p></div>").children().before(function(index, oldHtml){return "<i>" + oldHtml + "</i>"}).parent()', "get old html"],
-        ]
-      }
-    ]
-  },
-  {
     name: '.after()',
     tests: [
       {
@@ -672,6 +627,78 @@ window.complianceTests = [
     ]
   },
   {
+    name: '.end()',
+    tests: [
+      {
+        name: '.end(  )',
+        tests: [
+
+//          ['$("<p></p>").addClass("test").end()', ".addClass()"],
+//          ['$("<div><b></b></div>").after("<i></i>").end()', ".after()"],
+          ['$("<div><b></b></div>").children().after("<i></i>").end()', ".after()"],
+//          ['$("<p></p>").append("<i></i>").end()', ".append()"],
+          ['$("<p></p>").appendTo("<i></i>").end()', ".appendTo()"],
+//          ['$("<p></p>").attr("test", "test").end()', ".attr()"],
+          // 'before' needs no testing
+          ['$("#ul3").children()', ".children()"],
+          ['$("#ul3").children().end()', ".children()"],
+          ['$("<div><b></b></div>").children()', ".children()"],
+          ['$("<div><b><i></i></b></div>").children().end()', ".children()"],
+          ['$("<div><b><i></i></b></div>").children().children().end()', ".children()"],
+          ['$("<p></p>").clone().end()', ".clone()"],
+          ['$("<p></p>").clone().end().end()', ".clone()"],
+          ['$("li#item2_1").closest("ul").end()', ".closest()"],
+          ['$("<p></p>").css("color", "red").end()', ".css()"],
+          ['$("li#item2_1").css("color", "red")', ".css()"],
+          ['$("li#item2_1").css("color", "red").end()', ".css() - This is a surprising result from jQuery..."],
+          ['$("li#item2_1").parent().css("color", "red").end()', ".css() - Here is an explanation - css doesnt touch the pushStack"],
+          ['$("li#item2_1").end()', ".css() - more explanation..."],
+          ['$("li#item2_1").data("a", "b").end()', ".data()"],
+          ['$("li#item2_1").each(function(){}).end()', ".each()"],
+          ['$("<p><b></b></p>").empty().end()', ".empty()"],
+          ['$("#ul3 .odd, #ul2 .odd").eq(2).end()', ".eq()"],
+          ['$("li").filter("#item2_1")', ".filter()"],
+          ['$("#ul3 .odd, #ul2 .odd").filter("#item2_1").end()', ".filter()"],
+          ['$("#ul3 .odd, #ul2 .odd").filter("*").end()', ".filter()"],
+          ['$("#ul3 > li").find("#item_3_1").end()', ".find()"],
+          ['$("#ul3, #ul2").find($(".odd")).find("#item_3_1").end()', ".find( jQuery )"],
+          ['$("#ul3 .odd, #ul2 .odd").first().end()', ".first()"],
+          ['$("#ul3 .odd, #ul2 .odd").get().end()', ".get()"],
+//          ['$("li#item2_1").hasClass("odd").end()', ".hasClass()"],
+          ['$("<p></p>").hide().end()', ".hide()"],
+          ['$("<p></p>").html("<i>hello</i>").end()', ".html()"],
+          ['$("<p></p>").insertAfter("<i>hello</i>").end()', "insertAfter()"],
+          ['$("<p></p>").insertBefore("<i>hello</i>").end()', "insertBefore()"],
+          ['$("<one></one><two></two>").last().end()', "last()"],
+          ['$("#ul3 .odd, #ul2 .odd").last().end()', ".last()"],
+          ['$("li#item2_1").map(function(){return this.parentNode}).end()', ".map()"],
+          ['$("li#item2_1").map(function(){return this.parentNode})', ".map()"],
+          ['$("li#item3_1").next().end()', ".next()"],
+          ['$("#item3_1, input").offsetParent().end()', ".offsetParent()"],
+          ['$("#item3_1").on("ready", function(){})', ".on()"],
+          ['$("#item3_1").on("ready", function(){}).end()', ".on()"],
+          ['$("#item3_1").parent().end()', ".parent()"],
+          ['$("<p></p>").prepend("<i></i>").end()', ".prepend()"],
+          ['$("<p></p>").prependTo("<i></i>").end()', ".prependTo()"],
+          ['$("li#item3_2").prev().end()', ".prev()"],
+          ['$([]).pushStack([$("li.odd").get(0)]).pushStack([$("li.even").get(0)]).end()', ".pushStack()"],
+          ['$("#item3_1").ready(function(){}).end()', ".ready()"],
+          ['$("<p></p>").remove().end()', ".remove()"],
+          ['$("<table cellpadding=2></table>").removeAttr("cellpadding").end()', ".removeAttr()"],
+          ['$("<p class=upper></p>").removeClass("upper").end()', ".removeClass()"],
+          ['$("<p class=upper></p>").replaceWith("upper").end()', ".removeClass()"],
+          ['$("<div><h1>text</h1></div>").children().replaceWith("<h2>new heading</h2>").end()', ".replaceWith()"],
+          ['$("<p style=\'display:none\'></p>").show().end()', ".show()"],
+          ['$("<p style=\'display:none\'></p>").show().end()', ".show()"],
+//          ['function(){$("body").append("<div id=test2><h1>text</h1></div>");$("#test2").children().replaceWith("<h2>new heading</h2>");return $("#test2").remove()}()', ""],
+//          ['$("#item2_1").text().end()', ".text()"],
+          ['$("<div></div>").text("test").end()', ".text( text )"],
+          ['$("<div></div>").trigger("click").end()', ".trigger( )"],
+        ]
+      },
+    ]
+  },
+  {
     name: '.empty()',
     tests: [
       {
@@ -996,6 +1023,7 @@ window.complianceTests = [
           ['$([3,4]).map(function(i) {return i})', ""],
           ['$([3,4]).map(function(i,elm) {return elm})', ""],
           ['$("li").map()', ""],
+          ['$({a:"apple", b:"banana"}).map(function(propertyOfObject, key) {return key + " is for " + propertyOfObject})', ""],
         ]
       }
     ]
@@ -1165,6 +1193,23 @@ window.complianceTests = [
           ['$("li:last-child").prev(".even")', ""],
         ]
       }
+    ]
+  },
+  {
+    name: '.pushStack()',
+    tests: [
+      {
+        name: '.pushStack( elements )',
+        tests: [
+//          ['$("<p></p>").pushStack(document.getElementsByTagName( "li" ))', ""],
+          ['$([]).pushStack([$("li").get(0)])', ""],
+        ]
+      },
+      {
+        name: '.pushStack( elements, name, arguments )',
+        tests: [
+        ]
+      },
     ]
   },
   {
@@ -1362,8 +1407,18 @@ window.complianceTests = [
       },
     ]
   },
-/*
   {
+    name: '.toArray',
+    tests: [
+      {
+        name: 'toArray( )',
+        tests: [
+          ['$("<div></div><li></li>").toArray()', "Two elements"],
+        ]
+      }
+    ]
+  },
+/*  {
     name: '.children',
     tests: [
       {

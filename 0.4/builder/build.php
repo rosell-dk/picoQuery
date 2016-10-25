@@ -452,7 +452,7 @@ if (isFeatureEnabled('replaceWith')) {
   enableFeatureByNameId('before');
   enableFeatureByNameId('remove');
 }
-if (isFeatureEnabled('first') || isFeatureEnabled('last')) {
+if (isFeatureEnabled('last')) {
   enableFeatureByNameId('eq');
 }
 
@@ -476,6 +476,9 @@ if (isFeatureEnabled('data')) {
   enableFeatureByNameId('jQuery.camelCase');
 }
 
+if (isFeatureEnabled('end')) {
+  enableFeatureByNameId('pushStack');
+}
 
 
 if ($minify_functions || $minify_all) {
@@ -703,15 +706,21 @@ $helpers = array(
   // Try to use common characters (gzip)
   // Use the most common characters for the most used functions.
   // Below, I put most used functions on top
-  array('ITERATE', 'iterate', 's'),     // Iterate normal array. Use instead of "for (var i=0; ..."
+  array('ITERATE', 'forEach', 's'),     // Iterate normal array. Use instead of "for (var i=0; ...". TODO: rename to "FOREACH"
   array('TO_ARRAY', 'toArray', 't'),
   array('IS_FUNCTION', 'isFunction', 'f'),
   array('DOM_MANIP', 'domManip', 'm'),  // used in .before(), .prepend(), etc
   array('IS_UNDEFINED', 'isUndefined', 'u'),
   array('IS_STRING', 'isString', 's'),
+  array('FLATTEN', 'flatten', 'v'),
   array('MAP', 'map', 'M'),             // Map normal array
   array('PROPERTY_FUNC', 'prop', 'p'),  // Used with map.
   array('EACH', 'each', 'E'),   // DEPRECATED - use ITERATE(this.e)
+  array('PUSH_STACK', 'pushStack', ''),                // Expects array
+  array('PUSH_STACK_SINGLE', 'pushStackSingle', ''),   // Expects single element
+  array('PUSH_STACK_THIS', 'pushStackThis', ''),       // Expects no arguments.
+  array('PUSH_STACK_JQ', 'pushStackJQ', ''),         // Expects jQuery object
+  array('RETURN_PUSH_STACK_JQ', 'retPushStackJQ', ''),         // Expects jQuery object
 
 );
 $helpers_output = array();
@@ -722,15 +731,18 @@ $helpers_inline = array();
 // If input string has extra code after the last argument, it will be returned in "extra"
 /*
   And it also works with nested
-  return __EACH__(<@ this.e @>, <@ function(el) {
-    return __EACH__(<@ el.parentNode @>, <@ function(el) {
+  return __ITERATE__(<@ this.e @>, <@ function(el) {
+    return __ITERATE__(<@ el.parentNode @>, <@ function(el) {
       // do something
     } @>);
   } @>);
 */
 function parseArgs($helper, $js) {
+  if (substr($js, 0, 1) == ')') {
+    return array('args' => array(), 'extra' => $js);
+  }
   if (substr($js, 0, 2) != '<@') {
-    echo 'Could not parse args for ' . $helper;
+    echo 'Could not parse args for ' . $helper . $js;
     print_r($js);
 //    return $js;
     return parseArgsOld($js);
@@ -967,6 +979,15 @@ function _process_helpers($js, $step) {
     if ($helper[0] == 'DOM_MANIP') {
       $treshold = 1;
     }
+    if (($helper[0] == 'PUSH_STACK') ||
+      ($helper[0] == 'PUSH_STACK_SINGLE') ||
+      ($helper[0] == 'PUSH_STACK_THIS') ||
+      ($helper[0] == 'PUSH_STACK_JQ') ||
+      ($helper[0] == 'RETURN_PUSH_STACK_JQ')) {
+      // These must always be inlined
+        $treshold = 9999;
+    }
+
 //      $treshold = 0;
     if ($step == 2) {
       // we currently only do inlining in step 2 (easier)
@@ -986,7 +1007,7 @@ function _process_helpers($js, $step) {
       
       And it also works with multiline, and with multiple arguments:
 
-      return __EACH__(this, function(el) {
+      return __ITERATE__(this.e, function(el) {
         if (el.classList) {
           el.classList.add(value);
         } 
@@ -1006,8 +1027,8 @@ function _process_helpers($js, $step) {
       }););
 
       And it also works with nested
-      return __EACH__(this.e, function(el) {
-        return __EACH__(el.parentNode, function(el) {
+      return __ITERATE__(this.e, function(el) {
+        return __ITERATE__(el.parentNode, function(el) {
           // do something
         }
       }
@@ -1069,7 +1090,7 @@ function _process_helpers($js, $step) {
     else if ($numCallsToHelper >= $treshold) {
       $helpers_needed[] = $i;
 
-      // Fix function calls ("__EACH__(" => "each(", etc)
+      // Fix function calls ("__ITERATE__(" => "forEach(", etc)
       global $use_real_small_function_names_for_helpers;
       $js = preg_replace('/__' . $helper[0] . '__\\s*\(/', $helper[$use_real_small_function_names_for_helpers ? 2 : 1] . '(', $js);
     }

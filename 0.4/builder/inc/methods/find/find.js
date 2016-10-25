@@ -29,7 +29,9 @@ find: function(selector) {
 
     arr = arr.filter(function(item,i,r){return r.indexOf(item) == i});
 
-    return $(arr);
+//    return $(arr);
+//    return this.pushStack(arr);
+    return __PUSH_STACK__(<@ arr @>);
 
     // First map, then flatten approach:
     // (map elements to querySelectorAll searches)
@@ -131,7 +133,10 @@ find: function(selector) {
         }
       });
     });
-    return $(arr);
+//    return $(arr);
+//    return this.pushStack(arr);
+    return __PUSH_STACK__(<@ arr @>);
+
 
 
     //});

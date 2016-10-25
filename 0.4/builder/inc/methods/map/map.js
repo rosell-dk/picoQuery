@@ -22,6 +22,7 @@ map: function(fn) {
   var arr = this.e.map(function(item, index) {return fn.call(item, index, item)});
 
   // Wrap the array of whatever type the callback provides in $
-  return $(arr);
+//  return $(arr);
+  return __PUSH_STACK__(<@ arr @>)
 }
 

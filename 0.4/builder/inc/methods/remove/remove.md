@@ -13,9 +13,13 @@ Without support for selector, its as simple as this:
 //  return $(arr).filter(selector||'*');
 
 
-### jQuery
+### jQuery implementation
 
-```javascript
+```
+remove: function( selector ) {
+	return remove( this, selector );
+},
+
 function remove( elem, selector, keepData ) {
 	var node,
 		nodes = selector ? jQuery.filter( selector, elem ) : elem,

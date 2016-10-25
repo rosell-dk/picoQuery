@@ -16,6 +16,8 @@ prev: function(selector) {
 
   // Remove nulls
   arr = arr.filter(function(item,i,r){return item != null});
-  return $(arr).filter(selector||"*");
+//  return $(arr).filter(selector||"*");
+  __RETURN_PUSH_STACK_JQ__(<@ $(arr).filter(selector||"*") @>)
+
 }
 

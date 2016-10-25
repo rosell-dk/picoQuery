@@ -44,7 +44,9 @@ parent: function(selector) {
 
 
   // Wrap and filter
-  return $(arr).filter(selector||'*');
+//  return $(arr).filter(selector||'*');
+
+  __RETURN_PUSH_STACK_JQ__(<@ $(arr).filter(selector||'*') @>)
 
   // 
 //  return selector ? $(arr).filter(selector) : $(arr);
