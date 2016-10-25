@@ -17,15 +17,6 @@ Fully supported signatures:
 
 */
 remove: function(selector) {
-  /* without support for selector, its as simple as this: */
-/*
-  this.e.forEach(function(item) {
-    if (item.parentNode) {
-      item.parentNode.removeChild(item);
-    }
-  });
-  return this;
-*/
   
   var $sel = this.filter(selector||'*');
   $sel.e.forEach(function(item) {
@@ -34,11 +25,5 @@ remove: function(selector) {
     }
   });
   return this;
-  
-//  var arr = this.e.map(function(item){return __TO_ARRAY__(<@ a['children'] @>)});
-
-
-//  return $(arr).filter(selector||'*');
-
 }
 

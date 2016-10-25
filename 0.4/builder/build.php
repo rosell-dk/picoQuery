@@ -431,7 +431,7 @@ if (isFeatureEnabled('insertBefore')) {
 if (isFeatureEnabled('insertAfter')) {
   enableFeatureByNameId('after');
 }
-if (isFeatureEnabled('prepend') || isFeatureEnabled('prepend') || isFeatureEnabled('after')  || isFeatureEnabled('before')) {
+if (isFeatureEnabled('prepend') || isFeatureEnabled('append') || isFeatureEnabled('after')  || isFeatureEnabled('before')) {
   enableFeatureByNameId('clone');
 }
 
@@ -441,7 +441,8 @@ if (isFeatureEnabled('hide')) {
 if (isFeatureEnabled('next') || 
     isFeatureEnabled('prev') ||
     isFeatureEnabled('children') ||
-    isFeatureEnabled('parent')) {
+    isFeatureEnabled('parent') ||
+    isFeatureEnabled('remove')) {
   enableFeatureByNameId('filter');
 }
 if (isFeatureEnabled('filter')) {

@@ -173,6 +173,10 @@ td.mismatch {background-color: #ffbbbb}
   float: right;
   font-size: 10px;
 }
+.tablecell, tablecell { /* used for testing show() method */
+  display: table-cell;
+}
+
 li.odd {
   font-style: italic;
 }
@@ -224,6 +228,7 @@ for ($i = count($frameworks)+2; $i>0; $i--) {
     <b>test</b>
     <input id="submitbtn" name="Submit" value="Submit" type="button">
   </form>
+  <i class="tablecell">tablecell</i>
 </div>
 
 </body>

@@ -554,6 +554,9 @@ window.complianceTests = [
           ['$().css("fontStyle")', ""],
           ['$("li#item4").css("font-size")', ""],
           ['$("li#item4").css("width")', ""],
+          ['$("<i class=\'tablecell\'></i>").css("display")', "An element does not get its styles from class with jQuery, until its appended to the document. My guess is that its due to that jQuery creates a DocumentFragment. picoQuery on the other hand create a real element right away."],
+          ['$("<tablecell></tablecell>").css("display")', ""],
+          ['function () {var $el = $("<tablecell></tablecell>").appendTo("body"), res = $el.css("display"); $el.remove(); return res}()', "Once the node has been added to the document, jQuery and picoQuery agrees again"],
         ]
       },
       {
@@ -1253,6 +1256,40 @@ window.complianceTests = [
       },
       {
         name: '.replaceWith( function )',
+        tests: [
+        ]
+      },
+    ]
+  },
+  {
+    name: '.show()',
+    tests: [
+      {
+        name: '.show(  )',
+        tests: [
+          ['$("<p style=\'display:none\'></p>").show()', "Block element, hidden with css"],
+          ['$("<i style=\'display:none\'></i>").show()', "Inline element, hidden with css"],
+          ['$("<i style=\'display:\'></i>").show()', "Inline element, hidden with css"],
+          ['$("<i></i>").css("display", "none").show()', "Inline element, hidden by setting css display to none"],
+          ['$("<i></i>").css("display", "").show()', "Inline element, hidden by setting css display to empty string"],
+          ['$("<i></i>").hide().show()', "Inline element, hidden by hide(), and shown again"],
+          ['$("<i style=\'display:block\'></i>").hide().show()', "Inline element by default, but made block element with css, then hidden with hide(), and shown again"],
+          ['$("<i></i>").css("display", "table-cell").hide().show()', "Element made table-cell, hidden with hide(), and shown again"],
+          ['$("<i class=\'tablecell\'></i>").css("display")', "An element does not get its styles from class with jQuery, until its appended to the document. My guess is that its due to that jQuery creates a DocumentFragment. picoQuery on the other hand create a real element right away."],
+          ['$("<i class=\'tablecell\'></i>").hide().show()', "Same issue as above"],
+          ['$("<tablecell></tablecell>").hide().show()', ""],
+          ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', ""],
+          ['function () {var $el = $("<tablecell></tablecell>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', "Once the node has been added to the document, jQuery and picoQuery agrees again"],
+          ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', "- as above"],
+        ]
+      },
+      {
+        name: '.show( duration, complete )',
+        tests: [
+        ]
+      },
+      {
+        name: '.show( options )',
         tests: [
         ]
       },
