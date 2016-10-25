@@ -704,6 +704,14 @@ window.complianceTests = [
           ['$("<li>1</li><li>2</li><li>3</li>").eq(-4)', " "],
         ]
       },
+      {
+        name: 'Edge cases',
+        tests: [
+          ['$("ul.notexist").eq(-1)', "Last on an empty set"],
+          ['$(null).eq(2)', "Second on null"],
+          ['$(true).eq(1)', "Nonsense"],
+        ]
+      },
     ]
   },
   {
@@ -770,12 +778,16 @@ window.complianceTests = [
       {
         name: 'first()',
         tests: [
-          ['$("ul li").first()', ""],
-          ['$([3,4]).first()', ""],
-          ['$([3,4]).first()', ""],
-          ['$("ul.notexist").first()', ""],
-          ['$(null).first()', ""],
-          ['$(true).first()', ""],
+          ['$("ul li").first()', "First element"],
+          ['$([3,4]).first()', "First array member"],
+        ]
+      },
+      {
+        name: 'Edge cases',
+        tests: [
+          ['$("ul.notexist").first()', "First on an empty set"],
+          ['$(null).first()', "Null"],
+          ['$(true).first()', "Nonsense"],
         ]
       },
     ]
@@ -952,6 +964,26 @@ window.complianceTests = [
       }
     ]
   },  
+  {
+    name: '.last()',
+    tests: [
+      {
+        name: 'last()',
+        tests: [
+          ['$("ul li").last()', "Last element"],
+          ['$([3,4]).last()', "Last array member"],
+        ]
+      },
+      {
+        name: 'Edge cases',
+        tests: [
+          ['$("ul.notexist").last()', "Last on an empty set"],
+          ['$(null).last()', "Null"],
+          ['$(true).last()', "Nonsense"],
+        ]
+      },
+    ]
+  },
   {
     name: '.map()',
     tests: [

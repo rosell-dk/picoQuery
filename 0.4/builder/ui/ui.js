@@ -244,6 +244,12 @@ var methods_meta = {
       ['.keyup() => jQuery', PARTIAL, 'See .on() method for compliance notes'],
     ]
   ],
+  'last': [
+    'http://api.jquery.com/last/',
+    [
+      ['.last( ) => jQuery', FULL],
+    ]
+  ],
   'map': [
     'http://api.jquery.com/map/',
     [
@@ -341,6 +347,15 @@ var methods_meta = {
       ['.replaceWith( newContent ) => jQuery', FULL],
       ['.replaceWith( function ) => jQuery', FULL],
     ]
+  ],
+  'show': [
+    'http://api.jquery.com/show/',
+    [
+      ['.show( ) => jQuery', FULL],
+      ['.show( [ duration ][, complete ] ) => jQuery', NONE],
+      ['.show( options ) => jQuery', NONE],
+      ['.show( [ duration ][, easing][, complete ] ) => jQuery', NONE],
+    ],
   ],
   'text': [
     'http://api.jquery.com/text/',

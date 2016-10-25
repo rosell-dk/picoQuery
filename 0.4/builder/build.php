@@ -452,6 +452,9 @@ if (isFeatureEnabled('replaceWith')) {
   enableFeatureByNameId('before');
   enableFeatureByNameId('remove');
 }
+if (isFeatureEnabled('first') || isFeatureEnabled('last')) {
+  enableFeatureByNameId('eq');
+}
 
 $enabled_event_methods = array();
 foreach ($event_methods_standard as $i => $method_nameid) {

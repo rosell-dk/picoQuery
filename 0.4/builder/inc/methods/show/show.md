@@ -1,4 +1,14 @@
-###    zepto implementation:
+###  Developer notes
+
+zepto and jQuery creates AND appends a node to the document in order to determine default display.
+It however seems we do not need to append the node to get a default display.
+- this gets it:      $('<' + el.nodeName + '></' + el.nodeName + '>').css('display')
+- but this does not: $(d.createElement(el.nodeName)).css('display')
+The former calls the constructor, which creates a div with createElement and sets HTML with innerHTML.
+And thats apperently enough
+
+
+### zepto implementation:
 
 ```
   function defaultDisplay(nodeName) {

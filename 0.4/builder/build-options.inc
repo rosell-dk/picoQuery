@@ -3,9 +3,9 @@
 // Define all build options
 // Note that the place in the array is important, because its used fo
 // generate the buildId.
-$buildoptions_nameids = array('fallback', 'arraylike', 'builderurl', 'addClass', 'css', 'each', 'on', 'append', 'removeClass', 'click', 'hide', 'parent', 'next', 'get', 'children', 'attr', 'html', 'find', 'prepend', 'remove', 'closest', 'before', 'after', 'insertBefore', 'insertAfter', 'prev', 'replaceWith', 'jQuery.noConflict', 'filter', 'appendTo', 'prependTo', 'text', 'eq', 'offset', 'offsetParent', 'first', 'empty', 'removeAttr', 'trigger', 'clone', 'focus', 'keyup', 'ready', 'map', 'hasClass', 'jQuery.camelCase', 'data', 'jQuery.data', 'jQuery.merge', 'show');
+$buildoptions_nameids = array('fallback', 'arraylike', 'builderurl', 'addClass', 'css', 'each', 'on', 'append', 'removeClass', 'click', 'hide', 'parent', 'next', 'get', 'children', 'attr', 'html', 'find', 'prepend', 'remove', 'closest', 'before', 'after', 'insertBefore', 'insertAfter', 'prev', 'replaceWith', 'jQuery.noConflict', 'filter', 'appendTo', 'prependTo', 'text', 'eq', 'offset', 'offsetParent', 'first', 'empty', 'removeAttr', 'trigger', 'clone', 'focus', 'keyup', 'ready', 'map', 'hasClass', 'jQuery.camelCase', 'data', 'show', 'last', 'jQuery.data', 'jQuery.merge', 'toArray');
 
-$build_options_static_methods = array('jQuery.noConflict', 'jQuery.camelCase', 'jQuery.data', 'jQuery.merge');  // array('grep')
+$build_options_static_methods = array('jQuery.noConflict', 'jQuery.camelCase', 'jQuery.data', 'jQuery.merge');  // array('jQuery.grep')
 
 // most build options must explicitly be turned on
 // but some must explicitly turned off

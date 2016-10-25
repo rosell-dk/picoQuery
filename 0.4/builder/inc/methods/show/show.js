@@ -17,9 +17,6 @@ TODO: MUST be tested in IE9, because the jQuery solution involves some IE9-11 co
 Also, jQuery has more code involved for finding the default value for a tag name, "if the simple
 method fails". But under which circumstances are the simple method failing?
 
-zepto and jQuery creates AND appends a node to the document in order to determine default display.
-It however seems we do not need to append the node to get a default display.
-
 
  */
 show: function() {
@@ -34,6 +31,7 @@ show: function() {
 
       // else set to default value for that tag name.
       else {
+//  			el.style.display = $(d.createElement(el.nodeName)).css('display');
   			el.style.display = $('<' + el.nodeName + '></' + el.nodeName + '>').css('display');
       }
     };
