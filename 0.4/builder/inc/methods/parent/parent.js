@@ -22,33 +22,10 @@ parent: function(selector) {
   // Map elements to their parent node
   var arr = this.e.map(function(a){return a['parentNode']});
 
-  // Remove duplicates
-//  arr = arr.filter(function(item,i,r){return r.indexOf(item) == i});
-
-  // Remove nulls
-//  arr = arr.filter(function(item,i,r){return item != null});
-
-
-  // Remove duplicates and nulls
-
-  // Note that this code does not work with prototype 1.7.
-  // The problem is that prototype 1.7 overrides Array.prototype.filter (even though it already
-  // exists) and that it forgets the third argument (even though its ES5 standard)
-  // Both these problems seems fixed in prototype 1.7.2
-  // Here is a prototype 1.7 compatible variant:
-  // arr = arr.filter(function(item,i,r){return item && arr.indexOf(item) == i});
-  
-
-  arr = arr.filter(function(item,i,r){return item && r.indexOf(item) == i});
-
-
-
-  // Wrap and filter
-//  return $(arr).filter(selector||'*');
+  arr = __REMOVE_DUPLICATES_AND_NULLS__(<@ arr @>);
 
   __RETURN_PUSH_STACK_JQ__(<@ $(arr).filter(selector||'*') @>)
 
-  // 
 //  return selector ? $(arr).filter(selector) : $(arr);
 
 }

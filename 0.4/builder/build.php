@@ -438,15 +438,15 @@ if (isFeatureEnabled('prepend') || isFeatureEnabled('append') || isFeatureEnable
 if (isFeatureEnabled('hide')) {
   enableFeatureByNameId('css');
 }
+if (isFeatureEnabled('filter') || isFeatureEnabled('closest')) {
+  enableFeatureByNameId('parent');
+}
 if (isFeatureEnabled('next') || 
     isFeatureEnabled('prev') ||
     isFeatureEnabled('children') ||
     isFeatureEnabled('parent') ||
     isFeatureEnabled('remove')) {
   enableFeatureByNameId('filter');
-}
-if (isFeatureEnabled('filter')) {
-  enableFeatureByNameId('parent');
 }
 if (isFeatureEnabled('replaceWith')) {
   enableFeatureByNameId('before');
@@ -702,6 +702,7 @@ $helpers = array(
   // We reserve z for junk
   // We reserve d for document (its no problem that CC used 'd' - CC avoids 'd', when its used)
   // We reserve w for window
+  // We reserve P for picoQuery class
 
   // Try to use common characters (gzip)
   // Use the most common characters for the most used functions.
@@ -713,6 +714,8 @@ $helpers = array(
   array('IS_UNDEFINED', 'isUndefined', 'u'),
   array('IS_STRING', 'isString', 's'),
   array('FLATTEN', 'flatten', 'v'),
+  array('REMOVE_DUPLICATES', 'rmDuplicates', 'D'),
+  array('REMOVE_DUPLICATES_AND_NULLS', 'rmDuplicatesAndNulls', 'F'),
   array('MAP', 'map', 'M'),             // Map normal array
   array('PROPERTY_FUNC', 'prop', 'p'),  // Used with map.
   array('EACH', 'each', 'E'),   // DEPRECATED - use ITERATE(this.e)
@@ -963,7 +966,7 @@ function _process_helpers($js, $step) {
 
     // Find out if a call to the helper is in the sourcecode
     $numCallsToHelper = preg_match_all('/__' . $helper[0] . '__\\s*\(/', $js);
-
+//echo $helper[0] . ':' . $numCallsToHelper . '\n';
     // HACK to make ITERATE useable in helpers
 /*
     if ($helper == 'ITERATE') {
@@ -973,8 +976,13 @@ function _process_helpers($js, $step) {
 //$inline_all_helpers = TRUE;
 // ($helper[0] == 'EACH') || 
     $treshold = 8;
-    if ($helper[0] == 'ITERATE') {
-//      $treshold = 0;
+    if (($helper[0] == 'REMOVE_DUPLICATES') ||
+      ($helper[0] == 'REMOVE_DUPLICATES_AND_NULLS')) {
+        if (isFeatureEnabled('jQuery.noConflict')) {
+          // We are running with variant #2, and it doesn't pay off to inline variant #2
+          // (see REMOVE_DUPLICATES_AND_NULLS.md)
+          $treshold = 1;
+        }
     }
     if ($helper[0] == 'DOM_MANIP') {
       $treshold = 1;

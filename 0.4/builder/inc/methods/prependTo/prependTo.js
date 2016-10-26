@@ -18,7 +18,6 @@ prependTo: function(target) {
     $(t).prepend(elems);
     Array.prototype.push.apply(ret, elems);    
   } @>);
-//  return $(ret);
   return __PUSH_STACK__(<@ ret @>)
 }
 

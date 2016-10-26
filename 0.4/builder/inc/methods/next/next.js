@@ -14,7 +14,7 @@ Fully supported signatures:
 next: function(selector) {
   var arr = this.e.map(function(a){return a["nextElementSibling"]}); 
 
-  // Remove nulls
+  // Remove nulls (TODO: provide and use helper)
   arr = arr.filter(function(item,i,r){return item != null});
 //  return $(arr).filter(selector||"*");
   __RETURN_PUSH_STACK_JQ__(<@ $(arr).filter(selector||"*") @>)

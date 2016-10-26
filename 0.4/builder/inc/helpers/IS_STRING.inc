@@ -1,8 +1,8 @@
 (a) {
-  return (typeof a > "s");
+  return ("s" < typeof a);
 }
 
 [[INLINE_VERSION]]
-typeof [[ARG1]] > "s"
+"s" < typeof [[ARG1]]
 
 

@@ -93,14 +93,7 @@ function P(a,b) {
           }
         });
 
-        // Remove duplicates
-        // Note that this code does not work with prototype 1.7.
-        // (see parent.inc)
-        // Here is a prototype 1.7 compatible variant:
-        // arr = arr.filter(function(item,i,r){return arr.indexOf(item) == i});
-        arr = arr.filter(function(item,i,r){return r.indexOf(item) == i});
-
-        this.e = arr;
+        this.e = __REMOVE_DUPLICATES__(<@ arr @>);
       }
       else {
         b = (b instanceof P ? b.e[0] : b);
