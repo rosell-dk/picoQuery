@@ -1,5 +1,5 @@
-### 0.3
-*Released 13 Oct 2016*
+### 0.3 (13 new methods in 13 days, released the 13'th)
+*Released 13 Oct 2016* 
 - More API: jQuery.noConflict(), .after(), .before(), .closest(), .eq(), .insertAfter(), .insertBefore(), .offset(), .offsetParent(), .remove(), .replaceWith(), .text(), .prependTo()
 - picoQuery now defines window.jQuery, and overwrites it if it exist. Also, picoQuery no longer cowardly steps aside when $ is already defined. Like in jQuery, you can get $ restored with jQuery.noConflict(). The philosophy behind this change is that picoQuery should behave exactly like jQuery, so they can be used interchangably. This ensures that swapping between jQuery and picoQuery really is just a matter of changing the library and also ensures that there will be no unpleasant surprises when picoQuery falls back to jQuery.
 - Improved compatibility of constructor, .append(), .appendTo, .prepend() and events

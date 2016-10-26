@@ -18,6 +18,7 @@ This approach has several benefits:
 The following methods is currently supported: 
 .addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .each(), .empty(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .ready(), .remove(), .removeAttr(), .removeClass(), .text(), .trigger()
 
+And its rapidly growing at a rate about one new method per day.
 Focus in the 0.4 release will be to support even more of the jQuery API. Please let me know if there is a specific method you wish to be supported.
 
 If you cannot wait for support of a certain method, you can add instance methods this way:
@@ -82,7 +83,7 @@ When more API is supported, it will be possible for plugin developers to create 
 Done:
 - Restructure of include files: optimized code is moved to separate file
 - Much faster build time (optimization of code which inlines helpers)
-- .hasClass(), .data(), jQuery.data(), .show(), .toArray(), jQuery.camelCase(), jQuery.merge() (though the data methods involves risk for memory leak)
+- .hasClass(), .data(), jQuery.data(), .show(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge() (though the data methods, show() and hide() currently involves risk for memory leak) (9 new methods in 13 days)
 
 
 #### Features planned for 0.5:
