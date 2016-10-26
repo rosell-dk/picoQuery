@@ -747,6 +747,9 @@ window.complianceTests = [
       {
         name: '.filter( selector )',
         tests: [
+          ['$("<li></li><b></b>").filter("b")', " "],
+          ['$("<li></li><b></b>").filter("*")', " "],
+          
         ]
       },
       {
