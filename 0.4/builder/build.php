@@ -479,6 +479,9 @@ if (isFeatureEnabled('data')) {
 if (isFeatureEnabled('end')) {
   enableFeatureByNameId('pushStack');
 }
+if (isFeatureEnabled('add')) {
+  enableFeatureByNameId('jQuery.merge');
+}
 
 
 if ($minify_functions || $minify_all) {

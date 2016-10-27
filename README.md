@@ -83,16 +83,22 @@ When more API is supported, it will be possible for plugin developers to create 
 Done:
 - Restructure of include files: optimized code is moved to separate file
 - Much faster build time (optimization of code which inlines helpers)
-- .hasClass(), .data(), jQuery.data(), .show(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge() (though the data methods, show() and hide() currently involves risk for memory leak) (9 new methods in 13 days)
+- .hasClass(), .data(), jQuery.data(), .show(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add() (though the data methods, show() and hide() currently involves risk for memory leak) (10 new methods in 14 days)
 
+The complete list of methods supported wil be the following (51): 
+.add(), .addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .show(), .text(), .toArray(), .trigger()
 
 #### Features planned for 0.5:
+- More API
+- Improve the builder UI a bit (especially the method selection part)
+
+#### Features planned for 0.6:
 - Option to granularly downgrade functionality for each method. If you know you never use certain signatures/features of a method, you can deselect the signature/feature in order to get size down. It will also be visible when there are features that picoQuery does not support.
 - Possibility to see the code that will be generated for each method, depending on what sub-functionality are selected
 - Browser tests. I will apply for a free "open source" account on browsershack.com
 - picoQuery.com and the CDN must run on HTTPS
 
-#### Features planned for 0.6:
+#### Features planned for 0.7:
 - Optionally optimize library for execution speed rather than gzip size.
 
 ### Links
