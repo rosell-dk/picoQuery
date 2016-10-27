@@ -20,6 +20,17 @@ var general_meta = {
 }
 
 var methods_meta = {
+  'add': [
+    'http://api.jquery.com/add/',
+    [
+      ['.add( selector ) => jQuery', PARTIAL, 'jQuery sorts it in Document order. picoQuery does not do any sorting (it will in future release)'],
+      ['.add( elements ) => jQuery', PARTIAL, 'see above'],
+      ['.add( html ) => jQuery', PARTIAL, 'see above'],
+      ['.add( selection ) => jQuery', PARTIAL, 'see above'],
+      ['.add( html ) => jQuery', PARTIAL, 'see above'],
+      ['.add( selection, context ) => jQuery', PARTIAL, 'see above'],
+    ]
+  ],
   'addClass': [
     'http://api.jquery.com/addClass/',
     [

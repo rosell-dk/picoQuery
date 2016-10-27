@@ -1,5 +1,45 @@
 window.complianceTests = [
   {
+    name: '.add()',
+    tests: [
+      {
+        name: '.add( selector )',
+        tests: [
+          ['$("li#item2_1").add("li#item3_1")', ""],
+          ['$("li#item3_1").add("li#item2_1")', "jQuery sorts it in Document order. picoQuery does not do any sorting (it will in future release)"],
+          ['$("li#item3_1").add("li#item3_1")', "Remove duplicates"],
+          ['$("li#item2_1").add("li#item3_1").end()', "pushStack"],
+        ]
+      },
+      {
+        name: '.add( elements )',
+        tests: [
+        ]
+      },
+      {
+        name: '.add( html )',
+        tests: [
+          ['$("<p></p>").add("<i></i>")', ""],
+        ]
+      },
+      {
+        name: '.add( selection )',
+        tests: [
+          ['$("li#item2_1").add($("li#item3_1"))', ""],
+        ]
+      },
+      {
+        name: '.add( selection, context )',
+        tests: [
+//          ['$("li#item2_1").add($("li#item3_1"), $("body").get(0))', ""],
+//          ['$("li", document.getElementById("item3"))', "Refreshing our memory of what $(selection, context) does. Here, it selects all li elements descending the item#3"],
+          ['$().add("li", document.getElementById("item3"))', ""],
+//          ['$("li#item2_1").add($("li#item3_1"), $("#item1").get(0))', ""],
+        ]
+      },
+    ]
+  },
+  {
     name: '.addClass()',
     tests: [
       {
