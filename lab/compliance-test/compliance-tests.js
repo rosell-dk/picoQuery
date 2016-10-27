@@ -40,6 +40,24 @@ window.complianceTests = [
     ]
   },
   {
+    name: '.addBack()',
+    tests: [
+      {
+        name: '.addBack( )',
+        tests: [
+          ['$("li#item2_1").parent().addBack()', ""],
+          ['$("#ul3").children().addBack()', "jQuery sorts the result in Document order, picoQuery doesnt yet (because .add() doesnt yet)"],
+        ]
+      },
+      {
+        name: '.addBack( selector )',
+        tests: [
+          ['$("#ul3").children().addBack(".odd")', ""],
+        ]
+      },
+    ]
+  },
+  {
     name: '.addClass()',
     tests: [
       {

@@ -2,17 +2,15 @@
 .add()
 
 Description:
-  Create a new jQuery object with elements added to the set of matched elements.
-  http://api.jquery.com/add/
+  Add the previous set of elements on the stack to the current set, optionally filtered by a selector.
+  http://api.jquery.com/addBack/
 
 Signatures: 
-  .add( ) => jQuery
+  .addBack( ) => jQuery
+  .addBack( selector ) => jQuery
 
  */
-add: function(a, aa) {
-//  return this.prevObject || $();
-  var arr = $.merge(this.e, $(a,aa).e);
-  arr = __REMOVE_DUPLICATES__(<@ arr @>);
-  return __PUSH_STACK__(<@ arr @>);
+addBack: function(selector) {
+	return this.add( selector ? this.prevObject.filter(selector) : this.prevObject);
 }
 

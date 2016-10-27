@@ -31,6 +31,13 @@ var methods_meta = {
       ['.add( selection, context ) => jQuery', PARTIAL, 'see above'],
     ]
   ],
+  'addBack': [
+    'http://api.jquery.com/addBack/',
+    [
+      ['.addBack( ) => jQuery', PARTIAL, 'jQuery sorts it in Document order. picoQuery does not do any sorting (it will in future release)'],
+      ['.addBack( selector ) => jQuery', PARTIAL, 'see above'],
+    ]
+  ],
   'addClass': [
     'http://api.jquery.com/addClass/',
     [

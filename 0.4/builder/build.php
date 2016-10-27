@@ -445,7 +445,8 @@ if (isFeatureEnabled('next') ||
     isFeatureEnabled('prev') ||
     isFeatureEnabled('children') ||
     isFeatureEnabled('parent') ||
-    isFeatureEnabled('remove')) {
+    isFeatureEnabled('remove') ||
+    isFeatureEnabled('addBack')) {
   enableFeatureByNameId('filter');
 }
 if (isFeatureEnabled('replaceWith')) {
@@ -478,6 +479,12 @@ if (isFeatureEnabled('data')) {
 
 if (isFeatureEnabled('end')) {
   enableFeatureByNameId('pushStack');
+}
+if (isFeatureEnabled('addBack')) {
+  enableFeatureByNameId('pushStack');
+  enableFeatureByNameId('add');
+  enableFeatureByNameId('filter');
+  enableFeatureByNameId('jQuery.merge');
 }
 if (isFeatureEnabled('add')) {
   enableFeatureByNameId('jQuery.merge');

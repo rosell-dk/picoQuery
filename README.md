@@ -83,10 +83,10 @@ When more API is supported, it will be possible for plugin developers to create 
 Done:
 - Restructure of include files: optimized code is moved to separate file
 - Much faster build time (optimization of code which inlines helpers)
-- .hasClass(), .data(), jQuery.data(), .show(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add() (though the data methods, show() and hide() currently involves risk for memory leak) (10 new methods in 14 days)
+- .hasClass(), .data(), jQuery.data(), .show(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add(), .addBack (though the data methods, show() and hide() currently involves risk for memory leak) (11 new methods in 14 days)
 
 The complete list of methods supported wil be the following (51): 
-.add(), .addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .show(), .text(), .toArray(), .trigger()
+.add(), .addBack, .addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .show(), .text(), .toArray(), .trigger()
 
 #### Features planned for 0.5:
 - More API
