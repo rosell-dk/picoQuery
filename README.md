@@ -64,16 +64,6 @@ When more API is supported, it will be possible for plugin developers to create 
 - I have build a small tool that logs the jQuery methods used in an application real-time. Its available [here](picoquery.com/lab/feature-detect/). The purpose is of course to find out what methods are required in the picoQuery build. For the tool to be more useful, I plan to have it calculate the picoquery build id (right now it just outputs the methods used). It consist of a script that you include after you include jQuery. The script intercepts all jQuery methods in order to record the usage.
 - Future tool: A tool to merge two build ids.
 
-#### New in 0.3:
-- More API: jQuery.noConflict(), .after(), .before(), .closest(), .eq(), .insertAfter(), .insertBefore(), .offset(), .offsetParent(), .remove(), .replaceWith(), .text(), .prependTo()
-- picoQuery now defines window.jQuery, and overwrites it if it exist. Also, picoQuery no longer cowardly steps aside when $ is already defined. Like in jQuery, you can get $ restored with jQuery.noConflict(). The philosophy behind this change is that picoQuery should behave exactly like jQuery, so they can be used interchangably. This ensures that swapping between jQuery and picoQuery really is just a matter of changing the library and also ensures that there will be no unpleasant surprises when picoQuery falls back to jQuery.
-- Improved compatibility of constructor, .append(), .appendTo, .prepend() and events
-- build id encoding has changed. In v0.2, options are encoded in base 16. In v0.3, first char specifies the encoding. A=base 16, B=base64. With "B" encoding, we get a bit shorter URLs.
-- CDN... Yes CDN!... -- but with picoQuery, there are literally millions of possible builds! I know. Its a good thing picoQuery is so small, otherwise it might get expensive. I have set up a "pull server", which means that when an uncached build is requested, the CDN grabs the builder result from picoquery.com. While best practice is that you either inline picoquery directly in HTML or concatenate it with your other scripts, its often handy just to point to a CDN. The real point of providing a CDN though, is to offload the online builder and protect the server against some site with many visitors linking directly to the build script. The builds will be available on URLs like this: http://cdn.picoquery.com/picoquery0.3.0-B2ga.min.js when 0.3 is released. I implemented in 0.2 too. I have set cache time to 100 years, so you can rely on CDN working even if the builder is temporarily down
-- New handy CDN URL format with method names. Ie, to create a build which has .addClass() and .css(), you enter: http://cdn.picoquery.com/picoquery0.3.0-addClass-css.min.js. Should you later want to use ie the .attr() method, you simply change src to cdn.picoquery.com/picoquery0.3.0-addClass-css-attr.min.js
-- New handy CDN URL format for full version. Ie: http://cdn.picoquery.com/picoquery0.3.0-full.min.js for the minified version
-- Reordered internal build option list, which is used for encoding and decoding build IDs. Purpose was to order it by relevance, such that build ids for most projects will be smaller
-
 
 ### Roadmap
 
