@@ -152,6 +152,12 @@ var methods_meta = {
       ['.empty() => jQuery', FULL],
     ]
   ],
+  'end': [
+    'http://api.jquery.com/end/',
+    [
+      ['.end( ) => jQuery', FULL],
+    ]
+  ],
   'eq': [
     'http://api.jquery.com/eq/',
     [
@@ -336,6 +342,13 @@ var methods_meta = {
       ['.prev( [selector] ) => jQuery', FULL, 'Note though, as with all selectors in picoQuery, only standard CSS3 selectors are supported. The special JQuery selectors, such as ":button", etc are not supported'],
     ]
   ],
+  'pushStack': [
+    'http://api.jquery.com/pushStack/',
+    [
+      ['.pushStack( elements ) => jQuery', FULL],
+      ['.pushStack( elements, name, arguments ) => jQuery', FULL],
+    ]
+  ],
   'ready': [
     'http://api.jquery.com/ready/',
     [
@@ -388,6 +401,21 @@ var methods_meta = {
       ['.text( text ) => jQuery', FULL],
       ['.text( function ) => jQuery', FULL],
     ]
+  ],
+  'toArray': [
+    'http://api.jquery.com/toArray/',
+    [
+      ['.toArray( ) => Array', FULL],
+    ],
+  ],
+  'toggle': [
+    'http://api.jquery.com/toggle/',
+    [
+      ['.show( ) => jQuery', FULL],
+      ['.show( [ duration ][, complete ] ) => jQuery', NONE],
+      ['.show( options ) => jQuery', NONE],
+      ['.show( [ duration ][, easing][, complete ] ) => jQuery', NONE],
+    ],
   ],
   'trigger': [
     'http://api.jquery.com/trigger/',

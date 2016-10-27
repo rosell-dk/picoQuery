@@ -1,11 +1,28 @@
 ###  Developer notes
 
+*Should code be changed, make sure to change code in .toggle() as well!*
+
 zepto and jQuery creates AND appends a node to the document in order to determine default display.
 It however seems we do not need to append the node to get a default display.
 - this gets it:      $('<' + el.nodeName + '></' + el.nodeName + '>').css('display')
 - but this does not: $(d.createElement(el.nodeName)).css('display')
 The former calls the constructor, which creates a div with createElement and sets HTML with innerHTML.
 And thats apperently enough
+
+We can either do this:
+    if ((el.style.display == 'none') || (el.style.display == '')) {
+or this:
+    if (el.style.display == 'none') {
+
+If we do the first, we meet edge case "Already visible - will it alter css #1?", but not #2
+$​("​<p>​​</p>​"​)​.show​(​) => $[ ​<p style="display: block;">​​</p>​ ]
+
+If we do the second, we meet edge case "Already visible - will it alter css #2?", but not #1
+$​("​<i>​​</i>​"​)​.appendTo​("body"​)​.show​(​) => $[ ​<i>​​</i>​ ]
+
+We could try to come up with compliant behavior, but its an edge case... We go for the latter.
+
+
 
 
 ### zepto implementation:
@@ -153,3 +170,15 @@ function showHide( elements, show ) {
 
 	return elements;
 }
+
+The animation is added with this code:
+
+jQuery.each( [ "toggle", "show", "hide" ], function( i, name ) {
+	var cssFn = jQuery.fn[ name ];
+	jQuery.fn[ name ] = function( speed, easing, callback ) {
+		return speed == null || typeof speed === "boolean" ?
+			cssFn.apply( this, arguments ) :
+			this.animate( genFx( name, true ), speed, easing, callback );
+	};
+} );
+

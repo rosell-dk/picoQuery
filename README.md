@@ -15,8 +15,8 @@ This approach has several benefits:
 2. Simply include that custom script instead of jQuery.
 
 ### Current subset
-The following methods is currently supported: 
-.addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .each(), .empty(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .ready(), .remove(), .removeAttr(), .removeClass(), .text(), .trigger()
+The following methods is currently supported: (41)
+.addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .each(), .empty(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .ready(), .remove(), .removeAttr(), .removeClass(), .replaceWith(), .text(), .trigger()
 
 And its rapidly growing at a rate about one new method per day.
 Focus in the 0.4 release will be to support even more of the jQuery API. Please let me know if there is a specific method you wish to be supported.
@@ -77,19 +77,19 @@ When more API is supported, it will be possible for plugin developers to create 
 
 ### Roadmap
 
-#### Features planned for 0.4:
+#### Features planned for 0.4 (will be released in a few days):
 - Even more API! Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishes-for-new-methods-in-0.4) on the wiki.
 
 Done:
 - Restructure of include files: optimized code is moved to separate file
 - Much faster build time (optimization of code which inlines helpers)
-- .hasClass(), .data(), jQuery.data(), .show(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add(), .addBack (though the data methods, show() and hide() currently involves risk for memory leak) (11 new methods in 14 days)
+- .hasClass(), .data(), jQuery.data(), .show(), .toggle(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add(), .addBack(), .andSelf(), .last() (though the data methods, show() and hide() currently involves risk for memory leak) (14 new methods in 14 days)
 
-The complete list of methods supported wil be the following (51): 
-.add(), .addBack, .addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .show(), .text(), .toArray(), .trigger()
+The complete list of methods supported wil (at least) be the following (55): 
+.add(), .addBack, .addClass(), .after(), .andSelf(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .last(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .replaceWith(), .show(), .text(), .toArray(), .toggle(), .trigger()
 
-#### Features planned for 0.5:
-- More API
+#### Features planned for 0.5 (release date: ~10/11-2016)
+- More API (14 methods in 14 days)
 - Improve the builder UI a bit (especially the method selection part)
 
 #### Features planned for 0.6:

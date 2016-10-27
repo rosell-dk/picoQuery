@@ -960,6 +960,7 @@ window.complianceTests = [
       {
         name: 'hide()',
         tests: [
+          ['$("<i></i>").hide()', "Inline element, hidden by hide()"],
         ]
       },
       {
@@ -1419,9 +1420,7 @@ window.complianceTests = [
         tests: [
           ['$("<p style=\'display:none\'></p>").show()', "Block element, hidden with css"],
           ['$("<i style=\'display:none\'></i>").show()', "Inline element, hidden with css"],
-          ['$("<i style=\'display:\'></i>").show()', "Inline element, hidden with css"],
           ['$("<i></i>").css("display", "none").show()', "Inline element, hidden by setting css display to none"],
-          ['$("<i></i>").css("display", "").show()', "Inline element, hidden by setting css display to empty string"],
           ['$("<i></i>").hide().show()', "Inline element, hidden by hide(), and shown again"],
           ['$("<i style=\'display:block\'></i>").hide().show()', "Inline element by default, but made block element with css, then hidden with hide(), and shown again"],
           ['$("<i></i>").css("display", "table-cell").hide().show()', "Element made table-cell, hidden with hide(), and shown again"],
@@ -1431,6 +1430,11 @@ window.complianceTests = [
           ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', ""],
           ['function () {var $el = $("<tablecell></tablecell>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', "Once the node has been added to the document, jQuery and picoQuery agrees again"],
           ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', "- as above"],
+          ['$("<i></i>").css("display", "").show()', "Edge case. jQuery treats empty display as hidden - even though its not"],
+          ['$("<i style=\'display:\'></i>").show()', "Edge case. jQuery treats empty display as hidden - even though its not"],
+          ['$("<p></p>").show()', "Edge case: Already visible - will it alter css? #1"],
+          ['$("<i></i>").appendTo("body").show()', "Edge case: Already visible - will it alter css? #2"],
+
         ]
       },
       {
@@ -1487,6 +1491,52 @@ window.complianceTests = [
         name: 'toArray( )',
         tests: [
           ['$("<div></div><li></li>").toArray()', "Two elements"],
+        ]
+      }
+    ]
+  },
+  {
+    name: '.toggle()',
+    tests: [
+      {
+        name: '.toggle(  )',
+        tests: [
+          ['$("<i></i>").toggle()', "Seems jQuery has a bug here!"],
+          ['$("<i></i>").toggle().toggle()', "jQuery behaves really strange here..."],
+          ['$("<i></i>").toggle().toggle().toggle()', "keep on toggling, I wont care!"],
+          ['$("<i></i>").appendTo("body").toggle()', "Ok, I see, the strange behaviour above is because element isnt added yet. But .hide() *does* work in jQuery, before element is added"],
+          ['$("<i></i>").toggle().appendTo("body")', "So, does jQuery 'remember'? - no, toggles are lost"],
+          ['$("<p style=\'display:none\'></p>").appendTo("body").toggle()', "Block element, hidden with css"],
+          ['$("<p style=\'display:inline-block\'></p>").appendTo("body").toggle().toggle()', ""],
+        ]
+      },
+      {
+        name: '.toggle( display )',
+        tests: [
+          ['$("<p></p>").appendTo("body").toggle(false)', ".toggle(false) is the same as .hide()"],
+          ['$("<p style=\'display:none\'></p>").appendTo("body").toggle(false)', ".toggle(false) is the same as .hide()"],
+          ['$("<p></p>").appendTo("body").toggle(true)', ".toggle(true) is the same as .show()"],
+          ['$("<p style=\'display:none\'></p>").appendTo("body").toggle(true)', ".toggle(false) is the same as .show()"],
+        ]
+      },
+      {
+        name: '.toggle( duration, complete )',
+        tests: [
+        ]
+      },
+      {
+        name: '.toggle( options )',
+        tests: [
+        ]
+      },
+    ]
+  },
+  {
+    name: '.trigger()',
+    tests: [
+      {
+        name: 'trigger( )',
+        tests: [
         ]
       }
     ]

@@ -435,7 +435,7 @@ if (isFeatureEnabled('prepend') || isFeatureEnabled('append') || isFeatureEnable
   enableFeatureByNameId('clone');
 }
 
-if (isFeatureEnabled('hide')) {
+if (isFeatureEnabled('hide') || isFeatureEnabled('toggle')) {
   enableFeatureByNameId('css');
 }
 if (isFeatureEnabled('filter') || isFeatureEnabled('closest')) {

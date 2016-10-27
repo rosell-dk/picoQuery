@@ -1,5 +1,5 @@
 /*
-.hide()
+.show()
 
 Description:
   Show the matched elements.
@@ -22,7 +22,8 @@ method fails". But under which circumstances are the simple method failing?
 show: function() {
 
   __ITERATE__(<@ this.e @>, <@ function(el) {
-    if ((el.style.display == 'none') || (el.style.display == '')) {
+//    if ((el.style.display == 'none') || (el.style.display == '')) {
+    if (el.style.display == 'none') {
 
       // If previously hidden with the hide() method, set display to old display value, FLAG#1
       if (el['__picoquerydata'] && el['__picoquerydata'][1]) {
