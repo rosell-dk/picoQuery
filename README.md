@@ -89,7 +89,7 @@ The complete list of methods supported wil (at least) be the following (55):
 .add(), .addBack, .addClass(), .after(), .andSelf(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .last(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .replaceWith(), .show(), .text(), .toArray(), .toggle(), .trigger()
 
 #### Features planned for 0.5 (release date: ~10/11-2016)
-- More API (14 methods in 14 days)
+- More API. I expect to work on animation methods, such as slideDown()
 - Improve the builder UI a bit (especially the method selection part)
 
 #### Features planned for 0.6:
