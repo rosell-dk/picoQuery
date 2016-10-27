@@ -54,6 +54,12 @@ var methods_meta = {
       ['.after( function-html ) => jQuery', FULL],
     ]
   ],
+  'andSelf': [
+    'http://api.jquery.com/andSelf/',
+    [
+      ['.andSelf( ) => jQuery', PARTIAL, 'jQuery sorts it in Document order. picoQuery does not do any sorting (it will in future release)'],
+    ]
+  ],
   'append': [
     'http://api.jquery.com/append/',
     [

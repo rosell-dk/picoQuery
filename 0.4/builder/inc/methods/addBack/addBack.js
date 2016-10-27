@@ -1,5 +1,5 @@
 /*
-.add()
+.addBack()
 
 Description:
   Add the previous set of elements on the stack to the current set, optionally filtered by a selector.

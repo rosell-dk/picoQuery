@@ -139,6 +139,18 @@ window.complianceTests = [
     ]
   },
   {
+    name: '.andSelf()',
+    tests: [
+      {
+        name: '.andSelf( )',
+        tests: [
+          ['$("li#item2_1").parent().andSelf()', ""],
+          ['$("#ul3").children().andSelf()', "jQuery sorts the result in Document order, picoQuery doesnt yet (because .add() doesnt yet)"],
+        ]
+      },
+    ]
+  },
+  {
     name: '.append()',
     tests: [
       {
