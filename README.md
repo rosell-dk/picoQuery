@@ -101,6 +101,9 @@ The complete list of methods supported wil be the following (51):
 #### Features planned for 0.7:
 - Optionally optimize library for execution speed rather than gzip size.
 
+#### Features planned for 1.0:
+- Support *all* jQuery methods
+
 ### Links
 - picoQuery is originally based on picoCSS, available here: https://github.com/vladocar/picoCSS
 - Here is a resource for writing code without jQuery: http://youmightnotneedjquery.com/
