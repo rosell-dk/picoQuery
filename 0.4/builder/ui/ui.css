@@ -74,6 +74,7 @@ h3.panel-title {
   height: 100%;
 }
 
+
 #code_panel textarea {
   height: 200px;
   width: 100%;
@@ -84,9 +85,18 @@ h3.panel-title {
   background-color: yellow;
   width: 100%;
 }
-#code-url {
+
+#url_panel > div > h3 {
+  display: inline-block;
+  width: 100px;
+  margin: 0;
+  font-weight: bold;
+  font-size: 14px;
+}
+#code-url, #code-url-alt {
   width: 80%;
 }
+
 
 #methods_column {
 }

@@ -148,12 +148,20 @@ $inline_all_helpers = FALSE;
 function decodeOptions($encodeOptionsString) {
 
   $firstChar = substr($encodeOptionsString, 0, 1);
-
   // ie 'addClass-css'  (/src/picoquery-0.3.0-addClass-css.min.js)
-  if (($firstChar >= 'a') && ($firstChar <= 'a')) {
-    $features = explode('-', $encodeOptionsString);
+  if (($firstChar >= 'a') && ($firstChar <= 'z') || ($firstChar == '~')) {
+
+    $features = explode('-', $encodeOptionsString);    
     foreach ($features as $index => $feature_nameid) {
-      enableFeatureByNameId($feature_nameid);
+      $invert = (substr($feature_nameid,0,2) == 'no');
+      $feature_nameid = str_replace('~', 'jQuery.', $feature_nameid);
+
+      if ($invert) {
+        disableFeatureByNameId(substr($feature_nameid,2));
+      }
+      else {
+        enableFeatureByNameId($feature_nameid);
+      }
     }
   }
   else {
@@ -301,6 +309,8 @@ Encodings currently available:
 
 if (isset($_GET['bid'])) {
   $bid = $_GET['bid'];
+//echo $bid;
+  // TODO: Make work, when bid is ALT url
   $parts = explode('.', $bid, 2);
   $features_to_include = $parts[0];
   $ext = $parts[1];

@@ -442,9 +442,11 @@ function versionChanged() {
 
 var version = location.pathname.match(/builder\/(\d\.\d\.\d)/)[1];
 
+
 function populateOptionsPanel(buildoptions) {
 //alert(JSON.stringify(buildoptions));
 //console.log(buildoptions);
+
   buildoptions.sort(function (a, b) {
     if (a.nameid < b.nameid) {
       return -1;
@@ -466,7 +468,7 @@ function populateOptionsPanel(buildoptions) {
       label = meta[0];
     }
     
-    var html = '<div class="buildoption" nameid=""><input id="buildoption_' + index + '" type="checkbox" value="' + index + '" default_enabled="true"></input><label for="buildoption_' + index + '">' + label + '</label>';
+    var html = '<div class="buildoption"><input id="buildoption_' + index + '" type="checkbox" value="' + index + '" default_enabled="true" data-name-id="' + buildoption['nameid'] + '"></input><label for="buildoption_' + index + '">' + label + '</label>';
 
     if (meta && meta[1]) {
       var helpicon = '<span class="icon-info"></span>';
@@ -539,7 +541,7 @@ function populateOptionsPanel(buildoptions) {
       label = '.' + label;
     }
 
-    var html = '<div class="buildoption" nameid=""><input id="buildoption_' + index + '" type="checkbox" value="' + index + '"></input><label for="buildoption_' + index + '">' + label + '</label>';
+    var html = '<div class="buildoption"><input id="buildoption_' + index + '" type="checkbox" value="' + index + '" data-name-id="' + buildoption['nameid'] + '"></input><label for="buildoption_' + index + '">' + label + '</label>';
     if (meta) {
 
       var warn = (sigmap[PARTIAL] || sigmap[NONE]);
@@ -594,58 +596,49 @@ function populateOptionsPanel(buildoptions) {
 //alert($('.buildoption')[0]);
 }
 
+function buildBuildExt() {
+  var readability = $('input[name="readability"]:checked').attr('value');
+  var optimizeFor = $('input[name="optimizefor"]:checked').attr('value');
+  var inlining = $('input[name="inlining"]:checked').attr('value');
 
+  var ext = '';
+  if (inlining != 'inline-optimal') {
+    ext = inlining + '.';
+  }
+  if (optimizeFor == 'speed') {
+    ext += 'speed.';
+  }
+  if (readability == 'production') {
+    ext += 'min.';
+  }
+  ext += 'js';
+  return ext;
+}
+
+function buildFlagsFromCheckboxes($checkboxes) {
+  var flags = [];
+  var maxI = 0;
+  $checkboxes.each(function() {
+    var i = $(this).val() - 1;
+    maxI = Math.max(i, maxI);
+
+    var invertFlag = ($(this).attr('default_enabled') == 'true');
+    if (invertFlag^$(this).is(':checked')) {
+      flags[i] = '1';
+    }
+//      flags += ($(this).is(':checked') ? '1' : '0');
+  });
+  for (var i=0; i<maxI; i++) {
+    if (flags[i] != '1') {
+      flags[i] = '0';
+    }
+  }
+  return flags;
+}
 function buildBuildId() {
 
   // Version
 //  var v = $('#version_selector').val();
-
-
-/*
-  This is commented out, because it does not fill in gaps,
-  if for example a build option will be removed, we would have a problem
-
-  function calculateHexFromCheckboxes($checkboxes) {
-    var flags = '';
-    $checkboxes.each(function() {
-      flags += ($(this).is(':checked') ? '1' : '0');
-    });
-    // convert flags to hex
-    var hex = '';
-    for (var i=0; i<flags.length; i+=4) {
-      var fourflags = flags.substr(i, 4).split('').reverse().join('');
-      hex += parseInt(fourflags, 2).toString(16);
-    }
-    return hex;
-  }*/
-  function calculateHexFromCheckboxes($checkboxes) {
-    var flags = [];
-    var maxI = 0;
-    $checkboxes.each(function() {
-      var i = $(this).val() - 1;
-      maxI = Math.max(i, maxI);
-
-      var invertFlag = ($(this).attr('default_enabled') == 'true');
-      if (invertFlag^$(this).is(':checked')) {
-        flags[i] = '1';
-      }
-//      flags += ($(this).is(':checked') ? '1' : '0');
-    });
-    for (var i=0; i<maxI; i++) {
-      if (flags[i] != '1') {
-        flags[i] = '0';
-      }
-    }
-
-
-    // convert flags to hex string
-    var hex = '';
-    for (var i=0; i<flags.length; i+=4) {
-      var fourflags = flags.slice(i, i+4).reverse().join('');
-      hex += parseInt(fourflags, 2).toString(16);
-    }
-    return hex;
-  }
 
   function dec2base64(dec) {
     function chr(charCode) {
@@ -673,23 +666,7 @@ function buildBuildId() {
     return '?';
   }
   function calculateBase64FromCheckboxes($checkboxes) {
-    var flags = [];
-    var maxI = 0;
-    $checkboxes.each(function() {
-      var i = $(this).val() - 1;
-      maxI = Math.max(i, maxI);
-
-      var invertFlag = ($(this).attr('default_enabled') == 'true');
-      if (invertFlag^$(this).is(':checked')) {
-        flags[i] = '1';
-      }
-//      flags += ($(this).is(':checked') ? '1' : '0');
-    });
-    for (var i=0; i<maxI; i++) {
-      if (flags[i] != '1') {
-        flags[i] = '0';
-      }
-    }
+    var flags = buildFlagsFromCheckboxes($checkboxes);
 
     // convert flags to base64 string
     var result = '';
@@ -701,57 +678,44 @@ function buildBuildId() {
     return result;
   }
 
-  // Comments
-//  var commentFlagsHex = calculateHexFromCheckboxes($('#commenting_panel .checkbox-list input'));
-  
-  // Minimizer
-//  var minFlagsHex = calculateHexFromCheckboxes($('#minify_panel .checkbox-list input'));
-
-  // Compactness
-  var compactnessFlagsHex = '';
-
-/*
-  switch ($('input[name="compactness"]:checked').attr('value')) {
-    case 'min':
-      compactnessFlagsHex = '0';
-      break;
-    case 'optimized':
-      compactnessFlagsHex = '3';
-      break;
-    case 'default':
-      compactnessFlagsHex = '5';
-      break;
-    case 'devel':
-      compactnessFlagsHex = '9';
-      break;
-  }
-*/
-  var readability = $('input[name="readability"]:checked').attr('value');
-  var optimizeFor = $('input[name="optimizefor"]:checked').attr('value');
-  var inlining = $('input[name="inlining"]:checked').attr('value');
-
-  var ext = '';
-  if (inlining != 'inline-optimal') {
-    ext = inlining + '.';
-  }
-  if (optimizeFor == 'speed') {
-    ext += 'speed.';
-  }
-  if (readability == 'production') {
-    ext += 'min.';
-  }
-  ext += 'js';
+  var $checkboxes = $('.buildoption > input');
 
   // buildoptions
-//  var buildoptionsHex = calculateHexFromCheckboxes($('.buildoption > input'));
-//  bid = compactnessFlagsHex + '-A' + buildoptionsHex;
-
-  var buildoptions64 = calculateBase64FromCheckboxes($('.buildoption > input'));
-  bid = 'B' + buildoptions64 + '.' + ext;
+  var buildoptions64 = calculateBase64FromCheckboxes($checkboxes);
+  bid = 'B' + buildoptions64 + '.' + buildBuildExt();
   
 
 //  bid = v + '-' + commentFlagsHex + '-' + minFlagsHex + '-' + buildoptionsHex;
   return bid;
+}
+
+function buildBuildIdAlt() {
+//  console.log(window.buildoptions)
+
+  var $checkboxes = $('.buildoption > input');
+
+  // If all checkboxes are checked, return full
+  if ($checkboxes.toArray().every(function(el) {
+    return $(el).is(':checked');
+  })) {
+    return 'full.' + buildBuildExt();
+  }
+
+
+  var nameIds = [];
+  $checkboxes.each(function() {
+    var invert = ($(this).attr('default_enabled') == 'true');
+    var checked = $(this).is(':checked');
+    var nameIdEncoded = $(this).attr('data-name-id').replace('jQuery.', '~');
+    if (checked && !invert) {
+      nameIds.push(nameIdEncoded);
+    }
+    else if (!checked && invert) {
+      nameIds.push('no' + nameIdEncoded);
+    }
+  });
+
+  return nameIds.join('-') + '.' + buildBuildExt();
 }
 
 function setBuildId(buildId) {
@@ -958,19 +922,28 @@ function generateCode() {
   var buildId = buildBuildId();
 
   var filename = 'picoquery-' + version + '-' + buildBuildId();
+  var filenameAlt = 'picoquery-' + version + '-' + buildBuildIdAlt();
 
   var localBuildUrl = 'build.php?bid=' + buildId;
   var localBuildUrlSrc = '/src/' + filename;
+  var localBuildUrlSrcAlt = '/src/' + filenameAlt;
   var cdnUrl = 'http://cdn.picoquery.com/' + filename;
+  var cdnUrlAlt = 'http://cdn.picoquery.com/picoquery-' + filenameAlt;
+
   var cdnUrlProxy = 'get-build-from-cdn.php?filename=' + filename;
 
   var urlLink = (useCDN ? cdnUrl : localBuildUrlSrc);
+  var urlLinkAlt = (useCDN ? cdnUrlAlt : localBuildUrlSrcAlt);
   var buildUrl = (useCDN ? cdnUrlProxy : localBuildUrl);
 
 
   $('#code').html('...building...');
   $('#code-link').attr('href', urlLink);
   $('#code-url').val(urlLink);
+
+  $('#code-link-alt').attr('href', urlLinkAlt);
+  $('#code-url-alt').val(urlLinkAlt);
+
   $('#compliancetest-link').attr('href', '/lab/compliance-test/?frameworks=jquery-1.12.4.min.js,' + filename);
 
 
