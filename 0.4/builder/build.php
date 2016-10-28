@@ -306,76 +306,53 @@ if (isset($_GET['bid'])) {
   $ext = $parts[1];
   decodeOptions($features_to_include);
 
-  switch ($ext) {
-    case 'small.min.js':
-    case 'min.js':
-      $compactness = 0;
+  $ext_parts = explode('.', $ext, 2);
+  $inlining = $ext_parts[0];
+  switch ($inlining) {
+    case 'inline-all':
+    case 'minimal-inlining':
+    case 'no-inlining':
+      $optimize_ext = $ext_parts[1];
       break;
-    case 'small.js':
-      $compactness = 3;
+    default:
+      $optimize_ext = $ext;
+      $inlining = 'inline-optimal';
+  }
+//print_r($ext_parts);
+//echo $inlining;
+
+  $optimize_for;
+  switch ($optimize_ext) {
+    case 'min.js':
+      $production = TRUE;
+      $optimize_for = 'size';
+      break;
+    case 'speed.min.js':
+      $production = TRUE;
+      $optimize_for = 'speed';
+      break;
+    case 'speed.js':
+      $production = FALSE;
+      $optimize_for = 'speed';
       break;
     case 'js':
-      $compactness = 5;
-      break;
-    case 'devel.js':
-      $compactness = 9;
+      $production = FALSE;
+      $optimize_for = 'readability';
       break;
   }
-
-}
-/*
-elseif (isset($_GET['file'])) {
-  print_r($_GET);
-}*/
-elseif (isset($_GET['v'])) {
-//  print_r($_GET);
-
-
-  $v = $_GET['v'];
-
-  
-  if (isset($_GET['compactness'])) {
-    $compactness = $_GET['compactness'];
-    if ($compactness == 'max') {
-      $compactness = 10;
-    }
-    else {
-      $compactness = intval($_GET['compactness']);
-    }
+  if ($production) {
+    $use_optimized_methods = TRUE;
+    $minify_all = TRUE;
+    $use_real_small_function_names_for_helpers = TRUE;
   }
   else {
-/*
-    $comments = isset($_GET['comments']) ? $_GET['comments'] : '';
-    if ($comments == 'none') {
-      $comments = '';
-    }
-    list($comments_build_id, $comments_method_signatures, $comments_method_description, $comments_inline, $comments_devel_notes) = flagnames2flagsarray(array('build_id', 'method_signatures', 'method_description', 'inline', 'devel_notes'), explode(',', $comments));
-
-    $minify = isset($_GET['minify']) ? $_GET['minify'] : 'functions,all';
-    if ($minify == 'none') {
-      $minify = '';
-    }
-
-    list($minify_functions, $minify_all) = flagnames2flagsarray(array('functions', 'all'), explode(',', $minify));
-    */
+    $use_optimized_methods = FALSE;
+    $minify_all = FALSE;
+    $use_real_small_function_names_for_helpers = FALSE;
   }
-
+  $minify_functions = TRUE;
+  $comments_inline = TRUE;
 }
-
-if (isset($compactness)) {
-  $comments_devel_notes = $compactness <= 9;
-  $comments_inline = $compactness <= 8;
-  $comments_method_signatures = $compactness <= 7;
-
-  $minify_functions = $compactness <= 6;
-  $comments_method_description = $compactness <= 5;
-  $use_optimized_methods = $compactness <= 4;
-  $use_real_small_function_names_for_helpers = $compactness <= 3;
-
-  $minify_all = $compactness <= 2;
-  $comments_build_id = $compactness <= 1;
-}
-
 
 if (isFeatureEnabled('builderurl')) {
   // Calculate builder url
@@ -397,20 +374,6 @@ if (isFeatureEnabled('builderurl')) {
     $code .= decbase64(intval($sixflags, 2));
   }
   $code = rtrim($code, '0');
-
-  $ext = 'js';
-  switch ($compactness) {
-    case 0:
-      $ext = 'min.js';
-      break;
-    case 3:
-      $ext = 'small.js';
-      break;
-    case 5:
-      $ext = 'js';
-      break;
-  }
-    
   $bid = $code . '.' . $ext;
   $builder_url = "picoquery.com/builder/" . $version . "/?" . $bid;
 }
@@ -546,10 +509,12 @@ function indent($js, $indent_levels = 0, $indent_first_line = FALSE) {
 }
 
 
-function include_javascript($filename) {
+function include_javascript($filename_without_ext) {
   ob_start();
   global $bugfix_version;
-  
+  global $optimize_ext;
+  global $optimize_for;
+
 /*  $bugfixes = [
     'constructor.js' => array(
       'version' => 1,
@@ -563,7 +528,22 @@ function include_javascript($filename) {
   else {
     include($filename);
   }*/
-  include($filename);
+
+  if (file_exists($filename_without_ext . '.' . $optimize_ext)) {
+    include($filename_without_ext . '.' . $optimize_ext);
+  }
+  else {
+    if (($optimize_ext == 'speed.min.js') && (file_exists($filename_without_ext . '.min.js'))) {
+      include($filename_without_ext . '.min.js');
+    }
+    else if (($optimize_ext == 'speed.js') && (file_exists($filename_without_ext . '.speed.js'))) {
+      include($filename_without_ext . '.speed.js');
+    }
+    else {
+      include($filename_without_ext . '.js');
+    }
+  }
+
 
   $js = trim(ob_get_clean());
 
@@ -602,12 +582,7 @@ function include_javascript($filename) {
 function include_method($feat_nameid, $type = 'instance') {
   global $use_optimized_methods;
   
-  if ($use_optimized_methods) {
-    $js = include_javascript('inc/methods/' . $feat_nameid . '/' . $feat_nameid . '.min.js');
-  }
-  else {
-    $js = include_javascript('inc/methods/' . $feat_nameid . '/' . $feat_nameid . '.js');
-  }
+  $js = include_javascript('inc/methods/' . $feat_nameid . '/' . $feat_nameid);
 
   // If "array-like" feature isn't disabled, substitute "this.e[...]" with "this[...]"
   // TODO: Create the feature, and check it.
@@ -691,13 +666,13 @@ function include_methods($type = 'instance') {
 
 function include_constructor() {
   global $use_optimized_methods;
+
+  $js = include_javascript('inc/constructor');
   
   if ($use_optimized_methods) {
-    $js = include_javascript('inc/constructor.min.js');
     $js = indent($js, 1, TRUE);
   }
   else {
-    $js = include_javascript('inc/constructor.js');
     $js = indent($js, 1, TRUE);
   }
 
@@ -926,7 +901,18 @@ function prepare_helpers() {
 
     // Start output buffer so we can indent
     ob_start(); 
-    include('inc/helpers/' . $helper[0] . '.inc');
+
+    $filename_without_ext = 'inc/helpers/' . $helper[0] . '/' . $helper[0];
+
+    global $optimize_for;
+    if (($optimize_for == 'speed') && (file_exists($filename_without_ext . '.speed.js'))) {
+      include($filename_without_ext . '.speed.js');
+    }
+    else {
+      include($filename_without_ext . '.js');
+    }
+
+//    include('inc/helpers/' . $helper[0] . '/' . $helper[0] . '.inc');
     $js = ob_get_clean();
 
     global $helpers_output;
@@ -975,45 +961,87 @@ function _process_helpers($js, $step) {
 //$js = 'STEP:' . $step . "\n" . $js;
 
   foreach ($helpers as $i => $helper) {
+    $inline_this_helper;
 
     // Find out if a call to the helper is in the sourcecode
     $numCallsToHelper = preg_match_all('/__' . $helper[0] . '__\\s*\(/', $js);
-//echo $helper[0] . ':' . $numCallsToHelper . '\n';
-    // HACK to make ITERATE useable in helpers
-/*
-    if ($helper == 'ITERATE') {
-      numCallsToHelper = 2;
-    }*/
-    global $inline_all_helpers;
-//$inline_all_helpers = TRUE;
-// ($helper[0] == 'EACH') || 
-    $treshold = 8;
-    if (($helper[0] == 'REMOVE_DUPLICATES') ||
-      ($helper[0] == 'REMOVE_DUPLICATES_AND_NULLS')) {
-        if (isFeatureEnabled('jQuery.noConflict')) {
-          // We are running with variant #2, and it doesn't pay off to inline variant #2
-          // (see REMOVE_DUPLICATES_AND_NULLS.md)
-          $treshold = 1;
-        }
+    if ($numCallsToHelper == 0) {
+      continue;
     }
-    if ($helper[0] == 'DOM_MANIP') {
-      $treshold = 1;
-    }
+
+    // Some helpers must always be inlined, even in "no inlining" mode
     if (($helper[0] == 'PUSH_STACK') ||
       ($helper[0] == 'PUSH_STACK_SINGLE') ||
       ($helper[0] == 'PUSH_STACK_THIS') ||
       ($helper[0] == 'PUSH_STACK_JQ') ||
       ($helper[0] == 'RETURN_PUSH_STACK_JQ')) {
-      // These must always be inlined
-        $treshold = 9999;
+        $inline_this_helper = TRUE;
     }
+    else {
+      global $inlining;
+      switch ($inlining) {
+        case 'no-inlining':
+          $inline_this_helper = FALSE;
+          break;
+        case 'inline-all':
+          $inline_this_helper = TRUE;
+          break;
+        case 'minimal-inlining':
+        case 'inline-optimal':
+          global $optimize_for;
+          if (($optimize_for == 'speed') && ($inlining == 'inline-optimal')) {
+            $inline_this_helper = TRUE;
+            break;
+          }
+          if ($inlining == 'minimal-inlining') {
+            $treshold = 1;
+          }
+          else {
 
-//      $treshold = 0;
-    if ($step == 2) {
-      // we currently only do inlining in step 2 (easier)
-//      $inline_all_helpers = TRUE;
+            // Set treshold
+            // It will be handled in a case further down...
+
+            // Default treshold
+            $treshold = 8;
+
+            // It seems it always pays off to inline the following methods:
+            if (in_array($helper[0], array('ITERATE', 'IS_UNDEFINED', 'TO_ARRAY', 'IS_FUNCTION', 'MAP', 'IS_STRING'))) {
+              $treshold = 90;
+            }
+
+            if (($helper[0] == 'REMOVE_DUPLICATES') ||
+              ($helper[0] == 'REMOVE_DUPLICATES_AND_NULLS')) {
+                if (isFeatureEnabled('jQuery.noConflict')) {
+                  // We are running with variant #2, and it doesn't pay off to inline variant #2
+                  // (see REMOVE_DUPLICATES_AND_NULLS.md)
+                  // EDIT: actually, it does.
+                  $treshold = 91;
+                }
+            }
+            if ($helper[0] == 'DOM_MANIP') {
+              $treshold = 1;
+            }
+        //      $treshold = 0;
+            if ($step == 2) {
+              // we currently only do inlining in step 2 (easier)
+        //      $inline_all_helpers = TRUE;
+            }
+          }
+          $inline_this_helper = ($numCallsToHelper <= $treshold);
+          break;
+      }
     }
-    if (($inline_all_helpers) || (($numCallsToHelper > 0) && ($numCallsToHelper <= $treshold))) {
+//$inline_all_helpers = TRUE;
+// ($helper[0] == 'EACH') || 
+
+    if (!$inline_this_helper) {
+      $helpers_needed[] = $i;
+
+      // Fix function calls ("__ITERATE__(" => "forEach(", etc)
+      global $use_real_small_function_names_for_helpers;
+      $js = preg_replace('/__' . $helper[0] . '__\\s*\(/', $helper[$use_real_small_function_names_for_helpers ? 2 : 1] . '(', $js);
+    }
+    else {
 
       /* 
 
@@ -1107,14 +1135,6 @@ function _process_helpers($js, $step) {
 
       }
     }
-    else if ($numCallsToHelper >= $treshold) {
-      $helpers_needed[] = $i;
-
-      // Fix function calls ("__ITERATE__(" => "forEach(", etc)
-      global $use_real_small_function_names_for_helpers;
-      $js = preg_replace('/__' . $helper[0] . '__\\s*\(/', $helper[$use_real_small_function_names_for_helpers ? 2 : 1] . '(', $js);
-    }
-
   }
 
   $helper_js = '';

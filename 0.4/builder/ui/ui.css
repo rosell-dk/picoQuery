@@ -129,19 +129,26 @@ h3.panel-title {
   max-width: 100%;
 }
 
-.buildoption {
+.buildoption,
+.buildversion {
   position: relative;
 }
-.buildoption label {
+.buildoption label,
+.buildversion label {
   width: 100%;
   display: inline-block;
   width: 165px;
 }
-.buildoption .help-icon {
+
+/* Help icons and popup  */
+/* --------------------- */
+
+.help-icon {
 /*  display: none;*/
   position: absolute;
   right: 0;
   top: 0;
+  cursor: pointer;
 /*  float: right;*/
 /*
   text-align: center;
@@ -160,6 +167,56 @@ h3.panel-title {
 
 */
 }
+
+.buildoption:hover {
+/*  background-color: #ddd;*/
+}
+.help-icon:hover {
+  display: block;
+}
+
+.help-icon img {
+  width: 16px;
+}
+.help-icon a {
+  cursor: pointer;
+  text-decoration: none;
+  color: #111;
+}
+.help-icon.warning {
+  /*
+  color: #aa0;
+  background-color: #ff7;
+  */
+}
+
+.helptext {
+  display: none;
+  position: absolute;
+  z-index:991;
+  border: 1px solid #111;
+  background-color: #eee;
+  margin: 5px 0 0 25px;
+  padding: 10px;
+  min-width: 170px;
+}
+.buildoption:nth-child(n+13) .helptext {
+  left: 200px;
+  bottom: -20px;
+}
+
+.buildversion .helptext {
+  min-width: 350px;
+}
+/*
+.buildoption:hover .helptext {
+  display: block;
+}*/
+
+
+/* Help-popups in build options */
+/* ---------------------------- */
+
 .buildoption .help-icon .incomplete,
 .buildoption .help-icon .complete {
   text-align: center;
@@ -180,50 +237,6 @@ h3.panel-title {
 /*  background-color: #3366ff;*/
   background-color: #99dd00;
 }
-.buildoption:hover {
-/*  background-color: #ddd;*/
-}
-.buildoption:hover .help-icon {
-  display: block;
-}
-
-.buildoption .help-icon img {
-  width: 16px;
-}
-.buildoption .help-icon a {
-  cursor: pointer;
-  text-decoration: none;
-  color: #111;
-}
-.buildoption .help-icon.warning {
-  /*
-  color: #aa0;
-  background-color: #ff7;
-  */
-}
-
-.buildoption .helptext {
-  display: none;
-  position: absolute;
-  z-index:991;
-  border: 1px solid #111;
-  background-color: #eee;
-  margin: 5px 0 0 25px;
-  padding: 10px;
-  min-width: 170px;
-}
-.buildoption:nth-child(n+13) .helptext {
-  left: 200px;
-  bottom: -20px;
-}
-
-#general_panel .buildoption .helptext {
-  min-width: 350px;
-}
-/*
-.buildoption:hover .helptext {
-  display: block;
-}*/
 .buildoption .helptext h4 {
   white-space: nowrap;
   display: block;

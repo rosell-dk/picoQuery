@@ -568,7 +568,7 @@ function populateOptionsPanel(buildoptions) {
 
   $('.buildoption').change(generateCode);
 
-  $('.buildoption .help-icon').hover(function() {
+  $('.buildoption .help-icon, .buildversion .help-icon').hover(function() {
     $(this).parent('div').find('.helptext').show();
   }, function() {
     $(this).parent('div').find('.helptext').hide();
@@ -726,7 +726,21 @@ function buildBuildId() {
       break;
   }
 */
-  var ext = $('input[name="compactness"]:checked').attr('value');
+  var readability = $('input[name="readability"]:checked').attr('value');
+  var optimizeFor = $('input[name="optimizefor"]:checked').attr('value');
+  var inlining = $('input[name="inlining"]:checked').attr('value');
+
+  var ext = '';
+  if (inlining != 'inline-optimal') {
+    ext = inlining + '.';
+  }
+  if (optimizeFor == 'speed') {
+    ext += 'speed.';
+  }
+  if (readability == 'production') {
+    ext += 'min.';
+  }
+  ext += 'js';
 
   // buildoptions
 //  var buildoptionsHex = calculateHexFromCheckboxes($('.buildoption > input'));
@@ -734,7 +748,6 @@ function buildBuildId() {
 
   var buildoptions64 = calculateBase64FromCheckboxes($('.buildoption > input'));
   bid = 'B' + buildoptions64 + '.' + ext;
-
   
 
 //  bid = v + '-' + commentFlagsHex + '-' + minFlagsHex + '-' + buildoptionsHex;
@@ -821,11 +834,77 @@ function setBuildId(buildId) {
   }
 
 //  var tokens = buildId.split('-');
-  var re = /(.*)\.(.*)/g
+
+  var parts = buildId.split('.');
+  var encodedOptionString = parts.shift();
+
+  var inlining;
+  switch (parts[0]) {
+    case 'inline-all':
+    case 'minimal-inlining':
+    case 'no-inlining':
+      inlining = parts[0]
+      break;
+    default:
+      inlining = 'inline-optimal';
+      parts.unshift('');
+  }
+  var optimizeFor;
+  if (parts[1] == 'speed') {
+    optimizeFor = 'speed';      
+  }
+  else {
+    optimizeFor = 'size';
+    parts.unshift('');
+  }
+  
+  var readability;
+  if (parts[2] == 'min') {
+    readability = 'production';      
+  }
+  else {
+    readability = 'human';
+    parts.unshift('');
+  }
+  
+  // inlining
+  $('input[name="inlining"][value="' + inlining + '"]').prop("checked", true);
+
+  // optimizefor
+  $('input[name="optimizefor"][value="' + optimizeFor + '"]').prop("checked", true);
+
+  // readability
+  $('input[name="readability"][value="' + readability + '"]').prop("checked", true);
+
+
+/*
+  var re = /([^.]*)\.(.*)/g
   var result = re.exec(buildId);
   var encodedOptionString = result[1];
   var ext = result[2];
 
+console.log(buildId);
+console.log(ext);
+
+  var re = /([^.]*)\.(.*)/g
+  var ext_parts = re.exec(ext);
+  var optimize_ext;
+  if (ext_parts) {
+    var inlining = ext_parts[1];
+    switch (inlining) {
+      case 'inline-all':
+      case 'minimal-inlining':
+      case 'no-inlining':
+        optimize_ext = ext_parts[2];
+        break;
+      default:
+        inlining = 'inline-optimal';
+    }
+  }
+  else {
+    optimize_ext = 'js';
+    inlining = 'inline-optimal';
+  }*/
 
   // Version
 //  var version = tokens[0];
@@ -835,18 +914,9 @@ function setBuildId(buildId) {
 //  var commentsFlags = hexstr2flagsarray(tokens[0], 2);
 //  setCheckboxesByFlags($('#commenting_panel .checkbox-list input'), commentsFlags);
 
-  // compactness
-  $('input[name="compactness"][value="' + ext + '"]').prop("checked", true);
 
-
-  // Minify
-/*
-  var minify = tokens[1];
-  var minifyFlags = hexstr2flagsarray(minify, 1);
-  setCheckboxesByFlags($('#minify_panel .checkbox-list input'), minifyFlags);*/
 
   // buildoptions
-
   var encoding = encodedOptionString[0];
   var code = encodedOptionString.substr(1);
 
@@ -974,7 +1044,7 @@ $(document).ready(function() {
   $('#version_selector').on('change', versionChanged);
 */
 
-  $('[name="compactness"]').on('change', function() {
+  $('[name="readability"],[name="optimizefor"],[name="inlining"]').on('change', function() {
 //    alert('t');
 //    $('.buildoption input').prop('checked', $(this).is(':checked'));
     generateCode();
