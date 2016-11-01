@@ -320,8 +320,8 @@ if (isset($_GET['bid'])) {
   $inlining = $ext_parts[0];
   switch ($inlining) {
     case 'inline-all':
-    case 'minimal-inlining':
-    case 'no-inlining':
+    case 'inline-once':
+    case 'inline-never':
       $optimize_ext = $ext_parts[1];
       break;
     default:
@@ -542,7 +542,7 @@ function include_javascript($filename_without_ext) {
   }*/
 
 //$optimize_ext = 'js';
-// http://picoquery/lab/compliance-test/?frameworks=picoquery-0.4.0-full.inline-all.js,picoquery-0.4.0-full.no-inlining.js,picoquery-0.4.0-full.inline-all.min.js,picoquery-0.4.0-full.no-inlining.min.js&group=all&onlyfails
+// http://picoquery/lab/compliance-test/?frameworks=picoquery-0.4.0-full.inline-all.js,picoquery-0.4.0-full.inline-never.js,picoquery-0.4.0-full.inline-all.min.js,picoquery-0.4.0-full.inline-never.min.js&group=all&onlyfails
 
   $ext = $optimize_ext;
 
@@ -1018,20 +1018,20 @@ function _process_helpers($js, $step, $helpers) {
     else {
       global $inlining;
       switch ($inlining) {
-        case 'no-inlining':
+        case 'inline-never':
           $inline_this_helper = FALSE;
           break;
         case 'inline-all':
           $inline_this_helper = TRUE;
           break;
-        case 'minimal-inlining':
+        case 'inline-once':
         case 'inline-optimal':
           global $optimize_for;
           if (($optimize_for == 'speed') && ($inlining == 'inline-optimal')) {
             $inline_this_helper = TRUE;
             break;
           }
-          if ($inlining == 'minimal-inlining') {
+          if ($inlining == 'inline-once') {
             $treshold = 1;
           }
           else {

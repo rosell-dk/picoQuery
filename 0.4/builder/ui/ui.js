@@ -805,8 +805,8 @@ function setBuildId(buildId) {
   var inlining;
   switch (parts[0]) {
     case 'inline-all':
-    case 'minimal-inlining':
-    case 'no-inlining':
+    case 'inline-once':
+    case 'inline-never':
       inlining = parts[0]
       break;
     default:
@@ -857,8 +857,8 @@ console.log(ext);
     var inlining = ext_parts[1];
     switch (inlining) {
       case 'inline-all':
-      case 'minimal-inlining':
-      case 'no-inlining':
+      case 'inline-once':
+      case 'inline-never':
         optimize_ext = ext_parts[2];
         break;
       default:
