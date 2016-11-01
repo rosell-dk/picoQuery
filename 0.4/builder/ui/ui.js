@@ -570,7 +570,7 @@ function populateOptionsPanel(buildoptions) {
 
   $('.buildoption').change(generateCode);
 
-  $('.buildoption .help-icon, .buildversion .help-icon').hover(function() {
+  $('.help-icon').hover(function() {
     $(this).parent('div').find('.helptext').show();
   }, function() {
     $(this).parent('div').find('.helptext').hide();

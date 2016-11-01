@@ -86,12 +86,17 @@ h3.panel-title {
   width: 100%;
 }
 
-#url_panel > div > h3 {
-  display: inline-block;
-  width: 100px;
-  margin: 0;
+#url_panel > div h3 {
+  display: inline;
   font-weight: bold;
   font-size: 14px;
+}
+#url_panel .help-icon {
+  position: relative;
+  display: inline-block;
+}
+#url_panel .helptext {
+  width: 500px;
 }
 #code-url, #code-url-alt {
   width: 80%;
@@ -205,10 +210,12 @@ h3.panel-title {
   position: absolute;
   z-index:991;
   border: 1px solid #111;
-  background-color: #eee;
+  background-color: #ffffee;
   margin: 5px 0 0 25px;
-  padding: 10px;
+  padding: 15px;
   min-width: 170px;
+  line-height: 1.4;
+  font-family: sans-serif; 
 }
 .buildoption:nth-child(n+13) .helptext {
   left: 200px;
