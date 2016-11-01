@@ -3,7 +3,7 @@
 picoQuery is a customizable subset of jQuery. Its written for modern browsers and automatically falls back to jQuery on older browsers.
 
 This approach has several benefits:
-- picoQuery is <i>ultra</i>-light. Even if you choose the largest subset currently available (41 methods), its only 2.4kb zipped
+- picoQuery is <i>ultra</i>-light. Even if you choose the largest subset currently available (55 methods), its only 3kb zipped
 - If you know jQuery, there is nothing new to learn
 - If your project grows and turns out to require advanced features, migration to jQuery is as easy as including jQuery instead of picoQuery
 - jQuery syntax is very expressive, so not only is picoQuery light, but your code that relies on picoQuery, will probably also be light. Plus you get the job done quickly with "jQuery"
@@ -15,11 +15,11 @@ This approach has several benefits:
 2. Simply include that custom script instead of jQuery.
 
 ### Current subset
-The following methods is currently supported: (41)
-.addClass(), .after(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .each(), .empty(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.noConflict(), .keyup(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .ready(), .remove(), .removeAttr(), .removeClass(), .replaceWith(), .text(), .trigger()
+The following methods is currently supported:
+.add(), .addBack, .addClass(), .after(), .andSelf(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .last(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .replaceWith(), .show(), .text(), .toArray(), .toggle(), .trigger()
 
 And its rapidly growing at a rate about one new method per day.
-Focus in the 0.4 release will be to support even more of the jQuery API. Please let me know if there is a specific method you wish to be supported.
+Focus in the 0.5 release will be to support even more of the jQuery API. Please let me know if there is a specific method you wish to be supported. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishes-for-new-methods-in-0.4) on the wiki.
 
 If you cannot wait for support of a certain method, you can add instance methods this way:
 
@@ -64,28 +64,20 @@ When more API is supported, it will be possible for plugin developers to create 
 - I have build a small tool that logs the jQuery methods used in an application real-time. Its available [here](picoquery.com/lab/feature-detect/). The purpose is of course to find out what methods are required in the picoQuery build. For the tool to be more useful, I plan to have it calculate the picoquery build id (right now it just outputs the methods used). It consist of a script that you include after you include jQuery. The script intercepts all jQuery methods in order to record the usage.
 - Future tool: A tool to merge two build ids.
 
+#### New features in 0.4.0
+- More API: .hasClass(), .data(), jQuery.data(), .show(), .toggle(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add(), .addBack(), .andSelf(), .last()
+- Optionally optimize library for execution speed rather than gzip size.
+- Added option for inlining of helpers
+- Added alternative CDN url in builder
+- Much faster build time (optimization of code which inlines helpers)
+- Restructure of include files: optimized code is moved to separate file
+- Added help texts
+
 
 ### Roadmap
 
-#### Features planned for 0.4 (will be released in approx one day):
-- Even more API! Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishes-for-new-methods-in-0.4) on the wiki.
-
-Done:
-- .hasClass(), .data(), jQuery.data(), .show(), .toggle(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add(), .addBack(), .andSelf(), .last()
-- Optionally optimize library for execution speed rather than gzip size.
-- Added option for inlining of helpers
-- Added help texts
-- Added alternative CDN url in builder
-- Restructure of include files: optimized code is moved to separate file
-- Much faster build time (optimization of code which inlines helpers)
-
-The complete list of methods supported will (at least) be the following (55): 
-.add(), .addBack, .addClass(), .after(), .andSelf(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .last(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .replaceWith(), .show(), .text(), .toArray(), .toggle(), .trigger()
-
-All that is left now is a little more testing
-
 #### Features planned for 0.5 (release date: ~16/11-2016)
-- More API. I expect to work on animation methods, such as slideDown()
+- More API. I expect to work on animation methods, such as slideDown(). Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishes-for-new-methods-in-0.4) on the wiki.
 - Improve the builder UI a bit (especially the method selection part)
 
 #### Features planned for 0.6:
