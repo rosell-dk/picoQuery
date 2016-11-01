@@ -996,7 +996,7 @@ window.complianceTests = [
       {
         name: '.html( htmlString )',
         tests: [
-          ['$("<ul></ul><ul></ul>").html("<li>item</li>").html()', " "],
+          ['$("<ul></ul><ul><b></b></ul>").html("<li>item</li>").html()', " "],
         ]
       },
       {

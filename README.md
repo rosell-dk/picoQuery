@@ -67,7 +67,7 @@ When more API is supported, it will be possible for plugin developers to create 
 
 ### Roadmap
 
-#### Features planned for 0.4 (will be released in approx three days):
+#### Features planned for 0.4 (will be released in approx one day):
 - Even more API! Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishes-for-new-methods-in-0.4) on the wiki.
 
 Done:
@@ -82,7 +82,7 @@ Done:
 The complete list of methods supported will (at least) be the following (55): 
 .add(), .addBack, .addClass(), .after(), .andSelf(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .last(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .replaceWith(), .show(), .text(), .toArray(), .toggle(), .trigger()
 
-I'm currently working on making sure that data added with the data() method, and private data are removed when .remove(), .empty(), .html() or .replaceWith() are called. 
+All that is left now is a little more testing
 
 #### Features planned for 0.5 (release date: ~16/11-2016)
 - More API. I expect to work on animation methods, such as slideDown()

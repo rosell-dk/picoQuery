@@ -10,7 +10,7 @@ $hasPrivateData = $hasPrivData0 || $hasPrivData1;
     var elems = [a];
     Array.prototype.push.apply(elems,a.getElementsByTagName("*"));
     for (z=0; elems[z] != null; z++ ) {
-      console.log('cleaning data:', elems[z]);
+//      console.log('cleaning data:', elems[z]);
       elems[z].__picoquerydata = <?php if ($hasPublicData): ?>elems[z]._picoquerydata = <?php endif; ?>void 0;
     }
 <?php endif; ?>
@@ -21,7 +21,7 @@ $hasPrivateData = $hasPrivData0 || $hasPrivData1;
     var elems = [[[ARG1]]];
     Array.prototype.push.apply(elems,[[ARG1]].getElementsByTagName("*"));
     for (z=0; elems[z] != null; z++ ) {
-      console.log('cleaning data:', elems[z]);
+//      console.log('cleaning data:', elems[z]);
       elems[z].__picoquerydata = <?php if ($hasPublicData): ?>elems[z]._picoquerydata = <?php endif; ?>void 0;
     }
 <?php endif; ?>

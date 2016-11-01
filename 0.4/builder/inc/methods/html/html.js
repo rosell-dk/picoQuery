@@ -20,7 +20,7 @@ html: function( value ) {
     // Return undefined if no item
     return (this.e[0] && this.e[0].innerHTML);
   }
-  __ITERATE__(<@ this.e @>, <@ function(item, index) {
+  __ITERATE__(<@ this.e @>, <@ function(el, index) {
     // TODO: Our constructor should support wrapMap functionality (search for "wrapMap" in jQuery source)
     // When it does, we should use that
 
@@ -33,11 +33,13 @@ html: function( value ) {
       // When these tags are found in source, or tag should be wrapped, jQuery reverts to:
 			// this.empty().append( value );
 
+    __CLEAN_DATA__(<@ el @>);
+
     if (__IS_FUNCTION__(<@ value @>)) {
-      item.innerHTML = value.call(item, index, item.innerHTML);
+      el.innerHTML = value.call(el, index, el.innerHTML);
     }
     else {
-  		item.innerHTML = value;
+  		el.innerHTML = value;
     }
   } @>);
   return this;
