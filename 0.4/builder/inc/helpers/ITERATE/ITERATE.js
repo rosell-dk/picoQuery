@@ -1,5 +1,6 @@
-(a,f) {
-  a.forEach(f);
+(a,b) {
+//  console.log('forEach',a.length,b);
+  a.forEach(b);
 }
 
 [[INLINE_VERSION]]

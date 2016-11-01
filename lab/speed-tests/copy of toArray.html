@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Performance test</title>
+  <script>
+
+//  var ps = document.getElementsByName("p");
+// https://www.sitepoint.com/measuring-javascript-functions-performance/
+// http://stackoverflow.com/questions/222841/most-efficient-way-to-convert-an-htmlcollection-to-an-array
+
+// TODO:
+// As results depends heavily on which alternative gets the "priviledge" to start,
+// Lets make a new solution. Ie we can put each test in an iframe and an icon to reload
+
+
+  var msglog = [];
+  function log(msg) {
+//    msglog.push(msg);
+    console.log(msg)
+  }
+
+
+  function testToArrayAlternatives() {
+    var alternatives = [        
+      {name:'for loop', fn:function(ps) {
+        var t0 = performance.now();
+        var a = [];
+        for (var i=0,len=ps.length; i<len; i++) {
+          a.push(ps[i]);
+        }
+        var t1 = performance.now();
+        return (t1 - t0).toFixed(4);
+      }},/*,
+      {name:'[].slice.call()', fn:function(ps) {
+        var t0 = performance.now();
+        var a = [].slice.call(ps);
+        var t1 = performance.now();
+        return (t1 - t0).toFixed(4);
+      }},*/
+      {name:'Array.prototype.slice.call()', fn:function(ps) {
+        var t0 = performance.now();
+        var a = Array.prototype.slice.call(ps);
+        var t1 = performance.now();
+        return (t1 - t0).toFixed(4);
+      }},
+      {name:'Array.from()', fn:function(ps) {
+        var t0 = performance.now();
+        var a = Array.from(ps);
+        var t1 = performance.now();
+        return (t1 - t0).toFixed(4);
+      }}/*,
+      {name:'while', fn:function(ps) {
+        var t0 = performance.now();
+
+        var len = ps.length, a = new Array(len);
+        while (len--) a[len] = ps[len];
+
+        var t1 = performance.now();
+        return (t1 - t0).toFixed(4);
+      }}*/
+    ]
+
+    var ps = document.getElementsByTagName("p");
+
+    var results = [];
+
+    var index = location.search.substr(1);
+
+/*    for (var i=0; i<alternatives.length; i++) {
+      results[i] = [];
+    }*/
+    for (var j=0; j<10; j++) {
+//      for (var i=0; i<alternatives.length; i++) {
+//      for (var i=alternatives.length; i--;) {
+//        results[index][j] = alternatives[index].fn.call(null, ps);
+        results.push(alternatives[index].fn.call(null, ps));
+  //    }
+    }
+    msg = '<label>' + alternatives[index].name + '</label><times>' + results.join(',') + '</times>';
+/*
+    var msg = results.map(function (item, index){
+      return '<label>' + alternatives[index].name + '</label><times>' + item + '</times>';
+    });
+*/
+
+    document.getElementsByTagName('body')[0].innerHTML = msg; // .join('<br>');
+  
+//    console.log(results);
+//    log(forLoop() + 'ms with for loop');
+/*
+console.log(ps);
+    var a, t0, t1;
+
+    // FOr
+
+    t0 = performance.now();
+    a = [].slice.call(ps);
+    t1 = performance.now();
+    log((t1 - t0).toFixed(4) + ' ms, with [].slice.call()');
+
+    t0 = performance.now();
+    a = Array.prototype.slice.call(ps);
+    t1 = performance.now();
+    log((t1 - t0).toFixed(4) + ' ms, with Array.prototype.slice.call()');
+
+
+    t0 = performance.now();
+    a = [];
+    for (var i = ps.length; i--;) {
+      a.push(ps[i]);
+    }
+    t1 = performance.now();
+    log((t1 - t0).toFixed(4) + ' ms, with for loop (backwards)');
+  }
+
+//  alert(msglog.join('\n'));
+*/
+var a = [];
+
+  }
+  </script>
+  <style>
+    label {display: inline-block; width: 250px;}
+    times {display: inline-block}
+  </style>
+</head>
+<body onload="testToArrayAlternatives()">
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+<p>bla bla bla</p>
+
+</body>
+</html>

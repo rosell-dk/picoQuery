@@ -1,5 +1,5 @@
 (a) {
-  [].concat.apply([], a);
+  return [].concat.apply([], a);
 }
 
 [[INLINE_VERSION]]

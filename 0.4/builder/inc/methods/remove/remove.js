@@ -19,11 +19,12 @@ Fully supported signatures:
 remove: function(selector) {
   
   var $sel = this.filter(selector||'*');
-  $sel.e.forEach(function(item) {
-    if (item.parentNode) {
-      item.parentNode.removeChild(item);
+  __ITERATE__(<@ $sel.e @>, <@ function(el) {
+    if (el.parentNode) {
+      __CLEAN_DATA__(<@ el @>);
+      el.parentNode.removeChild(el);
     }
-  });
+  } @>);
   return this;
 }
 

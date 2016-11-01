@@ -1,11 +1,12 @@
-Without support for selector, its as simple as this:
-
+### Implementation
 ```
-  this.e.forEach(function(item) {
-    if (item.parentNode) {
-      item.parentNode.removeChild(item);
+  var $sel = this.filter(selector||'*');
+  __ITERATE__(<@ $sel.e @>, <@ function(el) {
+    if (el.parentNode) {
+      __CLEAN_DATA__(<@ el @>)
+      el.parentNode.removeChild(el);
     }
-  });
+  } @>);
   return this;
 ```
 
@@ -13,11 +14,27 @@ Without support for selector, its as simple as this:
 //  return $(arr).filter(selector||'*');
 
 
+### min
+remove:function(b) {
+  this.filter(b || "*").e.forEach(function(a) {
+    a.parentNode && a.parentNode.removeChild(a);
+  });
+  return this;
+}
+
+
+### Speedtest
+https://jsperf.com/innerhtml-vs-removechild/376
+
+
 ### jQuery implementation
 
 ```
 remove: function( selector ) {
 	return remove( this, selector );
+},
+detach: function( selector ) {
+	return remove( this, selector, true );
 },
 
 function remove( elem, selector, keepData ) {
@@ -55,6 +72,8 @@ function getAll( context, tag ) {
 		jQuery.merge( [ context ], ret ) :
 		ret;
 }
+
+
 
 ```
 

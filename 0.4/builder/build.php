@@ -141,7 +141,6 @@ function flagnames2flagsarray($flag_names, $selected_flags) {
 }
 
 $use_real_small_function_names_for_helpers = TRUE;
-$use_optimized_methods = TRUE;
 $include_helpers_as_var = FALSE;
 $inline_all_helpers = FALSE;
 
@@ -310,6 +309,7 @@ Encodings currently available:
 if (isset($_GET['bid'])) {
   $bid = $_GET['bid'];
 //echo $bid;
+//print_r($_GET);
   // TODO: Make work, when bid is ALT url
   $parts = explode('.', $bid, 2);
   $features_to_include = $parts[0];
@@ -351,17 +351,19 @@ if (isset($_GET['bid'])) {
       break;
   }
   if ($production) {
-    $use_optimized_methods = TRUE;
     $minify_all = TRUE;
     $use_real_small_function_names_for_helpers = TRUE;
   }
   else {
-    $use_optimized_methods = FALSE;
     $minify_all = FALSE;
     $use_real_small_function_names_for_helpers = FALSE;
   }
   $minify_functions = TRUE;
   $comments_inline = TRUE;
+//    $use_real_small_function_names_for_helpers = FALSE;
+
+//    $minify_all = FALSE;
+//  $minify_functions = FALSE;
 }
 
 if (isFeatureEnabled('builderurl')) {
@@ -408,10 +410,10 @@ if (isFeatureEnabled('prepend') || isFeatureEnabled('append') || isFeatureEnable
   enableFeatureByNameId('clone');
 }
 
-if (isFeatureEnabled('hide') || isFeatureEnabled('toggle')) {
+if (isFeatureEnabled('hide') || isFeatureEnabled('toggle') || isFeatureEnabled('show')) {
   enableFeatureByNameId('css');
 }
-if (isFeatureEnabled('filter') || isFeatureEnabled('closest')) {
+if (isFeatureEnabled('filter') || isFeatureEnabled('closest') || isFeatureEnabled('remove')) {
   enableFeatureByNameId('parent');
 }
 if (isFeatureEnabled('next') || 
@@ -539,38 +541,52 @@ function include_javascript($filename_without_ext) {
     include($filename);
   }*/
 
-  if (file_exists($filename_without_ext . '.' . $optimize_ext)) {
-    include($filename_without_ext . '.' . $optimize_ext);
+//$optimize_ext = 'js';
+// http://picoquery/lab/compliance-test/?frameworks=picoquery-0.4.0-full.inline-all.js,picoquery-0.4.0-full.no-inlining.js,picoquery-0.4.0-full.inline-all.min.js,picoquery-0.4.0-full.no-inlining.min.js&group=all&onlyfails
+
+  $ext = $optimize_ext;
+
+//  If minified versions fail, and its unclear which...
+  switch ($filename_without_ext) {
+    case 'inc/methods/children/children':
+    case 'inc/methods/filter/filter':
+    case 'inc/methods/constructor/filter':
+    case 'inc/methods/on/on':
+    case 'inc/methods/parent/parent':
+    case 'inc/methods/ready/ready':
+    case 'inc/constructor':
+      break;
+    case 'inc/methods/remove/remove':
+//      $ext = 'js';
+      break;
+    default:
+//      echo "\n\n" . strtoupper($filename_without_ext) . "\n\n";
+//      echo "\n\n" . $filename_without_ext . '.' . $ext . "\n\n";
+  }
+
+  $filename = '';
+  if (file_exists($filename_without_ext . '.' . $ext)) {
+    $filename = $filename_without_ext . '.' . $ext;
   }
   else {
     if (($optimize_ext == 'speed.min.js') && (file_exists($filename_without_ext . '.min.js'))) {
-      include($filename_without_ext . '.min.js');
+      $filename = $filename_without_ext . '.min.js';
     }
     else if (($optimize_ext == 'speed.js') && (file_exists($filename_without_ext . '.speed.js'))) {
-      include($filename_without_ext . '.speed.js');
+      $filename = $filename_without_ext . '.speed.js';
     }
     else {
-      include($filename_without_ext . '.js');
+      $filename = $filename_without_ext . '.js';
     }
   }
 
+  if ($filename != '') {
+      echo "\n\n// **********************\n// ***** " . $filename . " *****\n// *********************\n";
+    include($filename);
+  }
 
   $js = trim(ob_get_clean());
 
-
-//  $readable_version = preg_replace('/\/\/\\s*OPTIMIZED_VERSION\\s*\/\/.*/ms', '', $js);
-//  $optimized_version = trim(preg_replace('/(.*\/\/\\s*OPTIMIZED_VERSION\\s*\/\/\\s*)/ms', '', $js));
-/*
-//  $readable_version = $optimized_version = $js;
-
-  global $use_optimized_methods;
-  if ($use_optimized_methods) {
-    $js = $optimized_version;
-  }
-  else {
-    $js = $readable_version;
-  }
-*/
 
   global $minify_functions;
   global $comments_inline;
@@ -590,7 +606,6 @@ function include_javascript($filename_without_ext) {
 
 
 function include_method($feat_nameid, $type = 'instance') {
-  global $use_optimized_methods;
   
   $js = include_javascript('inc/methods/' . $feat_nameid . '/' . $feat_nameid);
 
@@ -675,21 +690,15 @@ function include_methods($type = 'instance') {
 
 
 function include_constructor() {
-  global $use_optimized_methods;
-
-  $js = include_javascript('inc/constructor');
-  
-  if ($use_optimized_methods) {
-    $js = indent($js, 1, TRUE);
-  }
-  else {
-    $js = indent($js, 1, TRUE);
-  }
-
+  $js = include_javascript('inc/constructor');  
+  $js = indent($js, 1, TRUE);
   echo $js;
 }
 
-$helpers = array(
+$helpers_first_pass = array(
+  array('DOM_MANIP', 'domManip', 'm'),  // used in .before(), .prepend(), etc
+);
+$helpers_second_pass = array(
   // A note for choosing short names:
   // Google Closure compiler uses a,b,c,... up to g (currently)
   // We reserve [a-h] for Closure Compiler
@@ -704,25 +713,27 @@ $helpers = array(
   // Try to use common characters (gzip)
   // Use the most common characters for the most used functions.
   // Below, I put most used functions on top
-  array('ITERATE', 'forEach', 's'),     // Iterate normal array. Use instead of "for (var i=0; ...". TODO: rename to "FOREACH"
   array('TO_ARRAY', 'toArray', 't'),
-  array('IS_FUNCTION', 'isFunction', 'f'),
-  array('DOM_MANIP', 'domManip', 'm'),  // used in .before(), .prepend(), etc
-  array('IS_UNDEFINED', 'isUndefined', 'u'),
-  array('IS_STRING', 'isString', 's'),
+  array('ITERATE', 'forEach', 's'),     // Iterate normal array. Use instead of "for (var i=0; ...". TODO: rename to "FOREACH"
+  array('IS_FUNCTION', 'isFunction', 'o'),
+  array('IS_UNDEFINED', 'isUndefined', 'U'),
+  array('IS_STRING', 'isString', 'n'),
   array('FLATTEN', 'flatten', 'v'),
   array('REMOVE_DUPLICATES', 'rmDuplicates', 'D'),
   array('REMOVE_DUPLICATES_AND_NULLS', 'rmDuplicatesAndNulls', 'F'),
   array('MAP', 'map', 'M'),             // Map normal array
   array('PROPERTY_FUNC', 'prop', 'p'),  // Used with map.
-  array('EACH', 'each', 'E'),   // DEPRECATED - use ITERATE(this.e)
+  array('CLEAN_DATA', 'cleanData', 'E'),
   array('PUSH_STACK', 'pushStack', ''),                // Expects array
   array('PUSH_STACK_SINGLE', 'pushStackSingle', ''),   // Expects single element
   array('PUSH_STACK_THIS', 'pushStackThis', ''),       // Expects no arguments.
   array('PUSH_STACK_JQ', 'pushStackJQ', ''),         // Expects jQuery object
   array('RETURN_PUSH_STACK_JQ', 'retPushStackJQ', ''),         // Expects jQuery object
-
 );
+$helpers_third_pass = array(
+);
+$helpers = array_merge($helpers_first_pass, $helpers_second_pass);
+
 $helpers_output = array();
 $helpers_inline = array();
 
@@ -945,9 +956,15 @@ function prepare_helpers() {
 function process_helpers($js) {
 //  return $js;
 
-  $js = _process_helpers($js, 1);
+//  global $helpers;
+//  $js = _process_helpers($js, 1, $helpers);
+
+  global $helpers_first_pass;
+  $js = _process_helpers($js, 1, $helpers_first_pass);
 //  $js = '[[HELPERS]]' . $js;
-  $js = _process_helpers($js, 2);
+
+  global $helpers_second_pass;
+  $js = _process_helpers($js, 2, $helpers_second_pass);
 
   $js = preg_replace('/\[\[END-INCLUDE]\]/', '', $js);
 
@@ -961,23 +978,34 @@ function process_helpers($js) {
   return $js;
 }
 
-function _process_helpers($js, $step) {
-  global $helpers;
+function _process_helpers($js, $step, $helpers) {
   global $helpers_output;
   global $helpers_inline;
+//  global $helpers;
 
   $helpers_needed = [];
 //echo $js;
 //$js = 'STEP:' . $step . "\n" . $js;
 
   foreach ($helpers as $i => $helper) {
+    if ($step == 1) {
+      $helperIndex = $i;
+    }
+    else {
+      global $helpers_first_pass;
+      $helperIndex = count($helpers_first_pass) + $i;
+    }
+
     $inline_this_helper;
 
     // Find out if a call to the helper is in the sourcecode
+//        preg_match('/__' . $helper[0] . '__\\s*\((.*)\[\[END-INCLUDE\]\]/ms', $js, $matches);
+
     $numCallsToHelper = preg_match_all('/__' . $helper[0] . '__\\s*\(/', $js);
     if ($numCallsToHelper == 0) {
       continue;
     }
+//    echo 'Calls to helper: ' . $helper[0] . ':' . $numCallsToHelper;
 
     // Some helpers must always be inlined, even in "no inlining" mode
     if (($helper[0] == 'PUSH_STACK') ||
@@ -1096,7 +1124,7 @@ function _process_helpers($js, $step) {
       for ($x = 0; $x < $numCallsToHelper; $x++) {
 
         // Get the inline code, ie "typeof [[ARG1]] == "function""
-        $inline_code = $helpers_inline[$i];
+        $inline_code = $helpers_inline[$helperIndex];
 
         // Next, we substitute "[[ARG1]]" with the name of the first argument, ect.
 
@@ -1181,8 +1209,13 @@ function _process_helpers($js, $step) {
       }
     }
   }
-  if ($helper_js != '') {
-    $helper_js = "\n  // helpers\n" . $helper_js;
+  if ($step == 2) {
+    if ($helper_js != '') {
+      $helper_js = "\n  // helpers\n" . $helper_js;
+    }
+  }
+  if ($step == 1) {
+    $helper_js = '[[HELPERS]]' . $helper_js;
   }
   $js = preg_replace('/\[\[HELPERS]\]/', $helper_js, $js);
 
@@ -1193,7 +1226,7 @@ function _process_helpers($js, $step) {
 <?php if (isFeatureEnabled('fallback')):?>
 (Array.isArray ? 
 <?php endif;?>
-(function(w,d,u,$<?php if ($use_optimized_methods) {echo ',z';} // TODO: Detect if u and z are used. u can be tested For example with the javascript parser ?>) {
+(function(w,d,u,$,z) {
 <?php if (isFeatureEnabled('jQuery.noConflict')) {
   echo '  var _$ = window.$;';
 }

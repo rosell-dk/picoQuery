@@ -53,7 +53,7 @@ Supported signatures:
     We can however make the code a bit smaller with a little trick:
     el.className=(' '+el.className+' ').replace(new RegExp('\\b'+className.replace(' ','\\b|\\b')+'\\b','g'),' ');
     Optimized regex-version:
-    removeClass: function(b){return __EACH__(this,function(a){a.className=(" "+a.className+" ").replace(new RegExp("\\b"+b.replace(" ","\\b|\\b")+"\\b","g")," ")})}
+    removeClass: function(b){return __ITERATE__(this.e,function(a){a.className=(" "+a.className+" ").replace(new RegExp("\\b"+b.replace(" ","\\b|\\b")+"\\b","g")," ")})}
     The code above can produce strings that start or end with space.
     We could remove it with .trim() (http://www.w3schools.com/jsref/jsref_trim_string.asp)
     - But we take the chance that the extra space does not pose problems in any browser
@@ -90,7 +90,7 @@ Supported signatures:
     var s=' ';el.className=el.className.split(s).filter(function(v){return!(s+className+s).match(s+v+s)}).join(s);
 
     However, the space-string might get useful in other methods as well. So perhaps its worth defining on the same level 
-    as the helper functions (__EACH__, etc).
+    as the helper functions (__ITERATE__, etc).
     Defining it here costs 6 bytes (",s=' '"). Defining it locally above costs 10 bytes (because of the "var" keyword).
     So totally this version will then be cheaper! (two bytes).
     Only thing is that it occupies one of the short variable names. 

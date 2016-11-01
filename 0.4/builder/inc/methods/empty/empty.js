@@ -12,8 +12,9 @@ Fully supported signatures:
 
 */
 empty: function() {
-  __ITERATE__(<@ this.e @>, <@ function(item) {
-    item.innerHTML = '';
+  __ITERATE__(<@ this.e @>, <@ function(el) {
+    __CLEAN_DATA__(<@ el @>);
+    el.innerHTML = '';
   } @>);
   return this;
 }
