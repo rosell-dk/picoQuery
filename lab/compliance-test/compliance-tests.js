@@ -776,6 +776,8 @@ window.complianceTests = [
         tests: [
           ['$("<li>1</li><li>2</li>").empty()', " "],
           ['$("<li>1</li><li>2</li>").empty().children()', ""],
+          ['$("<ul><li>1</li><li>2</li></ul>").empty()', ""],
+          ['$("<ul><li><b>1</b></li><li>2</li></ul>").empty()', ""],
         ]
       }
     ]

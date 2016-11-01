@@ -98,12 +98,18 @@ foreach ($frameworks as $index => $framework) {
 
 
 
-<script>
-// todo: include jQuery, if it isn't
-var j$ = frameworks[0][0];
-//console.log(j$);
-var $=j$;
-</script>
+<?php
+// include jQuery, if it isn't
+if (strpos($frameworks[0], 'jquery') === FALSE) {
+  echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>' . "\n";
+  echo '<script>var j$ = $;console.log("jq", $)</script>';
+//  pushFramework('jQuery-1.12.4.min.js');
+//  echo '<script>$ = j$</script>';
+}
+else {
+  echo '<script>var j$ = frameworks[0][0];var $=j$;</script>';
+}
+?>
 <!--
 <script src="chosen_v1.6.2/chosen.jquery.min.js"></script>
 <link rel="stylesheet" href="chosen_v1.6.2/chosen.css">-->
@@ -186,6 +192,7 @@ li.odd {
 <body>
 
 <h1>Compliance test</h1>
+<?php //print_r($frameworks); echo implode(',', array_slice($frameworks,1)); ?>
 <h3 class="fighters"><span><span class="framework-selector"><?php echo implode('</span><span class="vs">and</span><span class="framework-selector">', array_slice($frameworks,1)) ?></span><span class="vs">tested against</span><?php echo $frameworks[0] ?></span></h3>
 <div id="groups"></div>
 <p>Each line in the table below represents a test. First column is the test code. Second column is the result of the test code evaluated in <?php echo $frameworks[0] ?>. Third column is the result of the test code evalaluated in <?php echo $frameworks[1] ?><?php if (count($frameworks) > 2) echo ' etc' ?>. If the results are the same, the background will be green, otherwise red.</p>

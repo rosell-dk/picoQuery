@@ -18,6 +18,111 @@ function htmlEscapeEtc(str) {
   return str;
 }
 
+function toPrint(obj) {
+  switch (typeof obj) {
+    case 'object':
+      var html = '';
+      if (obj === null) {
+        return 'null';
+      }
+      if (!obj.constructor) {
+        console.log('object without constructor?', obj);
+        return 'object without constructor?';
+
+      }
+      var className = obj.constructor.toString().match(/function (\w*)/)[1];
+      if ((className == 'DOMException') || (className == 'TypeError') || (className == 'ReferenceError') || (className == 'Error')) {
+        html = '<span class="error">' + obj.name + (obj['message'] ? '<span class="error-description">' + obj.message + '</span>' : '') + '</span>';
+      }
+      else if (className.match('^HTML[^E]*Element')) {
+        // Its an HTML Element
+//          html = '<span class="tagname" title="' + className + '">' + obj.tagName.toLowerCase() + '</span>';
+        // html = htmlEscapeEtc(j$(obj).html()); // nah, this creates innerHTML
+        // http://stackoverflow.com/questions/5744207/jquery-outer-html
+//          html = '<span class="element-html">' + htmlEscapeEtc($(obj).wrapAll('<parent>').parent().html()) + '</span>';
+        html = '<span class="element-html">' + htmlEscapeEtc(obj.outerHTML) + '</span>';
+
+        // Show all object properties
+
+/*
+        var content = [];
+        var props = [];
+        for (var prop in obj) {
+//            content.push(prop + ':' + toPrint(obj[prop]));
+          props.push(prop);
+        }
+//          html += '<span class="obj">{ ' + content.join('<span class="comma">,</span>') + ' }</span></span>';
+        html += '<span class="obj">{ ' + props.join(', ') + '</span>';*/
+
+
+/*
+        if (obj.id) {
+          html += '<span class="tagid">#' + obj.id + '</span>';
+        }
+        else if (obj.className) {
+          html += '<span class="tagclassname">.' + obj.className + '</span>';
+        }*/
+      }
+      else if (obj.splice) {  // (this is the same test as console.log performs)
+        // Its an array 
+        // - or a jQuery object, or something array-like 
+        var content = [];
+        for (var i=0; i<obj.length; i++) {
+          content.push(toPrint(obj[i]));
+        }
+        html = '<span class="array">[ ' + content.join('<span class="comma">,</span>') + ' ]</span>';
+        if (obj.ready) {
+          
+        }
+        // hm... how to test if its a jQuery / zepto / picoQuery?
+//          html += className;
+        var isJquery = false;
+        for (var i=0; i<frameworks.length; i++) {
+          if (obj instanceof frameworks[i][2]) {
+            isJquery = true;
+          }
+        }
+        if (isJquery ||
+          (window.Zepto && obj instanceof Zepto.zepto.Z) ||
+          (obj.e)) {
+          html = '$' + html;
+        }
+        else {
+          html = className + html;
+        }
+      }
+      else if ((Object.getPrototypeOf(obj) == Object.prototype ) ||
+        (className == 'NodeList2')
+      ) {
+        var content = [];
+        for (var prop in obj) {
+          content.push(prop + ':' + toPrint(obj[prop]));
+        }
+        html = '<span class="obj">{ ' + content.join('<span class="comma">,</span>') + ' }</span></span>';
+//          html = className;
+      }
+      else if (className == 'Text') {
+//          html = className + '{' + toPrint(obj.childNodes) + '}';
+        html = className + '{"' + obj.wholeText + '"}';
+
+      }
+      else if (className == 'NodeList') {
+//          html = className + '{' + toPrint(obj.childNodes) + '}';
+        html = className + '{' + toPrint([].slice.call(obj)) + '}';
+
+      }
+      else {
+        // Some kind of object, ie 'HTMLDocument', 'DocumentFragment', 'Text', 'NodeList', etc
+        // we only show the class name for unknown objects
+        html = className;
+      }
+      return html;
+    case 'string':
+      return '<span class="value">"' + htmlEscapeEtc(obj) + '"</span>';
+    default:
+      return '<span class="value">' + JSON.stringify(obj) + '</span>';
+  }
+}
 
 window.testNumber = 0;
 function testInAllFrameworks(code, description) {
@@ -58,111 +163,7 @@ function testInAllFrameworks(code, description) {
 
   $ = j$;
 
-  function toPrint(obj) {
-    switch (typeof obj) {
-      case 'object':
-        var html = '';
-        if (obj === null) {
-          return 'null';
-        }
-        if (!obj.constructor) {
-          console.log('object without constructor?', obj);
-          return 'object without constructor?';
-  
-        }
-        var className = obj.constructor.toString().match(/function (\w*)/)[1];
-        if ((className == 'DOMException') || (className == 'TypeError') || (className == 'ReferenceError') || (className == 'Error')) {
-          html = '<span class="error">' + obj.name + (obj['message'] ? '<span class="error-description">' + obj.message + '</span>' : '') + '</span>';
-        }
-        else if (className.match('^HTML[^E]*Element')) {
-          // Its an HTML Element
-//          html = '<span class="tagname" title="' + className + '">' + obj.tagName.toLowerCase() + '</span>';
-          // html = htmlEscapeEtc(j$(obj).html()); // nah, this creates innerHTML
-          // http://stackoverflow.com/questions/5744207/jquery-outer-html
-//          html = '<span class="element-html">' + htmlEscapeEtc($(obj).wrapAll('<parent>').parent().html()) + '</span>';
-          html = '<span class="element-html">' + htmlEscapeEtc(obj.outerHTML) + '</span>';
 
-          // Show all object properties
-
-/*
-          var content = [];
-          var props = [];
-          for (var prop in obj) {
-//            content.push(prop + ':' + toPrint(obj[prop]));
-            props.push(prop);
-          }
-//          html += '<span class="obj">{ ' + content.join('<span class="comma">,</span>') + ' }</span></span>';
-          html += '<span class="obj">{ ' + props.join(', ') + '</span>';*/
-
-
-/*
-          if (obj.id) {
-            html += '<span class="tagid">#' + obj.id + '</span>';
-          }
-          else if (obj.className) {
-            html += '<span class="tagclassname">.' + obj.className + '</span>';
-          }*/
-        }
-        else if (obj.splice) {  // (this is the same test as console.log performs)
-          // Its an array 
-          // - or a jQuery object, or something array-like 
-          var content = [];
-          for (var i=0; i<obj.length; i++) {
-            content.push(toPrint(obj[i]));
-          }
-          html = '<span class="array">[ ' + content.join('<span class="comma">,</span>') + ' ]</span>';
-          if (obj.ready) {
-            
-          }
-          // hm... how to test if its a jQuery / zepto / picoQuery?
-//          html += className;
-          var isJquery = false;
-          for (var i=0; i<frameworks.length; i++) {
-            if (obj instanceof frameworks[i][2]) {
-              isJquery = true;
-            }
-          }
-          if (isJquery ||
-            (window.Zepto && obj instanceof Zepto.zepto.Z) ||
-            (obj.e)) {
-            html = '$' + html;
-          }
-          else {
-            html = className + html;
-          }
-        }
-        else if ((Object.getPrototypeOf(obj) == Object.prototype ) ||
-          (className == 'NodeList2')
-        ) {
-          var content = [];
-          for (var prop in obj) {
-            content.push(prop + ':' + toPrint(obj[prop]));
-          }
-          html = '<span class="obj">{ ' + content.join('<span class="comma">,</span>') + ' }</span></span>';
-//          html = className;
-        }
-        else if (className == 'Text') {
-//          html = className + '{' + toPrint(obj.childNodes) + '}';
-          html = className + '{"' + obj.wholeText + '"}';
-
-        }
-        else if (className == 'NodeList') {
-//          html = className + '{' + toPrint(obj.childNodes) + '}';
-          html = className + '{' + toPrint([].slice.call(obj)) + '}';
-
-        }
-        else {
-          // Some kind of object, ie 'HTMLDocument', 'DocumentFragment', 'Text', 'NodeList', etc
-          // we only show the class name for unknown objects
-          html = className;
-        }
-        return html;
-      case 'string':
-        return '<span class="value">"' + htmlEscapeEtc(obj) + '"</span>';
-      default:
-        return '<span class="value">' + JSON.stringify(obj) + '</span>';
-    }
-  }
   var tdContent = testResults.map(function(item) {
 //    return '';
     var output = '';
@@ -176,6 +177,16 @@ function testInAllFrameworks(code, description) {
   });
 
   window.testNumber++;
+
+  // determine if row should be displayed
+  if (location.href.indexOf('onlyfails') > 0) {
+    var ok = tdContent.every(function(item){return item == tdContent[0]});
+    if (ok) {
+      return '';
+    }
+  }
+
+
   var tr = '<tr>';
 //  tr += '<td>' + window.testNumber + '</td>';
 
@@ -225,8 +236,12 @@ function testInAllFrameworks(code, description) {
     }
   }
   tr += '</tr>';
+
+//  $('#testresults tbody').append(tr);
+  return tr;
+
   // TODO: red backgrounds if td[2] != td[1]    
-  $('#testresults tbody').append(tr);
+
 //  console.log('Test #' + window.testNumber, testResults);
 //  console.log(testResults);
 }
@@ -258,7 +273,7 @@ function subgroup(caption) {
     html += '<th>' + framework[1] + '</th>';
   });
   html += '</tr>';
-  $('#testresults tbody').append(html);
+  return html;
 }
 
 function subgroup_empty(caption) {
@@ -267,7 +282,8 @@ function subgroup_empty(caption) {
 }
 
 function endsubgroup() {
-  $('#testresults tbody').append('<tr class="endsubgroup"><td ' + colspan + '></td></tr>');  
+//  $('#testresults tbody').append();  
+  return '<tr class="endsubgroup"><td ' + colspan + '></td></tr>';
 }
 
 function displayTestGroupLinks(groupsToShow) {
@@ -318,14 +334,25 @@ function runTests(groupsToShow) {
     group(method['name']);
     method['tests'].forEach(function (sg) {
       if (sg['tests'].length == 0) {
-        subgroup_empty(sg['name']);
+        if (location.href.indexOf('onlyfails') == -1) {
+          subgroup_empty(sg['name']);
+        }
       }
       else {
-        subgroup(sg['name']);
+        subgrouptrs = [];
         sg['tests'].forEach(function (test) {
-          testInAllFrameworks(test[0], test[1]);
+          var tr = testInAllFrameworks(test[0], test[1]);
+          if (tr != "") {
+            subgrouptrs.push(tr);
+          }          
         });
-        endsubgroup();
+        if (subgrouptrs.length > 0) {
+          $('#testresults tbody').append(subgroup(sg['name']));
+          subgrouptrs.forEach(function(tr) {
+            $('#testresults tbody').append(tr);
+          });
+          $('#testresults tbody').append(endsubgroup());
+        }
       }
     });
     endgroup();
