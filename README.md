@@ -20,7 +20,7 @@ The following methods is currently supported:
 .add(), .addBack, .addClass(), .after(), .andSelf(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .last(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .replaceWith(), .show(), .text(), .toArray(), .toggle(), .trigger()
 
 And its rapidly growing at a rate about one new method per day.
-Focus in the 0.5 release will be to support even more of the jQuery API. Please let me know if there is a specific method you wish to be supported. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishes-for-new-methods-in-0.4) on the wiki.
+Focus in the 0.5 release will be to support even more of the jQuery API. Please let me know if there is a specific method you wish to be supported. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishlist) on the wiki.
 
 If you cannot wait for support of a certain method, you can add instance methods this way:
 
@@ -78,7 +78,7 @@ When more API is supported, it will be possible for plugin developers to create 
 ### Roadmap
 
 #### Features planned for 0.5 (release date: ~16/11-2016)
-- More API. I expect to work on animation methods, such as slideDown(). Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishes-for-new-methods-in-0.4) on the wiki.
+- More API. I expect to work on animation methods, such as slideDown(). Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishlist) on the wiki.
 - Improve the builder UI a bit (especially the method selection part)
 
 #### Features planned for 0.6:
