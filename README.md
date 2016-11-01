@@ -73,7 +73,7 @@ When more API is supported, it will be possible for plugin developers to create 
 Done:
 - Restructure of include files: optimized code is moved to separate file
 - Much faster build time (optimization of code which inlines helpers)
-- .hasClass(), .data(), jQuery.data(), .show(), .toggle(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add(), .addBack(), .andSelf(), .last() (though the data methods, show() and hide() currently involves risk for memory leak) (14 new methods in 15 days)
+- .hasClass(), .data(), jQuery.data(), .show(), .toggle(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add(), .addBack(), .andSelf(), .last()
 - Optionally optimize library for execution speed rather than gzip size.
 - Added option for inlining of helpers
 - Added help icons
@@ -82,7 +82,7 @@ Done:
 The complete list of methods supported wil (at least) be the following (55): 
 .add(), .addBack, .addClass(), .after(), .andSelf(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .last(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .replaceWith(), .show(), .text(), .toArray(), .toggle(), .trigger()
 
-Now all that remains is testing
+I'm currently working on making sure that data added with the data() method, and private data are removed when .remove(), .empty(), .html() or .replaceWith() are called.
 
 #### Features planned for 0.5 (release date: ~10/11-2016)
 - More API. I expect to work on animation methods, such as slideDown()
