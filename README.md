@@ -71,13 +71,13 @@ When more API is supported, it will be possible for plugin developers to create 
 - Even more API! Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishes-for-new-methods-in-0.4) on the wiki.
 
 Done:
-- Restructure of include files: optimized code is moved to separate file
-- Much faster build time (optimization of code which inlines helpers)
 - .hasClass(), .data(), jQuery.data(), .show(), .toggle(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add(), .addBack(), .andSelf(), .last()
 - Optionally optimize library for execution speed rather than gzip size.
 - Added option for inlining of helpers
 - Added help texts
 - Added alternative CDN url in builder
+- Restructure of include files: optimized code is moved to separate file
+- Much faster build time (optimization of code which inlines helpers)
 
 The complete list of methods supported will (at least) be the following (55): 
 .add(), .addBack, .addClass(), .after(), .andSelf(), .append(), .appendTo(), .attr(), .before(), .children(), .click(), .clone(), .closest(), .css(), .data(), .each(), .empty(), .end(), .eq(), .filter(), .find(), .first(), .focus(), .get(), .hasClass(), .hide(), .html(), .insertAfter(), .insertBefore(), jQuery.camelCase(), jQuery.data(), jQuery.merge(), jQuery.noConflict(), .keyup(), .last(), .map(), .next(), .offset(), .offsetParent(), .on(), .parent(), .prepend(), .prependTo(), .prev(), .pushStack(), .ready(), .remove(), .removeAttr(), .removeClass(), .replaceWith(), .show(), .text(), .toArray(), .toggle(), .trigger()
