@@ -25,11 +25,12 @@ show: function() {
 //    if ((el.style.display == 'none') || (el.style.display == '')) {
     if (el.style.display == 'none') {
 
+      <?php if (isFeatureEnabled('toggle') || isFeatureEnabled('hide')): ?>
       // If previously hidden with the hide() method, set display to old display value, FLAG#1
       if (el['__picoquerydata'] && el['__picoquerydata'][1]) {
         el.style.display = el['__picoquerydata'][1];
       }
-
+      <?php endif; ?>
       // else set to default value for that tag name.
       else {
 //  			el.style.display = $(d.createElement(el.nodeName)).css('display');

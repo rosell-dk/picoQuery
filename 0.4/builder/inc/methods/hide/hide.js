@@ -21,13 +21,15 @@ hide: function() {
 //    console.log('el.style.display', $(el).css('display'));
 //    if (!((el.style.display == 'none'))) {  //  || (el.style.display == '')
 
+      <?php if (isFeatureEnabled('toggle') || isFeatureEnabled('show')): ?>
       // Private data
       if(!el['__picoquerydata']) {
         el['__picoquerydata'] = {};
       }
-
       // Store old display value. FLAG#1
       el['__picoquerydata'][1] = $(el).css('display');
+      <?php endif; ?>
+
       $(el).css('display', 'none');
 
 //    };
