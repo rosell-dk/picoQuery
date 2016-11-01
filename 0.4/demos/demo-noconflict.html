@@ -9,7 +9,7 @@
 <script src="../../builder/0.3/build.php?build=0-ffff1ffff"></script>
 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js"></script>
-<script src="../../builder/0.3/build.php?build=5-f04008008"></script>
+<script src="../../src/picoquery-0.4.0-addClass-~noConflict.min.js"></script>
 <script>
 
 // Of course, for this to work, you must select "jQuery.noConflict()" in the build options.
@@ -24,7 +24,7 @@ $(function () {
 document.addEventListener("DOMContentLoaded", function() {
 
   // Make message bold, using prototype
-  $('msg').addClassName('bold');
+  $('msg').addClassName('underline');
 
   // Make message blue, using picoQuery
   p$('#msg').addClass('blue');
@@ -34,12 +34,13 @@ document.addEventListener("DOMContentLoaded", function() {
 <style>
 .blue {color: blue}
 .bold {font-weight: bold}
+.underline {text-decoration: underline}
 </style>
 </head>
 <body>
 The source shows how to use picoQuery along another library that uses $ as a shortcut. (The method is identical to jQuery's method).
 
-<p>The following message is turned bold with prototypejs and blue with picoQuery</p>
+<p>The following message is underlined with prototypejs and turned blue with picoQuery</p>
 <p id="msg">view the source...</p>
 </body>
 </html>
