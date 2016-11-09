@@ -1,5 +1,5 @@
 # picoQuery
-*picoQuery is a subset of jQuery. &ndash; A subset *you* get to choose. Its IE9+, but automatically falls back to jQuery<br> (so actually, it is IE6+)*
+*picoQuery is a subset of jQuery. &ndash; A subset YOU get to choose. Its IE9+, but automatically falls back to jQuery<br> (so actually, it is IE6+)*
 
 ### How to use
 
