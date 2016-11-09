@@ -5,13 +5,13 @@
 RewriteEngine On
 
 # ---- BUILDER ----
-# Redirect: "builder/[major].[minor][.bugfix]/*" 
+# Rewrite:  "builder/[major].[minor][.bugfix]/*" 
 # to:       "[major].[minor]/builder/[bugfix]/*"
 RewriteRule ^builder/(\d\.\d)(\.(\d))?/(.*)$  $1/builder/$3/$4 [L]
 
 
 # ---- SRC ----
-# Redirect: "src/picoquery-[major].[minor][.bugfix-version]-*.js
+# Rewrite:  "src/picoquery-[major].[minor][.bugfix-version]-*.js
 # to:       "[major].[minor]/src/picoquery-[major].[minor][.bugfix-version]-*.js"
 RewriteRule ^src/(picoquery-(\d\.\d)(\.(\d))?-(.*)\.js)  /$2/src/$1 [L]
 
@@ -19,6 +19,22 @@ RewriteRule ^src/(picoquery-(\d\.\d)(\.(\d))?-(.*)\.js)  /$2/src/$1 [L]
 # ---- LATEST VERSION ----
 # Redirect to LATEST version of builder
 RewriteRule ^builder/$  /builder/0.4.0/ [L,R=302]
+
+
+# ---- Website images/scripts  ----
+RewriteRule ^(img|scripts|css)\/(.*)$  /web/$1/$2 [L]
+
+
+
+# ---- Markdown CMS ----
+# Rewrite:   "*"
+# to:        "template.php?*"
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$  /web/template.php?page=$1 [NC,L,QSA]
+
+# Pass directories to template as well
+# RewriteCond %{REQUEST_FILENAME} -d
+# RewriteRule ^(.*)$ /web/template.php?page=index [NC,L,QSA]
 
 
 </IfModule>

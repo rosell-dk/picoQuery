@@ -10,7 +10,8 @@ var frameworks = [];
 <?php
 //$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-1.9.1.min.js', 'picoquery-0.2.1-ffff1fff.min.js', 'picoquery-0.2.1-ffff1fff.js');
 
-$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-1.12.4.min.js', 'picoquery-0.3.0-full.min.js', 'picoquery-0.3.0-full.js');
+//$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-1.12.4.min.js', 'picoquery-0.4.0-full.min.js', 'picoquery-0.4.0-full.js');
+$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-1.12.4.min.js', 'picoquery', 'zepto', 'cash');
 
 //$frameworks = isset($_GET['frameworks']) ? explode(',', $_GET['frameworks']) : array('jquery-2.2.4.js');
 // frameworks=picoquery-0.2-1100.js,zepto1.2.0
@@ -23,7 +24,7 @@ else {
 }
 
 function pushFramework($framework) {
-  echo '<script>frameworks.push([window.$, "' . $framework . '", window.jQuery]); window.$=undefined; window.jQuery=undefined;</script>' . "\n";
+  echo '<script>frameworks.push([window.$, "' . $framework . '", window.jQuery || window.$]); window.$=undefined; window.jQuery=undefined;</script>' . "\n";
 }
 
 // Angular needs to be included before jQuery / picoQuery
@@ -66,6 +67,10 @@ foreach ($frameworks as $index => $framework) {
     pushFramework($framework);
   }
   if (strpos($framework, "pico") === 0 ) {
+    if ($framework == "picoquery") {
+      $framework = "picoquery-0.4.0-full.min.js";
+      $frameworks[$index] = $framework;
+    }
     if ($_SERVER['HTTP_HOST'] == 'picoquery.com') {
       // Use CDN when on live server
       echo '<script src="http://cdn.picoquery.com/' . $framework . '"></script>' . "\n";
@@ -88,6 +93,15 @@ foreach ($frameworks as $index => $framework) {
     echo '<script src="zepto.js"></script>' . "\n";
     pushFramework($framework);
   }
+  if ($framework == "cash") {
+    $framework = "cash1.3.0.min.js";
+    $frameworks[$index] = $framework;
+  }
+  if ($framework == "cash1.3.0.min.js") {
+    echo '<script src="https://cdn.jsdelivr.net/cash/1.3.0/cash.min.js"></script>' . "\n";
+    pushFramework($framework);
+  }
+
   if (strpos($framework, "angularjs") === 0 ) {
     continue;
   }

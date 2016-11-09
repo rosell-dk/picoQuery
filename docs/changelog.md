@@ -1,3 +1,5 @@
+# Changelog
+
 ### 0.4.0
 *Released 01 Nov 2016* 
 - More API: .hasClass(), .data(), jQuery.data(), .show(), .toggle(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add(), .addBack(), .andSelf(), .last()

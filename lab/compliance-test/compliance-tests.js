@@ -6,14 +6,23 @@ window.complianceTests = [
         name: '.add( selector )',
         tests: [
           ['$("li#item2_1").add("li#item3_1")', ""],
-          ['$("li#item3_1").add("li#item2_1")', "jQuery sorts it in Document order. picoQuery does not do any sorting (it will in future release)"],
+          ['$("li#item3_1").add("li#item2_1")', "jQuery sorts it in Document order. picoQuery does not do any sorting (it will perhaps in future release)"],
           ['$("li#item3_1").add("li#item3_1")', "Remove duplicates"],
           ['$("li#item2_1").add("li#item3_1").end()', "pushStack"],
         ]
       },
       {
+        name: '.add( element )',
+        tests: [
+          ['$("li#item2_1").add(document.getElementById("item3_1"))', ""],
+          //[makeTextNode("text"), makeElement("<i>italic</i>")]
+        ]
+      },
+      {
         name: '.add( elements )',
         tests: [
+          ['$("li#item2_1").add([document.getElementById("item3_1"), document.getElementById("item3_2")])', ""],
+          //[makeTextNode("text"), makeElement("<i>italic</i>")]
         ]
       },
       {
@@ -170,6 +179,12 @@ window.complianceTests = [
       {
         name: '.append( function )',
         tests: [
+//          ['function(){$("body").append("<p id=temp></p>");res=$("#temp").append(function(){return makeElement("<b></b>")}).html(); $("#temp").remove(); return res}()', ""],
+          ['$(tempEl).append(function(){return makeElement("<b></b>")})', ""],
+          ['$(tempEl).append(function(idx,oldHtml){return makeElement("<b>" + idx + oldHtml + "</b>")})', ""],
+
+//          ['function(){$("body").append("<p id=temp></p>");res=$("#temp").append(function(idx,html){return makeElement("<b>" + idx + html + "</b>")}).html(); $("#temp").remove(); return res}()', ""],
+//          ['function(){$("body").append("<p id=temp></p>");res=$("#temp").append(function(){return "test"}).html(); $("#temp").remove(); return res}()', ""],
         ]
       },
       {
@@ -186,11 +201,10 @@ window.complianceTests = [
       {
         name: '.appendTo( target )',
         tests: [
-          ['$("<a></a><b>b</b>")', ""],
           ['$("<p>hello</p>").appendTo($("<div></div>"))', ""],
-          ['$("<one>1</one><two>2</two>").appendTo($("<div></div>"))', ""],
-          ['$("<i>hello</i>").appendTo($("<a></a><b>b</b>"))', ""],
-          ['$("<i>hello</i>").appendTo($("<a></a><b>b</b>")).parent()', ""],
+          ['$("<one>1</one><two>2</two>").appendTo($("<div></div>"))', "Append two elements"],
+          ['$("<i>hello</i>").appendTo($("<a></a><b>b</b>"))', "Append to multiple targets"],
+          ['$("<i>hello</i>").appendTo($("<a></a><b>b</b>")).parent()', "zepto fails here..."],
           ['(function(){$("<i class=hello>hello</i>").appendTo($("#item3 li")); var clone=$("#item3").clone();$("#item3 .hello").remove(); return clone})()', "In the jQuery implementation, the actual operation is a side effect. This test inspects the side effect"],
  //         ['$("<one>1</one><two>2</two>").appendTo($("<a></a><b></b>"))', ""],
         ]
@@ -215,6 +229,7 @@ window.complianceTests = [
       {
         name: '.attr( attributes )',
         tests: [
+          ['$("<div/>").attr({class:"italic"})', " "],
         ]
       },
       {
@@ -304,8 +319,8 @@ window.complianceTests = [
       {
         name: '.children( [selector] )',
         tests: [
-          ['$("ul").children()', ""],
-          ['$("ul").children(".odd")', ""],
+          ['$("#ul3").children()', ""],
+          ['$("#ul3").children(".odd")', "Filtering"],
         ]
       }
     ]
@@ -404,7 +419,7 @@ window.complianceTests = [
           ['$("li", jq$("#item3").get(0))', "Standard"],
           ['$("li#item1", jq$("ul#ul2").get(0))', "selector is not in the decendant tree"],
           ['$("#item3", jq$("#item3").get(0))', "selector matches root of context"],
-          ['$("body li", jq$("#item3").get(0))', "selector begins with something outside of context. Its different in picoQuery because picoQuery uses Element.querySelecorAll, and here <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector'>the entire hierarchy counts</a>. In newer browsers, you can will get the compliant behaviour with the :scope pseudo-class.<a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll'>[1]</a> - but this probably causes syntax error in other browsers (havent tested yet). Btw, here is a <a href='https://github.com/lazd/scopedQuerySelectorShim'>shim</a>, and btw: picoQuery has same problem with find()"],
+          ['$("body li", jq$("#item3").get(0))', "selector begins with something outside of context. This requires special handling when finding is based on Element.querySelecorAll (which it is in picoQuery, Zepto and Cash). In newer browsers, you can will get the compliant behaviour with the :scope pseudo-class. picoQuery handles this - the solution is based on this shim: <a href='https://github.com/lazd/scopedQuerySelectorShim'>shim</a>. Zepto and Cash does not handle it (yet). Mere info: <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector'>the entire hierarchy counts</a>. <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll'>even more info</a>"],
           ['$(":scope body li", jq$("#item3").get(0))', "Applying the :scope pseudo-class."],
           ['$("#item3 li", jq$("#item3").get(0))', "selector begins with something outside of context"],
           ['$("#item3", document)', "jQuery( selector, [HTMLDocument]"],

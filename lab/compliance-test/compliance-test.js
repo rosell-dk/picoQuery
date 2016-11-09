@@ -135,6 +135,9 @@ function testInAllFrameworks(code, description) {
     $ = framework[0];
     jQuery = framework[2];
     jq$ = j$;
+
+    var tempEl = j$('<div></div>').appendTo('body').get(0);
+
     function makeTextNode(text) {
       return j$("<b>" + text + "</b>").get(0).childNodes[0];    
     }
@@ -156,6 +159,7 @@ function testInAllFrameworks(code, description) {
 //      console.log(e);
       result = e;
     }
+    j$(tempEl).remove();
 //    console.log('Test #' + window.testNumber, result);
 
     testResults.push(result);
@@ -369,6 +373,7 @@ j$(function($) {
     ['jQuery 1.12.4', 'jquery-1.12.4.min.js'], 
     ['zepto 1.2.0.min.js', 'zepto1.2.0.min.js'],
     ['zepto 1.2.0.js', 'zepto1.2.0.js'],
+    ['cash 1.3.0', 'cash1.3.0.min.js'],
     ['angularjs 1.5.7 (jqLite)', 'angularjs-1.5.7.min.js'],
     ['picoQuery 0.2.1-ffff1fff.min.js', 'picoquery-0.2.1-ffff1fff.min.js'],
     ['picoQuery 0.2.1-ffff1fff.js', 'picoquery-0.2.1-ffff1fff.js'],
