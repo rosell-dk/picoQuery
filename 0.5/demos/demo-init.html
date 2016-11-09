@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>picoQuery demo</title>
+
+<script src="../../src/picoquery-0.4.0-addClass-css.min.js"></script>
+<!--
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+-->
+<script>
+
+// The following common ways to initialize also works:
+$(function() {
+  alert('document is ready to be manipulated. We will turn it red');
+  $('body').css('background-color', 'red');
+});
+
+$(document).ready(function(){
+  alert('Hi again. ');
+});
+
+// picoQuery does not override the "jQuery" function, so this typical initializer does not work:
+/*
+jQuery(function($){
+  alert('ready');
+});
+*/
+// However, you can do this:
+$(function($){
+  alert('ok, enough. Lights off');
+  $('body').css('background-color', 'black');
+});
+
+
+
+</script>
+
+</head>
+<body>
+<p>Demonstrating three common ways to react to dom begin manipulation when dom is ready.</p>
+<p>These ways are available even in the smallest picoquery you can build</p>
+
+</body>
+</html>
