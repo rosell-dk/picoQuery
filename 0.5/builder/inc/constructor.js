@@ -135,8 +135,8 @@ function P(a,b) {
 
   // jQuery ( Array-like object )  (ie NodeList or HTMLCollection)
   else if (a.length !== u) {
-//    console.log('html', a, a instanceof NodeList);
     this.e = __TO_ARRAY__(<@ a @>);
+    console.log('html', a, this.e);
   }
   // TODO: support jQuery (plainObject)
   else {
