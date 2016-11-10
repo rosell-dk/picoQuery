@@ -163,10 +163,9 @@ window.complianceTests = [
     name: '.append()',
     tests: [
       {
-        name: '.append( content [,content] )',
+        name: '.append( content )',
         tests: [
           ['$("<p></p>").append("<b></b>")', "[ htmlString ]"],
-          ['$("<p>text</p>").append("<b></b>")', "[ htmlString ]"],
           ['$("<div><p></p></div>").append($("<b></b>"))', "[ jQuery ]"],
           ['$("<div><p></p></div>").append(makeElement("<b></b>"))', "[ Element ]"],
           ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Text Node ]"],
@@ -174,6 +173,26 @@ window.complianceTests = [
           ['$("<div><p></p></div>").append([makeTextNode("text"), makeElement("<i>italic</i>")])', "[ Array of text nodes / elements ]"],
           ['$("<div><p></p></div>").append("<b></b>").append("<i></i>")', "Chaining"],
           ['$("<div><p></p></div>").append([makeElement("<i>italic</i><b>bold</b>")])', "[ Array of elements ]"],
+          ['$("<div><p></p><p></p></div>").children().append("hello").parent()', "Append text multiple targets"],
+//          ['$("<div><p></p><p></p></div>").children().append($(tempEl).text("node")).parent()', "Append same node to multiple targets"],
+//          ['function(){var $appendThis = $(tempEl).html("<b>appended</b>"); var $appendToNodes = $("body").append("<div id=tempContainerABD><one></one><two></two></div>").children(); $appendToNodes.append($appendThis); var result = $("#tempContainerABD").html(); $("#tempContainerABD").remove(); return result }()', "Append same node to multiple targets"],
+          ['function(){var $appendThis = $(tempEl).html("<b class=banana>test</b>"); $("body").append("<div id=eCUbo><one></one><two></two></div>"); $("#eCUbo *").append($appendThis); var result = $("#eCUbo").clone(); $("#eCUbo").remove(); return result }()', "Append same attached node to multiple targets"],
+
+          ['function(){$("body").append("<div id=aBeN><banana></banana></div>"); $("body").append("<div id=eCUbola><one></one><two></two></div>"); $("#eCUbola *").append($("#aBeN")); var result = $("#eCUbola").clone(); $("#eCUbola").remove(); $("#aBeN").remove(); return result }()', "Append same attached node to multiple targets"],
+
+          ['function(){$("body").append("<div class=aBeN><banana></banana></div>"); $("body").append("<div id=eCUbola><one></one><two></two></div>"); $("#eCUbola *").append($(".aBeN")); var result = $(".aBeN").parent(); $("#eCUbola").remove(); $(".aBeN").remove(); return result }()', "Is appended node detached from previous position in DOM?"],
+
+//          ['function(){var $appendThis = $(tempEl).html("<b class=banana>test</b>"); $("body").append("<div id=eCUbo><one></one><two></two></div>"); $("#eCUbo *").append($appendThis); var result = $("#eCUbo").clone(); $("#eCUbo").remove(); return result }()', "Is appended node removed from previous position?"],
+//          ['$(tempEl)', "Append same node to multiple targets"],
+
+
+        ]
+      },
+      {
+        name: '.append( content [,content] )',
+        tests: [
+          ['$("<p></p>").append("<one></one>", "<two></two>")', ""],
+
         ]
       },
       {
@@ -417,9 +436,9 @@ window.complianceTests = [
         name: 'jQuery( selector, context [ Element ] )',
         tests: [
           ['$("li", jq$("#item3").get(0))', "Standard"],
+          ['$("body li", document.getElementById("item3"))', "selector begins with something outside of context. This requires special handling when finding is based on Element.querySelecorAll (which it is in picoQuery, Zepto and Cash). In newer browsers, you can will get the compliant behaviour with the :scope pseudo-class. picoQuery handles this - the solution is based on this shim: <a href='https://github.com/lazd/scopedQuerySelectorShim'>shim</a>. Zepto and Cash does not handle it (yet). Mere info: <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector'>the entire hierarchy counts</a>. <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll'>even more info</a>"],
           ['$("li#item1", jq$("ul#ul2").get(0))', "selector is not in the decendant tree"],
           ['$("#item3", jq$("#item3").get(0))', "selector matches root of context"],
-          ['$("body li", jq$("#item3").get(0))', "selector begins with something outside of context. This requires special handling when finding is based on Element.querySelecorAll (which it is in picoQuery, Zepto and Cash). In newer browsers, you can will get the compliant behaviour with the :scope pseudo-class. picoQuery handles this - the solution is based on this shim: <a href='https://github.com/lazd/scopedQuerySelectorShim'>shim</a>. Zepto and Cash does not handle it (yet). Mere info: <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector'>the entire hierarchy counts</a>. <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll'>even more info</a>"],
           ['$(":scope body li", jq$("#item3").get(0))', "Applying the :scope pseudo-class."],
           ['$("#item3 li", jq$("#item3").get(0))', "selector begins with something outside of context"],
           ['$("#item3", document)', "jQuery( selector, [HTMLDocument]"],
@@ -581,8 +600,8 @@ window.complianceTests = [
       {
         name: '.css( property )',
         tests: [
-          ['$("li.odd").css("font-style")', ""],
-          ['$("li.odd").css("fontStyle")', ""],
+          ['$("li.odd").css("font-style")', "dasherized"],
+          ['$("li.odd").css("fontStyle")', "camelCase"],
           ['$("li#item2").css("font-style")', ""],
           ['$("li#item2").css("fontStyle")', ""],
           ['$("li#item2_1").css("font-style")', ""],
@@ -602,14 +621,19 @@ window.complianceTests = [
       {
         name: '.css( property, value )',
         tests: [
-          ['$("<div/>").css("font-style", "italic").css("font-style")', ""],
-          ['$("<div/>").css("fontStyle", "italic").css("font-style")', ""],
-          ['$("<div/>").css("user-select", "none").css("user-select")', ""],
-          ['$("<div/>").css("font-size", "10").css("font-size")', ""],
-          ['$("<div/>").css("width", "123").css("width")', ""],
-          ['$("<div class=italic/>").css("font-style", "normal").css("font-style")', ""],
-          ['$("<div class=italic/>").css("fontStyle", "normal").css("font-style")', ""],
-          ['$("<div/>").css("cssText", "color:blue;font-size:16px").css("font-size")', ""],
+
+          ['$(tempEl).css("font-style", "italic").css("font-style")', "Set dasherized, get dasherized"],
+          ['$(tempEl).css("font-style", "italic").css("fontStyle")', "Set dasherized, get camelCased"],
+          ['$(tempEl).css("fontStyle", "italic").css("font-style")', "Set camelCased, get dasherized"],
+          ['$(tempEl).css("fontStyle", "italic").css("fontStyle")', "Set camelCased, get camelCased"],
+          ['$(tempEl).css("user-select", "none").css("user-select")', ""],
+          ['$(tempEl).css("nonexistingProp", "none").css("nonexistingProp")', "nonexisting property"],
+          ['$(tempEl).css("fontSize", "10").css("fontSize")', "Numeral property #1"],
+          ['$(tempEl).css("fontSize", 10).css("fontSize")', "Numeral property #2"],
+          ['$(tempEl).css("width", "123").css("width")', ""],
+          ['$("<div class=italic/>").css("fontStyle", "normal").css("fontStyle")', ""],
+          ['$("<div class=italic/>").css("fontStyle", "normal").css("fontStyle")', ""],
+          ['$("<div/>").css("cssText", "color:blue;font-size:16px").css("fontSize")', ""],
 
 
           // TODO: add testing of cssHooks
@@ -623,23 +647,31 @@ window.complianceTests = [
         ]
       },
       {
-        name: '.css( propertyNames )',
+        name: '.css( propertyNames [Array])',
         tests: [
+          ['$("#item2_1").css(["fontStyle", "textDecoration"])', "camelCased"],
+          ['$("#item2_1").css(["font-style", "text-decoration"])', "dasherized"],
         ]
       },
       {
         name: '.css( propertyName, function )',
         tests: [
+          ['$(tempEl).css("fontStyle", function(idx,value){return "italic"})', ""],
+          ['$(tempEl).css("font-style", function(idx,value){return "italic"})', ""],
+
         ]
       },
       {
         name: '.css( properties )',
         tests: [
+          ['$(tempEl).css({ "background-color": "#ffe", "border-left": "5px solid #ccc" })', "dasherized"],
+          ['$(tempEl).css({ "backgroundColor": "#ffe", "borderLeft": "5px solid #ccc" })', "camelCased"],
         ]
       },
       {
-        name: '.css(  )',
+        name: 'Edge cases',
         tests: [
+          ['$("li#item2").css()', ".css() is not defined in documentation"],
         ]
       },
 
@@ -664,6 +696,10 @@ window.complianceTests = [
           ['$("<div></div>").data("obj", {a:42}).get(0)', ""],
           ['$("<div></div>").data("obj", {a:42}).data("obj")', ""],
           ['$("<div></div>").data("obj2", {"a":"42"}).data("obj2")', ""],
+          ['$("<div data-monkey=\'chimpanse\' ></div>").data("a",42).data("a")', "Set data on a node that has a data-attribute"],
+          ['$("<div data-monkey=\'chimpanse\' ></div>").data("monkey", "gibbon").data("monkey")', "Update data that was set with data-attribute"],
+          ['$(tempEl).data("monkey", "gibbon")', "Does setting data add a data-attribute? (it should not)"],
+          ['$("<div data-monkey=\'chimpanse\' ></div>").data("monkey", "gibbon")', "Does setting this data affect the data-attribute? (it should not)"],
         ]
       },
       {
@@ -834,24 +870,38 @@ window.complianceTests = [
       {
         name: '.filter( selector )',
         tests: [
-          ['$("<li></li><b></b>").filter("b")', " "],
-          ['$("<li></li><b></b>").filter("*")', " "],
-          
+          ['$("<li></li><b></b>").filter("b")', "Filter by tag-name"],
+          ['$("<li></li><b></b>").filter("*")', "Filter *"],          
+          ['$("#item3 *").filter(".odd")', ""],
+        ]
+      },
+      {
+        name: '.filter( element )',
+        tests: [
+          ['$("#item3 li").filter(document.getElementById("item3_1"))', ""],
         ]
       },
       {
         name: '.filter( elements )',
         tests: [
+          ['$("#item3 li").filter([document.getElementById("item3_1")])', "Array of elements"],
+          ['$("#item3 li").filter(document.getElementsByTagName("li"))', "HTMLCollection (array-like)"],
         ]
       },
       {
         name: '.filter( selection )',
         tests: [
+          ['$("#item3 li").filter($("#item3_1"))', "Single item"],
+          ['$("#item3 li").filter($("li"))', "Multiple items"],
         ]
       },
       {
         name: '.filter( function )',
         tests: [
+          ['$("#item3 li").filter(function(idx,el){return true})', ""],
+          ['$("#item3 li").filter(function(idx,el){return (idx==0)})', "Test first argument (index)"],
+          ['$("#item3 li").filter(function(idx,el){return (el.id=="item3_1")})', "Test second argument (element)"],
+          ['$("#item3 li").filter(function(idx,el){return (this.id=="item3_1")})', "Test this"],
         ]
       },
     ]
@@ -863,13 +913,13 @@ window.complianceTests = [
         name: '.find( selector [String] )',
         tests: [
           ['$("ul").find("li")', " "],
-          ['$("ul").find("li")', " "],
+          ['$("#item3").find("body li")', "selector begins with something outside of context. Zepto and Cash errorsly returns matches here (they have same issue in constructor. The issue is described more in detail there)"],
+          ['$("#item3").find("#item3")', ""],
           ['$("ul#ul0").find("li")', " "],
           ['$("ul#ul2").find("li")', " "],
           ['$("ul#ul2,ul#ul3").find("li")', " "],
 
           ['$("ul#ul2").find("li#item1")', "selector is not in the decendant tree"],
-          ['$("#item3").find("body li")', "selector begins with something outside of context."],
         ]
       },
       {
@@ -883,8 +933,16 @@ window.complianceTests = [
       {
         name: '.find( selector [Element] )',
         tests: [
+          ['$("#ul2,#ul3").find(document.getElementById("item3_1"))', ""],
           ['$("ul#ul2").find($("li#item1").get(0))', "selector is an Element NOT in the decendant tree"],
+        ]
+      },
+      {
+        name: '.find( selector [Elements] )',
+        tests: [
+          ['$("#ul3").find([document.getElementById("item3_1")])', ""],
           ['$("ul#ul2,ul#ul3").find($("li").get())', ""],
+          ['$("#ul3").find(document.getElementsByTagName("li"))', "HTMLList"],
         ]
       }
     ]
@@ -978,6 +1036,8 @@ window.complianceTests = [
         name: 'hide()',
         tests: [
           ['$("<i></i>").hide()', "Inline element, hidden by hide()"],
+          ['$(tempEl).css("display", "table-cell").hide().show().css("display")', "Element made table-cell, hidden with hide(), and shown again"],
+
         ]
       },
       {
@@ -1026,7 +1086,36 @@ window.complianceTests = [
     name: '.insertAfter()',
     tests: [
       {
-        name: '.insertAfter( target )',
+        name: '.insertAfter( [ Selector ] )',
+        tests: [
+          ['function(){$("body").append("<div id=hetu><b></b></div>");$("#item3_1").clone().insertAfter("#hetu b"); var res=$("#hetu").html(); $("#hetu").remove(); return res}()', ""],
+          ['function(){$("body").append("<div id=hetu><one></one><two></two></div>");$("#item3_1").clone().insertAfter("#hetu *"); var res=$("#hetu").html(); $("#hetu").remove(); return res}()', "Multiple targets"],
+          ['function(){$("body").append("<div id=hetu><b></b></div>");$("#item3 li").clone().insertAfter("#hetu b"); var res=$("#hetu").html(); $("#hetu").remove(); return res}()', "Multiple nodes"],
+ //         ['$("<one>1</one><two>2</two>").insertBefore($("<a></a><b></b>"))', ""],
+        ]
+      },
+      {
+        name: '.insertAfter( [ htmlString ] )',
+        tests: [
+          ['$("<apple></apple>").insertAfter("<banana></banana>").parent()', "Does this signature even make sense? "],
+          ['$("<apple></apple>").insertAfter("<banana></banana>")', "We can get the apple"],
+          ['$("<apple></apple>").insertAfter("<banana></banana>").prev()', "- but where is the banana?"],
+//          ['$("#item3_1").clone().insertAfter("<div></div>").parent()', ""],
+          ['$("#item3_1").clone().insertAfter("<div></div>").parent()', ""],
+        ]
+      },
+      {
+        name: '.insertAfter( [ Element ] )',
+        tests: [
+        ]
+      },
+      {
+        name: '.insertAfter( [ Array ] )',
+        tests: [
+        ]
+      },
+      {
+        name: '.insertAfter( [ jQuery ] )',
         tests: [
           ['(function(){$("<i class=hello>hello</i>").insertAfter($("#item3 li")); var clone=$("#item3").clone();$("#item3 .hello").remove(); return clone})()', "In the jQuery implementation, the actual operation is a side effect. This test inspects the side effect"],
  //         ['$("<one>1</one><two>2</two>").insertBefore($("<a></a><b></b>"))', ""],

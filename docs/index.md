@@ -1,6 +1,5 @@
 # picoQuery
 
-
 ### How to use
 
 1. Build your subset here: http://picoquery.com/builder/<br>

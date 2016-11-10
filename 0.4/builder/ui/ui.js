@@ -134,8 +134,8 @@ var methods_meta = {
   'data': [
     'http://api.jquery.com/data/',
     [
-      ['.data( key, value ) => jQuery', PARTIAL, 'Complies, but risk for memoryleak. As with jQuery, you cannot set data on embed and '],
-      ['.data( obj ) => jQuery', PARTIAL, 'Complies, but risk for memoryleak'],
+      ['.data( key, value ) => jQuery', FULL, 'As with jQuery, you cannot set data on embed and '],
+      ['.data( obj ) => jQuery', FULL],
       ['.data( key ) => Object', FULL],
       ['.data( ) => Object', FULL],
     ]

@@ -1,14 +1,48 @@
-table.color-legend {
-  margin-bottom: 30px;
-  font-size: 70%;
-  width: auto;
+
+
+/* States */
+.full {
+  background-color: #0d0;
+}
+.approximate {
+  background-color: #0dd;
+}
+.partial {
+  background-color: yellow;
+}
+.none {
+  background-color: #e00;
 }
 
+/* Summary */
+table.summary {
+  width: 100%;
+  font-size: 14px;
+}
+table.summary td:first-child {
+  width: 120px;
+}
 
+/* Color-legend */
+
+.color-legend {
+  margin: 10px 0 30px;
+  font-size: 60%;
+  float: right;
+  border: 1px solid #ccc;
+}
+.color-legend table {
+}
+.color-legend table td:first-child {
+  width: 30px;
+}
+
+/* Chart */
 
 table.chart {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 table.chart th {
   font-weight: normal;
@@ -20,6 +54,7 @@ table.chart td {
   padding: 2px 4px;
   border: 1px solid #999;
 }
+
 table.chart td:first-child {
   border-left: 0px;
   font-size: 100%;
@@ -29,30 +64,31 @@ table.chart td div.text {
 }
 table.chart tr:hover td div.text {
 }
+table.chart a {
+  padding: 0 0;
+}
 
-td.full {
-  background-color: #0d0;
-}
-td.approximate {
-  background-color: #0dd;
-}
-td.partial {
-  background-color: yellow;
-}
-td.none {
-  background-color: #e00;
 
-}
 .has-title {
   cursor: default;
 }
 
-table.chart td ul {
+table.chart td ol {
   margin: 0;
   padding: 0 0 0 2px;
-/*  list-style-position: inside;*/
- list-style-type: none;
+  list-style-position: inside;
+  list-style-type: none;
+/*  list-style-type: upper-roman;*/
+  counter-reset: list;    /* http://stackoverflow.com/questions/1632005/ordered-list-html-lower-alpha-with-right-parentheses */
+}
+td li:before {
+  content: counter(list) ") ";
+  counter-increment: list;
 }
 td li {
   margin-bottom: 4px;
+}
+td li:not(:last-child) {
+  border-bottom: 1px dotted black;
+  padding: 5px 0;
 }

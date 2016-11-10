@@ -48,8 +48,10 @@ echo $title;
 <?php
 if ($page == 'compliance_chart') {
   echo '<link rel="stylesheet" href="/css/compliance_chart.css" type="text/css" media="all">';
-  echo '<script src="http://cdn.picoquery.com/picoquery-0.4.0-full.min.js"></script>';
-  echo '<script src="/scripts/compliance_chart"></script>';
+  echo '<link rel="stylesheet" href="/css/tipr.css" type="text/css" media="all">';
+//  echo '<script src="http://cdn.picoquery.com/picoquery-0.4.0-full.min.js"></script>';
+  echo '<script src=https://code.jquery.com/jquery-1.12.4.min.js></script>';
+  echo '<script src="/scripts/compliance_chart.js"></script>';
 }
 else {
   echo '<script src="http://cdn.picoquery.com/picoquery-0.4.0-full.min.js"></script>';
@@ -110,7 +112,7 @@ echo str_replace("/", "-", $page);
   <?php
   if ($page == 'index') {
     echo '<intro>';
-    echo '<p>picoQuery is a subset of jQuery.<br>&ndash; A subset *you* get to choose.</p>';
+    echo '<p>picoQuery implements a subset of jQuery.<br>&ndash; A subset *you* get to choose.</p>';
 //    echo '<p><small>(And its light. <small>Very <small>very <small>very light</small></small></small>)</small></p>';
     echo '<p><small>Its IE9+, but automatically falls back to jQuery<br> (so actually, it is IE6+)</small></p>';
     echo '</intro>';

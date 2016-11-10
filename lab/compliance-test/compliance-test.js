@@ -40,7 +40,14 @@ function toPrint(obj) {
         // html = htmlEscapeEtc(j$(obj).html()); // nah, this creates innerHTML
         // http://stackoverflow.com/questions/5744207/jquery-outer-html
 //          html = '<span class="element-html">' + htmlEscapeEtc($(obj).wrapAll('<parent>').parent().html()) + '</span>';
-        html = '<span class="element-html">' + htmlEscapeEtc(obj.outerHTML) + '</span>';
+
+        if (className == 'HTMLBodyElement') {
+          // Its too much to print entire body element
+          html = className;
+        }
+        else {
+          html = '<span class="element-html">' + htmlEscapeEtc(obj.outerHTML) + '</span>';
+        }
 
         // Show all object properties
 

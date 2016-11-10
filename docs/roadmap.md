@@ -1,7 +1,7 @@
 # Roadmap
 
 ### Features planned for 0.5 (release date: ~16/11-2016)
-- Make .attr() fully compliant
+- Make .attr(), .find() and .filter() fully compliant
 - More API. I expect to work on animation methods, such as slideDown(). Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishlist) on the wiki.
 - Improve the builder UI a bit (especially the method selection part)
 

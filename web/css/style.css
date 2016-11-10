@@ -69,8 +69,8 @@ article a {
   color: black;
   text-decoration: none;
   background-color: #ddd;
-  display: inline-block;
-  padding: 0 8px;
+/*  display: inline-block;*/
+  padding: 0 6px;
 }
 a:hover {
   text-decoration: underline;
