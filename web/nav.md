@@ -1,4 +1,5 @@
 - [Home](/)
+- [Builder](/builder/)
 - [Compliance chart](/compliance_chart)
 - [Misc](#)
   - [Roadmap](/roadmap)

@@ -474,6 +474,8 @@ window.complianceTests = [
           ['$(makeTextNode("text"))', "[ Text Node ]"],
           ['$(makeElement("<i>italic</i>"))', "[ Element ]"],
           ['$(makeNodeList())', "[ NodeList ]"],
+          ['$(makeHTMLCollection())', "[ HTMLCollection ]"],
+
 
         ]
       },
@@ -526,6 +528,7 @@ window.complianceTests = [
         tests: [
           ['$("<div class=div1/><div class=div2/>")', "Invalid self-closing tag (http://stackoverflow.com/questions/3558119/are-self-closing-tags-valid-in-html5)"],
           ['$("<hr />")', "Valid self-closing tag"],
+          ['$({length:1,0:document.getElementById("item3_1")})', "Array-like"],
           ['$(jq$("<div>text</div>"))', ""],
           ['$(jq$("<div>text</div>").get(0))', ""],
           ['$(jq$("<div>text</div>").get(0).childNodes)', ""],
@@ -942,7 +945,7 @@ window.complianceTests = [
         tests: [
           ['$("#ul3").find([document.getElementById("item3_1")])', ""],
           ['$("ul#ul2,ul#ul3").find($("li").get())', ""],
-          ['$("#ul3").find(document.getElementsByTagName("li"))', "HTMLList"],
+          ['$("#ul3").find(document.getElementsByTagName("li"))', "HTMLCollection"],
         ]
       }
     ]
@@ -1107,11 +1110,21 @@ window.complianceTests = [
       {
         name: '.insertAfter( [ Element ] )',
         tests: [
+          ['$("<apple></apple>").insertAfter($(tempEl).append("<b></b>").children()).parent()', ""],
+          ['$("#item3 li").clone().insertAfter($(tempEl).append("<b></b>").children().get(0)).parent()', "Multiple"],
         ]
       },
       {
-        name: '.insertAfter( [ Array ] )',
+        name: '.insertAfter( [ Array of elements ] )',
         tests: [
+          ['$("#item3 li").clone().insertAfter($(tempEl).append("<one></one><two></two>").children().get()).parent()', "Plain Array"],
+//          ['$("#item3 li").clone().insertAfter($(tempEl).append("<one></one><two></two>").children().toArray()).parent()', "Array"],
+          ['$("#item3 li").clone().insertAfter(makeNodeList()).parent()', "NodeList"],
+          ['$("#item3 li").clone().insertAfter(makeHTMLCollection()).parent()', "HTMLCollection"],
+//          ['console.log($(tempEl).append("<one></one><two></two>").get(0).getElementsByTagName("*"))', ""],
+//          ['console.log(makeNodeList())', ""],
+
+//          ['console.log($("<one></one><two></two>").get(0).constructor)', ""],
         ]
       },
       {
@@ -1127,7 +1140,46 @@ window.complianceTests = [
     name: '.insertBefore()',
     tests: [
       {
-        name: '.insertBefore( target )',
+        name: '.insertBefore( [ Selector ] )',
+        tests: [
+          ['function(){$("body").append("<div id=hetu><b></b></div>");$("#item3_1").clone().insertBefore("#hetu b"); var res=$("#hetu").html(); $("#hetu").remove(); return res}()', ""],
+          ['function(){$("body").append("<div id=hetu><one></one><two></two></div>");$("#item3_1").clone().insertBefore("#hetu *"); var res=$("#hetu").html(); $("#hetu").remove(); return res}()', "Multiple targets"],
+          ['function(){$("body").append("<div id=hetu><b></b></div>");$("#item3 li").clone().insertBefore("#hetu b"); var res=$("#hetu").html(); $("#hetu").remove(); return res}()', "Multiple nodes"],
+ //         ['$("<one>1</one><two>2</two>").insertBefore($("<a></a><b></b>"))', ""],
+        ]
+      },
+      {
+        name: '.insertBefore( [ htmlString ] )',
+        tests: [
+          ['$("<apple></apple>").insertBefore("<banana></banana>").parent()', "Does this signature even make sense? "],
+          ['$("<apple></apple>").insertBefore("<banana></banana>")', "We can get the apple"],
+          ['$("<apple></apple>").insertBefore("<banana></banana>").prev()', "- but where is the banana?"],
+//          ['$("#item3_1").clone().insertBefore("<div></div>").parent()', ""],
+          ['$("#item3_1").clone().insertBefore("<div></div>").parent()', ""],
+        ]
+      },
+      {
+        name: '.insertBefore( [ Element ] )',
+        tests: [
+          ['$("<apple></apple>").insertBefore($(tempEl).append("<b></b>").children()).parent()', ""],
+          ['$("#item3 li").clone().insertBefore($(tempEl).append("<b></b>").children().get(0)).parent()', "Multiple"],
+        ]
+      },
+      {
+        name: '.insertBefore( [ Array of elements ] )',
+        tests: [
+          ['$("#item3 li").clone().insertBefore($(tempEl).append("<one></one><two></two>").children().get()).parent()', "Plain Array"],
+//          ['$("#item3 li").clone().insertBefore($(tempEl).append("<one></one><two></two>").children().toArray()).parent()', "Array"],
+          ['$("#item3 li").clone().insertBefore(makeNodeList()).parent()', "NodeList"],
+          ['$("#item3 li").clone().insertBefore(makeHTMLCollection()).parent()', "HTMLCollection"],
+//          ['console.log($(tempEl).append("<one></one><two></two>").get(0).getElementsByTagName("*"))', ""],
+//          ['console.log(makeNodeList())', ""],
+
+//          ['console.log($("<one></one><two></two>").get(0).constructor)', ""],
+        ]
+      },
+      {
+        name: '.insertBefore( [ jQuery ] )',
         tests: [
           ['(function(){$("<i class=hello>hello</i>").insertBefore($("#item3 li")); var clone=$("#item3").clone();$("#item3 .hello").remove(); return clone})()', "In the jQuery implementation, the actual operation is a side effect. This test inspects the side effect"],
  //         ['$("<one>1</one><two>2</two>").insertBefore($("<a></a><b></b>"))', ""],
@@ -1216,6 +1268,7 @@ window.complianceTests = [
         tests: [
           ['$("li:first-child").next()', ""],
           ['$("li:last-child").next()', ""],
+          ['$("li").next().length', ""],
         ]
       },
       {

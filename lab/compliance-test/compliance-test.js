@@ -157,6 +157,12 @@ function testInAllFrameworks(code, description) {
       }
       return j$(html).get(0).childNodes;
     }
+    function makeHTMLCollection(html) {
+      if (!html) {
+        html = '<div><b>one</b><b>two</b></div>';
+      }
+      return j$(html).get(0).getElementsByTagName("b");
+    }
 
     try {
 //      result = fn.call();

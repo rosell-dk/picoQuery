@@ -52,6 +52,7 @@ Compliance summary:<br>
         <li>Special jQuery selectors such as :odd are not supported</li>
         <li>jQuery( selector, context [ Array of elements ] ) does not get the order right.</li>
         <li>jQuery( html ) does not clean up invalid self-closing tags.</li>
+        <li>Array-like structures are not supported, ie jQuery( [HTMLCollection] ) (Will be fixed in v0.5.0)</li>
         <li>Does not strictly comply in a few edge cases</li>
       </ol>
     </td>
@@ -62,6 +63,7 @@ Compliance summary:<br>
 </li>
         <li>jQuery( selector, context [ Array of elements ] ) does not get the order right.</li>
         <li>jQuery( selector, context [ Element ] ) does not fully comply, when Element is a NodeList</li>
+        <li>Array-like structures are not supported, ie jQuery( [HTMLCollection] ) and jQuery( [NodeList] )</li>
         <li>Does not strictly comply in a few edge cases</li>
       </ol>
     </td>
@@ -129,11 +131,14 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.append()</td>
-    <td class="full"></td>
+    <td class="approximate">
+      When a node is appended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners yet, these clones will erroursly not get these
+    </td>
     <td class="partial">
       <ol>
         <li>.append( function ) signature is unsupported</li>
         <li>weird result in the test "Is appended node detached from previous position in DOM?"</li>
+        <li>When a node is appended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners, these clones will erroursly not get these</li>
       </ol>
     </td>
     <td class="partial">
@@ -142,6 +147,7 @@ Compliance summary:<br>
         <li>.append( function ) signature is unsupported</li>
         <li>.append( [ Text Node ] ) signature is unsupported</li>
         <li>.append( [ Array of Text nodes ] ) signature is unsupported</li>
+        <li>When a node is appended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners, these clones will erroursly not get these</li>
       </ol>
     </td>
   </tr>
@@ -344,14 +350,14 @@ Compliance summary:<br>
     <td>.find()</td>
     <td class="partial">
       <ol>
-        <li>.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLList)</li>
+        <li>.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLCollection). (Will be fixed in 0.5.0)</li>
       </ol>
     </td>
     <td class="partial">
       <ol>
         <li>.find( selector ) signature is buggy: Duplicates are not removed</li>
         <li>.find( selector ) is buggy: It finds elements that are parent to the selection. Ie $​("#item3"​)​.find​("body li"​) can give a result. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></li>
-        <li>.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLList)</li>
+        <li>.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLCollection)</li>
       </ol>
     </td>
     <td class="partial">
@@ -439,21 +445,77 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.insertAfter()</td>
+    <td class="approximate">
+      <ol>
+        <li>.insertAfter( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</li>
+      </ol>
+    </td>
+    <td class="partial">
+      <ol>
+        <li>.insertAfter( [ Array of elements ] ) signature is not supported</li>
+      </ol>
+    </td>
+    <td class="approximate">
+      <ol>
+        <li>.insertAfter( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</li>
+      </ol>
+    </td>
   </tr>
   <tr>
     <td>.insertBefore()</td>
+    <td class="approximate">
+      <ol>
+        <li>.insertBefore( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</li>
+      </ol>
+    </td>
+    <td class="partial">
+      <ol>
+        <li>.insertBefore( [ Array of elements ] ) signature is not supported</li>
+      </ol>
+    </td>
+    <td class="approximate">
+      <ol>
+        <li>.insertBefore( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</li>
+      </ol>
+    </td>
   </tr>
   <tr>
     <td>.keyup()</td>
   </tr>
   <tr>
     <td>.last()</td>
+    <td class="full"></td>
+    <td class="partial">
+      <ol>
+        <li>Does not work with ordinary arrays. Ie, $​([3,4]​)​.last​(​) does not return 3</li>
+      </ol>
+    </td>
+    <td class="partial">
+      <ol>
+        <li>Does not work with ordinary arrays. Ie, $​([3,4]​)​.last​(​) does not return 3</li>
+      </ol>
+    </td>
   </tr>
   <tr>
     <td>.map()</td>
+    <td class="full"></td>
+    <td class="full"></td>
+    <td class="partial">
+      <ol>
+        <li>Very buggy. The function retrieves arguments (element, index) instead of (index, element).</li>
+        <li>The 'this' does not point to the element, but to window</li>
+      </ol>
+    </td>
   </tr>
   <tr>
     <td>.next()</td>
+    <td class="full"></td>
+    <td class="full"></td>
+    <td class="partial">
+      <ol>
+        <li>Only works on one element (the rest is dropped)</li>
+      </ol>
+    </td>
   </tr>
   <tr>
     <td>.offset()</td>
