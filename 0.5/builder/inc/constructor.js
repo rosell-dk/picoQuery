@@ -56,6 +56,10 @@ function P(a,b) {
           b = b.documentElement
         };
 
+        if (b.length !== undefined) {
+          b = __TO_ARRAY__(<@ b @>);
+        }
+
         var roots = (b instanceof P ? b.e : b instanceof Array ? b : [b]);
 
         // Push results to this array
@@ -127,7 +131,10 @@ function P(a,b) {
 
   }
   // jQuery ( NodeList )
-  else if (a instanceof NodeList) {
+//  else if (a instanceof NodeList) {
+
+  // jQuery ( Array-like object )  (ie NodeList or HTMLCollection)
+  else if (a.length !== u) {
 //    console.log('html', a, a instanceof NodeList);
     this.e = __TO_ARRAY__(<@ a @>);
   }
