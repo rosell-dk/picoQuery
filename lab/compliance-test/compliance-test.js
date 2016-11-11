@@ -3,22 +3,23 @@
 function htmlEscapeEtc(str) {
   var zws = 'ZWS';
   str = str
-      .replace(/&/g, '&amp;')
-      .replace(/\./g, zws + '.')
-      .replace(/\(/g, zws + '(')
-      .replace(/\)/g, zws + ')')
-      .replace(/\</g, zws + '<')
-      .replace(/\>/g, '>' + zws)
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/ZWS/g, '&#8203;')
+    .replace(/&/g, '&amp;')
+    .replace(/\./g, zws + '.')
+    .replace(/\(/g, zws + '(')
+    .replace(/\)/g, zws + ')')
+    .replace(/\</g, zws + '<')
+    .replace(/\>/g, '>' + zws)
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/ZWS/g, '&#8203;')
 //      .replace(/ZWS/g, '<span class="zero-width-space"> !!! </span>')
   return str;
 }
 
-function toPrint(obj) {
+function toPrint(obj, skipMarkUp) {
+//  skipMarkUp = !!skipMarkUp;
   switch (typeof obj) {
     case 'object':
       var html = '';
@@ -32,7 +33,12 @@ function toPrint(obj) {
       }
       var className = obj.constructor.toString().match(/function (\w*)/)[1];
       if ((className == 'DOMException') || (className == 'TypeError') || (className == 'ReferenceError') || (className == 'Error')) {
-        html = '<span class="error">' + obj.name + (obj['message'] ? '<span class="error-description">' + obj.message + '</span>' : '') + '</span>';
+        if (skipMarkUp) {
+          html = obj.name + (obj['message'] ? obj.message : '');
+        }
+        else {
+          html = '<span class="error">' + obj.name + (obj['message'] ? '<span class="error-description">' + obj.message + '</span>' : '') + '</span>';
+        }
       }
       else if (className.match('^HTML[^E]*Element')) {
         // Its an HTML Element
@@ -46,7 +52,11 @@ function toPrint(obj) {
           html = className;
         }
         else {
-          html = '<span class="element-html">' + htmlEscapeEtc(obj.outerHTML) + '</span>';
+//          html = htmlEscapeEtc(obj.outerHTML);
+          html = obj.outerHTML;
+          if (!skipMarkUp) {
+            html = '<span class="element-html">' + htmlEscapeEtc(html) + '</span>';
+          }
         }
 
         // Show all object properties
@@ -75,9 +85,15 @@ function toPrint(obj) {
         // - or a jQuery object, or something array-like 
         var content = [];
         for (var i=0; i<obj.length; i++) {
-          content.push(toPrint(obj[i]));
+          content.push(toPrint(obj[i], skipMarkUp));
         }
-        html = '<span class="array">[ ' + content.join('<span class="comma">,</span>') + ' ]</span>';
+        if (skipMarkUp) {
+          html = '[ ' + content.join(',') + ' ]';
+        }
+        else {
+          html = '<span class="array">[ ' + content.join('<span class="comma">,</span>') + ' ]</span>';
+        }
+
         if (obj.ready) {
           
         }
@@ -103,9 +119,14 @@ function toPrint(obj) {
       ) {
         var content = [];
         for (var prop in obj) {
-          content.push(prop + ':' + toPrint(obj[prop]));
+          content.push(prop + ':' + toPrint(obj[prop], skipMarkUp));
         }
-        html = '<span class="obj">{ ' + content.join('<span class="comma">,</span>') + ' }</span></span>';
+        if (skipMarkUp) {
+          html = '{ ' + content.join(',') + ' }';
+        }
+        else {
+          html = '<span class="obj">{ ' + content.join('<span class="comma">,</span>') + ' }</span></span>';
+        }
 //          html = className;
       }
       else if (className == 'Text') {
@@ -115,7 +136,7 @@ function toPrint(obj) {
       }
       else if (className == 'NodeList') {
 //          html = className + '{' + toPrint(obj.childNodes) + '}';
-        html = className + '{' + toPrint([].slice.call(obj)) + '}';
+        html = className + '{' + toPrint([].slice.call(obj), skipMarkUp) + '}';
 
       }
       else {
@@ -125,14 +146,22 @@ function toPrint(obj) {
       }
       return html;
     case 'string':
-      return '<span class="value">"' + htmlEscapeEtc(obj) + '"</span>';
+      html = obj;
+      if (!skipMarkUp) {
+        html = '<span class="value">"' + htmlEscapeEtc(html) + '"</span>';
+      }
+      return html;
     default:
-      return '<span class="value">' + JSON.stringify(obj) + '</span>';
+      html = JSON.stringify(obj);
+      if (!skipMarkUp) {
+        html = '<span class="value">' + html + '</span>'
+      }
+      return html;
   }
 }
 
 window.testNumber = 0;
-function testInAllFrameworks(code, description) {
+function testInAllFrameworks(code, description, anchor_name) {
 
   var testResults = [];
 //  var frameworks = [j$, z$, p$, pmin$];
@@ -207,7 +236,13 @@ function testInAllFrameworks(code, description) {
   var tr = '<tr>';
 //  tr += '<td>' + window.testNumber + '</td>';
 
-  tr += '<td>' + description + '</td>';
+
+  if (anchor_name) {
+    tr += '<td><a name="' + anchor_name + '">&nbsp;</a>' + description + '</td>';
+  }
+  else {
+    tr += '<td>' + description + '</td>';
+  }
 
   tr += '<td><div class="code" title="' + description + '">' + htmlEscapeEtc(code) + '</div></td>';
   for (var i=0; i<tdContent.length; i++) {
@@ -215,6 +250,26 @@ function testInAllFrameworks(code, description) {
       tr += '<td class="test">' + tdContent[i] + '</td>';
     }
     else {
+      // We got an error...
+
+      var unformattedOutput = testResults.map(function(item) {
+        return toPrint(item, true);
+      });
+//      tr += '<td class="test mismatch">' + unformattedOutput[i] + '</span></td>';
+
+      var j=0;
+      while (unformattedOutput[i].charAt(j) == unformattedOutput[0].charAt(j)) {
+        j++;
+      }
+      if (j==0) {
+        tr += '<td class="test mismatch">' + tdContent[i] + '</span></td>';
+      }
+      else {
+        tr += '<td class="test mismatch">' + htmlEscapeEtc(unformattedOutput[i].substr(0,j)) + '<span style="display:inline-block;min-width:10px;border-bottom:2px solid red;">' + htmlEscapeEtc(unformattedOutput[i].substr(j,1)) + '</span>' + htmlEscapeEtc(unformattedOutput[i].substr(j+1)) + '</td>';
+      }
+
+
+/*
       var j=0;
       while (tdContent[i].charAt(j) == tdContent[0].charAt(j)) {
         j++;
@@ -250,6 +305,7 @@ function testInAllFrameworks(code, description) {
 
         tr += '<td class="test mismatch">' + tdContent[i].substr(0,j) + '<span style="display:inline-block;min-width:10px;border-bottom:2px solid red;">' + tdContent[i].substr(j,l) + '</span>' + tdContent[i].substr(j+l) + '</td>';
       }
+*/
     }
   }
   tr += '</tr>';
@@ -358,7 +414,7 @@ function runTests(groupsToShow) {
       else {
         subgrouptrs = [];
         sg['tests'].forEach(function (test) {
-          var tr = testInAllFrameworks(test[0], test[1]);
+          var tr = testInAllFrameworks(test[0], test[1], test[2]);
           if (tr != "") {
             subgrouptrs.push(tr);
           }          

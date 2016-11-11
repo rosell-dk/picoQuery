@@ -89,10 +89,22 @@ $(function() {
     if (method.indexOf('()') > 0) {
       method = html.replace("()", "").split('.').join('');
     }
-    var html = '<a href="http://picoquery/lab/compliance-test/?frameworks=jquery-1.9.1.min.js,picoquery,zepto,cash&group=' + method + '" target="_blank">' + html + '</a>';
+    var html = '<a href="http://picoquery/lab/compliance-test/?frameworks=jquery-1.12.4.min.js,picoquery,zepto,cash&group=' + method + '" target="_blank">' + html + '</a>';
     $(this).html(html);
   });
 
+  // Link to compliance test
+  $('li[data-proof]').each(function() {
+    var proofs = $(this).attr('data-proof').split(',');
+    var $this = $(this);
+    proofs.forEach(function(proof) {
+      $a = $('<a href="' + $this.closest('tr').children(':first-child').children('a').attr('href') + '#' + proof + '">proof</a>');
+      $a.css('cssText', 'margin:0 4px');
+      $this.append($a);
+    });
+  });
+
+  // Tooltips
   $('[title]').each(function() {
     $(this).attr('data-tip', $(this).attr('title'));
   });

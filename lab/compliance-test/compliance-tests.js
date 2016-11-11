@@ -429,7 +429,7 @@ window.complianceTests = [
         tests: [
           ['$("#item3")', "Standard"],
           ['$("ul ul li:nth-child(odd)")', "<i>selector</i> is a CSS3 selector"],
-          ['$("ul ul li:odd")', "<i>selector</i> is a special jQuery selector. Currently unsupported"],
+          ['$("ul ul li:odd")', "<i>selector</i> is a special jQuery selector. Currently unsupported", "jquery_selectors"],
         ]
       },
       {
@@ -464,7 +464,7 @@ window.complianceTests = [
         name: 'jQuery( selector, context [ Array ] )',
         tests: [
           ['$("li", $("#item3").get())', "jQuery( selector, [ Array ] )"],
-          ['$("li", [$("#item3").get(0), $("#item2").get(0)])', "jQuery( selector, [ Array of [Element]] ).<br><br>Whoopsidasie, the order is different in picoQuery. It seems to get the order right, picoQuery must first do an unscoped search and then filter the results such that items outside the context are removed"],
+          ['$("li", [$("#item3").get(0), $("#item2").get(0)])', "jQuery( selector, [ Array of [Element]] ).<br><br>Whoopsidasie, the order is different in picoQuery. It seems to get the order right, picoQuery must first do an unscoped search and then filter the results such that items outside the context are removed", "wrong_order"],
         ]
       },
       {
@@ -474,7 +474,7 @@ window.complianceTests = [
           ['$(makeTextNode("text"))', "[ Text Node ]"],
           ['$(makeElement("<i>italic</i>"))', "[ Element ]"],
           ['$(makeNodeList())', "[ NodeList ]"],
-          ['$(makeHTMLCollection())', "[ HTMLCollection ]"],
+          ['$(makeHTMLCollection())', "[ HTMLCollection ]", "html_collection"],
 
 
         ]
@@ -506,6 +506,13 @@ window.complianceTests = [
         name: 'jQuery( html )',
         tests: [
           ['$("<li id=one>1</li><li id=two>2</li>")', ""],
+          ['$("<hr/>")', "Self-closing tag on void element (valid in HTML5, but <a href='http://stackoverflow.com/questions/3558119/are-self-closing-tags-valid-in-html5'>syntactic sugar</a>). Btw, this document has <a href='http://www.w3schools.com/html/html5_intro.asp'>HTML5 doctype</a>"],
+          ['$("<div/>")', "Self-closing tag on container element. According to the link above, this is actually an error in HTML5. It will be treated as a starting tag, and problem arises, because there will be no ending tag"],
+          ['$("<div/>a</div>")', "Internally, picoQuery uses innerHtml. As explained above, first tag is illegal but treated as a starting tag (in HTML5). jQuery on the other hand does some parsing, and converts the invalid self-closing tag to &lt;div>&lt;/div>", "invalid_html"],
+          ['$("<div class=div1/>")', "Self-closing tag", "invalid_html2"],
+          ['$("<div class=\'div1\'/>")', "Self-closing tag"],
+          ['$("<div class=div1></div>")', ""],
+
         ]
       },
       {
@@ -528,7 +535,9 @@ window.complianceTests = [
         tests: [
           ['$("<div class=div1/><div class=div2/>")', "Invalid self-closing tag (http://stackoverflow.com/questions/3558119/are-self-closing-tags-valid-in-html5)"],
           ['$("<hr />")', "Valid self-closing tag"],
-          ['$({length:1,0:document.getElementById("item3_1")})', "Array-like"],
+          ['$({length:1,0:document.getElementById("item3_1")})', "Array-like", "array_like"],
+          ['$({0:document.getElementById("item3_1")})', "Object, not so array-like"],
+          ['$({zero:document.getElementById("item3_1")})', "Object, not array-like at all"],
           ['$(jq$("<div>text</div>"))', ""],
           ['$(jq$("<div>text</div>").get(0))', ""],
           ['$(jq$("<div>text</div>").get(0).childNodes)', ""],
