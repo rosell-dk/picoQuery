@@ -465,7 +465,7 @@ window.complianceTests = [
           ['$("li", [document.getElementById("item3")])', "One element in standard array", "context_is_array"],
           ['$("li", [$("#item3").get(0), $("#item2").get(0)])', "Two elements in array. <br><br>Whoopsidasie, the order is different in picoQuery. It seems to get the order right, picoQuery must first do an unscoped search and then filter the results such that items outside the context are removed", "wrong_order"],
           ['$("li", document.getElementById("ul0").childNodes)', "[ NodeList ]", "edgecase3"],
-          ['$("li", document.getElementById("ul0").getElementsByTagName("ul"))', "[ HTMLCollection ]"],
+          ['$("li", document.getElementById("ul0").getElementsByTagName("ul"))', "[ HTMLCollection ]", "edgecase4"],
 
 
         ]
@@ -516,8 +516,9 @@ window.complianceTests = [
           ['$("<hr/>")', "Self-closing tag on void element (valid in HTML5, but <a href='http://stackoverflow.com/questions/3558119/are-self-closing-tags-valid-in-html5'>syntactic sugar</a>). Btw, this document has <a href='http://www.w3schools.com/html/html5_intro.asp'>HTML5 doctype</a>"],
           ['$("<div/>")', "Self-closing tag on container element. According to the link above, this is actually an error in HTML5. It will be treated as a starting tag, and problem arises, because there will be no ending tag"],
           ['$("<div/>a</div>")', "Internally, picoQuery uses innerHtml. As explained above, first tag is illegal but treated as a starting tag (in HTML5). jQuery on the other hand does some parsing, and converts the invalid self-closing tag to &lt;div>&lt;/div>", "invalid_html"],
-          ['$("<div class=div1/>")', "Self-closing tag", "invalid_html2"],
-          ['$("<div class=\'div1\'/>")', "Self-closing tag"],
+          ['$("<div class=div1/>")', "Self-closing tag with unquoted attribute (unvalid in HTML5)", "invalid_html2"],
+          ['$("<hr class=hr/>")', "Self-closing tag (void element) with unquoted attribute (valid in HTML5)"],
+          ['$("<div class=\'div1\'/>")', "Self-closing tag with quoted attribute"],
           ['$("<div class=div1></div>")', ""],
 
         ]
@@ -551,13 +552,6 @@ window.complianceTests = [
         ]
       },
       {
-        name: 'Edge cases',
-        tests: [
-          ['$("li", $("ul").get())', ""],
-          ['$("<div/>")', "Invalid tag syntax?"],
-        ]
-      },
-      {
         name: 'Outside specification',
         tests: [
           ['$(jq$("<div>text</div>").get(0).childNodes[0])', "jQuery([Text Node])"],
@@ -566,20 +560,30 @@ window.complianceTests = [
           ['$($("li#item1").get(0), $("ul#ul2"))', "selector is Element, and we provide a second argument"],
           ['function() {var li=document.createElement("li"),frag=document.createDocumentFragment();frag.appendChild(li);return $(frag)}()', "jQuery( [DocumentFragment] )"],
           ['$(null)', ""],
+          ['$(null).get(0)', ""],
           ['$(0)', ""],
-          ['$(1)', ""],
+          ['$(0).get(0)', ""],
+          ['$(1)', "", "edgecase5"],
+          ['$(2)', ""],
+          ['$(2).get(0)', ""],
           ['$(undefined)', ""],
           ['$("li", undefined)', ""],
           ['$("li", [undefined])', "", "edgecase1"],
-          ['$([document, null])', ""],
+          ['$([document, null])', "", "edgecase6"],
           ['$(false)', ""],
+          ['$(false).get(0)', ""],
           ['$("")', ""],
+          ['$("").get(0)', ""],
           ['$([])', ""],
+          ['$([]).get(0)', ""],
           ['$("a string")', ""],
-          ['$(true)', ""],
+          ['$("a string").get(0)', ""],
+          ['$(true)', "", "edgecase7"],
+          ['$(true).get(0)', ""],
           ['$([3,4])', ""],
+          ['$([3,4]).get(0)', ""],
           ['$(":scopepy body li", jq$("#item3").get(0))', "Applying non-existant pseudy-class."],
-          ['$(":scopydoodlydoo body li", jq$("#item3"))', "Applying non-existant pseudy-class."],
+          ['$(":scopydoodlydoo body li", jq$("#item3"))', "Applying non-existant pseudy-class.", "edgecase8"],
         ]
       },
     ]

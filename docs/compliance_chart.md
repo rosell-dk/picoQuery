@@ -54,7 +54,7 @@ Compliance summary:<br>
         <li data-proof="wrong_order">jQuery( selector, context [ Array of elements ] ) does not get the order right.</li>
         <li data-proof="invalid_html,invalid_html2">jQuery( html ) does not parse some invalid HTML the same way as jQuery does.</li>
         <li data-proof="html_collection,array_like">Array-like structures are not supported, ie jQuery( [HTMLCollection] ) (Will be fixed in v0.5.0)</li>
-        <li data-proof="edgecase1,edgecase3">Does not strictly comply in a few edge cases</li>
+        <li data-proof="edgecase1,edgecase3,edgecase4">Does not strictly comply in a few edge cases</li>
       </ol>
     </td>
     <td class="partial">
@@ -66,7 +66,7 @@ Compliance summary:<br>
         <!--<li data-proof="">jQuery( selector, context [ Element ] ) does not fully comply, when Element is a NodeList</li>-->
         <li data-proof="match_in_several_contexts">jQuery( selector, context [ jQuery ] ) does not remove duplicates, when there is a match in several contexts</li>
         <li data-proof="html_collection,array_like,nodelist">Array-like structures are not supported, ie jQuery( [HTMLCollection] ) and jQuery( [NodeList] )</li>
-        <li data-proof="edgecase1,edgecase2">Does not strictly comply in a few edge cases</li>
+        <li data-proof="edgecase1,edgecase2,edgecase3,edgecase4,edgecase5,edgecase6,edgecase7,edgecase8">Does not strictly comply in a few edge cases</li>
       </ol>
     </td>
     <td class="partial">
@@ -76,7 +76,7 @@ Compliance summary:<br>
 </li>
         <li>jQuery( selector, context [ jQuery ] ) does not work. - You cannot pass a jQuery object as context</li>
         <li>jQuery( selector, context [ Element ] ) returns matches root element of context, though it should not. Ie $​("#item3", document.&#8203;getElementById&#8203;("item3"​)​) returns a match</li>
-        <li>jQuery( html ) does not clean up invalid self-closing tags.</li>
+        <li data-proof="invalid_html,invalid_html2">jQuery( html ) does not parse some invalid HTML the same way as jQuery does.</li>
         <li data-proof="edgecase1,context_is_array">Does not strictly comply in more than a few edge cases</li>
       </ol>
     </td>

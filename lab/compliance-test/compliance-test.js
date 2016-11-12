@@ -253,7 +253,11 @@ function testInAllFrameworks(code, description, anchor_name) {
       // We got an error...
 
       var unformattedOutput = testResults.map(function(item) {
-        return toPrint(item, true);
+        var res = toPrint(item, true);
+        if (res === undefined) {
+          return "undefined";
+        }
+        return res;
       });
 //      tr += '<td class="test mismatch">' + unformattedOutput[i] + '</span></td>';
 
