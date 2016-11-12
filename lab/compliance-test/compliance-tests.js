@@ -438,7 +438,7 @@ window.complianceTests = [
           ['$("li", jq$("#item3").get(0))', "Standard"],
           ['$("body li", document.getElementById("item3"))', "selector begins with something outside of context. This requires special handling when finding is based on Element.querySelecorAll (which it is in picoQuery, Zepto and Cash). In newer browsers, you can will get the compliant behaviour with the :scope pseudo-class. picoQuery handles this - the solution is based on this shim: <a href='https://github.com/lazd/scopedQuerySelectorShim'>shim</a>. Zepto and Cash does not handle it (yet). Mere info: <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector'>the entire hierarchy counts</a>. <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll'>even more info</a>", "scoped_search"],
           ['$("li#item1", jq$("ul#ul2").get(0))', "selector is not in the decendant tree"],
-          ['$("#item3", jq$("#item3").get(0))', "selector matches root of context"],
+          ['$("#item3", jq$("#item3").get(0))', "selector matches root of context", "selector_matches_context_root"],
           ['$(":scope body li", jq$("#item3").get(0))', "Applying the :scope pseudo-class."],
           ['$("#item3 li", jq$("#item3").get(0))', "selector begins with something outside of context"],
           ['$("#item3", document)', "jQuery( selector, [HTMLDocument]"],
@@ -448,7 +448,7 @@ window.complianceTests = [
         name: 'jQuery( selector, context [ jQuery ] )',
         tests: [
           ['$("#item3", $("body"))', "Standard"],
-          ['$("li#item1", $("ul#ul2"))', "selector is not in the decendant tree"],
+          ['$("li#item1", $("ul#ul2"))', "selector is not in the decendant tree (no match)", "no_match_in_context"],
           ['$("#item3", $("#item3"))', "selector matches root of context"],
           ['$("#item3_1", $("#item2, #item3"))', "context has several 'roots', selector matches the second of them"],
           ['$("#item3_1", $("#item1, #item2"))', "context has several 'roots', but selector does not match in any of them"],

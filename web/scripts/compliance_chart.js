@@ -93,13 +93,14 @@ $(function() {
     $(this).html(html);
   });
 
-  // Link to compliance test
+  // Link to proofs
   $('li[data-proof]').each(function() {
     var proofs = $(this).attr('data-proof').split(',');
     var $this = $(this);
     proofs.forEach(function(proof) {
       $a = $('<a href="' + $this.closest('tr').children(':first-child').children('a').attr('href') + '#' + proof + '">proof</a>');
-      $a.css('cssText', 'margin:0 4px');
+//      $a.css('cssText', 'margin:0 4px');
+      $this.append('<span> </span>');
       $this.append($a);
     });
   });
