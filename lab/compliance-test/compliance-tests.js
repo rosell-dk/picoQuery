@@ -436,7 +436,7 @@ window.complianceTests = [
         name: 'jQuery( selector, context [ Element ] )',
         tests: [
           ['$("li", jq$("#item3").get(0))', "Standard"],
-          ['$("body li", document.getElementById("item3"))', "selector begins with something outside of context. This requires special handling when finding is based on Element.querySelecorAll (which it is in picoQuery, Zepto and Cash). In newer browsers, you can will get the compliant behaviour with the :scope pseudo-class. picoQuery handles this - the solution is based on this shim: <a href='https://github.com/lazd/scopedQuerySelectorShim'>shim</a>. Zepto and Cash does not handle it (yet). Mere info: <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector'>the entire hierarchy counts</a>. <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll'>even more info</a>"],
+          ['$("body li", document.getElementById("item3"))', "selector begins with something outside of context. This requires special handling when finding is based on Element.querySelecorAll (which it is in picoQuery, Zepto and Cash). In newer browsers, you can will get the compliant behaviour with the :scope pseudo-class. picoQuery handles this - the solution is based on this shim: <a href='https://github.com/lazd/scopedQuerySelectorShim'>shim</a>. Zepto and Cash does not handle it (yet). Mere info: <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector'>the entire hierarchy counts</a>. <a href='https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll'>even more info</a>", "scoped_search"],
           ['$("li#item1", jq$("ul#ul2").get(0))', "selector is not in the decendant tree"],
           ['$("#item3", jq$("#item3").get(0))', "selector matches root of context"],
           ['$(":scope body li", jq$("#item3").get(0))', "Applying the :scope pseudo-class."],
@@ -450,21 +450,24 @@ window.complianceTests = [
           ['$("#item3", $("body"))', "Standard"],
           ['$("li#item1", $("ul#ul2"))', "selector is not in the decendant tree"],
           ['$("#item3", $("#item3"))', "selector matches root of context"],
-          ['$("#item3_1", $("ul ul"))', "context has several 'roots'"],
+          ['$("#item3_1", $("#item2, #item3"))', "context has several 'roots', selector matches the second of them"],
+          ['$("#item3_1", $("#item1, #item2"))', "context has several 'roots', but selector does not match in any of them"],
           ['$("li", $("<ul></ul><ul><li></li></ul>"))', "context has several 'roots'"],
 
-          ['$("#item3 li", $("#item3"))', ""],
-          ['$("body", $("body"))', ""],
-          ['$("body li.odd", $("body"))', ""],
-          ['$("ul ul li.odd", $("ul"))', ""],
-          ['$("li.odd", $("ul"))', ""],
+          ['$("#item3 li", $("#item3"))', "Selector begins with something outside of context"],
+          ['$("body", $("body"))', "Selector begins with something outside of context"],
+          ['$("li.odd", $("ul"))', "Selector matches in several contexts. jQuery removes duplicates, but Zepto 2.1.4 does not.", "match_in_several_contexts"],
         ]
       },
       {
-        name: 'jQuery( selector, context [ Array ] )',
+        name: 'jQuery( selector, context [ Array ] ) (outside specification)',
         tests: [
-          ['$("li", $("#item3").get())', "jQuery( selector, [ Array ] )"],
-          ['$("li", [$("#item3").get(0), $("#item2").get(0)])', "jQuery( selector, [ Array of [Element]] ).<br><br>Whoopsidasie, the order is different in picoQuery. It seems to get the order right, picoQuery must first do an unscoped search and then filter the results such that items outside the context are removed", "wrong_order"],
+          ['$("li", [document.getElementById("item3")])', "One element in standard array", "context_is_array"],
+          ['$("li", [$("#item3").get(0), $("#item2").get(0)])', "Two elements in array. <br><br>Whoopsidasie, the order is different in picoQuery. It seems to get the order right, picoQuery must first do an unscoped search and then filter the results such that items outside the context are removed", "wrong_order"],
+          ['$("li", document.getElementById("ul0").childNodes)', "[ NodeList ]", "edgecase3"],
+          ['$("li", document.getElementById("ul0").getElementsByTagName("ul"))', "[ HTMLCollection ]"],
+
+
         ]
       },
       {
@@ -473,8 +476,6 @@ window.complianceTests = [
           ['$(jq$("#item3").get(0))', "Standard - <i>element</i> is an Element node"],
           ['$(makeTextNode("text"))', "[ Text Node ]"],
           ['$(makeElement("<i>italic</i>"))', "[ Element ]"],
-          ['$(makeNodeList())', "[ NodeList ]"],
-          ['$(makeHTMLCollection())', "[ HTMLCollection ]", "html_collection"],
 
 
         ]
@@ -482,7 +483,13 @@ window.complianceTests = [
       {
         name: 'jQuery( elementArray )',
         tests: [
-          ['$([$("#item3").get()])', ""],
+          ['$([document.getElementById("item3")])', "Standard Array"],
+          ['$($("#item3").get())', "Standard Array (exact same as above)"],
+          ['$(makeNodeList())', "[ NodeList ]", "nodelist"],
+          ['$(makeHTMLCollection())', "[ HTMLCollection ]", "html_collection"],
+          ['$("#item3").get()', ""],
+          ['console.log("hm",$("#item3").get())', ""],
+
         ]
       },
       {
@@ -538,18 +545,8 @@ window.complianceTests = [
           ['$({length:1,0:document.getElementById("item3_1")})', "Array-like", "array_like"],
           ['$({0:document.getElementById("item3_1")})', "Object, not so array-like"],
           ['$({zero:document.getElementById("item3_1")})', "Object, not array-like at all"],
-          ['$(jq$("<div>text</div>"))', ""],
-          ['$(jq$("<div>text</div>").get(0))', ""],
-          ['$(jq$("<div>text</div>").get(0).childNodes)', ""],
-          ['jq$("<div>text</div>").get(0)', ""],
-          ['jq$("<div>text</div>").get(0).childNodes', ""],
-          ['makeNodeList()', ""],
-          ['$(jq$("<span>text<p>node</p></span>").get(0).childNodes)', ""],
-          ['$("li", $("ul").get(0))', ""],
-          ['$([$("#item3").get(0)])', ""],
-          ['$("#item3").get()', ""],
-          ['$("#item3").get(0)', ""],
-          ['$("li", $("#item3").get())', ""],
+          ['$($("<div>text</div>"))', "Wrapping a jQuery object"],
+          ['$(jq$("<div>text</div>"))', "Wrapping a jQuery 1.12.4 object", "edgecase2"],
 //          ['$("<li><a></a></li>").children("a").end()', "pushstack. Every traversal method creates a new jQuery set and builds a stack. Use .end() to get at the previous set. Not supported in picoQuery yet"],
         ]
       },
@@ -573,7 +570,7 @@ window.complianceTests = [
           ['$(1)', ""],
           ['$(undefined)', ""],
           ['$("li", undefined)', ""],
-          ['$("li", [undefined])', ""],
+          ['$("li", [undefined])', "", "edgecase1"],
           ['$([document, null])', ""],
           ['$(false)', ""],
           ['$("")', ""],
