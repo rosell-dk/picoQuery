@@ -405,6 +405,11 @@ window.complianceTests = [
           ['$("li").closest("ul", $("#ul0").get(0))', ""],
           ['$("li").closest("#ul0", $("#ul2").get(0))', "Selection isnt in context. The jQuery result may be somewhat surprising. The doc says about context: A DOM element within which a matching element may be found. Yet, the element returned by jQuery is not found in the context"],
           ['$("li").closest("li#item2_1", $("body").get(0))', ""],
+          ['function() {var doc = document.getElementById("testiframe").contentWindow.document; var el=doc.createElement("list"); el.appendChild(doc.createElement("item")); doc.documentElement.appendChild(el); return $("item", doc).first().closest("list", doc)}()', "Selection and context is another document"],
+          ['function() {var doc = document.getElementById("testiframe").contentWindow.document; var el=doc.createElement("list"); el.appendChild(doc.createElement("item")); doc.documentElement.appendChild(el); return $("item", doc).first().closest("list")}()', "This test shows that context per default is the context of the selection"],
+          ['$("li").closest("ul", document.getElementById("testiframe").contentWindow.document)', "Setting another document as context has no effect in jQuery, it seems..."],
+          ['$("li").closest("notfound", document.getElementById("testiframe").contentWindow.document)', ""],
+// $(} $("<ul><li>truck<li></truck>", ).find("li").closest("ul")
         ]
       },
       {
@@ -488,7 +493,7 @@ window.complianceTests = [
           ['$(makeNodeList())', "[ NodeList ]", "nodelist"],
           ['$(makeHTMLCollection())', "[ HTMLCollection ]", "html_collection"],
           ['$("#item3").get()', ""],
-          ['console.log("hm",$("#item3").get())', ""],
+//          ['console.log("hm",$("#item3").get())', ""],
 
         ]
       },
@@ -526,6 +531,8 @@ window.complianceTests = [
       {
         name: 'jQuery( html, ownerDocument )',
         tests: [
+          ['$("<b>some html</b>", document.getElementById("testiframe").contentWindow.document).get(0).ownerDocument', "Is signature supported at all?", "owner_document"],
+//          ['document.getElementById("testiframe").contentWindow.document', ""],
         ]
       },
       {
@@ -536,6 +543,8 @@ window.complianceTests = [
       {
         name: 'jQuery( callback )',
         tests: [
+          ['$(function(dollar){console.log("jQuery( callback ) called. Arguments:", arguments)})', "The callback should receive a reference to jQuery. It does not in Cash 1.3.0 (see console output)"],
+
         ]
       },
       {

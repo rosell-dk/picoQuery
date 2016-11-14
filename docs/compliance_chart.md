@@ -54,6 +54,7 @@ Compliance summary:<br>
         <li data-proof="wrong_order">jQuery( selector, context [ Array of elements ] ) does not get the order right.</li>
         <li data-proof="invalid_html,invalid_html2">jQuery( html ) does not parse some invalid HTML the same way as jQuery does.</li>
         <li data-proof="html_collection,array_like">Array-like structures are not supported, ie jQuery( [HTMLCollection] ) (Will be fixed in v0.5.0)</li>
+        <li data-proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html )</li>
         <li data-proof="edgecase1,edgecase3,edgecase4">Does not strictly comply in a few edge cases</li>
       </ol>
     </td>
@@ -66,6 +67,7 @@ Compliance summary:<br>
         <!--<li data-proof="">jQuery( selector, context [ Element ] ) does not fully comply, when Element is a NodeList</li>-->
         <li data-proof="match_in_several_contexts">jQuery( selector, context [ jQuery ] ) does not remove duplicates, when there is a match in several contexts</li>
         <li data-proof="html_collection,array_like,nodelist">Array-like structures are not supported, ie jQuery( [HTMLCollection] ) and jQuery( [NodeList] )</li>
+        <li data-proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html )</li>
         <li data-proof="edgecase1,edgecase2,edgecase3,edgecase4,edgecase5,edgecase6,edgecase7,edgecase8">Does not strictly comply in some edge cases</li>
       </ol>
     </td>
@@ -75,8 +77,10 @@ Compliance summary:<br>
         <li data-proof="scoped_search">jQuery( selector, context [ Element ] ) is buggy: It finds elements that are parent to the selection. Ie $​("body li", document.&#8203;getElementById&#8203;("item3")) returns unexpected matches. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></li>
 </li>
         <li data-proof="no_match_in_context">jQuery( selector, context [ jQuery ] ) is not supported. Doing gives various results.</li>
+        <li data-proof="no_match_in_context">jQuery( callback ) is buggy: Callback does not receive a reference to $ which can be used to write failsafe jQuery code</li>
         <li data-proof="selector_matches_context_root">jQuery( selector, context [ Element ] ) returns matches root element of context, though it should not. Ie $​("#item3", document.&#8203;getElementById&#8203;("item3"​)​) returns a match</li>
         <li data-proof="invalid_html,invalid_html2">jQuery( html ) does not parse some invalid HTML the same way as jQuery does.</li>
+        <li data-proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html )</li>
         <li data-proof="edgecase1,context_is_array,edgecase7">Does not strictly comply in a few edge cases</li>
       </ol>
     </td>

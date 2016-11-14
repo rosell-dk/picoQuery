@@ -139,6 +139,9 @@ function toPrint(obj, skipMarkUp) {
         html = className + '{' + toPrint([].slice.call(obj), skipMarkUp) + '}';
 
       }
+      else if (className == 'HTMLDocument') {
+        return 'HTMLDocument (URL: ' + ((obj.URL.length > 25) ? obj.URL.substr(0,25) + '...' : obj.URL) + ')';
+      }
       else {
         // Some kind of object, ie 'HTMLDocument', 'DocumentFragment', 'Text', 'NodeList', etc
         // we only show the class name for unknown objects
