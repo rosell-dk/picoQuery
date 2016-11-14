@@ -17,20 +17,17 @@ function P(a,b) {
 		this.e = [];
 	}
 
-  // It would be most readable if we wrote:
-  //   if (typeof a === 'string') {
-  // But we prioritize compact code over readability and speed, and can utilize the fact, that
-  // there aren't any javascript datatype that comes after 'string', alphabetically
-  // (possible data types are: boolean, number, function, object, string)
-  else if (typeof a > 's') {
-//console.log('array', a);
+  else if (__IS_STRING__(<@ a @>)) {
 
     // jQuery( html )
     // TODO: Support optional [ownerDocument] and [attributes]
     if (a[0] == '<') {
       // TODO: look at jQuery.parseHtml() and zepto.fragment
       // Need we test for ending '>' like jQuery does?
-      var el = d.createElement('div');
+
+      // (b || d) expression used to support jQuery( html, ownerDocument)
+      // According to the doc, ownerDocument must be a Document (but jQuery supports others, it seems at a quick glance of source)
+      var el = (b || d).createElement('div');
       el.innerHTML = a;
       this.e = __TO_ARRAY__(<@ el.children @>);
 
