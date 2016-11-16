@@ -18,24 +18,24 @@ function P(a,b) {
 	}
 
   else if (__IS_STRING__(<@ a @>)) {
-
     // jQuery( html )
-    // TODO: Support optional [ownerDocument] and [attributes]
     if (a[0] == '<') {
-      // TODO: look at jQuery.parseHtml() and zepto.fragment
-      // Need we test for ending '>' like jQuery does?
-
-      // (b || d) expression used to support jQuery( html, ownerDocument)
       // According to the doc, ownerDocument must be a Document (but jQuery supports others, it seems at a quick glance of source)
-      var el = (b || d).createElement('div');
+
+      var el = (__IS_DOCUMENT_OBJECT__(<@ b @>) ? b : d).createElement('div');
       el.innerHTML = a;
       this.e = __TO_ARRAY__(<@ el.children @>);
 
-/*      this.e = __MAP__(this.e, function(item) {
-        if (item.children) {
+      if (__IS_PLAIN_OBJECT__(<@ b @>) && /^<([\w-]+)\s*\/?>(<\/\1>)?$/.test(a)) {
+        for (key in b) {
+          if (this[key]) {
+            this[key].call(this, b[key])
+          }
+          else {
+            this.attr(key, b[key]);
+          }
         }
-      })*/
-      // intro to document fragments in jQuery:   // http://ejohn.org/apps/workshop/adv-talk/#5
+      }
     }
 
     // jQuery( selector )
@@ -133,7 +133,6 @@ function P(a,b) {
   // jQuery ( Array-like object )  (ie NodeList or HTMLCollection)
   else if (a.length !== u) {
     this.e = __TO_ARRAY__(<@ a @>);
-    console.log('html', a, this.e);
   }
   // TODO: support jQuery (plainObject)
   else {

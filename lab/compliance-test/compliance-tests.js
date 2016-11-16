@@ -538,6 +538,27 @@ window.complianceTests = [
       {
         name: 'jQuery( html, attributes )',
         tests: [
+          ['$("<div></div>", {"class": "mydiv"})', "A string defining a single, standalone, HTML element (e.g. <div/> or <div></div>) - just like the spec says", "attributes"],
+          ['$("<hr/>", {"class": "my-hr"})', "variant of above"],
+          ['$("<div/>", {"class": "my-div"})', "variant of above (but illegal syntax in HTML5)"],
+          ['$("<div>non-empty</div>", {"class": "mydiv"})', "A string defining a non-empty element (outside spec)", "attributes_non_empty"],
+          ['$("<div><b>non-empty</b></div>", {"class": "mydiv"})', "A string defining a non-empty element (outside spec)"],
+          ['$("<div></div>", {"class": function(idx,oldAttr){return "mydiv2"}})', "Set an attribute with a function"],
+          ['$("<div></div>", {"class": function(idx,oldAttr){return "my-" + idx + "-" + oldAttr}})', "Test if function arguments are correct"],
+          ['$("<div></div>", {"text": "some text"})', "text()"],
+          ['$("<div></div>", {"html": "<b>hello</b>"})', "html()"],
+//          ['$("<input></input>", {"val": "14"}).val()', "val()"],
+//          ['$("<input></input>", {"val": function(){return "fourteen"}}).val()', "val(), as function"],
+
+//          ['$("<div></div>", {"html": "<b>hello</b><i></i>", "append": "<append>me</append>"})', "append()"],
+          ['$("<div></div>", {"append": "<append>me</append>"})', "append(). This fails in zepto. In jQuery 1.4-1.7 only certain methods were allowed, but in jQuery 1.8 allows all instance methods are allowed. Zepto 1.2.0 only support the original methods ('val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset' and events)", "jq1_8methods_as_attributes"],
+
+          ['$("<input></input>", {"napoleon": "14"})', "Neather name of a method nor standard attribute name"],
+
+          ['$("<div></div>", {"ready": function(){console.log("jQuery( html, attributes ) - ready")}})', "Event (check console)"],
+          ['$("<div></div>", {on:{ready: function(){console.log("ready")}}})', "Strange. This should work in jQuery, according to doc, but it does not"],
+          ['$("<div></div><div></div>", {"text": "some text"})', "two elements"],
+          ['$("<my-div></my-div>", {"text": "some text"})', "dashes in tag names are accepted in jquery"],
         ]
       },
       {
@@ -604,8 +625,8 @@ window.complianceTests = [
       {
         name: 'testing...',
         tests: [
-          ['$("li", jq$("#item3").get(0))', "Standard"],
-          ['$("#item3", document)', "jQuery( selector, [HTMLDocument]"],
+//          ['$("li", jq$("#item3").get(0))', "Standard"],
+//          ['$("#item3", document)', "jQuery( selector, [HTMLDocument]"],
 //          ['jq$("<b>hej</b>").get(0)', ""],
 //          ['$(jq$("<b>hej</b>"))', ""],
 //            ['$("#item3").get()', ""],
@@ -613,8 +634,8 @@ window.complianceTests = [
         ]
       }
     ]
-  },*/
-
+  },
+*/
 
   {
     name: '.css()',

@@ -1,3 +1,38 @@
+A note about the single tag test.
+In jQuery its like this:
+var rsingleTag = ( /^<([\w-]+)\s*\/?>(?:<\/\1>|)$/ );
+It matches ie "<div></div>", "<div/>" and "<my-div/>"
+
+In zepto its like this:
+singleTagRE = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
+The difference is that it does not allow dash in tag name
+
+In picoQuery, its like this:
+var re = /^<([\w-]+)\s*\/?>(<\/\1>)?$/;
+The "?:" is removed, because here we have no need to define it as a non-capturing group
+The "|" is removed, because it does not seem to do anything...
+
+In picoQuery, we only use the test in order to obtain compliance in when to trigger the 
+jQuery(html, attributes) behaviour (in jQuery, attributes are only applied if html is an empty tag)
+
+
+Zepto and jQuery uses this regex to do a createElement instead of innerHtml. 
+We could also do it when optimizing for speed, like this:
+```
+if (/^<([\w-]+)\s*\/?>(<\/\1>)?$/.test(a)) {
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/lastMatch
+  el = d.createElement(RegExp.$1);
+}
+else {
+  el.innerHTML = a;
+}
+```
+
+
+Intro to document fragments in jQuery:   // http://ejohn.org/apps/workshop/adv-talk/#5
+
+
+
 ### jQuery 1.12.4 implementation
 ```
 	init = jQuery.fn.init = function( selector, context, root ) {
@@ -149,6 +184,8 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 	return jQuery.merge( [], parsed.childNodes );
 };
 
+var rsingleTag = ( /^<([\w-]+)\s*\/?>(?:<\/\1>|)$/ );
+
 ```
 
 ### Cash 1.3.0 implementation
@@ -292,6 +329,9 @@ zepto.fragment = function(html, name, properties) {
 
   return dom
 }
+methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
+
+singleTagRE = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
 
 ```
 

@@ -719,6 +719,8 @@ $helpers_second_pass = array(
   array('IS_FUNCTION', 'isFunction', 'o'),
   array('IS_UNDEFINED', 'isUndefined', 'U'),
   array('IS_STRING', 'isString', 'n'),
+  array('IS_PLAIN_OBJECT', 'isPlainObject', 'F'),
+  array('IS_DOCUMENT_OBJECT', 'isDocumentObject', 'G'),
   array('FLATTEN', 'flatten', 'v'),
   array('REMOVE_DUPLICATES', 'rmDuplicates', 'D'),
   array('REMOVE_DUPLICATES_AND_NULLS', 'rmDuplicatesAndNulls', 'F'),
@@ -820,7 +822,13 @@ function parseArgs($helper, $js) {
       // done
 //      echo 'DONE';
 //      print_r(array('args' => $args, 'extra' => substr($js, $pos)));
-      return array('args' => $args, 'extra' => substr($js, $pos));
+
+      $extra = substr($js, $pos);
+      // We have this weird problems with backslash and $
+      $extra = preg_replace('/\\\\/', '__BACKSLASH__', $extra);
+      $extra = preg_replace('/\$/', '__DOLLAR__', $extra);
+
+      return array('args' => $args, 'extra' => $extra);
     }
     else if (substr($js, $pos, 1) == ',') {
 //      echo 'FOUND COMMA';
@@ -970,6 +978,7 @@ function process_helpers($js) {
   $js = preg_replace('/\[\[END-INCLUDE]\]/', '', $js);
 
   $js = preg_replace('/__BACKSLASH__/', '\\\\', $js);
+  $js = preg_replace('/__DOLLAR__/', '$', $js);
 
   // Those helper calls that were not inlined still have special markings around the arguments
   // - remove them!
