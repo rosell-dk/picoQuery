@@ -48,170 +48,191 @@ Compliance summary:<br>
   <tr>
     <td>constructor</td>
     <td class="partial">
-      <ol>
-        <li data-proof="jquery_selectors">Special jQuery selectors such as :odd are not supported</li>
-        <li data-proof="attributes">jQuery( html, attributes ) is not supported (will be fixed in v0.5.0)</li>
-        <li data-proof="wrong_order">jQuery( selector, context [ Array of elements ] ) does not get the order right.</li>
-        <li data-proof="invalid_html,invalid_html2">jQuery( html ) does not parse some invalid HTML the same way as jQuery does.</li>
-        <li data-proof="html_collection,array_like">Array-like structures are not supported, ie jQuery( [HTMLCollection] ) (will be fixed in v0.5.0)</li>
-        <li data-proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html ) (will be fixed in v0.5.0)</li>
-        <li data-proof="edgecase1,edgecase3,edgecase4">Does not strictly comply in a few edge cases</li>
-      </ol>
+      <issues>
+        <issue severity="highest" proof="jquery_selectors">Special jQuery selectors such as :odd are not supported</issue>
+        <issue severity="highest" proof="attributes">jQuery( html, attributes ) is not supported (will be fixed in v0.5.0)</issue>
+        <issue severity="high" proof="html_collection,array_like">Array-like structures are not supported, ie jQuery( [HTMLCollection] ) (will be fixed in v0.5.0)</issue>
+        <issue severity="high" proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html ) (will be fixed in v0.5.0)</issue>
+        <issue severity="low" proof="wrong_order">jQuery( selector, context [ Array of elements ] ) does not get the order right.</issue>
+        <issue severity="low" proof="invalid_html,invalid_html2">jQuery( html ) does not parse some invalid HTML the same way as jQuery does.</issue>
+        <issue severity="edgecase" proof="edgecase1,edgecase3,edgecase4">Does not strictly comply in a few edge cases</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li data-proof="jquery_selectors">Special jQuery selectors such as :odd are not supported</li>
-        <li data-proof="scoped_search">jQuery( selector, context [ Element ] ) is buggy: It finds elements that are parent to the selection. Ie $​("body li", document.&#8203;getElementById&#8203;("item3")) returns unexpected matches. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></li>
-</li>
-        <li data-proof="wrong_order">jQuery( selector, context [ Array of elements ] ) does not get the order right.</li>
-        <!--<li data-proof="">jQuery( selector, context [ Element ] ) does not fully comply, when Element is a NodeList</li>-->
-        <li data-proof="match_in_several_contexts">jQuery( selector, context [ jQuery ] ) does not remove duplicates, when there is a match in several contexts</li>
-        <li data-proof="html_collection,array_like,nodelist">Array-like structures are not supported, ie jQuery( [HTMLCollection] ) and jQuery( [NodeList] )</li>
-        <li data-proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html )</li>
-        <li data-proof="jq1_8methods_as_attributes">jQuery( html, attributes) does not support all instance methods. Actually zepto complies with jQuery 1.4-1.7, where only the following instance methods were supported: ('val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset' and events). In jQuery 1.8, all instance methods are supported</li>
-        <li data-proof="edgecase1,edgecase2,edgecase3,edgecase4,edgecase5,edgecase6,edgecase7,edgecase8,attributes_non_empty">Does not strictly comply in some edge cases</li>
-      </ol>
+      <issues>
+        <issue severity="highest" proof="jquery_selectors">Special jQuery selectors such as :odd are not supported</issue>
+        <issue severity="highest" proof="scoped_search">jQuery( selector, context [ Element ] ) is buggy: It finds elements that are parent to the selection. Ie $​("body li", document.&#8203;getElementById&#8203;("item3")) returns unexpected matches. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></issue>
+        <!--<issue severity="" proof="">jQuery( selector, context [ Element ] ) does not fully comply, when Element is a NodeList</issue>-->
+        <issue severity="high" proof="match_in_several_contexts">jQuery( selector, context [ jQuery ] ) does not remove duplicates, when there is a match in several contexts</issue>
+        <issue severity="high" proof="html_collection,array_like,nodelist">Array-like structures are not supported, ie jQuery( [HTMLCollection] ) and jQuery( [NodeList] )</issue>
+        <issue severity="high" proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html )</issue>
+        <issue severity="normal" proof="jq1_8methods_as_attributes">jQuery( html, attributes) does not support all instance methods. Actually zepto complies with jQuery 1.4-1.7, where only the following instance methods were supported: ('val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset' and events). In jQuery 1.8, all instance methods are supported</issue>
+        <issue severity="low" proof="wrong_order">jQuery( selector, context [ Array of elements ] ) does not get the order right.</issue>
+        <issue severity="edgecase" proof="edgecase1,edgecase2,edgecase3,edgecase4,edgecase5,edgecase6,edgecase7,edgecase8,attributes_non_empty">Does not strictly comply in some edge cases</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li data-proof="jquery_selectors">Special jQuery selectors such as :odd are not supported</li>
-        <li data-proof="attributes">jQuery( html, attributes ) is not supported</li>
-        <li data-proof="scoped_search">jQuery( selector, context [ Element ] ) is buggy: It finds elements that are parent to the selection. Ie $​("body li", document.&#8203;getElementById&#8203;("item3")) returns unexpected matches. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></li>
-</li>
-        <li data-proof="no_match_in_context">jQuery( selector, context [ jQuery ] ) is not supported. Doing gives various results.</li>
-        <li data-proof="no_match_in_context">jQuery( callback ) is buggy: Callback does not receive a reference to $ which can be used to write failsafe jQuery code</li>
-        <li data-proof="selector_matches_context_root">jQuery( selector, context [ Element ] ) returns matches root element of context, though it should not. Ie $​("#item3", document.&#8203;getElementById&#8203;("item3"​)​) returns a match</li>
-        <li data-proof="invalid_html,invalid_html2">jQuery( html ) does not parse some invalid HTML the same way as jQuery does.</li>
-        <li data-proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html )</li>
-        <li data-proof="edgecase1,context_is_array,edgecase7">Does not strictly comply in a few edge cases</li>
-      </ol>
+      <issues>
+        <issue severity="highest" proof="jquery_selectors">Special jQuery selectors such as :odd are not supported</issue>
+        <issue severity="highest" proof="scoped_search">jQuery( selector, context [ Element ] ) is buggy: It finds elements that are parent to the selection. Ie $​("body li", document.&#8203;getElementById&#8203;("item3")) returns unexpected matches. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></issue>
+        <issue severity="high" proof="no_match_in_context">jQuery( selector, context [ jQuery ] ) is not supported. Doing gives various results.</issue>
+        <issue severity="high" proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html )</issue>
+        <issue severity="normal" proof="no_match_in_context">jQuery( callback ) is buggy: Callback does not receive a reference to $ which can be used to write failsafe jQuery code</issue>
+        <issue severity="low" proof="selector_matches_context_root">jQuery( selector, context [ Element ] ) returns matches root element of context, though it should not. Ie $​("#item3", document.&#8203;getElementById&#8203;("item3"​)​) returns a match</issue>
+        <issue severity="low" proof="invalid_html,invalid_html2">jQuery( html ) does not parse some invalid HTML the same way as jQuery does.</issue>
+        <issue severity="edgecase" proof="edgecase1,context_is_array,edgecase7">Does not strictly comply in a few edge cases</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.add()</td>
-    <td class="approximate">jQuery sorts in Document order. picoQuery does not sort</td>
-    <td class="approximate">jQuery sorts in Document order. zepto does not sort</td>
-    <td class="approximate">jQuery sorts in Document order. Cash does not sort</td>
+    <td class="approximate">
+      <issues>
+        <issue severity="low" proof="document_order">jQuery sorts in Document order. picoQuery does not sort</issue>
+      </issues>
+    </td>
+    <td class="approximate">
+      <issues>
+        <issue severity="low" proof="document_order">jQuery sorts in Document order. Zepto 1.2.0 does not sort</issue>
+      </issues>
+    </td>
+    <td class="approximate">
+      <issues>
+        <issue severity="low" proof="document_order">jQuery sorts in Document order. Cash 1.3.0 does not sort</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.addBack()</td>
-    <td class="approximate">jQuery sorts in Document order. picoQuery does not sort</td>
+    <td class="approximate">
+      <issues>
+        <issue severity="low" proof="document_order">jQuery sorts in Document order. picoQuery does not sort</issue>
+      </issues>
+    </td>
     <td class="none"></td>
     <td class="none"></td>
   </tr>
   <tr>
     <td>.addClass()</td>
-    <td class="approximate">Does not comply in some edge cases</td>
-    <td class="approximate">Does not comply in some edge cases</td>
+    <td class="approximate">
+      <issues>
+        <issue severity="edgecase" proof="empty_string,space,tab,noargs">Does not comply in some edge cases</issue>
+      </issues>
+    </td>
+    <td class="approximate">
+      <issues>
+        <issue severity="edgecase" proof="tab_between_classnames,newline_between_classnames,trailing_space,same_class_twice,space,tab">Does not comply in some edge cases</issue>
+      </issues>
+    </td>
     <td class="partial">
-      <ol class="unsupported-signatures">
-        <li>.addClass( function )</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="function">.addClass( function ) signature is unsupported</issue>
+        <issue severity="edgecase" proof="tab_between_classnames,newline_between_classnames">Does not comply in some edge cases</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.after()</td>
-    <td class="approximate">Does not comply in some edge cases</td>
+    <td class="full"></td>
     <td class="partial">
-      <ol class="unsupported-signatures">
-        <li>.after( function )</li>
-        <li>.after( function-html )</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="function">.after( function ) signature is unsupported</issue>
+        <issue severity="normal" proof="function_html">.after( function-html ) signature is unsupported</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>.after( [Text] ) signature is unsupported. Ie you cannot do: $(el).after("some text")</li>
-        <li>.after( content [,content] ) only supports one piece of content</li>
-        <li>.after( function ) is unsupported</li>
-        <li>.after( function-html ) is unsupported</li>
-      </ol>
-      <ol>
-        <li></li>
-      </ol>
+      <issues>
+        <issue severity="high" proof="text">.after( [Text] ) signature is unsupported. Ie you cannot do: $(el).after("some text")</issue>
+        <issue severity="normal" proof="content_content">.after( content [,content] ) only supports one piece of content</issue>
+        <issue severity="normal" proof="function">.after( function ) signature is unsupported</issue>
+        <issue severity="normal" proof="function_html">.after( function-html ) signature is unsupported</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.andSelf()</td>
-    <td class="approximate">jQuery sorts in Document order. picoQuery does not sort</td>
+    <td class="approximate">
+      <issues>
+        <issue severity="low" proof="document_order">jQuery sorts in Document order. picoQuery does not sort</issue>
+      </issues>
+    </td>
     <td class="none"></td>
     <td class="none"></td>
   </tr>
   <tr>
     <td>.append()</td>
     <td class="approximate">
-      When a node is appended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners yet, these clones will erroursly not get these
+      <issues>
+        <issue severity="normal" proof="">When a node is appended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners yet, these clones will erroursly not get these</issue>
+      </issues>
+    </td>
     </td>
     <td class="partial">
-      <ol>
-        <li>.append( function ) signature is unsupported</li>
-        <li>weird result in the test "Is appended node detached from previous position in DOM?"</li>
-        <li>When a node is appended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners, these clones will erroursly not get these</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="function">.append( function ) signature is unsupported</issue>
+        <issue severity="edgecase" proof="">weird result in the test "Is appended node detached from previous position in DOM?"</issue>
+        <issue severity="normal" proof="">When a node is appended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners, these clones will erroursly not get these</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>.append( content [,content] ) only supports one piece of content</li>
-        <li>.append( function ) signature is unsupported</li>
-        <li>.append( [ Text Node ] ) signature is unsupported</li>
-        <li>.append( [ Array of Text nodes ] ) signature is unsupported</li>
-        <li>When a node is appended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners, these clones will erroursly not get these</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="content_content">.append( content [,content] ) only supports one piece of content</issue>
+        <issue severity="normal" proof="function">.append( function ) signature is unsupported</issue>
+        <issue severity="normal" proof="">When a node is appended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners, these clones will erroursly not get these</issue>
+        <issue severity="low" proof="text_node">.append( [ Text Node ] ) signature is unsupported (and array of text nodes)</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.appendTo()</td>
     <td class="full"></td>
     <td class="partial">
-      <ol>
-        <li>Does not support appending to multiple targets</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="multiple_targets">Does not support appending to multiple targets</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>Does not support appending to multiple targets</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="multiple_targets">Does not support appending to multiple targets</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.attr()</td>
     <td class="partial">
-      <ol class="unsupported-signatures">
-        <li>.attr( attributes )</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="attributes">.attr( attributes ) is unsupported</issue>
+        <issue severity="edgecase" proof="undefined">Does not comply in some edge cases</issue>
+      </issues>
     </td>
     <td class="approximate">
-      <ol>
-        <li>Does not comply in some edge cases</li>
-      </ol>
+      <issues>
+        <issue severity="edgecase" proof="function_arg2_noclass">Does not comply in an edge case</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol class="unsupported-signatures">
-        <li>.attr( attributeName, function )</li>
-      </ol>
-      <ol>
-        <li>Does not comply in some edge cases</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="function">.attr( attributeName, function ) signature is unsupported</issue>
+        <issue severity="edgecase" proof="null,undefined">Does not comply in some edge cases</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.before()</td>
-    <td class="approximate">Does not comply in some edge cases</td>
+    <td class="full"></td>
     <td class="partial">
-      <ol class="unsupported-signatures">
-        <li>.before( function )</li>
-        <li>.before( function-html )</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="function">.before( function ) signature is unsupported</issue>
+        <issue severity="normal" proof="function_html">.before( function-html ) signature is unsupported</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol class="unsupported-signatures">
-        <li>.before( [Text] )</li>
-        <li>.before( content, content, ... )</li>
-        <li>.before( function )</li>
-        <li>.before( function-html )</li>
-      </ol>
-      <ol>
-        <li></li>
-      </ol>
+      <issues>
+        <issue severity="high" proof="text">.before( [Text] ) signature is unsupported. Ie you cannot do: $(el).before("some text")</issue>
+        <issue severity="normal" proof="content_content">.before( content [,content] ) only supports one piece of content</issue>
+        <issue severity="normal" proof="function">.before( function ) signature is unsupported</issue>
+        <issue severity="normal" proof="function_html">.before( function-html ) signature is unsupported</issue>
+      </issues>
     </td>
   </tr>
   <tr>
@@ -228,72 +249,92 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.clone()</td>
-    <td class="partial">Does not copy data and events</td>
-    <td class="partial">Does not copy data and events</td>
-    <td class="partial">Does not copy data and events</td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="">Does not copy data and events</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="">Does not copy data and events</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="">Does not copy data and events</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.closest()</td>
     <td class="full"></td>
     <td class="partial">
-      <ol>
-        <li>.closest( selector, context ) is buggy</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="context">.closest( selector, context ) is non-compliant or buggy. Its probably the non-compliance in the constructor that comes into play</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>.closest( selector, context ) is buggy</li>
-        <li>.closest( selection ) is unsupported</li>
-        <li>.closest( element ) is unsupported</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="context">.closest( selector, context ) is non-compliant or buggy. Its probably the non-compliance in the constructor that comes into play</issue>
+        <issue severity="normal" proof="selection">.closest( selection ) is unsupported</issue>
+        <issue severity="normal" proof="element">.closest( element ) is unsupported</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.css()</td>
     <td class="partial">
-      <ol>
-        <li>jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</li>
-        <li>Automatic using vendor prefixed version when available is not supported.</li>
-        <li>Does not support omitting "px" for widths etc. Ie. .css("width", "123") sets width to 123px in jQuery, but not in picoQuery</li>
-        <li>Does not support setting a numeral property like this: .css​("fontSize", 10​) (but does support setting it like this: .css​("fontSize", "10​")</li>
-        <li>.css( properties) signature is not supported. That is: does not support getting several properties in one call</li>
-        <li>.css( propertyName, function ) is not supported</li>
-        <li>.css( properties ) is not supported. That is, it is not possible to set multiple properties in one go</li>
-      </ol>
+      <issues>
+        <issue severity="normal" proof="">jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</issue>
+        <issue severity="normal" proof="px1,px2">Does not support omitting "px" for widths etc. Ie. .css("width", "123")</issue>
+        <issue severity="normal" proof="numeral_property_1">Does not support setting a numeral property like this: .css​("fontSize", 10​) (but does support setting it like this: .css​("fontSize", "10​")</issue>
+        <issue severity="normal" proof="properties">.css( properties) signature is not supported. That is: does not support getting several properties in one call</issue>
+        <issue severity="normal" proof="property_names">.css( propertyNames [Array] ) signature is not supported.</issue>
+        <issue severity="normal" proof="function">.css( propertyName, function ) is not supported</issue>
+        <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
+        <issue severity="edgecase" proof="nonexisting_property">Does not comply in a few edge cases</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</li>
-        <li>Does not support getting property in camelCased form, unless it has been set with .css( property, value )</li>
-        <li>Does not support setting a numeral property like this: .css​("fontSize", "10"​) (but does support setting it like this: .css​("fontSize", 10​))</li>
-      </ol>
+      <issues>
+        <issue severity="high" proof="camelcase">Does not support getting property in camelCased form, unless it has been set with .css( property, value )</issue>
+        <issue severity="normal" proof="">jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</issue>
+        <issue severity="normal" proof="numeral_property_1">Does not support setting a numeral property like this: .css​("fontSize", "10"​) (but does support setting it like this: .css​("fontSize", 10​))</issue>
+        <issue severity="normal" proof="px1">Does not support omitting "px" for widths etc. Ie. .css("width", "123") (but does support it, when type is number, ie .css("width", 123))</issue>
+        <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
+        <issue severity="edgecase" proof="nonexisting_property,user_select">Does not comply in a few edge cases</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</li>
-        <li>Does not support getting or setting property in dasherized form. Only supports camelCased form. Ie $​("li​​)​.css​("font-style"​) does not work</li>
-        <li>Does not support setting a numeral property like this: .css​("fontSize", 10​)</li>
-        <li>.css( properties) signature is not supported. That is: does not support getting several properties in one call</li>
-        <li>.css( propertyName, function ) is not supported</li>
-      </ol>
+      <issues>
+        <issue severity="high" proof="dashes">Does not support getting or setting property in dasherized form. Only supports camelCased form. Ie $​("li​​)​.css​("font-style"​) does not work</issue>
+        <issue severity="normal" proof="">jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</issue>
+        <issue severity="normal" proof="px1,px2">Does not support omitting "px" for widths etc. Ie. .css("width", "123")</issue>
+        <issue severity="normal" proof="numeral_property_2">Does not support setting a numeral property like this: .css​("fontSize", 10​)</issue>
+        <issue severity="normal" proof="properties">.css( properties) signature is not supported. That is: does not support getting several properties in one call</issue>
+        <issue severity="normal" proof="function">.css( propertyName, function ) is not supported</issue>
+        <issue severity="normal" proof="property_names">.css( propertyNames [Array] ) signature is not supported.</issue>
+        <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
+        <issue severity="edgecase" proof="user_select">Does not comply in a few edge cases</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.data()</td>
     <td class="full"></td>
     <td class="partial">
-      <ol>
-        <li>.data( key, value ) is not implemented. </li>
-        <li>.data( object ) is not implemented either. So you can not set data, only read those set in "data-xxx" attributes</li>
-        <li>.data( ) is not implemented</li>
-        <li>Setting data changes the "data-xxx" attribute of the node. It should not</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.data( key, value ) is not implemented. </issue>
+        <issue severity="" proof="">.data( object ) is not implemented either. So you can not set data, only read those set in "data-xxx" attributes</issue>
+        <issue severity="" proof="">.data( ) is not implemented</issue>
+        <issue severity="" proof="">Setting data changes the "data-xxx" attribute of the node. It should not</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>Memory-leaking. Data is not deleted from nodes when .empty(), .remove(), .html() and .replaceWith() methods are called.</li>
-        <li>.data( ) is not implemented</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Memory-leaking. Data is not deleted from nodes when .empty(), .remove(), .html() and .replaceWith() methods are called.</issue>
+        <issue severity="" proof="">.data( ) is not implemented</issue>
+      </issues>
     </td>
   </tr>
   <tr>
@@ -301,9 +342,9 @@ Compliance summary:<br>
     <td class="full"></td>
     <td class="full"></td>
     <td class="partial">
-      <ol>
-        <li>Does not support iterating normal arrays</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Does not support iterating normal arrays</issue>
+      </issues>
     </td>
   </tr>
   <tr>
@@ -315,9 +356,9 @@ Compliance summary:<br>
   <tr>
     <td>.end()</td>
     <td class="approximate">
-      <ol>
-        <li>Does not comply in some edge cases</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Does not comply in some edge cases</issue>
+      </issues>
     </td>
     <td class="none"></td>
     <td class="none"></td>
@@ -331,62 +372,62 @@ Compliance summary:<br>
   <tr>
     <td>.filter()</td>
     <td class="partial">
-      <ol>
-        <li>.filter( elements [Array] ) signature does not support when elements is merely array-like</li>
-        <li>.filter( function ) signature is not supported</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.filter( elements [Array] ) signature does not support when elements is merely array-like</issue>
+        <issue severity="" proof="">.filter( function ) signature is not supported</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>.filter( element ) signature is not supported</li>
-        <li>.filter( elements [Array] ) signature is not supported</li>
-        <li>.filter( selection ) signature is not supported</li>
-        <li>.filter( filter ) signature is buggy - the function does not receive the second argument</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.filter( element ) signature is not supported</issue>
+        <issue severity="" proof="">.filter( elements [Array] ) signature is not supported</issue>
+        <issue severity="" proof="">.filter( selection ) signature is not supported</issue>
+        <issue severity="" proof="">.filter( filter ) signature is buggy - the function does not receive the second argument</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>.filter( element ) signature is not supported</li>
-        <li>.filter( elements [Array] ) signature is not supported</li>
-        <li>.filter( selection ) signature is not supported</li>
-        <li>.filter( filter ) signature is not supported</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.filter( element ) signature is not supported</issue>
+        <issue severity="" proof="">.filter( elements [Array] ) signature is not supported</issue>
+        <issue severity="" proof="">.filter( selection ) signature is not supported</issue>
+        <issue severity="" proof="">.filter( filter ) signature is not supported</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.find()</td>
     <td class="partial">
-      <ol>
-        <li>.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLCollection). (Will be fixed in 0.5.0)</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLCollection). (Will be fixed in 0.5.0)</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>.find( selector ) signature is buggy: Duplicates are not removed</li>
-        <li>.find( selector ) is buggy: It finds elements that are parent to the selection. Ie $​("#item3"​)​.find​("body li"​) can give a result. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></li>
-        <li>.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLCollection)</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.find( selector ) signature is buggy: Duplicates are not removed</issue>
+        <issue severity="" proof="">.find( selector ) is buggy: It finds elements that are parent to the selection. Ie $​("#item3"​)​.find​("body li"​) can give a result. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></issue>
+        <issue severity="" proof="">.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLCollection)</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>.find( selector ) is buggy: It finds elements that are parent to the selection. Ie $​("#item3"​)​.find​("body li"​) can give a result. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></li>
-        <li>.find( selector [jQuery] ) is not supported</li>
-        <li>.find( selector [Element] ) is not supported</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.find( selector ) is buggy: It finds elements that are parent to the selection. Ie $​("#item3"​)​.find​("body li"​) can give a result. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></issue>
+        <issue severity="" proof="">.find( selector [jQuery] ) is not supported</issue>
+        <issue severity="" proof="">.find( selector [Element] ) is not supported</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.first()</td>
     <td class="full"></td>
     <td class="partial">
-      <ol>
-        <li>Does not work with ordinary arrays. Ie, $​([3,4]​)​.first​(​) does not return 3</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Does not work with ordinary arrays. Ie, $​([3,4]​)​.first​(​) does not return 3</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>Does not work with ordinary arrays. Ie, $​([3,4]​)​.first​(​) does not return 3</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Does not work with ordinary arrays. Ie, $​([3,4]​)​.first​(​) does not return 3</issue>
+      </issues>
     </td>
   </tr>
   <tr>
@@ -404,11 +445,11 @@ Compliance summary:<br>
   <tr>
     <td>.on()</td>
     <td class="partial">
-      <ol>
-        <li>Multiple events are NOT SUPPORTED - only one event name may be specified</li>
-        <li>Namespaces such as "keydown.myPlugin" are not supported</li>
-        <li>Event propagation may not be correct</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Multiple events are NOT SUPPORTED - only one event name may be specified</issue>
+        <issue severity="" proof="">Namespaces such as "keydown.myPlugin" are not supported</issue>
+        <issue severity="" proof="">Event propagation may not be correct</issue>
+      </issues>
     </td>
     <td></td>
     <td></td>
@@ -422,15 +463,15 @@ Compliance summary:<br>
   <tr>
     <td>.hide()</td>
     <td class="partial">
-      <ol>
-        <li>Animation is not supported</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Animation is not supported</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>Does not store display value before setting it to "none", so .show() cannot restore it correctly. Ie. $(tempEl).css("display", "table-cell").hide().show().css("display") returns "block", but should return "table-cell"</li>
-        <li>Animation is not supported</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Does not store display value before setting it to "none", so .show() cannot restore it correctly. Ie. $(tempEl).css("display", "table-cell").hide().show().css("display") returns "block", but should return "table-cell"</issue>
+        <issue severity="" proof="">Animation is not supported</issue>
+      </issues>
     </td>
     <td class="none"></td>
   </tr>
@@ -438,52 +479,52 @@ Compliance summary:<br>
     <td>.html()</td>
     <td class="full"></td>
     <td class="partial">
-      <ol>
-        <li>Event listeners on the old HTML are not removed, which can cause memory leak</li>
-        <li>Does not comply in an edge case</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
+        <issue severity="" proof="">Does not comply in an edge case</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>Event listeners on the old HTML are not removed, which can cause memory leak</li>
-        <li>html( function ) signature is not implemented</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
+        <issue severity="" proof="">html( function ) signature is not implemented</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.insertAfter()</td>
     <td class="approximate">
-      <ol>
-        <li>.insertAfter( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.insertAfter( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>.insertAfter( [ Array of elements ] ) signature is not supported</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.insertAfter( [ Array of elements ] ) signature is not supported</issue>
+      </issues>
     </td>
     <td class="approximate">
-      <ol>
-        <li>.insertAfter( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.insertAfter( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</issue>
+      </issues>
     </td>
   </tr>
   <tr>
     <td>.insertBefore()</td>
     <td class="approximate">
-      <ol>
-        <li>.insertBefore( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.insertBefore( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>.insertBefore( [ Array of elements ] ) signature is not supported</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.insertBefore( [ Array of elements ] ) signature is not supported</issue>
+      </issues>
     </td>
     <td class="approximate">
-      <ol>
-        <li>.insertBefore( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">.insertBefore( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</issue>
+      </issues>
     </td>
   </tr>
   <tr>
@@ -493,14 +534,14 @@ Compliance summary:<br>
     <td>.last()</td>
     <td class="full"></td>
     <td class="partial">
-      <ol>
-        <li>Does not work with ordinary arrays. Ie, $​([3,4]​)​.last​(​) does not return 3</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Does not work with ordinary arrays. Ie, $​([3,4]​)​.last​(​) does not return 3</issue>
+      </issues>
     </td>
     <td class="partial">
-      <ol>
-        <li>Does not work with ordinary arrays. Ie, $​([3,4]​)​.last​(​) does not return 3</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Does not work with ordinary arrays. Ie, $​([3,4]​)​.last​(​) does not return 3</issue>
+      </issues>
     </td>
   </tr>
   <tr>
@@ -508,10 +549,10 @@ Compliance summary:<br>
     <td class="full"></td>
     <td class="full"></td>
     <td class="partial">
-      <ol>
-        <li>Very buggy. The function retrieves arguments (element, index) instead of (index, element).</li>
-        <li>The 'this' does not point to the element, but to window</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Very buggy. The function retrieves arguments (element, index) instead of (index, element).</issue>
+        <issue severity="" proof="">The 'this' does not point to the element, but to window</issue>
+      </issues>
     </td>
   </tr>
   <tr>
@@ -519,9 +560,9 @@ Compliance summary:<br>
     <td class="full"></td>
     <td class="full"></td>
     <td class="partial">
-      <ol>
-        <li>Only works on one element (the rest is dropped)</li>
-      </ol>
+      <issues>
+        <issue severity="" proof="">Only works on one element (the rest is dropped)</issue>
+      </issues>
     </td>
   </tr>
   <tr>

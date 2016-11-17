@@ -6,7 +6,7 @@ window.complianceTests = [
         name: '.add( selector )',
         tests: [
           ['$("li#item2_1").add("li#item3_1")', ""],
-          ['$("li#item3_1").add("li#item2_1")', "jQuery sorts it in Document order. picoQuery does not do any sorting (it will perhaps in future release)"],
+          ['$("li#item3_1").add("li#item2_1")', "jQuery sorts it in Document order. picoQuery does not do any sorting (it will perhaps in future release)", "document_order"],
           ['$("li#item3_1").add("li#item3_1")', "Remove duplicates"],
           ['$("li#item2_1").add("li#item3_1").end()', "pushStack"],
         ]
@@ -55,7 +55,7 @@ window.complianceTests = [
         name: '.addBack( )',
         tests: [
           ['$("li#item2_1").parent().addBack()', ""],
-          ['$("#ul3").children().addBack()', "jQuery sorts the result in Document order, picoQuery doesnt yet (because .add() doesnt yet)"],
+          ['$("#ul3").children().addBack()', "jQuery sorts the result in Document order, picoQuery doesnt yet (because .add() doesnt yet)", "document_order"],
         ]
       },
       {
@@ -75,27 +75,31 @@ window.complianceTests = [
           ['$("<p></p>").addClass("test")', "Add a single class name"],
           ['$("<p></p>").addClass("one two")', "Addding two class names in one go"],
           ['$("<p></p>").addClass("test").addClass("test2")', "Chaining"],
-          ['$("<p></p>").addClass("test ")', "Trailing space"],
-          ['$("<p></p>").addClass("test2 test2")', "Adding same class twice"],
+          ['$("<p></p>").addClass("test ")', "Trailing space", "trailing_space"],
+          ['$("<p></p>").addClass("test2 test2")', "Adding same class twice", "same_class_twice"],
           ['$("<p></p>").addClass("test2").addClass("test2")', "Adding same class twice in another way"],
           ['$("<p class=\'one two\'></p>").addClass("two")', "Adding same class in yet another way"],
           ['$("<p class=\ttest></p>").addClass("t2")', "HTML contains tab character"],
-          ['$("<p class=one\ttwo></p>").addClass("three")', "HTML contains tab character between class names"],
+          ['$("<p class=\'one\\ttwo\'></p>").addClass("three")', "HTML contains tab character between class names", "tab_between_classnames"],
+          ['$("<p class=\'one\\ntwo\'></p>").addClass("three")', "HTML contains newline character between class names", "newline_between_classnames"],
+//          ['s="\t";', ""],
+//          ['$("<p class=one\ntwo></p>").addClass("three")', "HTML contains newline character between class names"],
+//          ['$("<div><p class=\'one\\ttwo\'></p></div>").html()', ""],
         ]
       },
       {
         name: '.addClass( function )',
         tests: [
-          ['$("<div class=\'a b\'/>").addClass(function(a,b){return "b"+a+b})', ""],
+          ['$("<div class=\'a b\'/>").addClass(function(a,b){return "b"+a+b})', "", "function"],
         ]
       },
       {
         name: 'Edge cases',
         tests: [
-          ['$("<p></p>").addClass("")', "Adding empty string"],
-          ['$("<p></p>").addClass(" ")', "Adding just a space"],
-          ['$("<p></p>").addClass("\t")', "Adding just a tab"],
-          ['$("<p></p>").addClass()', "Adding nothing"],
+          ['$("<p></p>").addClass("")', "Adding empty string", "empty_string"],
+          ['$("<p></p>").addClass(" ")', "Adding just a space", "space"],
+          ['$("<p></p>").addClass("\t")', "Adding just a tab", "tab"],
+          ['$("<p></p>").addClass()', "No arguments", "noargs"],
         ]
       }
     ]
@@ -111,7 +115,7 @@ window.complianceTests = [
           ['$("<div><b></b></div>").children().after($("<i></i>")).parent()', "[ jQuery ]"],
           ['$("<div><b></b></div>").children().after($("<i></i>").get(0)).parent()', "[ Element ]"],
           ['$("<div><b></b><p></p></div>").children().after("<i></i>").parent()', "multiple targets"],
-          ['$("<div><b></b></div>").children().after("hello").parent()', "Text"],
+          ['$("<div><b></b></div>").children().after("hello").parent()', "Text", "text"],
           ['$("<div><b></b></div>").children().after($("<b>text</b>").get(0).childNodes[0]).parent()', "[ Text Node ]"],
           ['$("<div><p></p></div>").children().after("<b></b>").after("<i></i>").parent()', "Chaining"],
 
@@ -126,14 +130,14 @@ window.complianceTests = [
       {
         name: '.after( content, content, ... )',
         tests: [
-          ['$("<div><b></b></div>").children().after("<i></i>", "<p></p>").parent()', ""],
+          ['$("<div><b></b></div>").children().after("<i></i>", "<p></p>").parent()', "content_content"],
           ['$("<ul><li>1</li><li>2</li></ul>").children().after("<i></i><b></b>", "<p></p>").parent()', ""],
         ]
       },
       {
         name: '.after( function )',
         tests: [
-          ['$("<div><b></b><p></p></div>").children().after(function(index){return "<i>" + index + "</i>"}).parent()', "function receives index"],
+          ['$("<div><b></b><p></p></div>").children().after(function(index){return "<i>" + index + "</i>"}).parent()', "function receives index", "function"],
           ['$("<div><b></b><p></p></div>").children().after(function(index){return "<i>" + this + "</i>"}).parent()', "value of this"],
           ['$("<div><b></b><p></p></div>").children().after(function(index){return "hello"}).parent()', "return string"],
           // todo: return element, jquery
@@ -142,7 +146,7 @@ window.complianceTests = [
       {
         name: '.after( function-html ) (jQuery 1.10+)',
         tests: [
-          ['$("<div><p>hello</p></div>").children().after(function(index, oldHtml){return "<i>" + oldHtml + "</i>"}).parent()', "get old html"],
+          ['$("<div><p>hello</p></div>").children().after(function(index, oldHtml){return "<i>" + oldHtml + "</i>"}).parent()', "get old html", "function_html"],
         ]
       }
     ]
@@ -154,7 +158,7 @@ window.complianceTests = [
         name: '.andSelf( )',
         tests: [
           ['$("li#item2_1").parent().andSelf()', ""],
-          ['$("#ul3").children().andSelf()', "jQuery sorts the result in Document order, picoQuery doesnt yet (because .add() doesnt yet)"],
+          ['$("#ul3").children().andSelf()', "jQuery sorts the result in Document order, picoQuery doesnt yet (because .add() doesnt yet)", "document_order"],
         ]
       },
     ]
@@ -168,10 +172,10 @@ window.complianceTests = [
           ['$("<p></p>").append("<b></b>")', "[ htmlString ]"],
           ['$("<div><p></p></div>").append($("<b></b>"))', "[ jQuery ]"],
           ['$("<div><p></p></div>").append(makeElement("<b></b>"))', "[ Element ]"],
+          ['$("<div></div>").append("text")', "[ String ]"],
           ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Text Node ]"],
           ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Array of text nodes]"],
-          ['$("<div><p></p></div>").append([makeTextNode("text"), makeElement("<i>italic</i>")])', "[ Array of text nodes / elements ]"],
-          ['$("<div><p></p></div>").append("<b></b>").append("<i></i>")', "Chaining"],
+          ['$("<div><p></p></div>").append([makeTextNode("text"), makeElement("<i>italic</i>")])', "[ Array of text nodes / elements ]", "text_node"],
           ['$("<div><p></p></div>").append([makeElement("<i>italic</i><b>bold</b>")])', "[ Array of elements ]"],
           ['$("<div><p></p><p></p></div>").children().append("hello").parent()', "Append text multiple targets"],
 //          ['$("<div><p></p><p></p></div>").children().append($(tempEl).text("node")).parent()', "Append same node to multiple targets"],
@@ -184,6 +188,7 @@ window.complianceTests = [
 
 //          ['function(){var $appendThis = $(tempEl).html("<b class=banana>test</b>"); $("body").append("<div id=eCUbo><one></one><two></two></div>"); $("#eCUbo *").append($appendThis); var result = $("#eCUbo").clone(); $("#eCUbo").remove(); return result }()', "Is appended node removed from previous position?"],
 //          ['$(tempEl)', "Append same node to multiple targets"],
+          ['$("<div><p></p></div>").append("<b></b>").append("<i></i>")', "Chaining"],
 
 
         ]
@@ -191,7 +196,7 @@ window.complianceTests = [
       {
         name: '.append( content [,content] )',
         tests: [
-          ['$("<p></p>").append("<one></one>", "<two></two>")', ""],
+          ['$("<p></p>").append("<one></one>", "<two></two>")', "content_content"],
 
         ]
       },
@@ -199,7 +204,7 @@ window.complianceTests = [
         name: '.append( function )',
         tests: [
 //          ['function(){$("body").append("<p id=temp></p>");res=$("#temp").append(function(){return makeElement("<b></b>")}).html(); $("#temp").remove(); return res}()', ""],
-          ['$(tempEl).append(function(){return makeElement("<b></b>")})', ""],
+          ['$(tempEl).append(function(){return makeElement("<b></b>")})', "", "function"],
           ['$(tempEl).append(function(idx,oldHtml){return makeElement("<b>" + idx + oldHtml + "</b>")})', ""],
 
 //          ['function(){$("body").append("<p id=temp></p>");res=$("#temp").append(function(idx,html){return makeElement("<b>" + idx + html + "</b>")}).html(); $("#temp").remove(); return res}()', ""],
@@ -222,8 +227,11 @@ window.complianceTests = [
         tests: [
           ['$("<p>hello</p>").appendTo($("<div></div>"))', ""],
           ['$("<one>1</one><two>2</two>").appendTo($("<div></div>"))', "Append two elements"],
-          ['$("<i>hello</i>").appendTo($("<a></a><b>b</b>"))', "Append to multiple targets"],
-          ['$("<i>hello</i>").appendTo($("<a></a><b>b</b>")).parent()', "zepto fails here..."],
+          ['$("<i>hello</i>").appendTo($("<a></a><b>b</b>"))', "Append to multiple targets", "multiple_targets"],
+          ['$("<p>hello</p>").appendTo($("<div></div>")).parent()', "Parent"],
+          ['$("<i>hello</i>").appendTo($("<a></a><b>b</b>")).parent()', "Parent, when appended to several targets. For some reason, Zepto 1.2.0 fails completely here..."],
+//          ['$("<i>hello</i>").appendTo($("<a></a><b>b</b>")).length', ""],
+//          ['$("<a></a><b>b</b>").parent()', ""],
           ['(function(){$("<i class=hello>hello</i>").appendTo($("#item3 li")); var clone=$("#item3").clone();$("#item3 .hello").remove(); return clone})()', "In the jQuery implementation, the actual operation is a side effect. This test inspects the side effect"],
  //         ['$("<one>1</one><two>2</two>").appendTo($("<a></a><b></b>"))', ""],
         ]
@@ -243,25 +251,33 @@ window.complianceTests = [
         name: '.attr( attributeName, value )',
         tests: [
           ['$("<div/>").attr("class", "italic")', " "],
+//          ['$("<div/>").attr("data-tooltip", "line1\\nline2")', "Value is multi-line"],
+          ['$("<div/>").attr("data-tooltip", "line1\\nline2").attr("data-tooltip")', "Value is multi-line"],
+//          ['$("<div/>").attr("data-tooltip", "line1<br>line2")', "Value contains tag"],
+          ['$("<div/>").attr("data-tooltip", "line1<br>line2").attr("data-tooltip")', "Value contains tag"],
         ]
       },
       {
         name: '.attr( attributes )',
         tests: [
-          ['$("<div/>").attr({class:"italic"})', " "],
+          ['$("<div/>").attr({class:"italic"})', "", "attributes"],
         ]
       },
       {
         name: '.attr( attributeName, function )',
         tests: [
-          ['$("<div/>").attr("class", function(){return "test"})', " "],
-          ['$("<div class=oldval></div><div class=test></div><div></div>").attr("class", function(i,oldVal){return oldVal+i})', " "],
+          ['$("<div/>").attr("class", function(){return "test"})', "", "function"],
+          ['$("<div class=val></div>").attr("class", function(i,oldVal){return \'index\'+i})', "argument 1: index"],
+          ['$("<div class=val></div>").attr("class", function(i,oldVal){return \'changed-\' + oldVal})', "argument 2: old value"],
+          ['$("<div></div>").attr("class", function(i,oldVal){return \'changed-\' + oldVal})', "argument 2: old value, when there are none", "function_arg2_noclass"],
+//          ['$("<div class=val></div><div class=test></div><div></div>").attr("class", function(i,oldVal){return oldVal+i})', " "],
         ]
       },
       {
         name: 'Edge cases',
         tests: [
-          ['$("<div/>").attr("class", null)', " "],
+          ['$("<div/>").attr("class", null)', "null"],
+          ['$("<div/>").attr("class", undefined)', "undefined"],
           ['$("<div/>").attr("class", "italic").attr("class", null)', " "],
           ['$("li:first-child").attr("class2")', "Try to get attr on a Text node"],
           ['$($("li:first-child").get(0).firstChild).attr("class")', "Try to get attr on a Document node"],
@@ -284,7 +300,7 @@ window.complianceTests = [
           ['$("<div><b></b></div>").children().before($("<i></i>")).parent()', "[ jQuery ]"],
           ['$("<div><b></b></div>").children().before($("<i></i>").get(0)).parent()', "[ Element ]"],
           ['$("<div><b></b><p></p></div>").children().before("<i></i>").parent()', "multiple targets"],
-          ['$("<div><b></b></div>").children().before("hello").parent()', "Text"],
+          ['$("<div><b></b></div>").children().before("hello").parent()', "Text", "text"],
           ['$("<div><b></b></div>").children().before($("<b>text</b>").get(0).childNodes[0]).parent()', "[ Text Node ]"],
           ['$("<div><p></p></div>").children().before("<b></b>").before("<i></i>").parent()', "Chaining"],
 
@@ -297,14 +313,14 @@ window.complianceTests = [
       {
         name: '.before( content, content, ... )',
         tests: [
-          ['$("<div><b></b></div>").children().before("<i></i>", "<p></p>").parent()', ""],
+          ['$("<div><b></b></div>").children().before("<i></i>", "<p></p>").parent()', "content_content"],
           ['$("<ul><li>1</li><li>2</li></ul>").children().before("<i></i><b></b>", "<p></p>").parent()', ""],
         ]
       },
       {
         name: '.before( function )',
         tests: [
-          ['$("<div><b></b><p></p></div>").children().before(function(index){return "<i>" + index + "</i>"}).parent()', "function receives index"],
+          ['$("<div><b></b><p></p></div>").children().before(function(index){return "<i>" + index + "</i>"}).parent()', "function receives index", "function"],
           ['$("<div><b></b><p></p></div>").children().before(function(index){return "<i>" + this + "</i>"}).parent()', "value of this"],
           ['$("<div><b></b><p></p></div>").children().before(function(index){return "hello"}).parent()', "return string"],
           // todo: return element, jquery
@@ -313,7 +329,7 @@ window.complianceTests = [
       {
         name: '.before( function-html ) (jQuery 1.10+)',
         tests: [
-          ['$("<div><p>hello</p></div>").children().before(function(index, oldHtml){return "<i>" + oldHtml + "</i>"}).parent()', "get old html"],
+          ['$("<div><p>hello</p></div>").children().before(function(index, oldHtml){return "<i>" + oldHtml + "</i>"}).parent()', "get old html", "function_html"],
         ]
       }
     ]
@@ -401,9 +417,9 @@ window.complianceTests = [
         name: '.closest( selector, context )',
         tests: [
           ['$("li#item2_1").closest("ul", $("#ul0").get(0))', ""],
-          ['$("li#item2_1").closest("ul", $("#ul2").get(0))', "Context is selection"],
+          ['$("li#item2_1").closest("ul", $("#ul2").get(0))', "context"],
           ['$("li").closest("ul", $("#ul0").get(0))', ""],
-          ['$("li").closest("#ul0", $("#ul2").get(0))', "Selection isnt in context. The jQuery result may be somewhat surprising. The doc says about context: A DOM element within which a matching element may be found. Yet, the element returned by jQuery is not found in the context"],
+          ['$("li").closest("#ul0", $("#ul2").get(0))', ""], // Old comment (removed, because I do not see that problem now): Selection isnt in context. The jQuery result may be somewhat surprising. The doc says about context: A DOM element within which a matching element may be found. Yet, the element returned by jQuery is not found in the context
           ['$("li").closest("li#item2_1", $("body").get(0))', ""],
           ['function() {var doc = document.getElementById("testiframe").contentWindow.document; var el=doc.createElement("list"); el.appendChild(doc.createElement("item")); doc.documentElement.appendChild(el); return $("item", doc).first().closest("list", doc)}()', "Selection and context is another document"],
           ['function() {var doc = document.getElementById("testiframe").contentWindow.document; var el=doc.createElement("list"); el.appendChild(doc.createElement("item")); doc.documentElement.appendChild(el); return $("item", doc).first().closest("list")}()', "This test shows that context per default is the context of the selection"],
@@ -415,13 +431,13 @@ window.complianceTests = [
       {
         name: '.closest( selection )',
         tests: [
-          ['$("li").closest($("ul"))', ""],
+          ['$("li").closest($("ul"))', "", "selection"],
         ]
       },
       {
         name: '.closest( element )',
         tests: [
-          ['$("li").closest($("ul").get(0))', ""],
+          ['$("li").closest($("ul").get(0))', "", "element"],
         ]
       }
     ]
@@ -643,8 +659,8 @@ window.complianceTests = [
       {
         name: '.css( property )',
         tests: [
-          ['$("li.odd").css("font-style")', "dasherized"],
-          ['$("li.odd").css("fontStyle")', "camelCase"],
+          ['$("li.odd").css("font-style")', "dasherized", "dashes"],
+          ['$("li.odd").css("fontStyle")', "camelCase", "camelcase"],
           ['$("li#item2").css("font-style")', ""],
           ['$("li#item2").css("fontStyle")', ""],
           ['$("li#item2_1").css("font-style")', ""],
@@ -669,11 +685,14 @@ window.complianceTests = [
           ['$(tempEl).css("font-style", "italic").css("fontStyle")', "Set dasherized, get camelCased"],
           ['$(tempEl).css("fontStyle", "italic").css("font-style")', "Set camelCased, get dasherized"],
           ['$(tempEl).css("fontStyle", "italic").css("fontStyle")', "Set camelCased, get camelCased"],
-          ['$(tempEl).css("user-select", "none").css("user-select")', ""],
-          ['$(tempEl).css("nonexistingProp", "none").css("nonexistingProp")', "nonexisting property"],
-          ['$(tempEl).css("fontSize", "10").css("fontSize")', "Numeral property #1"],
-          ['$(tempEl).css("fontSize", 10).css("fontSize")', "Numeral property #2"],
-          ['$(tempEl).css("width", "123").css("width")', ""],
+          ['$(tempEl).css("user-select", "none")', "Set user-select, which isnt standard (yet), but supported with vendor prefixes in most browsers", "vendor_prefix"],
+          ['$(tempEl).css("user-select", "none").css("user-select")', "Set user-select, which isnt standard (yet), but supported with vendor prefixes in most browsers", "user_select"],
+          ['$(tempEl).css("nonexistingProp", "none").css("nonexistingProp")', "nonexisting property", "nonexisting_property"],
+          ['$(tempEl).css("fontSize", "10").css("fontSize")', "Numeral property #1", "numeral_property_1"],
+          ['$(tempEl).css("fontSize", 10).css("fontSize")', "Numeral property #2", "numeral_property_2"],
+          ['$(tempEl).css("width", "123").css("width")', "Set width without px (as string)", "px1"],
+          ['$(tempEl).css("width", 123).css("width")', "Set width without px (as number))", "px2"],
+          ['$(tempEl).css("width", "12em").css("width")', "Set width in em"],
           ['$("<div class=italic/>").css("fontStyle", "normal").css("fontStyle")', ""],
           ['$("<div class=italic/>").css("fontStyle", "normal").css("fontStyle")', ""],
           ['$("<div/>").css("cssText", "color:blue;font-size:16px").css("fontSize")', ""],
@@ -692,14 +711,14 @@ window.complianceTests = [
       {
         name: '.css( propertyNames [Array])',
         tests: [
-          ['$("#item2_1").css(["fontStyle", "textDecoration"])', "camelCased"],
+          ['$("#item2_1").css(["fontStyle", "textDecoration"])', "camelCased", "property_names"],
           ['$("#item2_1").css(["font-style", "text-decoration"])', "dasherized"],
         ]
       },
       {
         name: '.css( propertyName, function )',
         tests: [
-          ['$(tempEl).css("fontStyle", function(idx,value){return "italic"})', ""],
+          ['$(tempEl).css("fontStyle", function(idx,value){return "italic"})', "", "function"],
           ['$(tempEl).css("font-style", function(idx,value){return "italic"})', ""],
 
         ]
@@ -707,7 +726,7 @@ window.complianceTests = [
       {
         name: '.css( properties )',
         tests: [
-          ['$(tempEl).css({ "background-color": "#ffe", "border-left": "5px solid #ccc" })', "dasherized"],
+          ['$(tempEl).css({ "background-color": "#ffe", "border-left": "5px solid #ccc" })', "dasherized", "properties"],
           ['$(tempEl).css({ "backgroundColor": "#ffe", "borderLeft": "5px solid #ccc" })', "camelCased"],
         ]
       },

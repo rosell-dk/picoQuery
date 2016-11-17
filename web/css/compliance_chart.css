@@ -73,22 +73,33 @@ table.chart a {
   cursor: default;
 }
 
-table.chart td ol {
+issues {
   margin: 0;
   padding: 0 0 0 2px;
   list-style-position: inside;
   list-style-type: none;
 /*  list-style-type: upper-roman;*/
   counter-reset: list;    /* http://stackoverflow.com/questions/1632005/ordered-list-html-lower-alpha-with-right-parentheses */
+  display: block;
 }
-td li:before {
+issue:before {
   content: counter(list) ") ";
   counter-increment: list;
 }
-td li {
+issue:only-child:before {
+  content: "";
+}
+issue {
+  display: list-item;
   margin-bottom: 4px;
 }
-td li:not(:last-child) {
+issue:not(:last-child) {
   border-bottom: 1px dotted black;
   padding: 5px 0;
+}
+
+.tipr_content {
+  white-space: pre-wrap!important;
+}
+.tipr_container_bottom {
 }

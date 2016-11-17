@@ -42,9 +42,10 @@ $(function() {
     $(this).html('Full compliance');
   });
 
-  $('ul.unsupported-signatures li').each(function() {
+/*
+  $('ul.unsupported-signatures issue').each(function() {
     $(this).append(' is unsupported');
-  });
+  });*/
 
 /*  $('.chart tr td:not(:first-child)').each(function() {
     $(this).html('<div class="text">' + $(this).html() + '</div>');
@@ -70,9 +71,26 @@ $(function() {
         methods.push($(this).parent().children(':first-child').html());
       });
 
+      // Get issues
+      var num_issues = 0;
+      tds.find('issue[proof]').each(function() {
+        var proofs = $(this).attr('proof').split(',');
+        num_issues += proofs.length;
+      });
+
       $div = $('<div>&nbsp;</div>');
       $div.addClass(state);
-      $div.attr('title', methods.join(', '));
+
+      var title = methods.length + ' ';
+      title += {full:'fully supported',approximate:'approximately supported',partial:'partially supported',none:'unsupported'}[state];
+      title += ' methods:\n';
+      title += methods.join(', ');
+      if ((state == 'partial') || (state == 'approximate')) {
+        title += '\n';
+        title += num_issues + (state=='approximate'?' minor':'') + ' issues discovered.\n';
+//        title += '(' + Math.round(num_issues/methods.length *100)/100 + ' issues/method)';
+      }
+      $div.attr('title', title);
       $div.css('cssText', 'display:inline-block;overflow:hidden;width:' + (count/total * 100) + '%');
       $td.append($div);
     });
@@ -94,10 +112,11 @@ $(function() {
   });
 
   // Link to proofs
-  $('li[data-proof]').each(function() {
-    var proofs = $(this).attr('data-proof').split(',');
+  $('issue[proof]').each(function() {
+    var proofs = $(this).attr('proof').split(',');
     var $this = $(this);
     proofs.forEach(function(proof) {
+      if (proof == "") return;
       $a = $('<a href="' + $this.closest('tr').children(':first-child').children('a').attr('href') + '#' + proof + '">proof</a>');
 //      $a.css('cssText', 'margin:0 4px');
       $this.append('<span> </span>');

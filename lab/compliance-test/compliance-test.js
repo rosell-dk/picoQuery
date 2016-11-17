@@ -14,6 +14,8 @@ function htmlEscapeEtc(str) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/ZWS/g, '&#8203;')
+    .replace(/\t/g, '[tab]')
+    .replace(/\n/g, '[newline]')
 //      .replace(/ZWS/g, '<span class="zero-width-space"> !!! </span>')
   return str;
 }
