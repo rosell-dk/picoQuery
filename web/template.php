@@ -110,14 +110,14 @@ echo str_replace("/", "-", $page);
 <main>
   <article>
   <?php
-  if ($page == 'index') {
+/*  if ($page == 'index') {
     echo '<intro>';
     echo '<p>picoQuery implements a subset of jQuery.<br>&ndash; A subset *you* get to choose.</p>';
 //    echo '<p><small>(And its light. <small>Very <small>very <small>very light</small></small></small>)</small></p>';
     echo '<p><small>Its IE9+, but automatically falls back to jQuery<br> (so actually, it is IE6+)</small></p>';
     echo '</intro>';
 
-  }
+  }*/
   //$array = explode("\n", ;
   echo $Parsedown->text($page_md);
 

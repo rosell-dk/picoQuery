@@ -1159,7 +1159,7 @@ window.complianceTests = [
         tests: [
           ['$("<div>old</div>").html(function(i,oldVal){return "oldval:"+oldVal+",index:"+i}).html()', "function"],
         ]
-      }
+      },
       {
         name: 'Edge cases',
         tests: [
@@ -1183,7 +1183,7 @@ window.complianceTests = [
       {
         name: '.insertAfter( [ htmlString ] )',
         tests: [
-          ['$("<apple></apple>").insertAfter("<banana></banana>").parent()', "Does this signature even make sense? "],
+          ['$("<apple></apple>").insertAfter("<banana></banana>").parent()', "Does this signature even make sense? ", "html_string"],
           ['$("<apple></apple>").insertAfter("<banana></banana>")', "We can get the apple"],
           ['$("<apple></apple>").insertAfter("<banana></banana>").prev()', "- but where is the banana?"],
 //          ['$("#item3_1").clone().insertAfter("<div></div>").parent()', ""],
@@ -1200,10 +1200,11 @@ window.complianceTests = [
       {
         name: '.insertAfter( [ Array of elements ] )',
         tests: [
-          ['$("#item3 li").clone().insertAfter($(tempEl).append("<one></one><two></two>").children().get()).parent()', "Plain Array"],
+          ['$("#item3 li").clone().insertAfter($(tempEl).append("<one></one><two></two>").children().get()).parent()', "Plain Array of elements", "array"],
+          ['$("#item3 li").clone().insertAfter($(tempEl).append("<one></one><two></two>").children().get())', "Plain Array of elements", "array"],
 //          ['$("#item3 li").clone().insertAfter($(tempEl).append("<one></one><two></two>").children().toArray()).parent()', "Array"],
           ['$("#item3 li").clone().insertAfter(makeNodeList()).parent()', "NodeList"],
-          ['$("#item3 li").clone().insertAfter(makeHTMLCollection()).parent()', "HTMLCollection"],
+          ['$("#item3 li").clone().insertAfter(makeHTMLCollection()).parent()', "HTMLCollection", "html_collection"],
 //          ['console.log($(tempEl).append("<one></one><two></two>").get(0).getElementsByTagName("*"))', ""],
 //          ['console.log(makeNodeList())', ""],
 
@@ -1234,7 +1235,7 @@ window.complianceTests = [
       {
         name: '.insertBefore( [ htmlString ] )',
         tests: [
-          ['$("<apple></apple>").insertBefore("<banana></banana>").parent()', "Does this signature even make sense? "],
+          ['$("<apple></apple>").insertBefore("<banana></banana>").parent()', "Does this signature even make sense? ", "html_string"],
           ['$("<apple></apple>").insertBefore("<banana></banana>")', "We can get the apple"],
           ['$("<apple></apple>").insertBefore("<banana></banana>").prev()', "- but where is the banana?"],
 //          ['$("#item3_1").clone().insertBefore("<div></div>").parent()', ""],
@@ -1251,10 +1252,10 @@ window.complianceTests = [
       {
         name: '.insertBefore( [ Array of elements ] )',
         tests: [
-          ['$("#item3 li").clone().insertBefore($(tempEl).append("<one></one><two></two>").children().get()).parent()', "Plain Array"],
+          ['$("#item3 li").clone().insertBefore($(tempEl).append("<one></one><two></two>").children().get()).parent()', "Plain Array", "array"],
 //          ['$("#item3 li").clone().insertBefore($(tempEl).append("<one></one><two></two>").children().toArray()).parent()', "Array"],
           ['$("#item3 li").clone().insertBefore(makeNodeList()).parent()', "NodeList"],
-          ['$("#item3 li").clone().insertBefore(makeHTMLCollection()).parent()', "HTMLCollection"],
+          ['$("#item3 li").clone().insertBefore(makeHTMLCollection()).parent()', "HTMLCollection", "html_collection"],
 //          ['console.log($(tempEl).append("<one></one><two></two>").get(0).getElementsByTagName("*"))', ""],
 //          ['console.log(makeNodeList())', ""],
 
@@ -1313,7 +1314,7 @@ window.complianceTests = [
         name: 'last()',
         tests: [
           ['$("ul li").last()', "Last element"],
-          ['$([3,4]).last()', "Last array member"],
+          ['$([3,4]).last()', "Last array member", "array"],
         ]
       },
       {
@@ -1332,15 +1333,22 @@ window.complianceTests = [
       {
         name: '.map( callback )',
         tests: [
-          ['$("li").map(function(i,elm) {return elm})', ""],
-          ['$("li").map(function(i) {return i})', ""],
-          ['$("li").map(function(i) {return this})', ""],
+          ['$("li").map(function(i) {return this})', "This points to the element"],
+          ['$("li").map(function(i) {return i})', "First argument to callback is the index", "first_cb_arg"],
+          ['$("li").map(function(i,elm) {return elm})', "Second argument to callback is the element", "second_cb_arg"],
           ['$([3,4]).map(function(i) {return i})', ""],
-          ['$([3,4]).map(function(i,elm) {return elm})', ""],
-          ['$("li").map()', ""],
-          ['$({a:"apple", b:"banana"}).map(function(propertyOfObject, key) {return key + " is for " + propertyOfObject})', ""],
+          ['$([3,4]).map(function(i,elm) {return elm})', "array"],
         ]
-      }
+      },
+      {
+        name: 'Edge cases',
+        tests: [
+          ['$("li").map()', "No arguments"],
+          ['$({a:"apple", b:"banana"}).map(function(i,elm) {return i + ":" + JSON.stringify(elm)})', "An object is treated like if it was the only element in an array"],
+          ['$([{a:"apple", b:"banana"}]).map(function(i,elm) {return i + ":" + JSON.stringify(elm)})', "(proof of the statement above)"],
+          ['$(14).map(function(i,elm) {return i + ":" + JSON.stringify(elm)})', "a number"],
+        ]
+      },
     ]
   },
   {
@@ -1349,6 +1357,14 @@ window.complianceTests = [
       {
         name: '.next( )',
         tests: [
+          ['$($("<div><one></one><two></two></div>").get(0).children[0]).next()', "Basic. One->Two"],
+          ['$($("<div><one></one><two></two></div>").get(0).children[1]).next()', "Next on last child"],
+          ['$($("<div><one></one><two></two></div>").get(0).children).next()', "Next on two siblings"],
+          ['$($("<div><one></one><two></two></div>").get(0).children)', "Here is the explanation that the above doesnt work in Zepto 1.2.0: Its constructor does not support HTMLCollection"],
+          ['$("<div><one></one><two></two></div>").children().next()', "Next on two siblings, take two"],
+          ['$("<div><one></one><two></two><three></three></div>").children().next()', "Next on three siblings"],
+          ['$("#item1,#item3_1").next()', "Next on two elements", "multiple_elements"],
+          ['$("li:first-child")', ""],
           ['$("li:first-child").next()', ""],
           ['$("li:last-child").next()', ""],
           ['$("li").next().length', ""],
@@ -1357,7 +1373,7 @@ window.complianceTests = [
       {
         name: '.next( selector )',
         tests: [
-          ['$("li:first-child").next(".odd")', ""],
+          ['$("li:first-child").next(".odd")', "", "filtering"],
           ['$("li:first-child").next(".even")', ""],
         ]
       }

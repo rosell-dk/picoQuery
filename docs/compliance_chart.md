@@ -1,6 +1,6 @@
 # Compliance Chart
 
-*Note: The chart is under construction. I'm starting with the methods supported by picoQuery, which has the effect that the summary is biased in favor of picoquery. However, it does show that the methods which are supported by picoQuery are more compliant than the respective methods in Zepto and Cash*<br><br>
+*Note: The chart is under construction. I'm starting with the methods supported by picoQuery, which has the effect that the summary is biased in favor of picoquery. However, it does show that the methods which are supported by picoQuery are significantly more compliant than the respective methods in Zepto and Cash*<br><br>
 
 Compliance summary:<br>
 
@@ -502,17 +502,18 @@ Compliance summary:<br>
     <td>.insertAfter()</td>
     <td class="approximate">
       <issues>
-        <issue severity="" proof="">.insertAfter( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</issue>
+        <issue severity="low" proof="html_collection">.insertAfter( [ Array ] ) does not support array-like structures, such as HTMLCollection (Will be fixed in 0.5.0)</issue>
+        <issue severity="edgecase" proof="html_string">.insertAfter( [ htmlString ] ) does not comply. But that signature hardly makes sense.</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">.insertAfter( [ Array of elements ] ) signature is not supported</issue>
+        <issue severity="normal" proof="array">.insertAfter( [ Array of elements ] ) signature is not supported</issue>
       </issues>
     </td>
     <td class="approximate">
       <issues>
-        <issue severity="" proof="">.insertAfter( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</issue>
+        <issue severity="edgecase" proof="html_string">.insertAfter( [ htmlString ] ) does not comply. But that signature hardly makes sense.</issue>
       </issues>
     </td>
   </tr>
@@ -520,17 +521,18 @@ Compliance summary:<br>
     <td>.insertBefore()</td>
     <td class="approximate">
       <issues>
-        <issue severity="" proof="">.insertBefore( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</issue>
+        <issue severity="low" proof="html_collection">.insertBefore( [ Array ] ) does not support array-like structures, such as HTMLCollection (Will be fixed in 0.5.0)</issue>
+        <issue severity="edgecase" proof="html_string">.insertBefore( [ htmlString ] ) does not comply. But that signature hardly makes sense</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">.insertBefore( [ Array of elements ] ) signature is not supported</issue>
+        <issue severity="normal" proof="array">.insertBefore( [ Array of elements ] ) signature is not supported</issue>
       </issues>
     </td>
     <td class="approximate">
       <issues>
-        <issue severity="" proof="">.insertBefore( [ htmlString ] ) does not comply. But that signature hardly makes sense, and if it did, the picoQuery result makes more sense than the jQuery result</issue>
+        <issue severity="edgecase" proof="html_string">.insertBefore( [ htmlString ] ) does not comply. But that signature hardly makes sense</issue>
       </issues>
     </td>
   </tr>
@@ -542,12 +544,12 @@ Compliance summary:<br>
     <td class="full"></td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Does not work with ordinary arrays. Ie, $​([3,4]​)​.last​(​) does not return 3</issue>
+        <issue severity="low" proof="array">Does not work with ordinary arrays. Ie, $​([3,4]​)​.last​(​) does not return 3</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Does not work with ordinary arrays. Ie, $​([3,4]​)​.last​(​) does not return 3</issue>
+        <issue severity="low" proof="array">Does not work with ordinary arrays. Ie, $​([3,4]​)​.last​(​) does not return 3</issue>
       </issues>
     </td>
   </tr>
@@ -557,8 +559,8 @@ Compliance summary:<br>
     <td class="full"></td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Very buggy. The function retrieves arguments (element, index) instead of (index, element).</issue>
-        <issue severity="" proof="">The 'this' does not point to the element, but to window</issue>
+        <issue severity="high" proof="first_cb_arg,second_cb_arg">Very buggy. The function retrieves arguments (element, index) instead of (index, element).</issue>
+        <issue severity="high" proof="this">The 'this' does not point to the element, but to window</issue>
       </issues>
     </td>
   </tr>
@@ -568,7 +570,8 @@ Compliance summary:<br>
     <td class="full"></td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Only works on one element (the rest is dropped)</issue>
+        <issue severity="normal" proof="multiple_elements">Only works on one element (the rest is dropped)</issue>
+        <issue severity="normal" proof="filtering">.next( selector ) is not supported, that is: no filtering</issue>
       </issues>
     </td>
   </tr>
