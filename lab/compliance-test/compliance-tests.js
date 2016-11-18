@@ -949,30 +949,35 @@ window.complianceTests = [
       {
         name: '.filter( element )',
         tests: [
-          ['$("#item3 li").filter(document.getElementById("item3_1"))', ""],
+          ['$("#item3 li").filter(document.getElementById("item3_1"))', "", "element"],
         ]
       },
       {
         name: '.filter( elements )',
         tests: [
-          ['$("#item3 li").filter([document.getElementById("item3_1")])', "Array of elements"],
-          ['$("#item3 li").filter(document.getElementsByTagName("li"))', "HTMLCollection (array-like)"],
+          ['$("#item3 li").filter([document.getElementById("item3_1")])', "Array of elements", "array"],
+          ['$("#item3 li").filter({length:1, 0:document.getElementById("item3_1")})', "Array-like", "array_like"],
+          ['$("#item3 li").filter(document.getElementsByTagName("li"))', "HTMLCollection"],
         ]
       },
       {
         name: '.filter( selection )',
         tests: [
-          ['$("#item3 li").filter($("#item3_1"))', "Single item"],
+          ['$("#item3 li").filter($("#item3_1"))', "Single item", "selection"],
           ['$("#item3 li").filter($("li"))', "Multiple items"],
         ]
       },
       {
         name: '.filter( function )',
         tests: [
-          ['$("#item3 li").filter(function(idx,el){return true})', ""],
-          ['$("#item3 li").filter(function(idx,el){return (idx==0)})', "Test first argument (index)"],
-          ['$("#item3 li").filter(function(idx,el){return (el.id=="item3_1")})', "Test second argument (element)"],
-          ['$("#item3 li").filter(function(idx,el){return (this.id=="item3_1")})', "Test this"],
+          ['$("#item3 li").filter(function(idx,el){return true})', "Return all elements", "function"],
+          ['$("#item3 li").filter(function(idx,el){return false})', "Return no elements"],
+          ['function(){var arr=[];$("#item3 li").filter(function(i,el) {arr.push(i);return true});return arr}()', "First argument to callback is the index", "first_cb_arg"],
+          ['function(){var arr=[];$("#item3 li").filter(function(i,el) {arr.push(el);return true});return arr}()', "Second argument to callback is the element", "second_cb_arg"],
+          ['function(){var arr=[];$("#item3 li").filter(function(i,el) {arr.push(this);return true});return arr}()', "This is the element", "this"],
+//          ['$("#item3 li").filter(function(idx,el){return (idx==0)})', "Test first argument (index)"],
+//          ['$("#item3 li").filter(function(idx,el){return (el.id=="item3_1")})', "Test second argument (element)"],
+//          ['$("#item3 li").filter(function(idx,el){return (this.id=="item3_1")})', "Test this"],
         ]
       },
     ]
@@ -983,12 +988,13 @@ window.complianceTests = [
       {
         name: '.find( selector [String] )',
         tests: [
-          ['$("ul").find("li")', " "],
-          ['$("#item3").find("body li")', "selector begins with something outside of context. Zepto and Cash errorsly returns matches here (they have same issue in constructor. The issue is described more in detail there)"],
+          ['$("ul#ul2").find("li")', "Standard"],
+          ['$("ul#ul2,ul#ul3").find("li")', "Search several trees"],
+          ['$("#ul0,#ul2").find("li")', "An element is matched in more than one of the searched trees. But only one match is returned - no duplicates!", "no_duplicates"],
+//          ['$("ul").find("li")', " "],
+          ['$("#item3").find("body li")', "selector begins with something outside of context. Zepto and Cash errorsly returns matches here (they have same issue in constructor. The issue is described more in detail there)", "scoped_search"],
           ['$("#item3").find("#item3")', ""],
-          ['$("ul#ul0").find("li")', " "],
-          ['$("ul#ul2").find("li")', " "],
-          ['$("ul#ul2,ul#ul3").find("li")', " "],
+//          ['$("ul#ul0").find("li")', " "],
 
           ['$("ul#ul2").find("li#item1")', "selector is not in the decendant tree"],
         ]
@@ -996,7 +1002,7 @@ window.complianceTests = [
       {
         name: '.find( selector [jQuery] )',
         tests: [
-          ['$("ul").find($("li.odd"))', "selector is jQuery object"],
+          ['$("ul").find($("li.odd"))', "selector is jQuery object", "selection"],
           ['$("ul#ul2,ul#ul3").find($("li"))', " "],
           ['$("ul#ul2").find($("li#item1"))', "selector is a jQuery object NOT in the decendant tree"],
         ]
@@ -1004,7 +1010,7 @@ window.complianceTests = [
       {
         name: '.find( selector [Element] )',
         tests: [
-          ['$("#ul2,#ul3").find(document.getElementById("item3_1"))', ""],
+          ['$("#ul2,#ul3").find(document.getElementById("item3_1"))', "", "element"],
           ['$("ul#ul2").find($("li#item1").get(0))', "selector is an Element NOT in the decendant tree"],
         ]
       },
@@ -1013,6 +1019,7 @@ window.complianceTests = [
         tests: [
           ['$("#ul3").find([document.getElementById("item3_1")])', ""],
           ['$("ul#ul2,ul#ul3").find($("li").get())', ""],
+          ['$("#ul3").find({length:1, 0:document.getElementById("item3_1")})', "Array-like", "array_like"],
           ['$("#ul3").find(document.getElementsByTagName("li"))', "HTMLCollection"],
         ]
       }
@@ -1024,8 +1031,8 @@ window.complianceTests = [
       {
         name: 'first()',
         tests: [
-          ['$("ul li").first()', "First element"],
-          ['$([3,4]).first()', "First array member"],
+          ['$("ul li").first()', ".first() called on a selection of nodes"],
+          ['$([3,4]).first()', "Plain array", "array"],
         ]
       },
       {
@@ -1094,7 +1101,9 @@ window.complianceTests = [
           ['$("<b class=\'banana\'>").hasClass("bAnAnA")', "iGnOrE case?"],
           ['$("<b class=\'a\\tb\\tc\'>").hasClass("b")', "HTML contains tab char instead of space"],
           ['$("<b class=\'a  b    c\'>").hasClass("b")', "Extra spaces in HTML"],
-          ['$("<b class=\'a b c\\n\'>").hasClass("b")', "Newlines in HTML"],
+          ['$("<b class=\'a b c\\n\'>").hasClass("b")', "Newlines in HTML", "newline"],
+          ['$("<b class=\'a b c\'>").hasClass("a c")', "Multiple class names specified. And no, you cannot do that"],
+          ['$("<b class=\'a b c\'>").hasClass("a b")', "Multiple class names specified in same order as they appear in html. Oh, you can do that. But this must be a bug in jQuery"],
 
         ]
       },
@@ -1107,7 +1116,7 @@ window.complianceTests = [
         name: 'hide()',
         tests: [
           ['$("<i></i>").hide()', "Inline element, hidden by hide()"],
-          ['$(tempEl).css("display", "table-cell").hide().show().css("display")', "Element made table-cell, hidden with hide(), and shown again"],
+          ['$(tempEl).css("display", "table-cell").hide().show().css("display")', "Element made table-cell, hidden with hide(), and shown again", "store_original_display_value"],
 
         ]
       },

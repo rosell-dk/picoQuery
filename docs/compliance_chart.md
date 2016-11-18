@@ -375,24 +375,24 @@ Compliance summary:<br>
     <td>.filter()</td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">.filter( elements [Array] ) signature does not support when elements is merely array-like</issue>
-        <issue severity="" proof="">.filter( function ) signature is not supported</issue>
+        <issue severity="low" proof="array_like">.filter( elements [Array] ) signature does not support when elements is merely array-like (Will be fixed in 0.5.0)</issue>
+        <issue severity="normal" proof="function">.filter( function ) signature is not supported</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">.filter( element ) signature is not supported</issue>
-        <issue severity="" proof="">.filter( elements [Array] ) signature is not supported</issue>
-        <issue severity="" proof="">.filter( selection ) signature is not supported</issue>
-        <issue severity="" proof="">.filter( filter ) signature is buggy - the function does not receive the second argument</issue>
+        <issue severity="normal" proof="element">.filter( element ) signature is not supported</issue>
+        <issue severity="normal" proof="array">.filter( elements [Array] ) signature is not supported</issue>
+        <issue severity="normal" proof="selection">.filter( selection ) signature is not supported</issue>
+        <issue severity="low" proof="second_cb_arg">.filter( function ) signature is buggy - the function does not receive the second argument</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">.filter( element ) signature is not supported</issue>
-        <issue severity="" proof="">.filter( elements [Array] ) signature is not supported</issue>
-        <issue severity="" proof="">.filter( selection ) signature is not supported</issue>
-        <issue severity="" proof="">.filter( filter ) signature is not supported</issue>
+        <issue severity="normal" proof="element">.filter( element ) signature is not supported</issue>
+        <issue severity="normal" proof="array">.filter( elements [Array] ) signature is not supported</issue>
+        <issue severity="normal" proof="selection">.filter( selection ) signature is not supported</issue>
+        <issue severity="normal" proof="first_cb_arg,second_cb_arg">.filter( function ) signature is buggy: The callback receives the arguments in wrong order</issue>
       </issues>
     </td>
   </tr>
@@ -400,21 +400,21 @@ Compliance summary:<br>
     <td>.find()</td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLCollection). (Will be fixed in 0.5.0)</issue>
+        <issue severity="low" proof="array_like">.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLCollection). (Will be fixed in 0.5.0)</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">.find( selector ) signature is buggy: Duplicates are not removed</issue>
-        <issue severity="" proof="">.find( selector ) is buggy: It finds elements that are parent to the selection. Ie $​("#item3"​)​.find​("body li"​) can give a result. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></issue>
-        <issue severity="" proof="">.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLCollection)</issue>
+        <issue severity="high" proof="no_duplicates">.find( selector ) signature is buggy: In some circumstances it returns duplicates</issue>
+        <issue severity="high" proof="scoped_search">.find( selector ) is buggy: It finds elements that are parent to the selection. Ie $​("#item3"​)​.find​("body li"​) can give a result. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></issue>
+        <issue severity="low" proof="array_like">.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLCollection)</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">.find( selector ) is buggy: It finds elements that are parent to the selection. Ie $​("#item3"​)​.find​("body li"​) can give a result. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></issue>
-        <issue severity="" proof="">.find( selector [jQuery] ) is not supported</issue>
-        <issue severity="" proof="">.find( selector [Element] ) is not supported</issue>
+        <issue severity="high" proof="scoped_search">.find( selector ) is buggy: It finds elements that are parent to the selection. Ie $​("#item3"​)​.find​("body li"​) can give a result. The bug is because with the querySelector method, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector">the entire hierarchy counts</a>. To fix this shortcoming, the library has to do something similar to <a href="https://github.com/lazd/scopedQuerySelectorShim">this shim</a></issue>
+        <issue severity="normal" proof="selection">.find( selector [jQuery] ) is not supported</issue>
+        <issue severity="normal" proof="element">.find( selector [Element] ) is not supported</issue>
       </issues>
     </td>
   </tr>
@@ -423,12 +423,12 @@ Compliance summary:<br>
     <td class="full"></td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Does not work with ordinary arrays. Ie, $​([3,4]​)​.first​(​) does not return 3</issue>
+        <issue severity="low" proof="array">Does not work with ordinary arrays. Ie, $​([3,4]​)​.first​(​) does not return 3</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Does not work with ordinary arrays. Ie, $​([3,4]​)​.first​(​) does not return 3</issue>
+        <issue severity="low" proof="array">Does not work with ordinary arrays. Ie, $​([3,4]​)​.first​(​) does not return 3</issue>
       </issues>
     </td>
   </tr>
@@ -453,26 +453,30 @@ Compliance summary:<br>
         <issue severity="" proof="">Event propagation may not be correct</issue>
       </issues>
     </td>
-    <td></td>
-    <td></td>
+    <td>Has not been investigated</td>
+    <td>Has not been investigated</td>
   </tr>
   <tr>
     <td>.hasClass()</td>
     <td class="full"></td>
     <td class="full"></td>
-    <td class="full"></td>
+    <td class="approximate">
+      <issues>
+        <issue severity="edgecase" proof="newline">HTML may not contain newline</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.hide()</td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Animation is not supported</issue>
+        <issue severity="normal" proof="">Animation is not supported</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Does not store display value before setting it to "none", so .show() cannot restore it correctly. Ie. $(tempEl).css("display", "table-cell").hide().show().css("display") returns "block", but should return "table-cell"</issue>
-        <issue severity="" proof="">Animation is not supported</issue>
+        <issue severity="high" proof="store_original_display_value">Does not store display value before setting it to "none", so .show() cannot restore it correctly. Ie. $(tempEl).css("display", "table-cell").hide().show().css("display") returns "block", but should return "table-cell"</issue>
+        <issue severity="normal" proof="">Animation is not supported</issue>
       </issues>
     </td>
     <td class="none"></td>
