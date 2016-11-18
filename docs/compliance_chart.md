@@ -324,16 +324,17 @@ Compliance summary:<br>
     <td class="full"></td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">.data( key, value ) is not implemented. </issue>
-        <issue severity="" proof="">.data( object ) is not implemented either. So you can not set data, only read those set in "data-xxx" attributes</issue>
-        <issue severity="" proof="">.data( ) is not implemented</issue>
-        <issue severity="" proof="">Setting data changes the "data-xxx" attribute of the node. It should not</issue>
+        <issue severity="high" proof="key_value">.data( key, value ) is not implemented. </issue>
+        <issue severity="high" proof="obj">.data( object ) is not implemented either. So you can not set data, only read those set in "data-xxx" attributes</issue>
+        <issue severity="normal" proof="noargs">.data( ) is not implemented</issue>
+        <issue severity="normal" proof="data_attr_not_affected">Setting data changes the "data-xxx" attribute of the node. It should not</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Memory-leaking. Data is not deleted from nodes when .empty(), .remove(), .html() and .replaceWith() methods are called.</issue>
-        <issue severity="" proof="">.data( ) is not implemented</issue>
+        <issue severity="high" proof="">Memory-leaking. Data is not deleted from nodes when .empty(), .remove(), .html() and .replaceWith() methods are called.</issue>
+        <issue severity="normal" proof="obj_has_data_attr">.data( obj ) has no effect, when the element has data-attributes</issue>
+        <issue severity="normal" proof="noargs">.data( ) is not implemented</issue>
       </issues>
     </td>
   </tr>
@@ -343,7 +344,8 @@ Compliance summary:<br>
     <td class="full"></td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Does not support iterating normal arrays</issue>
+        <issue severity="high" proof="first_cb_arg,second_cb_arg">Callback receives the two arguments in wrong order</issue>
+        <issue severity="low" proof="iterate_plain_array">Does not support iterating normal arrays</issue>
       </issues>
     </td>
   </tr>
@@ -357,7 +359,7 @@ Compliance summary:<br>
     <td>.end()</td>
     <td class="approximate">
       <issues>
-        <issue severity="" proof="">Does not comply in some edge cases</issue>
+        <issue severity="low" proof="document_added_to_pushstack">$( selector ) does not add the document to the pushstack</issue>
       </issues>
     </td>
     <td class="none"></td>

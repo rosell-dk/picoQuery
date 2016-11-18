@@ -755,28 +755,31 @@ window.complianceTests = [
       {
         name: '.data( key, value )',
         tests: [
+          ['$("<div></div>").data("obj", {a:42}).data("obj")', "Set data (and get it)", "key_value"],
+          ['$("<div></div>").data("obj", {a:42}).data("obj")[\'a\']', "Set and get data"],
           ['$("<div></div>").data("obj", {a:42}).get(0)', ""],
-          ['$("<div></div>").data("obj", {a:42}).data("obj")', ""],
           ['$("<div></div>").data("obj2", {"a":"42"}).data("obj2")', ""],
           ['$("<div data-monkey=\'chimpanse\' ></div>").data("a",42).data("a")', "Set data on a node that has a data-attribute"],
           ['$("<div data-monkey=\'chimpanse\' ></div>").data("monkey", "gibbon").data("monkey")', "Update data that was set with data-attribute"],
           ['$(tempEl).data("monkey", "gibbon")', "Does setting data add a data-attribute? (it should not)"],
-          ['$("<div data-monkey=\'chimpanse\' ></div>").data("monkey", "gibbon")', "Does setting this data affect the data-attribute? (it should not)"],
+          ['$("<div data-monkey=\'chimpanse\' ></div>").data("monkey", "gibbon")', "Does setting this data affect the data-attribute? (it should not)", "data_attr_not_affected"],
         ]
       },
       {
         name: '.data( obj )',
         tests: [
-          ['$("<div></div>").data({a:42,b:[]}).get(0)', ""],
+          ['$("<div></div>").data({a:42,b:[]}).get(0)', "obj"],
           ['$("<div></div>").data({a:42,b:[]}).data("a")', ""],
           ['$("<div></div>").data({a:42,b:[0,1]}).data("b")', ""],
-          ['$("<div data-monkey=\'chimpanse\' ></div>").data("a",42).data({b:42,c:[0,1]}).data()', "Existing removed? - no!"],
+          ['$("<div data-monkey=\'chimpanse\' ></div>").data({b:42,c:[0,1]}).data()', "Called when html contains data-attributes", "obj_has_data_attr"],
+//          ['$("<div data-monkey=\'chimpanse\' ></div>").data("a",42).data({b:42,c:[0,1]}).data()', "Existing removed? - no!"],
           ['$("<div data-monkey=\'chimpanse\' ></div>").data("a",42).data({a:12,chimpanse:[0,1]}).data()', "Existing updated? - yes of course"],
         ]
       },
       {
         name: '.data( )',
         tests: [
+          ['$("<div data-monkey=\'chimpanse\' ></div>").data()', "noargs"],
           ['$("<div></div>").data({a:42,b:[0,1]}).data()', ""],
           ['$("<div data-monkey=\'chimpanse\' ></div>").data("b",43).data("a", 42).data()', "Order"],
           ['$("<div data-monkey=\'chimpanse\' ></div>").data({b:42,a:[0,1]}).data()', "Order"],
@@ -801,10 +804,14 @@ window.complianceTests = [
       {
         name: '.each( function )',
         tests: [
-          ['function(){var sum=0;$("li").each(function(i) {sum+=i});return sum}()', ""],
-          ['function(){var els=[];$("li").each(function(i) {els.push(this)});return els}()', ""],
-          ['function(){var els=[];$("li").each(function(i,el) {els.push(el)});return els}()', ""],
-          ['function(){var els=[];$([3,4]).each(function(i,el) {els.push(el)});return els}()', ""],
+//          ['function(){var els=[];$("li").each(function(i) {els.push(this)});return els}()', ""],
+          ['$("<ul><li></li><li></li></ul>").children().each(function(idx,el) {$(this).text(\'item\')})', "Basic"],
+//          ['$("<ul><li></li><li></li></ul>").children().each(function(idx,el) {$(this).text(\'item\' + idx)})', "First argument is the index"],
+          ['function(){var arr=[];$("#item3 li").each(function(i,el) {arr.push(i)});return arr}()', "First argument to callback is the index", "first_cb_arg"],
+          ['function(){var arr=[];$("#item3 li").each(function(i,el) {arr.push(el)});return arr}()', "Second argument to callback is the element", "second_cb_arg"],
+          ['function(){var arr=[];$("#item3 li").each(function(i,el) {arr.push(this)});return arr}()', "this is the element"],
+//          ['function(){var sum=0;$("li").each(function(i) {sum+=i});return sum}()', ""],
+          ['function(){var els=[];$([3,4]).each(function(i,el) {els.push(el)});return els}()', "Iterate plain array", "iterate_plain_array"],
         ]
       }
     ]
@@ -818,6 +825,8 @@ window.complianceTests = [
 
 //          ['$("<p></p>").addClass("test").end()', ".addClass()"],
 //          ['$("<div><b></b></div>").after("<i></i>").end()', ".after()"],
+          ['$("ul").end()', "jQuery( selector ) adds the document to the pushstack", "document_added_to_pushstack"],
+          ['$("<ul></ul>").end()', "jQuery( html ) does not add anything to the pushstack"],
           ['$("<div><b></b></div>").children().after("<i></i>").end()', ".after()"],
 //          ['$("<p></p>").append("<i></i>").end()', ".append()"],
           ['$("<p></p>").appendTo("<i></i>").end()', ".appendTo()"],
