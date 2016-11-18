@@ -486,14 +486,15 @@ Compliance summary:<br>
     <td class="full"></td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
-        <issue severity="" proof="">Does not comply in an edge case</issue>
+        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
+        <issue severity="edgecase" proof="empty_selection">Does not comply in an edge case</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
-        <issue severity="" proof="">html( function ) signature is not implemented</issue>
+        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
+        <issue severity="normal" proof="function">html( function ) signature is not implemented</issue>
+        <issue severity="edgecase" proof="empty_selection">Does not comply in an edge case</issue>
       </issues>
     </td>
   </tr>

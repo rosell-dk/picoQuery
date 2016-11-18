@@ -1143,9 +1143,9 @@ window.complianceTests = [
       {
         name: '.html()',
         tests: [
-          ['$("li").html()', " "],
-          ['$().html()', " "],
-          ['$("#testhtml form").html()', " "],
+          ['$("#ul3").html()', "Get innerHtml of single element"],
+          ['$("li").html()', "Only get innerHtml of first match"],
+          ['$("#testhtml form").html()', ""],
         ]
       },
       {
@@ -1157,7 +1157,13 @@ window.complianceTests = [
       {
         name: '.html( function )',
         tests: [
-          ['$("<div>old</div>").html(function(i,oldVal){return "oldval:"+oldVal+",index:"+i}).html()', ""],
+          ['$("<div>old</div>").html(function(i,oldVal){return "oldval:"+oldVal+",index:"+i}).html()', "function"],
+        ]
+      }
+      {
+        name: 'Edge cases',
+        tests: [
+          ['$().html()', "empty selection", "empty_selection"],
         ]
       }
     ]
