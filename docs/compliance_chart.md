@@ -445,18 +445,6 @@ Compliance summary:<br>
     <td class="full"></td>
   </tr>
   <tr>
-    <td>.on()</td>
-    <td class="partial">
-      <issues>
-        <issue severity="" proof="">Multiple events are NOT SUPPORTED - only one event name may be specified</issue>
-        <issue severity="" proof="">Namespaces such as "keydown.myPlugin" are not supported</issue>
-        <issue severity="" proof="">Event propagation may not be correct</issue>
-      </issues>
-    </td>
-    <td>Has not been investigated</td>
-    <td>Has not been investigated</td>
-  </tr>
-  <tr>
     <td>.hasClass()</td>
     <td class="full"></td>
     <td class="full"></td>
@@ -619,9 +607,31 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.on()</td>
+    <td class="partial">
+      <issues>
+        <issue severity="" proof="">Multiple events are NOT SUPPORTED - only one event name may be specified</issue>
+        <issue severity="" proof="">Namespaces such as "keydown.myPlugin" are not supported</issue>
+        <issue severity="" proof="">Event propagation may not be correct</issue>
+      </issues>
+    </td>
+    <td>Has not been investigated</td>
+    <td>Has not been investigated</td>
   </tr>
   <tr>
     <td>.parent()</td>
+    <td class="approximate">
+      <issues>
+        <issue severity="edgecase" proof="html_parent">If you try to get the parent of a jQuery selection which hasnt been appended to document, you will get a containing div - in jQuery you get an empty selection</issue>
+      </issues>
+    </td>
+    <td class="full"></td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="selector">.parent( selector ) signature is not supported - so no filtering</issue>
+        <issue severity="edgecase" proof="document_parent">parent of a document returns the documentElement, but in jQuery, it returns an empty selection</issue>
+        <issue severity="edgecase" proof="html_parent">If you try to get the parent of a jQuery selection which hasnt been appended to document, you will get a containing div - in jQuery you get an empty selection</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.prepend()</td>

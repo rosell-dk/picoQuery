@@ -1462,22 +1462,22 @@ window.complianceTests = [
         tests: [
           ['$("li#item3_2").parent()', ""],
           ['$("li").parent()', ""],
-          ['$(document).parent()', ""],
-          ['$(document).parent().parent()', ""],
-          ['$(1).parent()', ""],
-          ['$([3,4]).parent()', ""],
         ]
       },
       {
         name: '.parent( selector )',
         tests: [
-          ['$("li").parent(".level1")', ""],
+          ['$("li").parent(".level1")', "", "selector"],
         ]
       },
       {
         name: 'Edge cases',
         tests: [
-          ['$("<div><b></b></div>").parent()', ""],
+          ['$("<div><b></b></div>").parent()', "parent of a jQuery( html ), which has not been appended to the document", "html_parent"],
+          ['$(document).parent()', "document_parent"],
+          ['$(document).parent().parent()', ""],
+          ['$(1).parent()', ""],
+          ['$([3,4]).parent()', ""],
         ]
       }
     ]
