@@ -1708,7 +1708,7 @@ window.complianceTests = [
           ['$("<div class=\'a b a a e a a h a\'/>").removeClass("a c d f g i").get(0).className', "Remove a classname that is defined lots of times"],
           ['$("<div class=\'a\tb\tc\'/>").removeClass("b").get(0).className', "HTML contains tab char instead of space"],
           ['$("<div class=\'a\nb c\'/>").removeClass("b").get(0).className', "HTML contains newline"],
-          ['$("<div class=\' a  b    c \'/>").removeClass("b").get(0).className', "Extra spaces in HTML", "extra_html"],
+          ['$("<div class=\' a  b    c \'/>").removeClass("b").get(0).className', "Extra spaces in HTML", "extra_spaces_in_html"],
           ['$("<p class=\'a b\'></p><p class=\'a b\'></p>").removeClass("b")', "Multiple elements"],
         ]
       },
@@ -1745,7 +1745,11 @@ window.complianceTests = [
       {
         name: '.replaceWith( newContent )',
         tests: [
-          ['$("<div><h1>text</h1></div>").children().replaceWith("<h2>new heading</h2>")', ""],
+          ['function(){$(tempEl).append("<div id=test2><h1>text</h1></div>").children().children().replaceWith("<h2>new heading</h2>");return $(tempEl)}()', "Basic functionality"],
+          ['function(){$(tempEl).append("<h1>text</h1>").children().replaceWith("<h2>new heading</h2>");return $(tempEl)}()', "Basic functionality"],
+          ['$("<div><h1>text</h1></div>").children().replaceWith("<h2>new heading</h2>")', "As of jQuery 1.9.1, .replaceWith always returns the original unmodified set"],
+          ['$(tempEl).append("<div id=test2><h1>text</h1></div>").replaceWith("<h2>new heading</h2>")', ""],
+          ['$(tempEl).append("<div id=test2><h1>text</h1></div>").replaceWith("<h2>new heading</h2>").parent()', ""],
           ['function(){$("body").append("<div id=test2><h1>text</h1></div>");$("#test2").children().replaceWith("<h2>new heading</h2>");return $("#test2").remove()}()', ""],
 // ; 
         ]
@@ -1753,6 +1757,15 @@ window.complianceTests = [
       {
         name: '.replaceWith( function )',
         tests: [
+          ['function(){$(tempEl).append("<h1>text</h1>").children().replaceWith(function(){return "<h2>new heading</h2>"});return $(tempEl)}()', "Basic functionality", "function"],
+//          ['function(){$(tempEl).append("<h1>text</h1>").children().replaceWith(function(index){return "<h2>new heading" + a.toString() + this.toString() + "</h2>"});return $(tempEl)}()', "Arguments"],
+          ['function(){var arr=[];$(tempEl).append("<h1>text</h1><h1>more text</h1>").children().replaceWith(function(index,currentClassName) {arr.push(index);return "b"});return arr}()', "First argument to callback is the index"],
+          ['function(){var arr=[];$(tempEl).append("<h1>text</h1><p><b>more text</b></p>").children().replaceWith(function(index,oldHtml) {arr.push(oldHtml);return "b"});return arr}()', "Second argument to callback is the old html"],
+          ['function(){var arr=[];$(tempEl).append("<h1>text</h1><p><b>more text</b></p>").children().replaceWith(function(index,oldHtml) {arr.push(this);return "b"});return arr}()', "This points to the node about to be replaced"],
+
+//          ['$("<div><h1>text</h1></div>").children().replaceWith(function() {return "<h2>new heading</h2>"})', ""],
+//          ['$("<div><h1>text</h1></div>").children().replaceWith(function() {return $("<h2>new heading</h2>")})', ""],
+//          ['$(tempEl).append("<div><h1>text</h1></div>").children().replaceWith(function() {return "<h2>new heading</h2>"})', ""],
         ]
       },
     ]

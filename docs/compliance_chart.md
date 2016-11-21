@@ -351,9 +351,21 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.empty()</td>
-    <td class="full"></td>
-    <td class="full"></td>
-    <td class="full"></td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.end()</td>
@@ -471,7 +483,11 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.html()</td>
-    <td class="full"></td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
+      </issues>
+    </td>
     <td class="partial">
       <issues>
         <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
@@ -702,16 +718,19 @@ Compliance summary:<br>
     <td>.remove()</td>
     <td class="partial">
       <issues>
+        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
         <issue severity="low" proof="selector_nested">.remove( selector ) does not support nested selectors. For example "* > b" does not match when performed on a "b" element</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
+        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
         <issue severity="normal" proof="selector">.remove( selector ) signature is not supported (all elements are removed)</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
+        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
         <issue severity="normal" proof="selector">.remove( selector ) signature is not supported (all elements are removed)</issue>
       </issues>
     </td>
@@ -752,6 +771,23 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.replaceWith()</td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak (it does however remove data)</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak (no issues with data, because data is not stored as expando properties of nodes, but added as data-attributes)</issue>
+        <issue severity="normal" proof="function">.replaceWith( function ) is not supported</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="">Event listeners and data on the old HTML are not removed, which can cause memory leak</issue>
+        <issue severity="normal" proof="function">.replaceWith( function ) is not supported</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.show()</td>
