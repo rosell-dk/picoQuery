@@ -1385,17 +1385,21 @@ window.complianceTests = [
       {
         name: '.offset( )',
         tests: [
-          ['$("#item2_1").offset()', " "],
+          ['$("#item2_1").offset()', "Get offset of an element", "get"],
+          ['$("#item3_1,#item3_1").offset()', "Only get offset of first element in set"],
         ]
       },
       {
         name: '.offset( coordinates )',
         tests: [
+          ['$(tempEl).offset({top:20,left:30}).offset()', "Set offset", "set"],
+//          ['$(tempEl).offset({top:20,left:30}).css(\'position\')', "Set offset"],
         ]
       },
       {
         name: '.offset( function )',
         tests: [
+          ['$(tempEl).offset(function(index,coords){return {top:20,left:0}}).offset()', "Set offset", "function"],
         ]
       },
     ]
@@ -1407,10 +1411,18 @@ window.complianceTests = [
         name: '.offsetParent()',
         tests: [
 //          ['$("<div><p></p></div>").children().offsetParent()', " "],
-//          ['$("<div style=\'position:static\'><p></p></div>").children().offsetParent()', " "],
-          ['$("input").offsetParent()', " "],
-          ['$("#item3_1, input").offsetParent()', "Two"],
-          ['typeof $("#hidden_li").offsetParent()', "Element is hidden"]
+//          ['$("<div style=\'position:relative\'><p></p></div>").children().offsetParent()', " "],
+          ['$(tempEl).html("<div style=\'position:relative\'><p><i></i></p></div>").find("i").offsetParent()', "Closest positioned element has position:relative"],
+          ['$(tempEl).html("<div style=\'position:absolute\'><p><i></i></p></div>").find("i").offsetParent()', "Closest positioned element has position:absolute"],
+          ['$(tempEl).html("<div style=\'position:fixed\'><p><i></i></p></div>").find("i").offsetParent()', "Closest positioned element has position:fixed"],
+//          ['$(tempEl).html("<div style=\'position:static\'><p><i></i></p></div>").find("i").offsetParent()', "No parents are positioned (position:static is not positioned)"],
+          ['$(tempEl).offsetParent()', "No parents are positioned", "no_parents_positioned"],
+//          ['$(tempEl).html("<div style=\'position:static\'><p><i></i></p></div>").find("i").offsetParent().css("position")', "hm"],
+          ['function() {$("body").css("position","absolute"); var res=$(tempEl).offsetParent(); $("body").css("position","static");return res}()', "Body is absolutely positioned"],
+          ['$().offsetParent()', "No elements", "no_elements"],
+          ['$("input").offsetParent()', "An element on this page..."],
+          ['$("#item3_1, input").offsetParent()', "Two", "multiple_elements"],
+          ['$("#hidden_li").offsetParent()', "Element is hidden", "hidden_element"]
 //          ['$("h1").offsetParent()', " "],
 // TODO: Read: https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
         ]

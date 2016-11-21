@@ -53,6 +53,10 @@ function toPrint(obj, skipMarkUp) {
           // Its too much to print entire body element
           html = className;
         }
+        else if (className == 'HTMLHtmlElement') {
+          // Its too much to print entire html element
+          html = className;
+        }
         else {
 //          html = htmlEscapeEtc(obj.outerHTML);
           html = obj.outerHTML;
