@@ -577,9 +577,45 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.offset()</td>
+    <td class="partial">
+      <issues>
+        <issue severity="high" proof="set">.offset( coordinates ) is not supported. So setting coordinates is not supported, only getting</issue>
+        <issue severity="normal" proof="function">.offset( function ) is not supported</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="high" proof="get,set">.offset( ) returns wrong coordinates</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="high" proof="set">.offset( coordinates ) is not supported. So setting coordinates is not supported, only getting</issue>
+        <issue severity="normal" proof="function">.offset( function ) is not supported</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.offsetParent()</td>
+    <td class="partial">
+      <issues>
+        <issue severity="low" proof="no_parents_positioned">When no parents are positioned, the body element is returned, but jQuery returns the document element</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="low" proof="no_parents_positioned">When no parents are positioned, the body element is returned, but jQuery returns the document element</issue>
+        <issue severity="low" proof="hidden_element">When element is hidden, the body element is returned, but jQuery returns the document element</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="low" proof="no_parents_positioned">When no parents are positioned, the body element is returned, but jQuery returns the document element</issue>
+        <issue severity="low" proof="hidden_element">When element is hidden, an empty selection is returned, but jQuery returns the document element</issue>
+        <issue severity="low" proof="no_elements">When no elements are in set, we get an error</issue>
+        <issue severity="low" proof="multiple_elements">Does not handle operating on multiple elements</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.on()</td>
