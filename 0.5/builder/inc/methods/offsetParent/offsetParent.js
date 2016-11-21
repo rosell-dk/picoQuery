@@ -10,13 +10,28 @@ Signatures:
   .offsetParent( ) => jQuery
 
 */
-offsetParent: function(a) {
+offsetParent: function() {
 /*  return $(__MAP__(<@ this.e @>, <@ function(el) {
     return (el.offsetParent || el.ownerDocument.documentElement);
   } @>));*/
 
   __RETURN_PUSH_STACK_JQ__(<@ $(__MAP__(<@ this.e @>, <@ function(el) {
-    return (el.offsetParent || el.ownerDocument.documentElement);
+      var offsetParent = el.offsetParent;
+
+      if (!offsetParent || <?php if (isFeatureEnabled('css')) {echo '$(offsetParent).css("position")';} else {echo 'getComputedStyle(offsetParent)["position"]';} ?> == "static") {
+      
+      
+        return el.ownerDocument.documentElement
+      }
+      return offsetParent;
+
+/*    var offsetParent = el.offsetParent;
+    if (!offsetParent || offsetParent == offsetParent.ownerDocument.body) {
+      return el.ownerDocument.documentElement
+    }
+    return offsetParent;*/
+
+//    return (el.offsetParent || el.ownerDocument.documentElement);
   } @>)) @>)
 }
 
