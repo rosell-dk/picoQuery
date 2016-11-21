@@ -1671,26 +1671,20 @@ window.complianceTests = [
       {
         name: '.removeAttr( className )',
         tests: [
-          ['$("<div class=test></div>").removeAttr("class")', ""],
-          ['$("<div class=test id=test></div>").removeAttr("class id")', ""],
-          ['$().removeAttr("class")', ""],
-        ]
-      },
-      {
-        name: '.removeAttr()',
-        tests: [
-          ['$("<div class=test></div>").removeAttr()', ""],
-        ]
-      },
-      {
-        name: '.removeAttr( function )',
-        tests: [
+          ['$("<div class=test></div>").removeAttr("class")', "Basic functionality: Remove an attribute"],
+          ['$("<div class=\'test\' data-test=\'test\' id=test></div>").removeAttr("class id")', "Space seperated list of attributes", "space_separated"],
+          ['$("<div></div>").removeAttr("id")', "Try to remove an attribute that is not present"],
+          ['$("<div class=test></div><p class=test></p>").removeAttr("class")', "Remove an attribute on several nodes"],
         ]
       },
       {
         name: 'Edge cases',
         tests: [
-          ['$("<div class=test></div>").removeAttr(null)', ""],
+          ['$("<div class=test></div>").removeAttr()', "No args", "no_args"],
+          ['$("<div class=test></div>").removeAttr(null)', "Null", "null"],
+          ['$("<div class=test></div>").removeAttr(undefined)', "Undefined", "undefined"],
+          ['$("<div class=test></div>").removeAttr("")', "Empty string"],
+          ['$().removeAttr("class")', ""],
         ]
       }
 
@@ -1709,12 +1703,13 @@ window.complianceTests = [
           ['$("<div class=\'my-class\'/>").removeClass("my-class").get(0).className', "Remove hyhened classname"],
           ['$("<div class=\'banana\'/>").removeClass("BANANA").get(0).className', "iGnOrE case?"],
           ['$("<div class=\'elephant ele-phant\'/>").removeClass("phant").get(0).className', "Remove a classname that does not exist (but there is another classname which contains the string)"],
-          ['$("<div class=\'a a b\'/>").removeClass("a").get(0).className', "Remove a classname that is defined twice"],
+          ['$("<div class=\'a a b\'/>").removeClass("a").get(0).className', "Remove a classname that is defined twice", "classname_defined_more_than_once"],
           ['$("<div class=\'a b c d e f g h i\'/>").removeClass("a c d f g i").get(0).className', "Remove a lot of class names"],
           ['$("<div class=\'a b a a e a a h a\'/>").removeClass("a c d f g i").get(0).className', "Remove a classname that is defined lots of times"],
           ['$("<div class=\'a\tb\tc\'/>").removeClass("b").get(0).className', "HTML contains tab char instead of space"],
           ['$("<div class=\'a\nb c\'/>").removeClass("b").get(0).className', "HTML contains newline"],
-          ['$("<div class=\' a  b    c \'/>").removeClass("b").get(0).className', "Extra spaces in HTML"],
+          ['$("<div class=\' a  b    c \'/>").removeClass("b").get(0).className', "Extra spaces in HTML", "extra_html"],
+          ['$("<p class=\'a b\'></p><p class=\'a b\'></p>").removeClass("b")', "Multiple elements"],
         ]
       },
       {
@@ -1736,7 +1731,10 @@ window.complianceTests = [
       {
         name: '.removeClass( function )',
         tests: [
-          ['$("<div class=\'a b c\'></div>").removeClass(function(index,currentClassName){return "b"})', " "],
+          ['$("<p class=\'a b\'></p>").removeClass(function(index,currentClassName){return "b"})', "", "function"],
+          ['function(){var arr=[];$("<p class=\'a b\'></p><p class=\'a b\'></p>").removeClass(function(index,currentClassName) {arr.push(index);return "b"});return arr}()', "First argument to callback is the index"],
+          ['function(){var arr=[];$("<p class=\'a b\'></p><p class=\'a b\'></p>").removeClass(function(index,currentClassName) {arr.push(currentClassName);return "b"});return arr}()', "Second argument to callback is the current class name"],
+          ['function(){var arr=[];$("<p class=\'a b\'></p><p class=\'a b\'></p>").removeClass(function(index,currentClassName) {arr.push(this);return "b"});return arr}()', "This points to the element", "this"],
         ]
       }
     ]

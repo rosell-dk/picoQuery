@@ -718,9 +718,37 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.removeAttr()</td>
+    <td class="full"></td>
+    <td class="approximate">
+      <issues>
+        <issue severity="low" proof="no_args,null,undefined">Does not handle when argument is null or undefined</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="space_separated">Can only remove one attribute at a time (space separated list of attribute names is not supported)</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.removeClass()</td>
+    <td class="partial">
+      <issues>
+        <issue severity="edgecase" proof="extra_spaces_in_html">Does not remove extra spaces in HTML (fixed in 0.5.0)</issue>
+        <issue severity="low" proof="this">.removeClass( function ) is buggy: this does not point to the element</issue>
+      </issues>
+    </td>
+    <td class="approximate">
+      <issues>
+        <issue severity="edgecase" proof="classname_defined_more_than_once">Does not remove a class name defined more than once</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="function">.removeClass( function ) is not supported</issue>
+        <issue severity="edgecase" proof="extra_spaces_in_html">Does not remove extra spaces in HTML (fixed in 0.5.0)</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.replaceWith()</td>

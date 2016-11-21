@@ -302,12 +302,12 @@ removeClass: function(a) {
       el.className = "";
     }
     else {
-      var z = __IS_FUNCTION__(<@ a @>) ? a.call(null, index, el.className) : a;
+      var z = __IS_FUNCTION__(<@ a @>) ? a.call(el, index, el.className) : a;
 
       el.className=el.className.split(/\s/).filter(function(c){
     //    return!(" "+a+" ").match(' '+c+' ')  // 9 bytes longer in gzip
           return 0 > z.split(" ").indexOf(c);
-      }).join(" ");
+      }).join(" ").trim();
 
     }
   } @>);
