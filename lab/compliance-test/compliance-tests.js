@@ -1630,6 +1630,8 @@ window.complianceTests = [
       {
         name: '.ready()',
         tests: [
+//          ['$("<div></div>", {"ready": function(){console.log("jQuery( html, attributes ) - ready")}})', "Event (check console)"],
+          ['$("<div></div>").ready(function(){console.log("ready", arguments, framework[1])})', "Event (check console)", "arguments"],
         ]
       },
     ]
@@ -1640,18 +1642,25 @@ window.complianceTests = [
       {
         name: '.remove()',
         tests: [
-          ['$("<div><b></b><i></i></div>").children("b").remove()', ""],
-          ['$("<div><b></b><i></i></div>").children("b").remove().parent()', ""],
-          ['function(){$("body").append("<div id=testing><b>test</b><i></i></div>"); $("#testing b").remove();var els = $("#testing").get(); $("#testing").remove(); return els}()', ""],
+          ['$("<div><b></b><i></i></div>").children("b").remove()', "Basic: Remove an element (returns the element)"],
+          ['function() {$(tempEl).append("<p><b></b><i></i></p>").find("b").remove(); return $(tempEl)}()', "Basic: Remove an element (parent no longer contains it)"],
+          ['function() {$(tempEl).append("<p><b></b><i></i></p>").children().children().remove(); return $(tempEl)}()', "Remove two elements"],
         ]
       },
       {
         name: '.remove( selector )',
         tests: [
-          ['$("<div><b></b><i></i></div>").children().remove("b")', ""],
-          ['$("<div><b></b><i></i></div>").children().remove("b").parent()', ""],
-          ['$("<div><b></b><i></i></div>").children().remove("b i")', ""],
-          ['$("<div><b></b><i></i></div>").children().remove("b i").parent()', ""],
+          ['function() {$(tempEl).append("<p><b></b><i></i></p>").children().children().remove("b"); return $(tempEl)}()', "Basic: Remove an element (parent no longer contains it)", "selector"],
+          ['function() {$(tempEl).append("<p><b></b><i></i><strong></strong></p>").children().children().remove("b, strong"); return $(tempEl)}()', "Remove two elements"],
+          ['function() {$(tempEl).append("<p><b></b><i></i></p>").children().children().remove("* > b"); return $(tempEl)}()', "Match a 'b' element against '* > b'. In jQuery, this yields a match", "selector_nested"],
+          ['function() {$(tempEl).append("<p><b></b><i></i></p>").children().remove("* > b"); return $(tempEl)}()', "Try a selector that selects deep"],
+        ]
+      },
+      {
+        name: 'Edge cases',
+        tests: [
+          ['$("<div><b></b><i></i></div>").children("b").remove().parent()', "Get parent of removed item"],
+          ['$("<div><b></b><i></i></div>").children().remove("b").parent()', "Get parent of removed item"],
         ]
       },
     ]

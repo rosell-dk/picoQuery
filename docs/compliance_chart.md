@@ -690,9 +690,31 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.ready()</td>
+    <td class="full"></td>
+    <td class="full"></td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="arguments">The ready handler should be passed a reference to the jQuery object that called the method, but no arguments is passed</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.remove()</td>
+    <td class="partial">
+      <issues>
+        <issue severity="low" proof="selector_nested">.remove( selector ) does not support nested selectors. For example "* > b" does not match when performed on a "b" element</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="selector">.remove( selector ) signature is not supported (all elements are removed)</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="selector">.remove( selector ) signature is not supported (all elements are removed)</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.removeAttr()</td>
