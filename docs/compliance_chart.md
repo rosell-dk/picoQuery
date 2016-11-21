@@ -170,7 +170,7 @@ Compliance summary:<br>
     <td class="partial">
       <issues>
         <issue severity="normal" proof="function">.append( function ) signature is unsupported</issue>
-        <issue severity="edgecase" proof="">weird result in the test "Is appended node detached from previous position in DOM?"</issue>
+        <issue severity="edgecase" proof="weird">weird result in the test "Is appended node detached from previous position in DOM?"</issue>
         <issue severity="normal" proof="">When a node is appended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners, these clones will erroursly not get these</issue>
       </issues>
     </td>
@@ -635,15 +635,58 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.prepend()</td>
+    <td class="approximate">
+      <issues>
+        <issue severity="normal" proof="">When a node is prepended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners yet, these clones will erroursly not get these</issue>
+      </issues>
+    </td>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="function">.prepend( function ) signature is unsupported</issue>
+        <issue severity="edgecase" proof="weird">weird result in the test "Is prepended node detached from previous position in DOM?"</issue>
+        <issue severity="normal" proof="">When a node is prepended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners, these clones will erroursly not get these</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="content_content">.prepend( content [,content] ) only supports one piece of content</issue>
+        <issue severity="normal" proof="function">.prepend( function ) signature is unsupported</issue>
+        <issue severity="normal" proof="">When a node is prepended to multiple targets, the node is cloned behind the scenes. As the .clone() method doesnt support copying data and event listeners, these clones will erroursly not get these</issue>
+        <issue severity="low" proof="text_node">.prepend( [ Text Node ] ) signature is unsupported (and array of text nodes)</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.prependTo()</td>
+    <td class="full"></td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="multiple_targets">Does not support prepending to multiple targets</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="multiple_targets">Does not support prepending to multiple targets</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.prev()</td>
+    <td class="full"></td>
+    <td class="full"></td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="multiple_elements">Only works on one element (the rest is dropped)</issue>
+        <issue severity="normal" proof="filtering">.prev( selector ) is not supported, that is: no filtering</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.pushStack()</td>
+    <td class="full"></td>
+    <td class="none"></td>
+    <td class="none"></td>
   </tr>
   <tr>
     <td>.ready()</td>

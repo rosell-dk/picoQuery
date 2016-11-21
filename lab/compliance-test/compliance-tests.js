@@ -173,9 +173,9 @@ window.complianceTests = [
           ['$("<div><p></p></div>").append($("<b></b>"))', "[ jQuery ]"],
           ['$("<div><p></p></div>").append(makeElement("<b></b>"))', "[ Element ]"],
           ['$("<div></div>").append("text")', "[ String ]"],
-          ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Text Node ]"],
+          ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Text Node ]", "text_node"],
           ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Array of text nodes]"],
-          ['$("<div><p></p></div>").append([makeTextNode("text"), makeElement("<i>italic</i>")])', "[ Array of text nodes / elements ]", "text_node"],
+          ['$("<div><p></p></div>").append([makeTextNode("text"), makeElement("<i>italic</i>")])', "[ Array of text nodes / elements ]"],
           ['$("<div><p></p></div>").append([makeElement("<i>italic</i><b>bold</b>")])', "[ Array of elements ]"],
           ['$("<div><p></p><p></p></div>").children().append("hello").parent()', "Append text multiple targets"],
 //          ['$("<div><p></p><p></p></div>").children().append($(tempEl).text("node")).parent()', "Append same node to multiple targets"],
@@ -184,7 +184,7 @@ window.complianceTests = [
 
           ['function(){$("body").append("<div id=aBeN><banana></banana></div>"); $("body").append("<div id=eCUbola><one></one><two></two></div>"); $("#eCUbola *").append($("#aBeN")); var result = $("#eCUbola").clone(); $("#eCUbola").remove(); $("#aBeN").remove(); return result }()', "Append same attached node to multiple targets"],
 
-          ['function(){$("body").append("<div class=aBeN><banana></banana></div>"); $("body").append("<div id=eCUbola><one></one><two></two></div>"); $("#eCUbola *").append($(".aBeN")); var result = $(".aBeN").parent(); $("#eCUbola").remove(); $(".aBeN").remove(); return result }()', "Is appended node detached from previous position in DOM?"],
+          ['function(){$("body").append("<div class=aBeN><banana></banana></div>"); $("body").append("<div id=eCUbola><one></one><two></two></div>"); $("#eCUbola *").append($(".aBeN")); var result = $(".aBeN").parent(); $("#eCUbola").remove(); $(".aBeN").remove(); return result }()', "Is appended node detached from previous position in DOM?", "weird"],
 
 //          ['function(){var $appendThis = $(tempEl).html("<b class=banana>test</b>"); $("body").append("<div id=eCUbo><one></one><two></two></div>"); $("#eCUbo *").append($appendThis); var result = $("#eCUbo").clone(); $("#eCUbo").remove(); return result }()', "Is appended node removed from previous position?"],
 //          ['$(tempEl)', "Append same node to multiple targets"],
@@ -196,7 +196,7 @@ window.complianceTests = [
       {
         name: '.append( content [,content] )',
         tests: [
-          ['$("<p></p>").append("<one></one>", "<two></two>")', "content_content"],
+          ['$("<p></p>").append("<one></one>", "<two></two>")', "","content_content"],
 
         ]
       },
@@ -1486,19 +1486,54 @@ window.complianceTests = [
     name: '.prepend()',
     tests: [
       {
+        name: '.prepend( content )',
+        tests: [
+          ['$("<p></p>").prepend("<b></b>")', "[ htmlString ]"],
+          ['$("<div><p></p></div>").prepend($("<b></b>"))', "[ jQuery ]"],
+          ['$("<div><p></p></div>").prepend(makeElement("<b></b>"))', "[ Element ]"],
+          ['$("<div></div>").prepend("text")', "[ String ]"],
+          ['$("<div><p></p></div>").prepend(makeTextNode("text"))', "[ Text Node ]", "text_node"],
+          ['$("<div><p></p></div>").prepend(makeTextNode("text"))', "[ Array of text nodes]"],
+          ['$("<div><p></p></div>").prepend([makeTextNode("text"), makeElement("<i>italic</i>")])', "[ Array of text nodes / elements ]"],
+          ['$("<div><p></p></div>").prepend([makeElement("<i>italic</i><b>bold</b>")])', "[ Array of elements ]"],
+          ['$("<div><p></p><p></p></div>").children().prepend("hello").parent()', "prepend text multiple targets"],
+//          ['$("<div><p></p><p></p></div>").children().prepend($(tempEl).text("node")).parent()', "prepend same node to multiple targets"],
+//          ['function(){var $prependThis = $(tempEl).html("<b>prepended</b>"); var $prependToNodes = $("body").prepend("<div id=tempContainerABD><one></one><two></two></div>").children(); $prependToNodes.prepend($prependThis); var result = $("#tempContainerABD").html(); $("#tempContainerABD").remove(); return result }()', "prepend same node to multiple targets"],
+          ['function(){var $prependThis = $(tempEl).html("<b class=banana>test</b>"); $("body").prepend("<div id=eCUbo><one></one><two></two></div>"); $("#eCUbo *").prepend($prependThis); var result = $("#eCUbo").clone(); $("#eCUbo").remove(); return result }()', "prepend same attached node to multiple targets"],
+
+          ['function(){$("body").prepend("<div id=aBeN><banana></banana></div>"); $("body").prepend("<div id=eCUbola><one></one><two></two></div>"); $("#eCUbola *").prepend($("#aBeN")); var result = $("#eCUbola").clone(); $("#eCUbola").remove(); $("#aBeN").remove(); return result }()', "prepend same attached node to multiple targets"],
+
+          ['function(){$("body").prepend("<div class=aBeN><banana></banana></div>"); $("body").prepend("<div id=eCUbola><one></one><two></two></div>"); $("#eCUbola *").prepend($(".aBeN")); var result = $(".aBeN").parent(); $("#eCUbola").remove(); $(".aBeN").remove(); return result }()', "Is prepended node detached from previous position in DOM?", "weird"],
+
+//          ['function(){var $prependThis = $(tempEl).html("<b class=banana>test</b>"); $("body").prepend("<div id=eCUbo><one></one><two></two></div>"); $("#eCUbo *").prepend($prependThis); var result = $("#eCUbo").clone(); $("#eCUbo").remove(); return result }()', "Is prepended node removed from previous position?"],
+//          ['$(tempEl)', "prepend same node to multiple targets"],
+          ['$("<div><p></p></div>").prepend("<b></b>").prepend("<i></i>")', "Chaining"],
+
+
+        ]
+      },
+      {
         name: '.prepend( content [,content] )',
         tests: [
-          ['$("<p></p>").prepend("<b></b>").children()', "[ htmlString ]"],
-          ['$("<div><p></p></div>").prepend($("<b></b>")).children()', "[ jQuery ]"],
-          ['$("<div><p></p></div>").prepend($("<b></b>").get(0)).children()', "[ Element ]"],
-          ['$("<div><p></p></div>").prepend($("<b>text</b>").get(0).childNodes[0]).get(0).innerHTML', "[ Text Node ]"],
-          ['$("<div><p></p></div>").prepend([$("<b>text</b>").get(0).childNodes[0], $("<i>italic</i>")]).get(0).innerHTML', "[ Array of text nodes / elements ]"],
-          ['$("<div><p></p></div>").prepend("<b></b>").prepend("<i></i>").children()', "Chaining"],
+          ['$("<p></p>").prepend("<one></one>", "<two></two>")', "","content_content"],
+
         ]
       },
       {
         name: '.prepend( function )',
         tests: [
+//          ['function(){$("body").prepend("<p id=temp></p>");res=$("#temp").prepend(function(){return makeElement("<b></b>")}).html(); $("#temp").remove(); return res}()', ""],
+          ['$(tempEl).prepend(function(){return makeElement("<b></b>")})', "", "function"],
+          ['$(tempEl).prepend(function(idx,oldHtml){return makeElement("<b>" + idx + oldHtml + "</b>")})', ""],
+
+//          ['function(){$("body").prepend("<p id=temp></p>");res=$("#temp").prepend(function(idx,html){return makeElement("<b>" + idx + html + "</b>")}).html(); $("#temp").remove(); return res}()', ""],
+//          ['function(){$("body").prepend("<p id=temp></p>");res=$("#temp").prepend(function(){return "test"}).html(); $("#temp").remove(); return res}()', ""],
+        ]
+      },
+      {
+        name: 'Unspecified cases',
+        tests: [
+          ['$("<div><p></p></div>").prepend([$("<i>italic</i>")])', "[ Array of jQuery objects ]"],
         ]
       },
     ]
@@ -1509,11 +1544,13 @@ window.complianceTests = [
       {
         name: '.prependTo( target )',
         tests: [
-          ['$("<a></a><b>b</b>")', ""],
           ['$("<p>hello</p>").prependTo($("<div></div>"))', ""],
-          ['$("<one>1</one><two>2</two>").prependTo($("<div></div>"))', ""],
-          ['$("<i>hello</i>").prependTo($("<a></a><b>b</b>"))', ""],
-          ['$("<i>hello</i>").prependTo($("<a></a><b>b</b>")).parent()', ""],
+          ['$("<one>1</one><two>2</two>").prependTo($("<div></div>"))', "prepend two elements"],
+          ['$("<i>hello</i>").prependTo($("<a></a><b>b</b>"))', "prepend to multiple targets", "multiple_targets"],
+          ['$("<p>hello</p>").prependTo($("<div></div>")).parent()', "Parent"],
+          ['$("<i>hello</i>").prependTo($("<a></a><b>b</b>")).parent()', "Parent, when prepended to several targets. For some reason, Zepto 1.2.0 fails completely here..."],
+//          ['$("<i>hello</i>").prependTo($("<a></a><b>b</b>")).length', ""],
+//          ['$("<a></a><b>b</b>").parent()', ""],
           ['(function(){$("<i class=hello>hello</i>").prependTo($("#item3 li")); var clone=$("#item3").clone();$("#item3 .hello").remove(); return clone})()', "In the jQuery implementation, the actual operation is a side effect. This test inspects the side effect"],
  //         ['$("<one>1</one><two>2</two>").prependTo($("<a></a><b></b>"))', ""],
         ]
@@ -1521,7 +1558,7 @@ window.complianceTests = [
     ]
   },
   {
-    name: '.prev()',
+    name: '.prev1()',
     tests: [
       {
         name: '.prev()',
@@ -1540,6 +1577,34 @@ window.complianceTests = [
     ]
   },
   {
+    name: '.prev()',
+    tests: [
+      {
+        name: '.prev( )',
+        tests: [
+          ['$($("<div><one></one><two></two></div>").get(0).children[0]).prev()', "Basic. One->Two"],
+          ['$($("<div><one></one><two></two></div>").get(0).children[1]).prev()', "prev on last child"],
+          ['$($("<div><one></one><two></two></div>").get(0).children).prev()', "prev on two siblings"],
+          ['$($("<div><one></one><two></two></div>").get(0).children)', "Here is the explanation that the above doesnt work in Zepto 1.2.0: Its constructor does not support HTMLCollection"],
+          ['$("<div><one></one><two></two></div>").children().prev()', "prev on two siblings, take two"],
+          ['$("<div><one></one><two></two><three></three></div>").children().prev()', "prev on three siblings"],
+          ['$("#item2,#item3_2").prev()', "prev on two elements", "multiple_elements"],
+          ['$("li:first-child")', ""],
+          ['$("li:first-child").prev()', ""],
+          ['$("li:last-child").prev()', ""],
+          ['$("li").prev().length', ""],
+        ]
+      },
+      {
+        name: '.prev( selector )',
+        tests: [
+          ['$("li:last-child").prev(".odd")', "", "filtering"],
+          ['$("li:last-child").prev(".even")', ""],
+        ]
+      }
+    ]
+  },
+  {
     name: '.pushStack()',
     tests: [
       {
@@ -1552,6 +1617,9 @@ window.complianceTests = [
       {
         name: '.pushStack( elements, name, arguments )',
         tests: [
+          ['$([]).pushStack([$("ul").find("li").get(0)], "find", "li").selector', "Looking at the code, it seems this signature is removed in jQuery 1.9.1. This line of code confirms that. What the signature did was it set the 'selector' property on the returned object. In jQuery 1.8.1, this line of code returns 'li', but on jQuery 1.9.1, it returns an empty string. "],
+          ['$([]).pushStack([$("li").get(0)]).selector', ""],
+//          ['$("ul").find("li").selector', "Zepto fails here"],
         ]
       },
     ]
