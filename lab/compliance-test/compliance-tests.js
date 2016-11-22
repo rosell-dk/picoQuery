@@ -1776,22 +1776,25 @@ window.complianceTests = [
       {
         name: '.show(  )',
         tests: [
-          ['$("<p style=\'display:none\'></p>").show()', "Block element, hidden with css"],
+          ['$("<p style=\'display:none\'></p>").show()', "Unattached block element, hidden with inline style, then shown"],
+          ['$("<p class=\'display-none\'></p>").show()', "Unattached block element, hidden with css (class), then shown", "unattached1"],
+          ['$(tempEl).append("<p class=\'display-none\'></p>").children().show()', "Attached block element, hidden with css (class), then shown"],
+
           ['$("<i style=\'display:none\'></i>").show()', "Inline element, hidden with css"],
           ['$("<i></i>").css("display", "none").show()', "Inline element, hidden by setting css display to none"],
           ['$("<i></i>").hide().show()', "Inline element, hidden by hide(), and shown again"],
-          ['$("<i style=\'display:block\'></i>").hide().show()', "Inline element by default, but made block element with css, then hidden with hide(), and shown again"],
+          ['$("<i style=\'display:block\'></i>").hide().show()', "Inline element by default, but made block element with css, then hidden with hide(), and shown again", "restore_display"],
           ['$("<i></i>").css("display", "table-cell").hide().show()', "Element made table-cell, hidden with hide(), and shown again"],
           ['$("<i class=\'tablecell\'></i>").css("display")', "An element does not get its styles from class with jQuery, until its appended to the document. My guess is that its due to that jQuery creates a DocumentFragment. picoQuery on the other hand create a real element right away."],
-          ['$("<i class=\'tablecell\'></i>").hide().show()', "Same issue as above"],
+          ['$("<i class=\'tablecell\'></i>").hide().show()', "Same issue as above", "unattached2"],
           ['$("<tablecell></tablecell>").hide().show()', ""],
           ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', ""],
           ['function () {var $el = $("<tablecell></tablecell>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', "Once the node has been added to the document, jQuery and picoQuery agrees again"],
           ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', "- as above"],
-          ['$("<i></i>").css("display", "").show()', "Edge case. jQuery treats empty display as hidden - even though its not"],
+          ['$("<i></i>").css("display", "").show()', "Edge case. jQuery treats empty display as hidden - even though its not", "empty_display_hidden"],
           ['$("<i style=\'display:\'></i>").show()', "Edge case. jQuery treats empty display as hidden - even though its not"],
-          ['$("<p></p>").show()', "Edge case: Already visible - will it alter css? #1"],
-          ['$("<i></i>").appendTo("body").show()', "Edge case: Already visible - will it alter css? #2"],
+          ['$("<p></p>").show()', "Edge case: Even though an element is already visible, css will be altered on an unattached jQuery object", "alter_css_on_already_visible_unattached"],
+          ['$("<i></i>").appendTo("body").show()', "Edge case: On an attached jQuery object, css will not be altered when element is already visible"],
 
         ]
       },

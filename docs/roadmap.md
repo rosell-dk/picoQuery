@@ -1,18 +1,22 @@
 # Roadmap
 
 ### Features planned for 0.5 (release date: ~25/11-2016)
-Goal of this release: To improve compliance
-- Make .attr(), .find() and .filter() fully compliant
-- Improve the builder UI a bit (especially the method selection part)
+Goal of this release: To improve compliance of the current subset
+
+TODO:
+- Make .attr() and .filter() fully compliant
 
 Done:
-- Support jQuery( html, ownerDocument ) signature
-- Support jQuery( Array-like-structure), ie jQuery( [HTMLCollection] ) 
-- Support jQuery( html, attributes ) signature
+- jQuery( html, ownerDocument ) signature is now supported
+- jQuery( Array-like-structure), ie jQuery( [HTMLCollection] ) is now supported
+- jQuery( html, attributes ) signature is now supported
 - .offsetParent() is now fully compliant
 - .removeClass() is now fully compliant
+- .find() is now fully compliant
+- .show() is a bit more compliant
 
 ### Features planned for 0.6:
+- Improve the builder UI a bit (especially the method selection part)
 - More API. I expect to work on animation methods, such as slideDown(). Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishlist) on the wiki.
 
 ### Features planned for 0.7, 0.8 and 0.9:

@@ -200,6 +200,9 @@ td.mismatch {background-color: #ffbbbb}
 li.odd {
   font-style: italic;
 }
+.display-none {
+  display: none;
+}
 </style>
 </head>
 

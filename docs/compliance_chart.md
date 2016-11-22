@@ -603,7 +603,7 @@ Compliance summary:<br>
     <td>.offsetParent()</td>
     <td class="partial">
       <issues>
-        <issue severity="low" proof="no_parents_positioned">When no parents are positioned, the body element is returned, but jQuery returns the document element</issue>
+        <issue severity="low" proof="no_parents_positioned">When no parents are positioned, the body element is returned, but jQuery returns the document element (Will be fixed in 0.5.0)</issue>
       </issues>
     </td>
     <td class="partial">
@@ -791,8 +791,22 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.show()</td>
-  </tr>
-  <tr>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="">Animation is not supported</issue>
+        <issue severity="low" proof="unattached1,unattached2">Doesn't comply when working on unattached nodes (Will be fixed in 0.5.0)</issue>
+        <issue severity="edgecase" proof="empty_display_hidden,alter_css_on_already_visible_unattached">Does not comply in some edge cases</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="high" proof="restore_display">Doesnt restore display value to the value before .hide() or .toggle() has been called. Ie. $(tempEl).css("display", "table-cell").show().show().css("display") returns "block", but should return "table-cell"</issue>
+        <issue severity="normal" proof="">Animation is not supported</issue>
+        <issue severity="edgecase" proof="empty_display_hidden,alter_css_on_already_visible_unattached">Does not comply in some edgecases</issue>
+      </issues>
+    </td>
+    <td class="none"></td>
+  </tr>  <tr>
     <td>.text()</td>
   </tr>
   <tr>

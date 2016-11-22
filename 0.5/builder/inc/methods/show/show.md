@@ -23,6 +23,24 @@ $​("​<i>​​</i>​"​)​.appendTo​("body"​)​.show​(​) => $[ �
 We could try to come up with compliant behavior, but its an edge case... We go for the latter.
 
 
+In order to make show more compliant, we have added this condition to setting display value of css:
+(!el.ownerDocument.documentElement.contains(el)))
+It tests whether the element is attached the DOM.
+It should work in all targeted browsers [1](https://developer.mozilla.org/en-US/docs/Web/API/Node/contains)
+Here, they claim that we should use the body element instead of the documentElement to get IE compatibility. But is it also neccesarry in IE9 ?[2](http://stackoverflow.com/questions/5629684/how-to-check-if-element-exists-in-the-visible-dom)
+If we turn to use body, we must remember to test for the element itselves:
+function isInPage(node) {
+  return (node === document.body) ? false : document.body.contains(node);
+}
+
+
+So we do always set display value on unattached nodes.
+If we did not do that, this wouldn't work:
+$​("​<p class='display-none'>​​</p>​"​)​.show​(​)
+
+
+
+
 
 
 ### zepto implementation:

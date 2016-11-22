@@ -23,7 +23,12 @@ show: function() {
 
   __ITERATE__(<@ this.e @>, <@ function(el) {
 //    if ((el.style.display == 'none') || (el.style.display == '')) {
-    if (el.style.display == 'none') {
+    console.log(el.baseURI);
+//    if (getComputedStyle(el).display == 'none') {
+
+//      if ((getComputedStyle(el).display == 'none') || (!el.ownerDocument.documentElement.contains(el))) {
+      if (($(el).css('display') == 'none') || !el.ownerDocument.documentElement.contains(el)) {
+//    if (el.style.display == 'none') {
 
       <?php if (isFeatureEnabled('toggle') || isFeatureEnabled('hide')): ?>
       // If previously hidden with the hide() method, set display to old display value, FLAG#1
