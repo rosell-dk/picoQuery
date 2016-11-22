@@ -535,12 +535,18 @@ window.complianceTests = [
         tests: [
           ['$("<li id=one>1</li><li id=two>2</li>")', ""],
           ['$("<hr/>")', "Self-closing tag on void element (valid in HTML5, but <a href='http://stackoverflow.com/questions/3558119/are-self-closing-tags-valid-in-html5'>syntactic sugar</a>). Btw, this document has <a href='http://www.w3schools.com/html/html5_intro.asp'>HTML5 doctype</a>"],
-          ['$("<div/>")', "Self-closing tag on container element. According to the link above, this is actually an error in HTML5. It will be treated as a starting tag, and problem arises, because there will be no ending tag"],
-          ['$("<div/>a</div>")', "Internally, picoQuery uses innerHtml. As explained above, first tag is illegal but treated as a starting tag (in HTML5). jQuery on the other hand does some parsing, and converts the invalid self-closing tag to &lt;div>&lt;/div>", "invalid_html"],
+          ['$("<div/>")', "Self-closing tag on container element. According to the link above, this is actually an error in HTML5. If such invalid self-closing tags appear in the string used to set el.innerHTML, the browser will treat them as start tags. In this case we end up with missing an end tag. The browser detects a missing tag and adds it."],
+          ['$("<div/><p></p>")', "If this string is used to set el.innerHTML, the invalid self-closing tag will be converted to a start tag, and we get a valid div. But jQuery expands all such self-closed container tags before setting el.innerHTML. Here, the results will differ", "invalid_html"],
+          ['$("<div>inside container</div>outside<div>inside</div>")', "Text nodes are preserved", "preserve_text_nodes"],
+          ['$("<div>inside</div>outside")', "But text nodes after last ending tag are thrown away", "ending_text_dismissed"],
+          ['$("outside<div>inside</div>")', "And starting with text is no-go", ""],
+          ['$("<div/>a")', "", ""],
           ['$("<div class=div1/>")', "Self-closing tag with unquoted attribute (unvalid in HTML5)", "invalid_html2"],
           ['$("<hr class=hr/>")', "Self-closing tag (void element) with unquoted attribute (valid in HTML5)"],
           ['$("<div class=\'div1\'/>")', "Self-closing tag with quoted attribute"],
           ['$("<div class=div1></div>")', ""],
+          ['$("<p></p>").parent()', "The element has no parent.", "no_parent"],
+          ['$("<p/>").parent()', ""],
 
         ]
       },
@@ -648,7 +654,27 @@ window.complianceTests = [
 //            ['$("#item3").get()', ""],
 //          ['$(makeNodeList())', "[ NodeList ]"],
         ]
-      }
+      },
+      {
+        name: 'jQuery( html )',
+        tests: [
+          ['$("<li id=one>1</li><li id=two>2</li>")', ""],
+          ['$("<hr/>")', "Self-closing tag on void element (valid in HTML5, but <a href='http://stackoverflow.com/questions/3558119/are-self-closing-tags-valid-in-html5'>syntactic sugar</a>). Btw, this document has <a href='http://www.w3schools.com/html/html5_intro.asp'>HTML5 doctype</a>"],
+          ['$("<div/>")', "Self-closing tag on container element. According to the link above, this is actually an error in HTML5. It will be treated as a starting tag, and problem arises, because there will be no ending tag"],
+          ['$("<div/>a</div>")', "Internally, picoQuery uses innerHtml. As explained above, first tag is illegal but treated as a starting tag (in HTML5). jQuery on the other hand does some parsing, and converts the invalid self-closing tag to &lt;div>&lt;/div>", "invalid_html"],
+          ['$("<div/><p></p>")', "", ""],
+          ['$("<div>inside container</div>outside<div>inside</div>")', "Text nodes are preserved", ""],
+          ['$("<div>inside</div>outside")', "But text nodes after last ending tag are thrown away", ""],
+          ['$("outside<div>inside</div>")', "And starting with text is no-go", ""],
+          ['$("<div class=div1/>")', "Self-closing tag with unquoted attribute (unvalid in HTML5)", "invalid_html2"],
+          ['$("<hr class=hr/>")', "Self-closing tag (void element) with unquoted attribute (valid in HTML5)"],
+          ['$("<div class=\'div1\'/>")', "Self-closing tag with quoted attribute"],
+          ['$("<div class=div1></div>")', ""],
+          ['$("<p></p>").parent()', ""],
+          ['$("<p/>").parent()', ""],
+
+        ]
+      },
     ]
   },
 */
@@ -657,8 +683,20 @@ window.complianceTests = [
     name: '.css()',
     tests: [
       {
-        name: '.css( property )',
+        name: '.css( property ) - attached nodes',
         tests: [
+          ['$(tempEl).append("<li class=\'italic\'></li>").children().css("font-style")', "CSS set with class, get css using dasherized form", "dashes"],
+          ['$(tempEl).append("<li class=\'italic\'></li>").children().css("fontStyle")', "CSS set with class, get css using camelCase form", "camelcase"],
+          ['$(tempEl).append("<li style=\'font-style:italic\'></li>").children().css("font-style")', "CSS set with inline style, get css using dasherized form"],
+          ['$(tempEl).append("<li style=\'font-style:italic\'></li>").children().css("fontStyle")', "CSS set with inline style, get css using camelCased form"],
+          ['$(tempEl).append("<li class=\'italic\' style=\'font-style:normal\'></li>").children().css("fontStyle")', "CSS set both with class and inline style, get css using camelCased form"],
+          ['$(tempEl).append("<li class=\'italic-important\' style=\'font-style:normal\'></li>").children().css("fontStyle")', "CSS set both with class and inline style. But in class, it is !important. Get css using camelCased form"],
+          ['$(tempEl).append("<li style=\'float:left\'></li>").children().css("float")', "float is a special case, because getComputedStyle(el).getPropertyValue() needs to access it with cssFloat"],
+          ['$(tempEl).append("<li style=\'float:left\'></li>").children().css("cssFloat")', "float is a special case, because getComputedStyle(el).getPropertyValue() needs to access it with cssFloat"],
+          ['$(tempEl).append("<i class=\'tablecell\'></i>").children().css("display")', ""],
+          ['$(tempEl).append("<tablecell></tablecell>").children().css("display")', ""],
+//.italic-important
+/*
           ['$("li.odd").css("font-style")', "dasherized", "dashes"],
           ['$("li.odd").css("fontStyle")', "camelCase", "camelcase"],
           ['$("li#item2").css("font-style")', ""],
@@ -672,9 +710,35 @@ window.complianceTests = [
           ['$().css("fontStyle")', ""],
           ['$("li#item4").css("font-size")', ""],
           ['$("li#item4").css("width")', ""],
-          ['$("<i class=\'tablecell\'></i>").css("display")', "An element does not get its styles from class with jQuery, until its appended to the document. My guess is that its due to that jQuery creates a DocumentFragment. picoQuery on the other hand create a real element right away."],
+          ['$("<i class=\'tablecell\'></i>").css("display")', "An element does not get its styles from class with jQuery, until its appended to the document. NOTE: jQuery does NOT return the same on FF and Chrome (tested in FF 49.0.2 and Chromium 53). jQuery returns 'block' in FF, but empty string in Chrome"], // My guess is that its due to that jQuery creates a DocumentFragment. picoQuery on the other hand create a real element right away.
+          ['$("<tablecell></tablecell>").css("display")', "In picoquery 0.4.0, the result is different in Firefox and Chromium (in Firefox, picoQuery return table-cell). NOTE: jQuery does NOT return the same on FF and Chrome. It returns 'block' in FF, but empty string in Chrome"],
+          ['function () {var $el = $("<tablecell></tablecell>").appendTo("body"), res = $el.css("display"); $el.remove(); return res}()', "Once the node has been added to the document, jQuery and picoQuery agrees again"],*/
+        ]
+      },
+      {
+        name: '.css( property ) - unattached nodes',
+        tests: [
+
+          ['getComputedStyle(document.createElement("li"))["display"]', "Returns 'block' in FF, but empty string in Chrome"],
+//          ['function() {var container=document.createElement("div"); container.innerHTML="<li></li>"; return container.children[0]}()', ""],
+          ['function() {var container=document.createElement("div"); container.innerHTML="<li></li>"; return getComputedStyle(container.children[0])["display"]}()', "Returns 'list-item' in FF - so FF behaves differently when element is created with innerHTML than with createElement"],
+
+          ['$("<li class=\'italic\'></li>").css("font-style")', "CSS set with class, get css using dasherized form. NOTE: jQuery does NOT return the same on FF and Chrome (tested in FF 49.0.2 and Chromium 53). jQuery returns 'italic' in FF, but empty string in Chrome"],
+          ['$("<li class=\'italic\'></li>").css("fontStyle")', "CSS set with class, get css using camelCase form"],
+          ['$("<li style=\'font-style:italic\'></li>").css("font-style")', "CSS set with inline style, get css using dasherized form"],
+          ['$("<li style=\'font-style:italic\'></li>").css("fontStyle")', "CSS set with inline style, get css using camelCased form"],
+          ['$("<li class=\'italic\' style=\'font-style:normal\'></li>").css("fontStyle")', "CSS set both with class and inline style, get css using camelCased form"],
+          ['$("<li class=\'italic-important\' style=\'font-style:normal\'></li>").css("fontStyle")', "CSS set both with class and inline style. But in class, it is !important. Get css using camelCased form"],
+          ['$("<li style=\'float:left\'></li>").css("float")', "float is a special case, because getComputedStyle(el).getPropertyValue() needs to access it with cssFloat"],
+          ['$("<li style=\'float:left\'></li>").css("cssFloat")', "float is a special case, because getComputedStyle(el).getPropertyValue() needs to access it with cssFloat"],
+          ['$("<i></i>").css("display")', ""],
+          ['$("<li></li>").css("display")', ""],
+          ['$("<li/>").css("display")', ""],
+          ['$("<i class=\'inline-block\'></i>").css("display")', ""],
+          ['$("<i class=\'tablecell\'></i>").css("display")', ""],
           ['$("<tablecell></tablecell>").css("display")', ""],
-          ['function () {var $el = $("<tablecell></tablecell>").appendTo("body"), res = $el.css("display"); $el.remove(); return res}()', "Once the node has been added to the document, jQuery and picoQuery agrees again"],
+          ['console.log($("<tablecell></tablecell>").get(0).constructor)', ""],
+          ['console.log($("<i></i>").get(0).constructor)', ""],
         ]
       },
       {
@@ -1779,6 +1843,8 @@ window.complianceTests = [
           ['$("<p style=\'display:none\'></p>").show()', "Unattached block element, hidden with inline style, then shown"],
           ['$("<p class=\'display-none\'></p>").show()', "Unattached block element, hidden with css (class), then shown", "unattached1"],
           ['$(tempEl).append("<p class=\'display-none\'></p>").children().show()', "Attached block element, hidden with css (class), then shown"],
+          ['$("<p style=\'display:none\'></p>").appendTo("body").show()', "block element, hidden with css (inline style), attached to document and then shown"],
+          ['$(tempEl).append("<p css=\'display:none\'></p>").children().show()', "Attached block element, hidden with css (inline css), then shown"],
 
           ['$("<i style=\'display:none\'></i>").show()', "Inline element, hidden with css"],
           ['$("<i></i>").css("display", "none").show()', "Inline element, hidden by setting css display to none"],
@@ -1822,7 +1888,7 @@ window.complianceTests = [
           ['$("li").text()', "Multiple items"],
           ['$(makeTextNode("text")).text()', "[ Text Node ]"],
           ['$([makeTextNode("text"), makeElement("<i>italic</i>")]).text()', "[ Array of mixed content ]"],
-          ['$().text()', "Empty"],
+          ['$().text()', "Empty", "jquery_empty"],
 /*          ['$("<div><p></p></div>").append(makeElement("<b></b>"))', "[ Element ]"],
           ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Text Node ]"],
           ['$("<div><p></p></div>").append(makeTextNode("text"))', "[ Array of text nodes]"],
@@ -1833,13 +1899,13 @@ window.complianceTests = [
         name: '.text( text )',
         tests: [
           ['$("<div></div>").text("test")', "Single item"],
-          ['$("<div></div><li></li>").text("test")', "Multiple items"],
+          ['$("<div></div><li></li>").text("test")', "Multiple items", "multiple"],
         ]
       },
       {
         name: '.text( function )',
         tests: [
-          ['$("<one>One</one><two>Two</two>").text(function(idx,oldVal){return oldVal + idx})', ""],
+          ['$("<one>One</one><two><i>Two</i></two>").text(function(idx,oldVal){return oldVal + idx})', "First argument is index, second is old text value", "function"],
           ['$("<one>One</one>").text(function(idx,oldVal){return this})', "Value of this"],
         ]
       },
@@ -1862,12 +1928,20 @@ window.complianceTests = [
       {
         name: '.toggle(  )',
         tests: [
+          ['$("<p style=\'display:none\'></p>").toggle()', "Unattached block element, hidden with inline style, then toggled"],
+          ['$("<p class=\'display-none\'></p>").toggle()', "Unattached block element, hidden with css (class), then toggled", "unattached1"],
+          ['$(tempEl).append("<p class=\'display-none\'></p>").children().toggle()', "Attached block element, hidden with css (class), then toggled"],
+
+          ['$("<i style=\'display:none\'></i>").toggle()', "Inline element, hidden with css"],
+          ['$("<i></i>").css("display", "none").toggle()', "Inline element, hidden by setting css display to none"],
+          ['$("<i></i>").hide().toggle()', "Inline element, hidden by hide(), and toggled again"],
+          ['$("<i style=\'display:block\'></i>").hide().toggle()', "Inline element by default, but made block element with css, then hidden with hide(), and toggled again", "restore_display"],
+          ['$("<p style=\'display:none\'></p>").appendTo("body").toggle()', "Unattached block element, hidden with inline css and then toggled"],
           ['$("<i></i>").toggle()', "Seems jQuery has a bug here!"],
           ['$("<i></i>").toggle().toggle()', "jQuery behaves really strange here..."],
           ['$("<i></i>").toggle().toggle().toggle()', "keep on toggling, I wont care!"],
           ['$("<i></i>").appendTo("body").toggle()', "Ok, I see, the strange behaviour above is because element isnt added yet. But .hide() *does* work in jQuery, before element is added"],
           ['$("<i></i>").toggle().appendTo("body")', "So, does jQuery 'remember'? - no, toggles are lost"],
-          ['$("<p style=\'display:none\'></p>").appendTo("body").toggle()', "Block element, hidden with css"],
           ['$("<p style=\'display:inline-block\'></p>").appendTo("body").toggle().toggle()', ""],
         ]
       },
@@ -1878,6 +1952,7 @@ window.complianceTests = [
           ['$("<p style=\'display:none\'></p>").appendTo("body").toggle(false)', ".toggle(false) is the same as .hide()"],
           ['$("<p></p>").appendTo("body").toggle(true)', ".toggle(true) is the same as .show()"],
           ['$("<p style=\'display:none\'></p>").appendTo("body").toggle(true)', ".toggle(false) is the same as .show()"],
+          ['$("<p style=\'display:none\'></p>").appendTo("body").show()', ".toggle(false) is the same as .show()"],
         ]
       },
       {

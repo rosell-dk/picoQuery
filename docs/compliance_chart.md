@@ -53,8 +53,10 @@ Compliance summary:<br>
         <issue severity="highest" proof="attributes">jQuery( html, attributes ) is not supported (will be fixed in v0.5.0)</issue>
         <issue severity="high" proof="html_collection,array_like">Array-like structures are not supported, ie jQuery( [HTMLCollection] ) (will be fixed in v0.5.0)</issue>
         <issue severity="high" proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html ) (will be fixed in v0.5.0)</issue>
+        <issue severity="normal" proof="preserve_text_nodes">jQuery( html ) does not preserve text nodes at root level</issue>
         <issue severity="low" proof="wrong_order">jQuery( selector, context [ Array of elements ] ) does not get the order right.</issue>
-        <issue severity="low" proof="invalid_html,invalid_html2">jQuery( html ) does not parse some invalid HTML the same way as jQuery does.</issue>
+        <issue severity="low" proof="invalid_html,invalid_html2">jQuery( html ) does not handle self-containing container-tags in HTML5, such as &lt;div/&gt;. These are actually invalid in HTML5, but jQuery uses them in several examples. (Will be fixed in 0.5.0)</issue>
+        <issue severity="low" proof="no_parent">The elements have a parent, in jQuery they don't. (Will be fixed in 0.5.0)</issue>
         <issue severity="edgecase" proof="edgecase1,edgecase3,edgecase4">Does not strictly comply in a few edge cases</issue>
       </issues>
     </td>
@@ -68,7 +70,7 @@ Compliance summary:<br>
         <issue severity="high" proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html )</issue>
         <issue severity="normal" proof="jq1_8methods_as_attributes">jQuery( html, attributes) does not support all instance methods. Actually zepto complies with jQuery 1.4-1.7, where only the following instance methods were supported: ('val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset' and events). In jQuery 1.8, all instance methods are supported</issue>
         <issue severity="low" proof="wrong_order">jQuery( selector, context [ Array of elements ] ) does not get the order right.</issue>
-        <issue severity="edgecase" proof="edgecase1,edgecase2,edgecase3,edgecase4,edgecase5,edgecase6,edgecase7,edgecase8,attributes_non_empty">Does not strictly comply in some edge cases</issue>
+        <issue severity="edgecase" proof="edgecase1,edgecase2,edgecase3,edgecase4,edgecase5,edgecase6,edgecase7,edgecase8,attributes_non_empty,ending_text_dismissed">Does not strictly comply in some edge cases</issue>
       </issues>
     </td>
     <td class="partial">
@@ -79,8 +81,9 @@ Compliance summary:<br>
         <issue severity="high" proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html )</issue>
         <issue severity="normal" proof="no_match_in_context">jQuery( callback ) is buggy: Callback does not receive a reference to $ which can be used to write failsafe jQuery code</issue>
         <issue severity="low" proof="selector_matches_context_root">jQuery( selector, context [ Element ] ) returns matches root element of context, though it should not. Ie $​("#item3", document.&#8203;getElementById&#8203;("item3"​)​) returns a match</issue>
-        <issue severity="low" proof="invalid_html,invalid_html2">jQuery( html ) does not parse some invalid HTML the same way as jQuery does.</issue>
-        <issue severity="edgecase" proof="edgecase1,context_is_array,edgecase7">Does not strictly comply in a few edge cases</issue>
+        <issue severity="low" proof="invalid_html,invalid_html2">jQuery( html ) does not handle self-containing container-tags in HTML5, such as &lt;div/&gt;. These are actually invalid in HTML5, but jQuery uses them in several examples</issue>
+        <issue severity="low" proof="no_parent">The elements have a parent, in jQuery they dont.</issue>
+        <issue severity="edgecase" proof="edgecase1,context_is_array,edgecase7,ending_text_dismissed">Does not strictly comply in a few edge cases</issue>
       </issues>
     </td>
   </tr>
@@ -795,7 +798,7 @@ Compliance summary:<br>
       <issues>
         <issue severity="normal" proof="">Animation is not supported</issue>
         <issue severity="low" proof="unattached1,unattached2">Doesn't comply when working on unattached nodes (Will be fixed in 0.5.0)</issue>
-        <issue severity="edgecase" proof="empty_display_hidden,alter_css_on_already_visible_unattached">Does not comply in some edge cases</issue>
+        <issue severity="edgecase" proof="empty_display_hidden,alter_css_on_already_visible_unattached">Does not comply in some edge cases (not as many edge cases in 0.5.0)</issue>
       </issues>
     </td>
     <td class="partial">
@@ -806,11 +809,28 @@ Compliance summary:<br>
       </issues>
     </td>
     <td class="none"></td>
-  </tr>  <tr>
+  </tr>
+  <tr>
     <td>.text()</td>
+    <td class="full"></td>
+    <td class="approximate">
+      <issues>
+        <issue severity="edgecase" proof="jquery_empty">Does not comply when jQuery set is empty</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="jquery_empty">.text( function ) signature is not supported</issue>
+        <issue severity="normal" proof="multiple">Does not work on a set larger than one</issue>
+        <issue severity="edgecase" proof="jquery_empty">Throws error when jQuery set is empty</issue>
+      </issues>
+    </td>
   </tr>
   <tr>
     <td>.toArray()</td>
+    <td class="full"></td>
+    <td class="full"></td>
+    <td class="none"></td>
   </tr>
   <tr>
     <td>.toggle()</td>

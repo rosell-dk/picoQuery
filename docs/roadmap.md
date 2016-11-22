@@ -10,6 +10,8 @@ Done:
 - jQuery( html, ownerDocument ) signature is now supported
 - jQuery( Array-like-structure), ie jQuery( [HTMLCollection] ) is now supported
 - jQuery( html, attributes ) signature is now supported
+- jQuery( html ) now expands selfclosing container-tags
+- jQuery( html ) now accepts text nodes at root level
 - .offsetParent() is now fully compliant
 - .removeClass() is now fully compliant
 - .find() is now fully compliant

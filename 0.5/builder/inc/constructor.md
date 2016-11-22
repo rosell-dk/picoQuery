@@ -331,7 +331,21 @@ zepto.fragment = function(html, name, properties) {
 }
 methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
 
+    table = document.createElement('table'),
+    tableRow = document.createElement('tr'),
+
+    containers = {
+      'tr': document.createElement('tbody'),
+      'tbody': table, 'thead': table, 'tfoot': table,
+      'td': tableRow, 'th': tableRow,
+      '*': document.createElement('div')
+    },
+
+
 singleTagRE = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
+tagExpanderRE = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
+fragmentRE = /^\s*<(\w+|!)[^>]*>/,
 
 ```
+(wondering why 'tr' is set to 'tbody, 'td' is set to 'tr' etc in Zepto...)
 

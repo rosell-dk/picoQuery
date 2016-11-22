@@ -12,6 +12,7 @@ For example $(1) doesn't return the same as in jQuery, right now
 */
 
 function P(a,b) {
+  var el;
 
 	if ( !a ) {
 		this.e = [];
@@ -22,9 +23,33 @@ function P(a,b) {
     if (a[0] == '<') {
       // According to the doc, ownerDocument must be a Document (but jQuery supports others, it seems at a quick glance of source)
 
-      var el = (__IS_DOCUMENT_OBJECT__(<@ b @>) ? b : d).createElement('div');
-      el.innerHTML = a;
-      this.e = __TO_ARRAY__(<@ el.children @>);
+//      var el = (__IS_DOCUMENT_OBJECT__(<@ b @>) ? b : d).createElement('div');
+      if (/^<([\w-]+)\s*\/?>(<\/\1>)?$/.test(a)) {
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/lastMatch
+        el = (__IS_DOCUMENT_OBJECT__(<@ b @>) ? b : d).createElement(RegExp.$1);
+        this.e = [el];
+      }
+      else {
+
+        // Expand self-closed container tags, ie <div/> becomes <div></div>
+        // The negative look-ahead in the regex ensures that certain tags are not expanded, such as br and hr
+        // We need to do this, because in HTML5 selfclosed container elements is not allowed, but jQuery accepts them
+        // <div/>​a​</div>​
+        a = a.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig, "<$1></$2>");
+
+        el = (__IS_DOCUMENT_OBJECT__(<@ b @>) ? b : d).createElement("div");
+        el.innerHTML = a;
+
+        // If we wanted to preserve text nodes, we use el.childNodes (instead of el.children)
+        this.e = __TO_ARRAY__(<@ el.childNodes @>);
+
+        // Detach all nodes from the temporary parent
+        __ITERATE__(<@ this.e @>, <@ function(c) {
+          el.removeChild(c);
+        }@>);
+      }
+
+//      el.innerHTML = a;
 
       if (__IS_PLAIN_OBJECT__(<@ b @>) && /^<([\w-]+)\s*\/?>(<\/\1>)?$/.test(a)) {
         for (key in b) {

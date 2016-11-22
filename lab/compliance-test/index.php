@@ -186,6 +186,20 @@ td.mismatch {background-color: #ffbbbb}
 .zero-width-space {
   font-size: 22px;
 }
+.italic-important {
+  font-style: italic!important;
+}
+.display-none {
+  display: none;
+}
+.inline-block {
+  display: inline-block;
+}
+.tablecell, tablecell { /* used for testing show() method */
+  display: table-cell;
+}
+
+
 
 #testhtml {
   border: 1px solid #ccc;
@@ -193,15 +207,9 @@ td.mismatch {background-color: #ffbbbb}
   float: right;
   font-size: 10px;
 }
-.tablecell, tablecell { /* used for testing show() method */
-  display: table-cell;
-}
 
 li.odd {
   font-style: italic;
-}
-.display-none {
-  display: none;
 }
 </style>
 </head>
