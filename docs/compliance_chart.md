@@ -805,7 +805,9 @@ Compliance summary:<br>
       <issues>
         <issue severity="normal" proof="">Animation is not supported</issue>
         <issue severity="low" proof="unattached1,unattached2">Doesn't comply when working on unattached nodes (Will be fixed in 0.5.0)</issue>
-        <issue severity="edgecase" proof="empty_display_hidden,alter_css_on_already_visible_unattached">Does not comply in some edge cases (not as many edge cases in 0.5.0)</issue>
+        <issue severity="low" proof="data_survives">Data regarding old display value does not survive all jQuery operations.</issue>
+        <issue severity="edgecase" proof="empty_display_hidden,alter_css_on_already_visible_unattached">Does not comply in some edge cases (Will be fixed in 0.5.0)</issue>
+
       </issues>
     </td>
     <td class="partial">

@@ -1858,30 +1858,93 @@ window.complianceTests = [
     name: '.show()',
     tests: [
       {
-        name: '.show(  )',
+        name: '.show(  ) - attached',
         tests: [
-          ['$("<p style=\'display:none\'></p>").show()', "Unattached block element, hidden with inline style, then shown"],
-          ['$("<p class=\'display-none\'></p>").show()', "Unattached block element, hidden with css (class), then shown", "unattached1"],
           ['$(tempEl).append("<p class=\'display-none\'></p>").children().show()', "Attached block element, hidden with css (class), then shown"],
+          ['$(tempEl).append("<p style=\'display:none\'></p>").children().show()', "Attached block element, hidden with css (style attr), then shown"],
           ['$("<p style=\'display:none\'></p>").appendTo("body").show()', "block element, hidden with css (inline style), attached to document and then shown"],
-          ['$(tempEl).append("<p css=\'display:none\'></p>").children().show()', "Attached block element, hidden with css (inline css), then shown"],
+          ['$("<p style=\'display:none\'></p>").appendTo("body").hide().show()', "Hide it again!"],
+        ]
+      },
+      {
+        name: '.show(  ) - attached - hide() followed by show()',
+        tests: [
+          ['$(tempEl).append("<i></i>").children().hide().show()', ""],
+          ['$(tempEl).append("<i class=\'tablecell\'></i>").children().hide().show()', ""],
+          ['$(tempEl).append("<i style=\'display:table-cell\'></i>").children().hide().show()', ""],
+          ['$(tempEl).append("<i></i>").children().css("display", "table-cell").hide().show()', ""],
+          ['$(tempEl).append("<i></i>").children().css("display", "table-cell").hide().hide().show()', "Double-hide"],
+
+//          ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', ""],
+//          ['function () {var $el = $("<tablecell></tablecell>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', "Once the node has been added to the document, jQuery and picoQuery agrees again"],
+//          ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', "- as above"],
+
+        ]
+      },
+      {
+        name: '.show(  ) - unattached',
+        tests: [
+
+          ['$("<p style=\'display:none\'></p>").show()', "hidden with inline style, then shown"],
+          ['$("<p class=\'display-none\'></p>").show()', "hidden with stylesheet, then shown", "unattached1"],
+
+          ['$("<p style=\'display:none\'></p>").appendTo("body").show()', "block element, hidden with css (inline style), attached to document and then shown"],
 
           ['$("<i style=\'display:none\'></i>").show()', "Inline element, hidden with css"],
           ['$("<i></i>").css("display", "none").show()', "Inline element, hidden by setting css display to none"],
-          ['$("<i></i>").hide().show()', "Inline element, hidden by hide(), and shown again"],
-          ['$("<i style=\'display:block\'></i>").hide().show()', "Inline element by default, but made block element with css, then hidden with hide(), and shown again", "restore_display"],
-          ['$("<i></i>").css("display", "table-cell").hide().show()', "Element made table-cell, hidden with hide(), and shown again"],
+
           ['$("<i class=\'tablecell\'></i>").css("display")', "An element does not get its styles from class with jQuery, until its appended to the document. My guess is that its due to that jQuery creates a DocumentFragment. picoQuery on the other hand create a real element right away."],
-          ['$("<i class=\'tablecell\'></i>").hide().show()', "Same issue as above", "unattached2"],
-          ['$("<tablecell></tablecell>").hide().show()', ""],
-          ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', ""],
-          ['function () {var $el = $("<tablecell></tablecell>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', "Once the node has been added to the document, jQuery and picoQuery agrees again"],
-          ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.hide(); $el.show(); var res = $el.css("display"); $el.remove(); return res}()', "- as above"],
           ['$("<i></i>").css("display", "").show()', "Edge case. jQuery treats empty display as hidden - even though its not", "empty_display_hidden"],
           ['$("<i style=\'display:\'></i>").show()', "Edge case. jQuery treats empty display as hidden - even though its not"],
           ['$("<p></p>").show()', "Edge case: Even though an element is already visible, css will be altered on an unattached jQuery object", "alter_css_on_already_visible_unattached"],
           ['$("<i></i>").appendTo("body").show()', "Edge case: On an attached jQuery object, css will not be altered when element is already visible"],
+          ['$("<p style=\'display:none\'></p>").hide().show()', "double-hide"],
 
+        ]
+      },
+      {
+        name: '.show(  ) - unattached - hide() followed by show()',
+        tests: [
+          ['$("<i></i>").hide().show()', "Inline element, hidden by hide(), and shown again"],
+          ['$("<i style=\'display:block\'></i>").hide().show()', "Inline element by default, but made block element with css, then hidden with hide(), and shown again", "restore_display"],
+          ['$("<i></i>").css("display", "table-cell").hide().show()', "Element made table-cell, hidden with hide(), and shown again"],
+          ['$("<i class=\'tablecell\'></i>").hide().show()', "Same issue as above", "unattached2"],
+          ['$("<tablecell></tablecell>").hide().show()', ""],
+        ]
+      },
+      {
+        name: '.show(  ) - unattached - hide() - attached - show()',
+        tests: [
+          ['$(tempEl.appendChild($("<i></i>").hide().get(0))).show()', "Inline element"],
+          ['$(tempEl.appendChild($("<i style=\'display:block\'></i>").hide().get(0))).show()', "style=display:block"],
+          ['$(tempEl.appendChild($("<i></i>").css("display", "table-cell").hide().get(0))).show()', "css()"],
+          ['$(tempEl.appendChild($("<i class=\'tablecell\'></i>").hide().get(0))).show()', "class"],
+          ['$("<i style=\'display:block\'></i>").hide().appendTo(tempEl).show()', "Internal data regarding old display value survives append", "data_survives"],
+        ]
+      },
+      {
+        name: '.show(  ) - unattached - hide() - attached - show()',
+        tests: [
+          // We have problems here...
+          // - but the problem is that data does not survive an appendTo. Maybe due to not being copied during cloning?
+
+/*          ['$("<i style=\'display:block\'></i>").hide().get(0).__picoquerydata', ""],
+//          ['$("<i style=\'display:block\'></i>").hide().appendTo(tempEl).get(0).__picoquerydata', ""],
+//          ['tempEl.appendChild($("<i style=\'display:block\'></i>").hide().get(0)).__picoquerydata', ""],
+          ['$(tempEl.appendChild($("<i style=\'display:block\'></i>").hide().get(0))).get(0).__picoquerydata', ""],
+          ['$(tempEl.appendChild($("<i style=\'display:block\'></i>").hide().get(0))).show()', ""],
+
+
+          ['$("<i></i>").hide().appendTo(tempEl).show()', "Inline element, hidden by hide(), and shown again"],
+          ['$("<i style=\'display:block\'></i>").hide().appendTo(tempEl).show()', "Inline element by default, but made block element with css, then hidden with hide(), and shown again", "restore_display"],
+          ['$("<i></i>").css("display", "table-cell").hide().appendTo(tempEl).show()', "Element made table-cell, hidden with hide(), and shown again"],
+          ['$("<i class=\'tablecell\'></i>").hide().appendTo(tempEl).show()', "Same issue as above", "unattached2"],
+          ['$("<tablecell></tablecell>").hide().appendTo(tempEl).show()', ""],
+
+
+//          ['tempEl.appendChild($("<i style=\'display:block\'></i>").hide().get(0))', ""],
+//          ['$(tempEl.appendChild($("<i style=\'display:block\'></i>").hide().get(0))).show()', ""],
+*/
         ]
       },
       {

@@ -17,17 +17,27 @@ Unsupported signatures:
 hide: function() {
 //  return this.css('display','none');
   __ITERATE__(<@ this.e @>, <@ function(el) {
-//    console.log('el.style.display', el.style.display);
-//    console.log('el.style.display', $(el).css('display'));
-//    if (!((el.style.display == 'none'))) {  //  || (el.style.display == '')
 
       <?php if (isFeatureEnabled('toggle') || isFeatureEnabled('show')): ?>
-      // Private data
-      if(!el['__picoquerydata']) {
-        el['__picoquerydata'] = {};
+
+      var visible = getComputedStyle(el)['display'] != "none" && el.ownerDocument.documentElement.contains(el);
+
+      // Store display value, if:
+      // - "style.display" is set to something other than "none"
+      // - element is visible and in dom
+
+      if ( ((el.style.display != '') && (el.style.display != 'none')) || visible ){
+
+        // Private data
+        if(!el['__picoquerydata']) {
+          el['__picoquerydata'] = {};
+        }
+        // Store old display value. FLAG#1
+        el['__picoquerydata'][1] = (visible ? $(el).css('display') : el.style.display);
+
+//        $(el).attr('store', el['__picoquerydata'][1]);
+
       }
-      // Store old display value. FLAG#1
-      el['__picoquerydata'][1] = $(el).css('display');
       <?php endif; ?>
 
       $(el).css('display', 'none');

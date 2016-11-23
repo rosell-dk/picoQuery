@@ -22,29 +22,32 @@ method fails". But under which circumstances are the simple method failing?
 show: function() {
 
   __ITERATE__(<@ this.e @>, <@ function(el) {
-//    if ((el.style.display == 'none') || (el.style.display == '')) {
-    console.log(el.baseURI);
-//    if (getComputedStyle(el).display == 'none') {
-
-//      if ((getComputedStyle(el).display == 'none') || (!el.ownerDocument.documentElement.contains(el))) {
-      if (($(el).css('display') == 'none') || !el.ownerDocument.documentElement.contains(el)) {
-//    if (el.style.display == 'none') {
-
-      <?php if (isFeatureEnabled('toggle') || isFeatureEnabled('hide')): ?>
-      // If previously hidden with the hide() method, set display to old display value, FLAG#1
-      if (el['__picoquerydata'] && el['__picoquerydata'][1]) {
-        el.style.display = el['__picoquerydata'][1];
+<?php if (isFeatureEnabled('toggle') || isFeatureEnabled('hide')): ?>
+    // If previously hidden with the hide() method, set display to old display value, FLAG#1
+    if (el['__picoquerydata'] && el['__picoquerydata'][1] != undefined) {
+//        $(el).attr('restoring', el['__picoquerydata'][1]);
+      el.style.display = el['__picoquerydata'][1];
+    }
+    else {
+<?php endif; ?>
+		  // Reset the inline display of this element to learn if it is
+		  // being hidden by cascaded rules or not
+		  if (el.style.display == "none") {
+			  el.style.display = "";
       }
-      <?php endif; ?>
-      // else set to default value for that tag name.
-      else {
-//  			el.style.display = $(d.createElement(el.nodeName)).css('display');
-  			el.style.display = $('<' + el.nodeName + '></' + el.nodeName + '>').css('display');
-      }
-    };
+
+	    // Set elements which have been hidden in a stylesheet to default browser style
+      // Also set elements not in the dom to default
+	    if ( el.style.display === "" && (getComputedStyle(el)["display"] == "none" ) || !el.ownerDocument.documentElement.contains(el)) {
+        var tempEl = d.createElement(el.nodeName);
+        d.body.appendChild(tempEl);
+        el.style.display = getComputedStyle(tempEl)['display'];
+        tempEl.parentNode.removeChild(tempEl);
+	    }
+<?php if (isFeatureEnabled('toggle') || isFeatureEnabled('hide')): ?>
+    }
+<?php endif; ?>
   } @>);
-
   return this;
-
 }
 
