@@ -1910,6 +1910,9 @@ window.complianceTests = [
           ['$("<i></i>").css("display", "table-cell").hide().show()', "Element made table-cell, hidden with hide(), and shown again"],
           ['$("<i class=\'tablecell\'></i>").hide().show()', "Same issue as above", "unattached2"],
           ['$("<tablecell></tablecell>").hide().show()', ""],
+          ['$("<p class=\'display-none\'></p>").toggle()', ""],
+          ['$("<p class=\'display-none\'></p>").show()', ""],
+
         ]
       },
       {

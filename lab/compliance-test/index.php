@@ -59,8 +59,8 @@ foreach ($frameworks as $index => $framework) {
     $version = $matches[1];
     $ext = $matches[2];
     
-//    echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/' . $version . '/jquery.' . $ext . '"></script>' . "\n";
-    echo '<script src="jquery-1.12.4.js"></script>' . "\n";
+    echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/' . $version . '/jquery.' . $ext . '"></script>' . "\n";
+//    echo '<script src="jquery-1.12.4.js"></script>' . "\n";
 
 //    echo '<script src="../feature-detect/feature-detect.js"></script>';
 
