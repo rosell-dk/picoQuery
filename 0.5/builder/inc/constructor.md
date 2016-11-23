@@ -347,5 +347,5 @@ tagExpanderRE = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>
 fragmentRE = /^\s*<(\w+|!)[^>]*>/,
 
 ```
-(wondering why 'tr' is set to 'tbody, 'td' is set to 'tr' etc in Zepto...)
+I havent discovered that it matters whether an LI item is created inside a UL or a DIV...
 

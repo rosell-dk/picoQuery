@@ -289,36 +289,43 @@ Compliance summary:<br>
     <td class="partial">
       <issues>
         <issue severity="normal" proof="">jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</issue>
-        <issue severity="normal" proof="px1,px2">Does not support omitting "px" for widths etc. Ie. .css("width", "123")</issue>
-        <issue severity="normal" proof="numeral_property_1">Does not support setting a numeral property like this: .css​("fontSize", 10​) (but does support setting it like this: .css​("fontSize", "10​")</issue>
+
+        <issue severity="normal" proof="add_px">Does not support setting a numeral property like this: .css​("fontSize", 10​) (but does support setting it like this: .css​("fontSize", "10​") (Will be fixed in 0.5.0)</issue>
         <issue severity="normal" proof="properties">.css( properties) signature is not supported. That is: does not support getting several properties in one call</issue>
         <issue severity="normal" proof="property_names">.css( propertyNames [Array] ) signature is not supported.</issue>
         <issue severity="normal" proof="function">.css( propertyName, function ) is not supported</issue>
+        <issue severity="low" proof="important">Fails complying when a external style overrides style attribute with !important (Will be fixed in 0.5.0)</issue>
+        <issue severity="low" proof="width_height_exception">As an exception to the general rule of ignoring unitless strings, jQuery allows to set width and height with unitless strings. This exception is not supported (Will be fixed in 0.5.0)</issue>
+
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
-        <issue severity="edgecase" proof="nonexisting_property">Does not comply in a few edge cases</issue>
+        <issue severity="edgecase" proof="nonexisting_property,adjust_css">Does not comply in a few edge cases</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="high" proof="camelcase">Does not support getting property in camelCased form, unless it has been set with .css( property, value )</issue>
+        <issue severity="high" proof="camelcase">Does not support getting property in camelCased form, unless it has been set with .css( property, value ) or inline style</issue>
         <issue severity="normal" proof="">jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</issue>
-        <issue severity="normal" proof="numeral_property_1">Does not support setting a numeral property like this: .css​("fontSize", "10"​) (but does support setting it like this: .css​("fontSize", 10​))</issue>
+        <issue severity="normal" proof="unitless_string">Setting a property to a unitless string generally has no effect in jQuery. But Zepto sets the property to empty string</issue>
         <issue severity="normal" proof="px1">Does not support omitting "px" for widths etc. Ie. .css("width", "123") (but does support it, when type is number, ie .css("width", 123))</issue>
+        <issue severity="normal" proof="function">.css( propertyName, function ) is not supported</issue>
+        <issue severity="low" proof="important">Fails complying when a external style overrides style attribute with !important</issue>
+        <issue severity="low" proof="width_height_exception">Sets width and height wrong, when given as a unitless string (as an exception to the general rule of ignoring unitless strings, jQuery allows to set width and height with unitless strings)</issue>
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
-        <issue severity="edgecase" proof="nonexisting_property,user_select">Does not comply in a few edge cases</issue>
+        <issue severity="edgecase" proof="nonexisting_property,user_select,adjust_css,width_in_em">Does not comply in a few edge cases</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
         <issue severity="high" proof="dashes">Does not support getting or setting property in dasherized form. Only supports camelCased form. Ie $​("li​​)​.css​("font-style"​) does not work</issue>
         <issue severity="normal" proof="">jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</issue>
-        <issue severity="normal" proof="px1,px2">Does not support omitting "px" for widths etc. Ie. .css("width", "123")</issue>
-        <issue severity="normal" proof="numeral_property_2">Does not support setting a numeral property like this: .css​("fontSize", 10​)</issue>
+        <issue severity="normal" proof="add_px">Does not support setting a numeral property like this: .css​("fontSize", 10​)</issue>
+
         <issue severity="normal" proof="properties">.css( properties) signature is not supported. That is: does not support getting several properties in one call</issue>
         <issue severity="normal" proof="function">.css( propertyName, function ) is not supported</issue>
         <issue severity="normal" proof="property_names">.css( propertyNames [Array] ) signature is not supported.</issue>
+        <issue severity="low" proof="width_height_exception">Sets width and height wrong, when given as a unitless string (as an exception to the general rule of ignoring unitless strings, jQuery allows to set width and height with unitless strings)</issue>
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
-        <issue severity="edgecase" proof="user_select">Does not comply in a few edge cases</issue>
+        <issue severity="edgecase" proof="user_select,adjust_css">Does not comply in a few edge cases</issue>
       </issues>
     </td>
   </tr>
@@ -757,7 +764,7 @@ Compliance summary:<br>
     <td class="partial">
       <issues>
         <issue severity="edgecase" proof="extra_spaces_in_html">Does not remove extra spaces in HTML (fixed in 0.5.0)</issue>
-        <issue severity="low" proof="this">.removeClass( function ) is buggy: this does not point to the element</issue>
+        <issue severity="low" proof="this">.removeClass( function ) is buggy: this does not point to the element (fixed in 0.5.0)</issue>
       </issues>
     </td>
     <td class="approximate">

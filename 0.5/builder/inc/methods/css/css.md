@@ -1,6 +1,47 @@
+We have three ways of getting style.
+
+1) el.style[name]
+2) getComputedStyle(el)[name]
+3) getComputedStyle(el).getPropertyValue(name)
+
+How do they differ?
+
+(1) el.style[name]
+ - Gets the inline style attribute - does not take other styles into account!
+ - Can be accessed both in dasherised and camelCase (only tested that in a few browsers)
+ - Works on both attached nodes and unattached nodes
+  
+(2) getComputedStyle(el)[name]
+ - Takes all styles into account
+ - Can be accessed both in dasherised and camelCase (only tested that in a few browsers)
+ - For unattached nodes, it behaves differently in Chrome and Firefox:
+    - In Firefox, the styles of the document are taken into account,
+      even though its not attached to the DOM yet (but in defence for FF, it was created
+      with the createElement method)
+ - getComputedStyle(document.createElement('li'))['display'] returns 'block' in firefox
+   but when created with innerHTML, FF returns 'list-item'
+ 
+
+(3) getComputedStyle(el).getPropertyValue(name)
+ - Takes all styles into account
+ - Can only be accesed in dasherised form
+ - Has same crossbrowser issue with unattached nodes as (2)
+
+
+    var computed = getComputedStyle(this.e[0]);
+    return this.e[0].style[name] || computed.getPropertyValue(name) || computed[name];
+
+
+getPropertyValue
+
+
 ### jQuery implementation
 ```
 This is just an excerpt:
+
+var pnum = ( /[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/ ).source;
+var rcssNum = new RegExp( "^(?:([+-])=|)(" + pnum + ")([a-z%]*)$", "i" );
+
 
 jQuery.extend( {
 

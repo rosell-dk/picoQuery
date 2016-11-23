@@ -71,9 +71,17 @@ css: function(name, value) {
     // We should also support cssHooks, as plugins may add new ones: https://api.jquery.com/jQuery.cssHooks/
 //console.log(getComputedStyle(this.e[0]).getPropertyValue(name));
 
-    var computed = getComputedStyle(this.e[0]);   
     if (!this.e[0]) return;
-    return this.e[0].style[name] || computed.getPropertyValue(name) || computed[name];
+    var computed = getComputedStyle(this.e[0]);
+//console.log(name + ':' + this.e[0].style[name] + ':' + computed.getPropertyValue(name) + ':' + computed[name]);
+//console.log(name + ':' + this.e[0].style[name]);
+//      return this.e[0].style[name]
+//    return this.e[0].style[name] || computed[name];
+//    return this.e[0].style[name] || computed.getPropertyValue(name) || computed[name];
+    return computed[name] || this.e[0].style[name];
+//    return computed.getPropertyValue(name);
+//    return this.e[0].style[name] || computed[name];
+//    return this.e[0].style[name];
 
     // TODO: zepto and jQuery camelCases the property. But it seems unneccessary, as
     // getComputedStyle() returns an object with both ie "backgroundColor" and "background-color"
@@ -90,10 +98,14 @@ css: function(name, value) {
 
       // Although... this does not work with vender prefixes - there is ie no: el.style.-moz-user-select
       // To set that, we need: el.style.MozUserSelect
-      // console.log(el.style);
-      //console.log (value + (typeof value));
-      //console.log ( == 'number' ? 'px' : '')
-      el.style[name] = value;
+
+      // Maybe add px
+      // For some specified properties, do not add
+      // For width and height, add it even though the number is a string
+      if (!({'column-count':1, 'columns':1, 'font-weight':1, 'line-height':1,'opacity':1, 'z-index':1, 'zoom':1 }[name]) && ((typeof(value) == 'number') || (((name == 'width') || (name == 'height')) && (value.match(/^[\d\.]+$/))))) {
+        value = value + 'px';
+      }
+      el.style[name] = value + (+ (!({'column-count':1, 'columns':1, 'font-weight':1, 'line-height':1,'opacity':1, 'z-index':1, 'zoom':1 }[name]) && ((typeof(value) == 'number') || (((name == 'width') || (name == 'height')) && (value.match(/^[\d\.]+$/))))) ? 'px' : '');
 
       // btw, zepto sets the style with style.cssText
       // jQuery sets the style with el.style[camelCasedPropertyName]
