@@ -63,7 +63,6 @@ data: function(key, value) {
   	  elem['__picoquerydata'][0] = 1;
 		}
 
-
     return elem['_picoquerydata'];    
   }
   if (__IS_UNDEFINED__(<@ value @>) && (__IS_STRING__(<@ key @>))) {
@@ -85,8 +84,8 @@ data: function(key, value) {
     __ITERATE__(<@ this.e @>, <@ function(el) {
       // We store data in an expando property on the node
       // jQuery also stores on an expando property
-      // TODO: Beware of memory leaks
-      // https://developers.google.com/speed/articles/optimizing-javascript
+      // (these are removed in .remove() etc, to avoid memory leaks
+      //    https://developers.google.com/speed/articles/optimizing-javascript)
       if(!el['_picoquerydata']) {
         el['_picoquerydata'] = {};
       }

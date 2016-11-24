@@ -52,7 +52,7 @@ toggle: function(display) {
     }
     else {
 
-      // HIDE
+      // SHOW
       // ----
 
       var visible = getComputedStyle(el)['display'] != "none" && el.ownerDocument.documentElement.contains(el);
