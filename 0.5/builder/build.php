@@ -719,6 +719,7 @@ $helpers_second_pass = array(
   array('IS_FUNCTION', 'isFunction', 'o'),
   array('IS_UNDEFINED', 'isUndefined', 'U'),
   array('IS_STRING', 'isString', 'n'),
+  array('IS_OBJECT', 'isObject', 'H'),      //    false for ie isObject(new String("")) equal to this in jQuery: (jQuery.type( a ) === "object")
   array('IS_PLAIN_OBJECT', 'isPlainObject', 'F'),
   array('IS_DOCUMENT_OBJECT', 'isDocumentObject', 'G'),
   array('FLATTEN', 'flatten', 'v'),

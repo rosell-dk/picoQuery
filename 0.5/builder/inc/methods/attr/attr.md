@@ -13,6 +13,16 @@
         })
     },
 
+  function isObject(obj)     { return type(obj) == "object" }
+  function type(obj) {
+    return obj == null ? String(obj) :
+      class2type[toString.call(obj)] || "object"
+  }
+  // Populate the class2type map
+  $.each("Boolean Number String Function Array Date RegExp Object Error".split(" "), function(i, name) {
+    class2type[ "[object " + name + "]" ] = name.toLowerCase()
+  })
+
 
 
 ### jQuery implementation:
@@ -66,5 +76,35 @@ jQuery.fn.extend( {
 
 		// Non-existent attributes return null, we normalize to undefined
 		return ret == null ? undefined : ret;
+
+    // Multifunctional method to get and set values of a collection
+    // The value/s can optionally be executed if it's a function
+    var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
+	    var i = 0,
+		    length = elems.length,
+		    bulk = key == null;
+
+	    // Sets many values
+	    if ( jQuery.type( key ) === "object" ) {
+      ...
+
+
+	type: function( obj ) {
+		if ( obj == null ) {
+			return obj + "";
+		}
+		return typeof obj === "object" || typeof obj === "function" ?
+			class2type[ toString.call( obj ) ] || "object" :
+			typeof obj;
+	},
+
+// Populate the class2type map
+jQuery.each( "Boolean Number String Function Array Date RegExp Object Error Symbol".split( " " ),
+function( i, name ) {
+	class2type[ "[object " + name + "]" ] = name.toLowerCase();
+} );
+
+
+
 */
 

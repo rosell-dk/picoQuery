@@ -33,11 +33,11 @@ Fully supported signatures:
 
 */
 attr: function(name, value) {
-  if (__IS_UNDEFINED__(<@ value @>)) {
+  if (!(1 in arguments) && (__IS_STRING__(<@ name @>))) {
     // if Requirement: Return undefined on empty set (do not throw error)
-    if (!(0 in this.e)) {
+/*    if (!(0 in this.e)) {
       return undefined;
-    }
+    }*/
     // if Requirement: Return undefined for text-nodes and comment nodes (do not throw error)
 		// TODO: jQuery tests allows all nodes, except text, comment and attribute nodes
     // like this: 	if ( nType === 3 || nType === 8 || nType === 2 ) {
@@ -45,13 +45,16 @@ attr: function(name, value) {
     // Document does not support setAttribute, and neither does DocumentFragment. The rest
     // seems irrelavant as well (list of the rest: http://www.w3schools.com/jsref/prop_node_nodetype.asp)
 
+/*
     if (this.e[0].nodeType != 1) {
       return undefined;
-    }
+    }*/
 
-    // if Requirement: Return undefined for non-existant attributes (instead of null)
-    var z=this.e[0].getAttribute(name);
-    return (z == null ? undefined : z);
+    if ((0 in this.e) && (this.e[0].nodeType == 1)) {
+      // if Requirement: Return undefined for non-existant attributes (instead of null)
+      var z=this.e[0].getAttribute(name);
+      return (z == null ? undefined : z);
+    }
     // else:
     // return this.e[0].getAttribute(name);
 
@@ -65,13 +68,14 @@ attr: function(name, value) {
       // Set attribute on a node, or remove it, if value is null
       function setOrRemoveAttribute(node, name, value) {
         // if Requirement: Convert value to string
-        value == null ? node.removeAttribute(name) : node.setAttribute(name, value + "");
+        value === null ? node.removeAttribute(name) : node.setAttribute(name, value + "");
         // else:
         //value == null ? node.removeAttribute(name) : node.setAttribute(name, value);
       }
 
       // If Requirement: .attr( attributes ) => jQuery
-      if (typeof name == "object") {
+
+      if (__IS_OBJECT__(<@ name @>)) {
         for (key in name) {
           setOrRemoveAttribute(node, key, name[key])
         }

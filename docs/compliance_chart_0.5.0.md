@@ -6,7 +6,7 @@ Compliance summary:<br>
 
 <table class="summary">
   <tr>
-    <td>picoQuery 0.4.0</td>
+    <td>picoQuery 0.5.0</td>
   </tr>
   <tr>
     <td>Zepto 1.2.0</td>
@@ -50,14 +50,8 @@ Compliance summary:<br>
     <td class="partial">
       <issues>
         <issue severity="highest" proof="jquery_selectors">Special jQuery selectors such as :odd are not supported</issue>
-        <issue severity="highest" proof="attributes">jQuery( html, attributes ) is not supported (will be fixed in v0.5.0)</issue>
-        <issue severity="high" proof="html_collection,array_like">Array-like structures are not supported, ie jQuery( [HTMLCollection] ) (will be fixed in v0.5.0)</issue>
-        <issue severity="high" proof="owner_document">jQuery( html, ownerDocument) is not supported - behaves as jQuery( html ) (will be fixed in v0.5.0)</issue>
-        <issue severity="normal" proof="preserve_text_nodes">jQuery( html ) does not preserve text nodes at root level</issue>
         <issue severity="low" proof="wrong_order">jQuery( selector, context [ Array of elements ] ) does not get the order right.</issue>
-        <issue severity="low" proof="invalid_html,invalid_html2">jQuery( html ) does not handle self-containing container-tags in HTML5, such as &lt;div/&gt;. These are actually invalid in HTML5, but jQuery uses them in several examples. (Will be fixed in 0.5.0)</issue>
-        <issue severity="low" proof="no_parent">The elements have a parent, in jQuery they don't. (Will be fixed in 0.5.0)</issue>
-        <issue severity="edgecase" proof="edgecase1,edgecase3,edgecase4">Does not strictly comply in a few edge cases</issue>
+        <issue severity="edgecase" proof="edgecase1,edgecase3,ending_text_dismissed">Does not strictly comply in a few edge cases</issue>
       </issues>
     </td>
     <td class="partial">
@@ -204,19 +198,22 @@ Compliance summary:<br>
     <td>.attr()</td>
     <td class="partial">
       <issues>
-        <issue severity="normal" proof="attributes">.attr( attributes ) is unsupported</issue>
-        <issue severity="edgecase" proof="undefined">Does not comply in some edge cases</issue>
+        <issue severity="low" proof="">Does not implement attrHooks</issue>
+        <issue severity="edgecase" proof="undefined,string_class1">Does not comply in some edge cases</issue>
       </issues>
     </td>
-    <td class="approximate">
+    <td class="partial">
       <issues>
-        <issue severity="edgecase" proof="function_arg2_noclass">Does not comply in an edge case</issue>
+        <issue severity="low" proof="">Does not implement attrHooks</issue>
+        <issue severity="edgecase" proof="function_arg2_noclass,string_class1">Does not comply in an edge case</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
         <issue severity="normal" proof="function">.attr( attributeName, function ) signature is unsupported</issue>
-        <issue severity="edgecase" proof="null,undefined">Does not comply in some edge cases</issue>
+        <issue severity="normal" proof="null_removes">Does not support removing attributes with null</issue>
+        <issue severity="low" proof="">Does not implement attrHooks</issue>
+        <issue severity="edgecase" proof="null,undefined,string_class,string_class1">Does not comply in some edge cases</issue>
       </issues>
     </td>
   </tr>
@@ -290,13 +287,9 @@ Compliance summary:<br>
       <issues>
         <issue severity="normal" proof="">jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</issue>
 
-        <issue severity="normal" proof="add_px">Does not support setting a numeral property like this: .css​("fontSize", 10​) (but does support setting it like this: .css​("fontSize", "10​") (Will be fixed in 0.5.0)</issue>
         <issue severity="normal" proof="properties">.css( properties) signature is not supported. That is: does not support getting several properties in one call</issue>
         <issue severity="normal" proof="property_names">.css( propertyNames [Array] ) signature is not supported.</issue>
         <issue severity="normal" proof="function">.css( propertyName, function ) is not supported</issue>
-        <issue severity="low" proof="important">Fails complying when a external style overrides style attribute with !important (Will be fixed in 0.5.0)</issue>
-        <issue severity="low" proof="width_height_exception">As an exception to the general rule of ignoring unitless strings, jQuery allows to set width and height with unitless strings. This exception is not supported (Will be fixed in 0.5.0)</issue>
-
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
         <issue severity="edgecase" proof="nonexisting_property,adjust_css">Does not comply in a few edge cases</issue>
       </issues>
@@ -397,7 +390,6 @@ Compliance summary:<br>
     <td>.filter()</td>
     <td class="partial">
       <issues>
-        <issue severity="low" proof="array_like">.filter( elements [Array] ) signature does not support when elements is merely array-like (Will be fixed in 0.5.0)</issue>
         <issue severity="normal" proof="function">.filter( function ) signature is not supported</issue>
       </issues>
     </td>
@@ -420,11 +412,7 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.find()</td>
-    <td class="partial">
-      <issues>
-        <issue severity="low" proof="array_like">.find( selector [Array of Elements] ) does not support when selector is merely array-like (ie a HTMLCollection). (Will be fixed in 0.5.0)</issue>
-      </issues>
-    </td>
+    <td class="full"></td>
     <td class="partial">
       <issues>
         <issue severity="high" proof="no_duplicates">.find( selector ) signature is buggy: In some circumstances it returns duplicates</issue>
@@ -516,7 +504,6 @@ Compliance summary:<br>
     <td>.insertAfter()</td>
     <td class="approximate">
       <issues>
-        <issue severity="low" proof="html_collection">.insertAfter( [ Array ] ) does not support array-like structures, such as HTMLCollection (Will be fixed in 0.5.0)</issue>
         <issue severity="edgecase" proof="html_string">.insertAfter( [ htmlString ] ) does not comply. But that signature hardly makes sense.</issue>
       </issues>
     </td>
@@ -535,7 +522,6 @@ Compliance summary:<br>
     <td>.insertBefore()</td>
     <td class="approximate">
       <issues>
-        <issue severity="low" proof="html_collection">.insertBefore( [ Array ] ) does not support array-like structures, such as HTMLCollection (Will be fixed in 0.5.0)</issue>
         <issue severity="edgecase" proof="html_string">.insertBefore( [ htmlString ] ) does not comply. But that signature hardly makes sense</issue>
       </issues>
     </td>
@@ -611,11 +597,7 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.offsetParent()</td>
-    <td class="partial">
-      <issues>
-        <issue severity="low" proof="no_parents_positioned">When no parents are positioned, the body element is returned, but jQuery returns the document element (Will be fixed in 0.5.0)</issue>
-      </issues>
-    </td>
+    <td class="full"></td>
     <td class="partial">
       <issues>
         <issue severity="low" proof="no_parents_positioned">When no parents are positioned, the body element is returned, but jQuery returns the document element</issue>
@@ -761,12 +743,7 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.removeClass()</td>
-    <td class="partial">
-      <issues>
-        <issue severity="edgecase" proof="extra_spaces_in_html">Does not remove extra spaces in HTML (fixed in 0.5.0)</issue>
-        <issue severity="low" proof="this">.removeClass( function ) is buggy: this does not point to the element (fixed in 0.5.0)</issue>
-      </issues>
-    </td>
+    <td class="full"></td>
     <td class="approximate">
       <issues>
         <issue severity="edgecase" proof="classname_defined_more_than_once">Does not remove a class name defined more than once</issue>
@@ -804,10 +781,7 @@ Compliance summary:<br>
     <td class="partial">
       <issues>
         <issue severity="normal" proof="">Animation is not supported</issue>
-        <issue severity="low" proof="unattached1,unattached2">Doesn't comply when working on unattached nodes (Will be fixed in 0.5.0)</issue>
         <issue severity="low" proof="data_survives">Data regarding old display value does not survive all jQuery operations.</issue>
-        <issue severity="edgecase" proof="empty_display_hidden,alter_css_on_already_visible_unattached">Does not comply in some edge cases (Will be fixed in 0.5.0)</issue>
-
       </issues>
     </td>
     <td class="partial">
@@ -846,16 +820,15 @@ Compliance summary:<br>
     <td class="partial">
       <issues>
         <issue severity="normal" proof="">Animation is not supported</issue>
-        <issue severity="low" proof="unattached1,unattached2">Doesn't comply when working on unattached nodes (Will be fixed in 0.5.0)</issue>
         <issue severity="low" proof="data_survives">Data regarding old display value does not survive all jQuery operations.</issue>
-        <issue severity="edgecase" proof="empty_display_hidden,alter_css_on_already_visible_unattached,bug">Does not comply in some edge cases (Will be fixed in 0.5.0)</issue>
+        <issue severity="edgecase" proof="bug">Does not comply in some edge cases, but to do so, we would have to recreate a buggy behaviour in jQuery</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
         <issue severity="high" proof="restore_display">Doesnt restore display value to the value before .hide() or .toggle() has been called. Ie. $(tempEl).css("display", "table-cell").show().show().css("display") returns "block", but should return "table-cell"</issue>
         <issue severity="normal" proof="">Animation is not supported</issue>
-        <issue severity="edgecase" proof="empty_display_hidden,alter_css_on_already_visible_unattached,bug">Does not comply in some edgecases</issue>
+        <issue severity="edgecase" proof="bug">Does not comply in some edge cases, but to do so, we would have to recreate a buggy behaviour in jQuery</issue>
       </issues>
     </td>
     <td class="none"></td>
