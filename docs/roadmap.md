@@ -15,7 +15,9 @@ Done:
 - .offsetParent() is now fully compliant
 - .removeClass() is now fully compliant
 - .find() is now fully compliant
-- .show() is a bit more compliant
+- .show(), .hide() and .toggle() are now much more compliant
+- .attr( attributes ) signature is now supported
+- .attr( attributeName, value ) now handles when attributeName is a string class instead of a string literal
 
 ### Features planned for 0.6:
 - Improve the builder UI a bit (especially the method selection part)

@@ -245,22 +245,33 @@ window.complianceTests = [
         name: '.attr( attributeName )',
         tests: [
           ['$("li:first-child").attr("class")', ""],
+          ['$("<div></div>").attr(new String("class"))', "name is String class instead of string literal", "string_class1"],
         ]
       },
       {
         name: '.attr( attributeName, value )',
         tests: [
-          ['$("<div/>").attr("class", "italic")', " "],
+          ['$("<div></div>").attr("class", "italic")', "Standard functionality"],
+//          ['$("<div data-tooltip=\'hi\'></div>").attr("tooltip", null)', "value=null removes attribute"],
+          ['$(tempEl).append("<div class=\'hi\'></div>").children().attr("class", null)', "value=null removes attribute", "null_removes"],
+//          ['$(tempEl).append("<div data-banana=\'hi\'></div>").children().attr("data-banana", null)', "value=null removes attribute"],
 //          ['$("<div/>").attr("data-tooltip", "line1\\nline2")', "Value is multi-line"],
           ['$("<div/>").attr("data-tooltip", "line1\\nline2").attr("data-tooltip")', "Value is multi-line"],
 //          ['$("<div/>").attr("data-tooltip", "line1<br>line2")', "Value contains tag"],
           ['$("<div/>").attr("data-tooltip", "line1<br>line2").attr("data-tooltip")', "Value contains tag"],
+          ['$("<div></div>").attr(new String("class"), "italic")', "name is [String class] instead of literal", "string_class"],
+
+/*          ['jQuery.type(10)', ""],
+          ['jQuery.type(new Number(10))', ""],
+          ['typeof "10"', ""],
+          ['typeof new String("10")', ""],*/
         ]
       },
       {
         name: '.attr( attributes )',
         tests: [
-          ['$("<div/>").attr({class:"italic"})', "", "attributes"],
+          ['$("<div></div>").attr({class:"italic"})', "", "Plain object"],
+          ['function() {var obj=new Object(); obj.class="italic"; return $("<div></div>").attr(obj)}()', "", "Constructed object"],
         ]
       },
       {
@@ -277,7 +288,7 @@ window.complianceTests = [
         name: 'Edge cases',
         tests: [
           ['$("<div/>").attr("class", null)', "null"],
-          ['$("<div/>").attr("class", undefined)', "undefined"],
+          ['$("<div/>").attr("class", undefined)', "undefined", "undefined"],
           ['$("<div/>").attr("class", "italic").attr("class", null)', " "],
           ['$("li:first-child").attr("class2")', "Try to get attr on a Text node"],
           ['$($("li:first-child").get(0).firstChild).attr("class")', "Try to get attr on a Document node"],
@@ -2023,7 +2034,7 @@ window.complianceTests = [
           ['$("<i></i>").hide().toggle()', "Inline element, hidden by hide(), and toggled again"],
           ['$("<i style=\'display:block\'></i>").hide().toggle()', "Inline element by default, but made block element with css, then hidden with hide(), and toggled again", "restore_display"],
           ['$("<p style=\'display:none\'></p>").appendTo("body").toggle()', "Unattached block element, hidden with inline css and then toggled"],
-          ['$("<i></i>").toggle()', "Seems jQuery has a bug here!"],
+          ['$("<i></i>").toggle()', "Seems jQuery has a bug here!", "bug"],
           ['$("<i></i>").toggle().toggle()', "jQuery behaves really strange here..."],
           ['$("<i></i>").toggle().toggle().toggle()', "keep on toggling, I wont care!"],
           ['$("<i></i>").appendTo("body").toggle()', "Ok, I see, the strange behaviour above is because element isnt added yet. But .hide() *does* work in jQuery, before element is added"],
@@ -2049,6 +2060,74 @@ window.complianceTests = [
       {
         name: '.toggle( options )',
         tests: [
+        ]
+      },
+      {
+        name: '.toggle(  ) - attached',
+        tests: [
+          ['$(tempEl).append("<p class=\'display-none\'></p>").children().toggle()', "Attached block element, hidden with css (class), then toggled"],
+          ['$(tempEl).append("<p style=\'display:none\'></p>").children().toggle()', "Attached block element, hidden with css (style attr), then toggled"],
+          ['$("<p style=\'display:none\'></p>").appendTo("body").toggle()', "block element, hidden with css (inline style), attached to document and then toggled"],
+          ['$("<p style=\'display:none\'></p>").appendTo("body").toggle().toggle()', "Hide it again!"],
+        ]
+      },
+      {
+        name: '.toggle(  ) - attached - toggle() followed by toggle()',
+        tests: [
+          ['$(tempEl).append("<i></i>").children().toggle().toggle()', ""],
+          ['$(tempEl).append("<i class=\'tablecell\'></i>").children().toggle().toggle()', ""],
+          ['$(tempEl).append("<i style=\'display:table-cell\'></i>").children().toggle().toggle()', ""],
+          ['$(tempEl).append("<i></i>").children().css("display", "table-cell").toggle().toggle()', ""],
+          ['$(tempEl).append("<i></i>").children().css("display", "table-cell").toggle().toggle().toggle()', "Double-hide"],
+
+//          ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.toggle(); $el.toggle(); var res = $el.css("display"); $el.remove(); return res}()', ""],
+//          ['function () {var $el = $("<tablecell></tablecell>").appendTo("body"); $el.toggle(); $el.toggle(); var res = $el.css("display"); $el.remove(); return res}()', "Once the node has been added to the document, jQuery and picoQuery agrees again"],
+//          ['function () {var $el = $("<i class=\'tablecell\'></i>").appendTo("body"); $el.toggle(); $el.toggle(); var res = $el.css("display"); $el.remove(); return res}()', "- as above"],
+
+        ]
+      },
+      {
+        name: '.toggle(  ) - unattached',
+        tests: [
+
+          ['$("<p style=\'display:none\'></p>").toggle()', "hidden with inline style, then toggled"],
+          ['$("<p class=\'display-none\'></p>").toggle()', "hidden with stylesheet, then toggled", "unattached1"],
+
+          ['$("<p style=\'display:none\'></p>").appendTo("body").toggle()', "block element, hidden with css (inline style), attached to document and then toggled"],
+
+          ['$("<i style=\'display:none\'></i>").toggle()', "Inline element, hidden with css"],
+          ['$("<i></i>").css("display", "none").toggle()', "Inline element, hidden by setting css display to none"],
+
+          ['$("<i class=\'tablecell\'></i>").css("display")', "An element does not get its styles from class with jQuery, until its appended to the document. My guess is that its due to that jQuery creates a DocumentFragment. picoQuery on the other hand create a real element right away."],
+          ['$("<i></i>").css("display", "").toggle()', "Edge case. jQuery treats empty display as hidden - even though its not", "empty_display_hidden"],
+          ['$("<i style=\'display:\'></i>").toggle()', "Edge case. jQuery treats empty display as hidden - even though its not"],
+          ['$("<p></p>").toggle()', "Edge case: Even though an element is already visible, css will be altered on an unattached jQuery object", "alter_css_on_already_visible_unattached"],
+          ['$("<i></i>").appendTo("body").toggle()', "Edge case: On an attached jQuery object, css will not be altered when element is already visible"],
+          ['$("<p style=\'display:none\'></p>").toggle().toggle()', "double-hide"],
+
+        ]
+      },
+      {
+        name: '.toggle(  ) - unattached - toggle() followed by toggle()',
+        tests: [
+          ['$("<i></i>").toggle().toggle()', "Inline element, hidden by toggle(), and toggled again"],
+          ['$("<i style=\'display:block\'></i>").toggle().toggle()', "Inline element by default, but made block element with css, then hidden with toggle(), and toggled again", "restore_display"],
+          ['$("<i></i>").css("display", "table-cell").toggle().toggle()', "Element made table-cell, hidden with toggle(), and toggled again"],
+          ['$("<i class=\'tablecell\'></i>").toggle().toggle()', "Same issue as above", "unattached2"],
+          ['$("<tablecell></tablecell>").toggle().toggle()', ""],
+          ['$("<p class=\'display-none\'></p>").toggle()', ""],
+          ['$("<p class=\'display-none\'></p>").toggle()', ""],
+
+        ]
+      },
+      {
+        name: '.toggle(  ) - unattached - toggle() - attached - toggle()',
+        tests: [
+          ['$(tempEl.appendChild($("<i></i>").toggle().get(0))).toggle()', "Inline element"],
+          ['$(tempEl.appendChild($("<i style=\'display:block\'></i>").toggle().get(0))).toggle()', "style=display:block"],
+          ['$(tempEl.appendChild($("<i></i>").css("display", "table-cell").toggle().get(0))).toggle()', "css()"],
+          ['$(tempEl.appendChild($("<i class=\'tablecell\'></i>").toggle().get(0))).toggle()', "class"],
+          ['$("<i style=\'display:block\'></i>").toggle().appendTo(tempEl).toggle()', "Internal data regarding old display value survives append", "data_survives"],
         ]
       },
     ]
