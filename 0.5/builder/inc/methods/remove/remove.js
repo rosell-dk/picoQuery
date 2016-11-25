@@ -18,8 +18,8 @@ Fully supported signatures:
 */
 remove: function(selector) {
   
-  var $sel = this.filter(selector||'*');
-  __ITERATE__(<@ $sel.e @>, <@ function(el) {
+//  var $sel = ;
+  __ITERATE__(<@ this.filter(selector||'*').e @>, <@ function(el) {
     if (el.parentNode) {
       __CLEAN_DATA__(<@ el @>);
       el.parentNode.removeChild(el);
