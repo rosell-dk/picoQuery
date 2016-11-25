@@ -50,7 +50,6 @@ function P(a,b) {
       }
 
 //      el.innerHTML = a;
-
       if (__IS_PLAIN_OBJECT__(<@ b @>) && /^<([\w-]+)\s*\/?>(<\/\1>)?$/.test(a)) {
         for (key in b) {
           if (this[key]) {
