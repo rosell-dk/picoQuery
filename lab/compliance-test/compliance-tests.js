@@ -651,7 +651,7 @@ window.complianceTests = [
       },
     ]
   },
-/*
+
   {
     name: '.constructor2()',
     tests: [
@@ -688,7 +688,7 @@ window.complianceTests = [
       },
     ]
   },
-*/
+
 
   {
     name: '.css()',
@@ -894,6 +894,35 @@ window.complianceTests = [
     ]
   },
   {
+    name: '.detach()',
+    tests: [
+      {
+        name: '.detach()',
+        tests: [
+          ['$("<div><b></b><i></i></div>").children("b").detach()', "Basic: detach an element (returns the element)"],
+          ['function() {$(tempEl).append("<p><b></b><i></i></p>").find("b").detach(); return $(tempEl)}()', "Basic: detach an element (parent no longer contains it)"],
+          ['function() {$(tempEl).append("<p><b></b><i></i></p>").children().children().detach(); return $(tempEl)}()', "detach two elements"],
+        ]
+      },
+      {
+        name: '.detach( selector )',
+        tests: [
+          ['function() {$(tempEl).append("<p><b></b><i></i></p>").children().children().detach("b"); return $(tempEl)}()', "Basic: detach an element (parent no longer contains it)", "selector"],
+          ['function() {$(tempEl).append("<p><b></b><i></i><strong></strong></p>").children().children().detach("b, strong"); return $(tempEl)}()', "detach two elements"],
+          ['function() {$(tempEl).append("<p><b></b><i></i></p>").children().children().detach("* > b"); return $(tempEl)}()', "Match a 'b' element against '* > b'. In jQuery, this yields a match", "selector_nested"],
+          ['function() {$(tempEl).append("<p><b></b><i></i></p>").children().detach("* > b"); return $(tempEl)}()', "Try a selector that selects deep"],
+        ]
+      },
+      {
+        name: 'Edge cases',
+        tests: [
+          ['$("<div><b></b><i></i></div>").children("b").detach().parent()', "Get parent of detachd item"],
+          ['$("<div><b></b><i></i></div>").children().detach("b").parent()', "Get parent of detachd item"],
+        ]
+      },
+    ]
+  },
+  {
     name: '.each()',
     tests: [
       {
@@ -1034,11 +1063,17 @@ window.complianceTests = [
     name: '.filter()',
     tests: [
       {
-        name: '.filter( selector )',
+        name: '.filter( selector ) - attached node',
+        tests: [
+          ['$("#item3 *").filter(".odd")', ""],
+        ]
+      },
+      {
+        name: '.filter( selector ) - unattached node',
         tests: [
           ['$("<li></li><b></b>").filter("b")', "Filter by tag-name"],
+          ['$("<li></li><b></b><li></li>").filter("li")', "Filter, multiple results"],
           ['$("<li></li><b></b>").filter("*")', "Filter *"],          
-          ['$("#item3 *").filter(".odd")', ""],
         ]
       },
       {
@@ -1062,6 +1097,24 @@ window.complianceTests = [
           ['$("#item3 li").filter($("li"))', "Multiple items"],
         ]
       },
+      {
+        name: '.filter( function )',
+        tests: [
+          ['$("#item3 li").filter(function(idx,el){return true})', "Return all elements", "function"],
+          ['$("#item3 li").filter(function(idx,el){return false})', "Return no elements"],
+          ['function(){var arr=[];$("#item3 li").filter(function(i,el) {arr.push(i);return true});return arr}()', "First argument to callback is the index", "first_cb_arg"],
+          ['function(){var arr=[];$("#item3 li").filter(function(i,el) {arr.push(el);return true});return arr}()', "Second argument to callback is the element", "second_cb_arg"],
+          ['function(){var arr=[];$("#item3 li").filter(function(i,el) {arr.push(this);return true});return arr}()', "This is the element", "this"],
+//          ['$("#item3 li").filter(function(idx,el){return (idx==0)})', "Test first argument (index)"],
+//          ['$("#item3 li").filter(function(idx,el){return (el.id=="item3_1")})', "Test second argument (element)"],
+//          ['$("#item3 li").filter(function(idx,el){return (this.id=="item3_1")})', "Test this"],
+        ]
+      },
+    ]
+  },
+  {
+    name: '.filter2()',
+    tests: [
       {
         name: '.filter( function )',
         tests: [

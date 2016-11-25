@@ -207,7 +207,7 @@ function testInAllFrameworks(code, description, anchor_name) {
       eval("result = " + code);
     }
     catch (e) {
-//      console.log(e);
+      console.log(e);
       result = e;
     }
     j$(tempEl).remove();

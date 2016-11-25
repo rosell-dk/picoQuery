@@ -406,11 +406,7 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.filter()</td>
-    <td class="partial">
-      <issues>
-        <issue severity="normal" proof="function">.filter( function ) signature is not supported</issue>
-      </issues>
-    </td>
+    <td class="full"></td>
     <td class="partial">
       <issues>
         <issue severity="normal" proof="element">.filter( element ) signature is not supported</issue>
