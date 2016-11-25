@@ -20,6 +20,15 @@ So we go for the old-school solution, which is to use querySelectorAll
 on the parent element
 (for size reasons, we do not implement both - though speedwise, the above wins)
 
+
+      /*
+      we dont do it like this, because we want gzip to be able to reuse the entire match string:
+      var match, tempParent = d.createElement("div");   // maybe tempParent = $("<div/>").e[0]; is shorter?
+      tempParent.appendChild(el),
+      match = ~$(selector, tempParent).e.indexOf(el);
+      tempParent.removeChild(el);
+      return match;
+
 ### old-school soluction
 ```
 // In order to avoid recurssion, we need to check for '*'
@@ -29,6 +38,52 @@ return (selector=='*') ? this : $(this.e.filter(function(element){
   return ~$(selector, $(element).parent().e[0]).e.indexOf(element);
 }));
 ```
+
+But ... there may not be a parent.
+It is only a problem when $( html ) removes children from the temp element.
+It did not do so in 0.4.0, but it does so in 0.5.0
+In 0.4.0, we could just do this:
+  return ~$(selector, $(el).parent().e[0]).e.indexOf(el);
+
+now we must do this:
+
+```
+if (!el.parentNode) {
+
+  var match, tempParent = d.createElement("div");   // maybe tempParent = $("<div/>").e[0]; is shorter?
+  tempParent.appendChild(el),
+  match = ~$(selector, $(el).parent().e[0]).e.indexOf(el);
+  tempParent.removeChild(el);
+  return match;
+}
+return ~$(selector, $(el).parent().e[0]).e.indexOf(el);
+```
+
+if append() and detach() are enabled, we can make it a bit shorter: (havent tested the code)
+
+```
+  $("<div/>").append(el),
+  match = ~$(selector, $(el).parent().e[0]).e.indexOf(el);
+  $(el).detach();
+  return match
+```
+
+if append() is enabled, but not detach(), we can do this:
+```
+  $("<div/>").append(el),
+  match = ~$(selector, $(el).parent().e[0]).e.indexOf(el);
+  $(el).parent().e[0].removeChild(el);
+  return match
+```
+
+
+
+
+Note that we have taken care that this string can be reused entirely in gzip:
+"~$(selector, $(el).parent().e[0]).e.indexOf(el);"
+
+
+
 
 ### other ideas
 /*
