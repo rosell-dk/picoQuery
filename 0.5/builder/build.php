@@ -413,14 +413,15 @@ if (isFeatureEnabled('prepend') || isFeatureEnabled('append') || isFeatureEnable
 if (isFeatureEnabled('hide') || isFeatureEnabled('toggle') || isFeatureEnabled('show')) {
   enableFeatureByNameId('css');
 }
-if (isFeatureEnabled('filter') || isFeatureEnabled('closest') || isFeatureEnabled('remove')) {
+if (isFeatureEnabled('filter') || isFeatureEnabled('closest') || isFeatureEnabled('remove') || isFeatureEnabled('detach')) {
   enableFeatureByNameId('parent');
 }
 if (isFeatureEnabled('next') || 
     isFeatureEnabled('prev') ||
     isFeatureEnabled('children') ||
     isFeatureEnabled('parent') ||
-    isFeatureEnabled('remove')) {
+    isFeatureEnabled('remove') ||
+    isFeatureEnabled('detach')) {
   enableFeatureByNameId('filter');
 }
 if (isFeatureEnabled('replaceWith')) {

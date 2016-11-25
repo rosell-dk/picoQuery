@@ -349,6 +349,24 @@ Compliance summary:<br>
     </td>
   </tr>
   <tr>
+    <td>.detach()</td>
+    <td class="partial">
+      <issues>
+        <issue severity="low" proof="selector_nested">.detach( selector ) does not support nested selectors. For example "* > b" does not match when performed on a "b" element</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="selector">.detach( selector ) signature is not supported (all elements are removed)</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="selector">.detach( selector ) signature is not supported (all elements are removed)</issue>
+      </issues>
+    </td>
+  </tr>
+  <tr>
     <td>.each()</td>
     <td class="full"></td>
     <td class="full"></td>

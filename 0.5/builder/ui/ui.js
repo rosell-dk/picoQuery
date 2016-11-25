@@ -140,6 +140,13 @@ var methods_meta = {
       ['.data( ) => Object', FULL],
     ]
   ],
+  'detach': [
+    'http://api.jquery.com/detach/',
+    [
+      ['.detach( ) => jQuery', FULL, ],
+      ['.detach( selector ) => jQuery', FULL, ],
+    ],
+  ],
   'each': [
     'http://api.jquery.com/each/',
     [
@@ -362,7 +369,6 @@ var methods_meta = {
       ['.remove( ) => jQuery', FULL, ],
       ['.remove( selector ) => jQuery', FULL, ],
     ],
-  'This is not just an alias for .on("DOMContentLoaded"). As in jQuery, handler is also called in cases where the DOMContentLoaded event has already fired at the time this method is called'
   ],
   'removeAttr': [
     'http://api.jquery.com/removeAttr/',
