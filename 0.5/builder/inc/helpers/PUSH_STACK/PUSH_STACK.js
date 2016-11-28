@@ -1,4 +1,4 @@
-(a) {
+() {
   // Not implemented...
   // This helper is supposed to always be inlined
 }

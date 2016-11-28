@@ -99,7 +99,8 @@ foreach ($frameworks as $index => $framework) {
     $frameworks[$index] = $framework;
   }
   if ($framework == "cash1.3.0.min.js") {
-    echo '<script src="https://cdn.jsdelivr.net/cash/1.3.0/cash.min.js"></script>' . "\n";
+//    echo '<script src="https://cdn.jsdelivr.net/cash/1.3.0/cash.min.js"></script>' . "\n";
+      echo '<script src="cash1.3.0.min.js"></script>' . "\n";
     pushFramework($framework);
   }
 

@@ -19,6 +19,7 @@ Done:
 - .attr( attributes ) signature is now supported
 - .attr( attributeName, value ) now handles when attributeName is a string class instead of a string literal
 - .filter() is now fully compliant
+- .css() is now much more compliant
 - added .detach() method
 
 ### Features planned for 0.6:

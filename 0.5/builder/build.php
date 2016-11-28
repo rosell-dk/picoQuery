@@ -720,7 +720,8 @@ $helpers_second_pass = array(
   array('IS_FUNCTION', 'isFunction', 'o'),
   array('IS_UNDEFINED', 'isUndefined', 'U'),
   array('IS_STRING', 'isString', 'n'),
-  array('IS_OBJECT', 'isObject', 'H'),      //    false for ie isObject(new String("")) equal to this in jQuery: (jQuery.type( a ) === "object")
+  array('IS_OBJECT', 'isObject', 'H'),      //    false for ie isObject(new String("")) equal to this: (jQuery.type( a ) === "object")
+  array('IS_ARRAY', 'isArray', 'J'),      //    equal to this: (jQuery.type( a ) === "array")
   array('IS_PLAIN_OBJECT', 'isPlainObject', 'I'),
   array('IS_DOCUMENT_OBJECT', 'isDocumentObject', 'G'),
   array('FLATTEN', 'flatten', 'v'),

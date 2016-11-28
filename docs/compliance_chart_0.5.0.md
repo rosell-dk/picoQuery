@@ -286,10 +286,7 @@ Compliance summary:<br>
     <td class="partial">
       <issues>
         <issue severity="normal" proof="">jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</issue>
-
-        <issue severity="normal" proof="properties">.css( properties) signature is not supported. That is: does not support getting several properties in one call</issue>
-        <issue severity="normal" proof="property_names">.css( propertyNames [Array] ) signature is not supported.</issue>
-        <issue severity="normal" proof="function">.css( propertyName, function ) is not supported</issue>
+        <issue severity="low" proof="auto">When height is "auto", .css( "height" ) must return the height in pixels, not "auto"</issue>
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
         <issue severity="edgecase" proof="nonexisting_property,adjust_css">Does not comply in a few edge cases</issue>
       </issues>
@@ -304,6 +301,7 @@ Compliance summary:<br>
         <issue severity="low" proof="important">Fails complying when a external style overrides style attribute with !important</issue>
         <issue severity="low" proof="width_height_exception">Sets width and height wrong, when given as a unitless string (as an exception to the general rule of ignoring unitless strings, jQuery allows to set width and height with unitless strings)</issue>
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
+        <issue severity="low" proof="auto">When height is "auto", .css( "height" ) must return the height in pixels, not "auto"</issue>
         <issue severity="edgecase" proof="nonexisting_property,user_select,adjust_css,width_in_em">Does not comply in a few edge cases</issue>
       </issues>
     </td>
@@ -317,6 +315,7 @@ Compliance summary:<br>
         <issue severity="normal" proof="function">.css( propertyName, function ) is not supported</issue>
         <issue severity="normal" proof="property_names">.css( propertyNames [Array] ) signature is not supported.</issue>
         <issue severity="low" proof="width_height_exception">Sets width and height wrong, when given as a unitless string (as an exception to the general rule of ignoring unitless strings, jQuery allows to set width and height with unitless strings)</issue>
+        <issue severity="low" proof="auto">When height is "auto", .css( "height" ) must return the height in pixels, not "auto"</issue>
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
         <issue severity="edgecase" proof="user_select,adjust_css">Does not comply in a few edge cases</issue>
       </issues>

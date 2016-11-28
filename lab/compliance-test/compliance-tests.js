@@ -744,6 +744,7 @@ window.complianceTests = [
           ['$("<li class=\'italic-important\' style=\'font-style:normal\'></li>").css("fontStyle")', "CSS set both with class and inline style. But in class, it is !important. Get css using camelCased form"],
           ['$("<li style=\'float:left\'></li>").css("float")', "float is a special case, because getComputedStyle(el).getPropertyValue() needs to access it with cssFloat"],
           ['$("<li style=\'float:left\'></li>").css("cssFloat")', "float is a special case, because getComputedStyle(el).getPropertyValue() needs to access it with cssFloat"],
+          ['$("<div></div>").css("height")', "if css height is auto, return calculated height", "auto"],
           ['$("<i></i>").css("display")', ""],
           ['$("<li></li>").css("display")', ""],
           ['$("<li/>").css("display")', ""],
@@ -791,6 +792,8 @@ window.complianceTests = [
           ['$("<div class=italic/>").css("fontStyle", "normal").css("fontStyle")', ""],
           ['$("<div class=italic/>").css("fontStyle", "normal").css("fontStyle")', ""],
           ['$("<div/>").css("cssText", "color:blue;font-size:16px").css("fontSize")', ""],
+          ['$("<one>1</one><two>2</two>").css("color", "blue")', "Multiple"],
+
 
 
           // TODO: add testing of cssHooks
@@ -808,13 +811,21 @@ window.complianceTests = [
         tests: [
           ['$("#item2_1").css(["fontStyle", "textDecoration"])', "camelCased", "property_names"],
           ['$("#item2_1").css(["font-style", "text-decoration"])', "dasherized"],
+          ['$("#item2_1").css(new Array("font-style", "text-decoration"))', "Array"],
         ]
       },
       {
         name: '.css( propertyName, function )',
         tests: [
-          ['$(tempEl).css("fontStyle", function(idx,value){return "italic"})', "", "function"],
+          ['$(tempEl).css("fontStyle", function(idx,value){return "italic"})', "Basic", "function"],
           ['$(tempEl).css("font-style", function(idx,value){return "italic"})', ""],
+          ['$(tempEl).css("fontSize", function(idx,value){return 10})', "px are also added automatically here", ""],
+          ['$(tempEl).css("fontSize", function(idx,value){return "11px"})', "px are only added when needed", ""],
+          ['$(tempEl).css("line-height", function(idx,value){return 1.2})', "px are only added when needed", ""],
+          ['function(){var arr=[];$("<one>1</one><two>2</two>").css("height", function(i,el) {arr.push(i); return "20px"});return arr}()', "First argument to callback is the index"],
+          ['function(){var arr=[];$("<one style=\'color:blue\'>1</one><two style=\'color:#000\'>2</two>").css("color", function(i,val) {arr.push(val); return "20px"});return arr}()', "Second argument to callback is the old value"],
+          ['function(){var arr=[];$("<one>1</one><two>2</two>").css("height", function(i,val) {arr.push(this); return "20px"});return arr}()', "This points to current element"],
+
 
         ]
       },
@@ -1535,19 +1546,26 @@ window.complianceTests = [
         tests: [
           ['$("#item2_1").offset()', "Get offset of an element", "get"],
           ['$("#item3_1,#item3_1").offset()', "Only get offset of first element in set"],
+          ['$(tempEl).css({position:"absolute", top:"20px", left:"30px"})', "absolutely positioned element"],
+          ['$(tempEl).css({position:"absolute", top:20, left:30}).offset()', "absolutely positioned element"],
         ]
       },
       {
         name: '.offset( coordinates )',
         tests: [
-          ['$(tempEl).offset({top:20,left:30}).offset()', "Set offset", "set"],
+//          ['$(tempEl).css("top", "20").css("position", "absolute").css("top")', ""],
+//          ['$(tempEl).offsetParent()', ""],
+          ['$(tempEl).offset({top:20,left:30}).offset()', "static positioned element", "set"],
+//          ['$(tempEl).offset({top:20,left:30}).html()', "static positioned element", "set"],
+          ['$(tempEl).css({position:"absolute", top:20, left:30}).offset()', "absolutely positioned element"],
+          ['$(tempEl).offset({position:"absolute", top:"auto", left:"auto"}).offset()', "absolutely positioned element"],
 //          ['$(tempEl).offset({top:20,left:30}).css(\'position\')', "Set offset"],
         ]
       },
       {
         name: '.offset( function )',
         tests: [
-          ['$(tempEl).offset(function(index,coords){return {top:20,left:0}}).offset()', "Set offset", "function"],
+          ['$(tempEl).offset(function(index,coords){return {top:20,left:15}}).offset()', "Set offset", "function"],
         ]
       },
     ]

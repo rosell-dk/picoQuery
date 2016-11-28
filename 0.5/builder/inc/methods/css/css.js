@@ -1,114 +1,47 @@
-/*
-.css()
 
-Description:
-  Get the value of a computed style property for the first element in the set of matched elements or set one or more CSS properties for every matched element.
-  http://api.jquery.com/css/
-
-Signatures: 
-  .css( propertyName ) => String
-    propertyName [String]: 
-      A CSS property.
-
-  .css( propertyNames ) => String
-    propertyNames [Array]: 
-      An array of one or more CSS properties.
-
-  .css( propertyName, value ) => jQuery
-    propertyName [String]: 
-      A CSS property.
-    value [String | Number]
-      A value to set for the property.
-
-  .css( propertyName, function ) => jQuery
-    propertyName [String]: 
-      A CSS property.
-    function [ Function( Integer index, String value ) => String or Number]
-      A function returning the value to set. this is the current element. Receives the index position
-      of the element in the set and the old value as arguments.
-
-  .css( properties ) => String
-    properties [PlainObject]
-      An object of property-value pairs to set.
-
-
-Support: Partial
-  The following signatures are fully supported:
-    .css( propertyName ) => String
-    .css( propertyName, value ) => jQuery
-
-  The following signatures are not supported:
-    .css( propertyNames ) => String
-    .css( propertyName, function ) => jQuery
-    .css( properties ) => String
-
-*/
-/**
- * Get the value of a computed style property for the first element in the set of matched elements or set one or more CSS properties for every matched element.
- *
- * @feature .css()
- * @support_level partial
- * @jquery_docs http://api.jquery.com/css/
- *
- * @param {(string|Object<string,*>)} arg1
- * @param {(string|number|function(number,*))=} arg2
- * @return {(string|!jQuery)}
- *
- */
 css: function(name, value) {
-  // Considering if(!value). 
-  // - But I guess we should support setting a property to an empty string
-  if (__IS_UNDEFINED__(<@ value @>)) {
+  if (__IS_OBJECT__(<@ name @>)) {
+    for (key in name) {
+      this.css(key, name[key]);
+    }
+    return this;
+  }
+  if (__IS_ARRAY__(<@ name @>)) {    
+    var o = {}, _this = this;
+    __ITERATE__(<@ name @>, <@ function(prop) {
+      o[prop] = _this.css(prop);
+    } @>);
+    return o;
+  }
 
-    // In picoQuery 0.1, we just return this.e[0].style[name]
-    // However, we need to support javascript properties as well
+  function setCSS(el, value) {
+    // Maybe add px
+    // For some specified properties, do not add
+    // For width and height, add it even though the number is a string
+    if (!({'column-count':1, 'columns':1, 'font-weight':1, 'line-height':1,'opacity':1, 'z-index':1, 'zoom':1 }[name]) && ((typeof(value) == 'number') || (((name == 'width') || (name == 'height')) && (value.match(/^[\d\.]+$/))))) {
+      value = value + 'px';
+    }
+    el.style[name] = value + (+ (!({'column-count':1, 'columns':1, 'font-weight':1, 'line-height':1,'opacity':1, 'z-index':1, 'zoom':1 }[name]) && ((typeof(value) == 'number') || (((name == 'width') || (name == 'height')) && (value.match(/^[\d\.]+$/))))) ? 'px' : '');
+  }
 
-    // There is a little quirk with 'float', because its a reserved word
-    // Therefore, its called 'cssFloat' instead of 'float' (its called styleFloat in IE8, but we
-    // needn't worry about that)
-    // http://stackoverflow.com/questions/606470/is-there-a-cross-browser-way-of-setting-style-float-in-javascript
-
-    // We should also support cssHooks, as plugins may add new ones: https://api.jquery.com/jQuery.cssHooks/
-//console.log(getComputedStyle(this.e[0]).getPropertyValue(name));
-
+//  if (!(1 in arguments) && (__IS_STRING__(<@ name @>))) {
+//  if (__IS_UNDEFINED__(<@ value @>)) {
+  if (!(1 in arguments)) {
     if (!this.e[0]) return;
     var computed = getComputedStyle(this.e[0]);
-//console.log(name + ':' + this.e[0].style[name] + ':' + computed.getPropertyValue(name) + ':' + computed[name]);
-//console.log(name + ':' + this.e[0].style[name]);
-//      return this.e[0].style[name]
-//    return this.e[0].style[name] || computed[name];
-//    return this.e[0].style[name] || computed.getPropertyValue(name) || computed[name];
     return computed[name] || this.e[0].style[name];
-//    return computed.getPropertyValue(name);
-//    return this.e[0].style[name] || computed[name];
-//    return this.e[0].style[name];
-
-    // TODO: zepto and jQuery camelCases the property. But it seems unneccessary, as
-    // getComputedStyle() returns an object with both ie "backgroundColor" and "background-color"
-    // console.log(getComputedStyle(this.e[0]));
-    // But does all modern browsers do that?
-    // getComputedStyle() also has the property 'float' - so no need to handle that (todo: browser-test it)
-
   } 
   else {
-    __ITERATE__(<@ this.e @>, <@ function(el) {
-      // Well, well, it seems that el.style has both variants (ie 'background-color' and 'backgroundColor')
-      // so we do not need to dasherize or camelCase.
-      // TODO: Browser-test it
+    __ITERATE__(<@ this.e @>, <@ function(el, index) {
 
-      // Although... this does not work with vender prefixes - there is ie no: el.style.-moz-user-select
-      // To set that, we need: el.style.MozUserSelect
-
-      // Maybe add px
-      // For some specified properties, do not add
-      // For width and height, add it even though the number is a string
-      if (!({'column-count':1, 'columns':1, 'font-weight':1, 'line-height':1,'opacity':1, 'z-index':1, 'zoom':1 }[name]) && ((typeof(value) == 'number') || (((name == 'width') || (name == 'height')) && (value.match(/^[\d\.]+$/))))) {
-        value = value + 'px';
+      if (__IS_FUNCTION__(<@ value @>)) {    
+        setCSS(el, value.call(el, index, $(el).css(name)));
       }
-      el.style[name] = value + (+ (!({'column-count':1, 'columns':1, 'font-weight':1, 'line-height':1,'opacity':1, 'z-index':1, 'zoom':1 }[name]) && ((typeof(value) == 'number') || (((name == 'width') || (name == 'height')) && (value.match(/^[\d\.]+$/))))) ? 'px' : '');
+      else {
+        setCSS(el, value);
+      }
 
-      // btw, zepto sets the style with style.cssText
-      // jQuery sets the style with el.style[camelCasedPropertyName]
+
     } @>);
   }
   return this;

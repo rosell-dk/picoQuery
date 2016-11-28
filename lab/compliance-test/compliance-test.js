@@ -160,6 +160,9 @@ function toPrint(obj, skipMarkUp) {
         html = '<span class="value">"' + htmlEscapeEtc(html) + '"</span>';
       }
       return html;
+    case 'function':
+      html = 'function';
+      return html;
     default:
       html = JSON.stringify(obj);
       if (!skipMarkUp) {
@@ -172,11 +175,12 @@ function toPrint(obj, skipMarkUp) {
 window.testNumber = 0;
 function testInAllFrameworks(code, description, anchor_name) {
 
-  var testResults = [];
+  var testResults = [], printedResults = [];
 //  var frameworks = [j$, z$, p$, pmin$];
 
   frameworks.forEach(function (framework) {
     var result;
+    var printedResult;
     $ = framework[0];
     jQuery = framework[2];
     jq$ = j$;
@@ -205,6 +209,7 @@ function testInAllFrameworks(code, description, anchor_name) {
     try {
 //      result = fn.call();
       eval("result = " + code);
+      printedResult = toPrint(result);
     }
     catch (e) {
       console.log(e);
@@ -214,11 +219,13 @@ function testInAllFrameworks(code, description, anchor_name) {
 //    console.log('Test #' + window.testNumber, result);
 
     testResults.push(result);
+    printedResults.push(printedResult);
   });
 
   $ = j$;
 
-
+  var tdContent = printedResults;
+/*
   var tdContent = testResults.map(function(item) {
 //    return '';
     var output = '';
@@ -230,7 +237,7 @@ function testInAllFrameworks(code, description, anchor_name) {
 //    console.log(item);
     return toPrint(item);
   });
-
+*/
   window.testNumber++;
 
   // determine if row should be displayed

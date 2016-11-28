@@ -4,5 +4,3 @@
 
 [[INLINE_VERSION]]
 (/\[object (.*)\]/.exec(toString.call([[ARG1]]))[1] == "Object")
-
-
