@@ -467,6 +467,14 @@ if (isFeatureEnabled('andSelf')) {
 if (isFeatureEnabled('add')) {
   enableFeatureByNameId('jQuery.merge');
 }
+if (isFeatureEnabled('offset')) {
+  enableFeatureByNameId('position');
+}
+if (isFeatureEnabled('position')) {
+  enableFeatureByNameId('css');
+  enableFeatureByNameId('offset');
+  enableFeatureByNameId('offsetParent');
+}
 
 
 if ($minify_functions || $minify_all) {

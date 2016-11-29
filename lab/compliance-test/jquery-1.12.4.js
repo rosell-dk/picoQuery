@@ -10797,7 +10797,6 @@ jQuery.fn.extend( {
 
 			// Get *real* offsetParent
 			offsetParent = this.offsetParent();
-
 			// Get correct offsets
 			offset = this.offset();
 			if ( !jQuery.nodeName( offsetParent[ 0 ], "html" ) ) {
@@ -10808,6 +10807,8 @@ jQuery.fn.extend( {
 			parentOffset.top  += jQuery.css( offsetParent[ 0 ], "borderTopWidth", true );
 			parentOffset.left += jQuery.css( offsetParent[ 0 ], "borderLeftWidth", true );
 		}
+//    console.log('jq');
+//    console.log(elem, $(elem).css("margin-left"), parseFloat( $(elem).css("margin-left") ));
 
 		// Subtract parent offsets and element margins
 		// note: when an element has margin: auto the offsetLeft and marginLeft

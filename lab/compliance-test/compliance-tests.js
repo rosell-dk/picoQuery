@@ -707,6 +707,11 @@ window.complianceTests = [
           ['$(tempEl).append("<li style=\'float:left\'></li>").children().css("cssFloat")', "float is a special case, because getComputedStyle(el).getPropertyValue() needs to access it with cssFloat"],
           ['$(tempEl).append("<i class=\'tablecell\'></i>").children().css("display")', ""],
           ['$(tempEl).append("<tablecell></tablecell>").children().css("display")', ""],
+          ['$("#automargin").css("margin-left")', "margin:auto", "automargin"],
+          ['$("#automargin").css("marginLeft")', "margin:auto", "automargin2"],
+          ['$("#nomargin").css("margin-left")', "no margin:auto"],
+
+
 //.italic-important
 /*
           ['$("li.odd").css("font-style")', "dasherized", "dashes"],
@@ -793,6 +798,7 @@ window.complianceTests = [
           ['$("<div class=italic/>").css("fontStyle", "normal").css("fontStyle")', ""],
           ['$("<div/>").css("cssText", "color:blue;font-size:16px").css("fontSize")', ""],
           ['$("<one>1</one><two>2</two>").css("color", "blue")', "Multiple"],
+          ['$("<div><b></b></div>").appendTo(tempEl).css("cssText", "color:black;padding-left:2px;margin-left:20px;margin-right:20;line-height:2;position:relative")', "cssText", "css_text"],
 
 
 
@@ -1542,12 +1548,28 @@ window.complianceTests = [
     name: '.offset()',
     tests: [
       {
-        name: '.offset( )',
+        name: '.offset( ) - attached nodes',
         tests: [
           ['$("#item2_1").offset()', "Get offset of an element", "get"],
           ['$("#item3_1,#item3_1").offset()', "Only get offset of first element in set"],
-          ['$(tempEl).css({position:"absolute", top:"20px", left:"30px"})', "absolutely positioned element"],
+          ['$(tempEl).css({position:"absolute", top:"20px", left:"30px"}).offset()', "absolutely positioned element"],
           ['$(tempEl).css({position:"absolute", top:20, left:30}).offset()', "absolutely positioned element"],
+          ['$(tempEl).css({position:"fixed", top:20, left:30}).offset()', "position:fixed"],
+          ['$(tempEl).css({position:"relative", top:20, left:30}).offset()', "position:relative"],
+          ['$(tempEl.ownerDocument.documentElement).offset()', "HTML"],
+//          ['$("#testiframe").offset()', "iframe"],
+//          ['$("<iframe></iframe>").appendTo(tempEl).get(0).contentWindow.document.body', "iframe"],
+          ['$($("<iframe></iframe>").appendTo(tempEl).get(0).contentWindow.document.body).offset()', "iframe"],
+          ['$("<div></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:relative;width:50px").offset()', "margin:auto"],
+          ['$("#automargin").offset()', "margin:auto"],
+          ['$("#nomargin").offset()', "no margin:auto"],
+
+        ]
+      },
+      {
+        name: '.offset( ) - unattached nodes',
+        tests: [
+          ['$("<div></div>").css({position:"absolute", top:"20px", left:"30px"}).offset()', "absolutely positioned element"],
         ]
       },
       {
@@ -1555,10 +1577,12 @@ window.complianceTests = [
         tests: [
 //          ['$(tempEl).css("top", "20").css("position", "absolute").css("top")', ""],
 //          ['$(tempEl).offsetParent()', ""],
-          ['$(tempEl).offset({top:20,left:30}).offset()', "static positioned element", "set"],
+          ['$(tempEl).offset({top:20,left:30}).offset()', "position: static", "set"],
+          ['$(tempEl).offset({top:20,left:30})', "position: static",],
 //          ['$(tempEl).offset({top:20,left:30}).html()', "static positioned element", "set"],
-          ['$(tempEl).css({position:"absolute", top:20, left:30}).offset()', "absolutely positioned element"],
-          ['$(tempEl).offset({position:"absolute", top:"auto", left:"auto"}).offset()', "absolutely positioned element"],
+          ['$(tempEl).css({position:"absolute", top:10, left:20}).offset({top:3,left:13}).offset()', "absolutely positioned element"],
+          ['$(tempEl).css({position:"absolute", top:"auto", left:"auto"}).offset({top:20,left:15}).offset()', "position:absolute, top: auto"],
+          ['$(tempEl).css({position:"absolute", top:"auto", left:"auto"}).offset({top:20,left:15}).offset()', "position:fixeded element"],
 //          ['$(tempEl).offset({top:20,left:30}).css(\'position\')', "Set offset"],
         ]
       },
@@ -1646,6 +1670,82 @@ window.complianceTests = [
           ['$([3,4]).parent()', ""],
         ]
       }
+    ]
+  },
+  {
+    name: '.position()',
+    tests: [
+      {
+        name: '.position( ) - attached nodes',
+        tests: [
+          ['$("#item2_1").position()', "Get position of an element", "get"],
+          ['$("#item3_1,#item3_1").position()', "Only get position of first element in set"],
+          ['$(tempEl).position()', "position: static"],
+          ['$(tempEl).css("margin-left", "20px").position()', "margin"],
+//          ['$("<div><b></b></div>").appendTo(tempEl).css("cssText", "color:black;margin-left:20px;position:relative")', "Check to see if framework gets this right, which is needed for some of the following tests"],
+          ['$("<div><b></b></div>").appendTo(tempEl).css("cssText", "color:black;margin-left:20px;position:relative").children().position()', "static within relative"],  // We added "color:black" as a dummy, because zepto ignores the first
+//          ['$("<div><b></b></div>").appendTo(tempEl).css("cssText", "color:black;margin-left:20px;border-left:4px;position:relative")', "static within relative with border"],
+          ['$("<div><b></b></div>").appendTo(tempEl).css("cssText", "color:black;margin-left:20px;border-left:4px;position:relative").children().position()', "static within relative with border", "border"],
+          ['$(tempEl).css({position:"absolute", top:"20px", left:"30px"}).position()', "absolutely positioned element"],
+          ['$(tempEl).css({position:"absolute", top:20, left:30}).position()', "absolutely positioned element"],
+          ['$(tempEl).css({position:"fixed", top:20, left:30}).position()', "position:fixed", "fixed"],
+          ['$(tempEl).css({position:"relative", top:20, left:30}).position()', "position:relative"],
+          ['$("body").position()', "body"],
+          ['$("html").position()', "html", "html"],
+          ['$(tempEl).css({position:"absolute", top:"20.5px", left:"33.3px"}).position()', "decimal points", "decimal_points"],
+
+//          ['$("<div><b></b></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:absolute;width:800px").children().css("cssText", "color:black;margin:auto;position:absolute;width:200px").position()', "margin:auto"],
+          ['$("<div></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:relative;width:50px").position()', "margin:auto"],
+//          ['$("<div></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:relative;width:50px")', "margin:auto"],
+
+//          ['$("<div></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:relative;width:50px").position()', "margin:auto"],
+//          ['$(tempEl).append("<div></div>").children().css("cssText", "color:black;margin:auto;position:relative;width:50px").position()', "margin:auto"],
+          ['$("#automargin").position()', "margin:auto", "automargin"],
+          ['$("#nomargin").position()', "no margin:auto"],
+
+
+          ['$(tempEl).css("margin-left", "0px").css("margin-left")', ""],
+          ['$(tempEl).css("margin-left", "auto").css("margin-left")', ""],
+          ['parseFloat($(tempEl).css("margin-left", "auto").css("margin-left"))', ""],
+        ]
+      },
+      {
+        name: '.position( ) - unattached nodes',
+        tests: [
+          ['$("<div></div>").position()', ""],
+          ['$("<div></div>").css({position:"absolute", top:20, left:30}).position()', "absolutely positioned element"],
+
+        ]
+      },
+    ]
+  },
+  {
+    name: '.position2()',
+    tests: [
+      {
+        name: '.position( )',
+        tests: [
+//          ['$("#item2_1").position()', "Get position of an element", "get"],
+
+//          ['$("<div><b></b></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:absolute;width:800px").children().css("cssText", "color:black;margin:auto;position:absolute;width:200px").position()', "margin:auto"],
+//          ['$("<div></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:relative;width:50px").position()', "margin:auto"],
+//          ['$(tempEl).append("<div></div>").children().css("cssText", "color:black;margin:auto;position:relative;width:50px").position()', "margin:auto"],
+          ['$("#automargin").position()', "margin:auto", "automargin"],
+          ['$("#nomargin").position()', "no margin:auto"],
+
+//          ['$("<div></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:relative;width:50px")', "margin:auto"],
+
+        ]
+      },
+      {
+        name: '.offset( )',
+        tests: [
+          ['$("#automargin").offset()', "margin:auto"],
+          ['$("#nomargin").offset()', "no margin:auto"],
+
+
+        ]
+      },
     ]
   },
   {

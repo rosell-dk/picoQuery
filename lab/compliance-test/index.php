@@ -59,8 +59,8 @@ foreach ($frameworks as $index => $framework) {
     $version = $matches[1];
     $ext = $matches[2];
     
-    echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/' . $version . '/jquery.' . $ext . '"></script>' . "\n";
-//    echo '<script src="jquery-1.12.4.js"></script>' . "\n";
+//    echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/' . $version . '/jquery.' . $ext . '"></script>' . "\n";
+    echo '<script src="jquery-1.12.4.js"></script>' . "\n";
 
 //    echo '<script src="../feature-detect/feature-detect.js"></script>';
 
@@ -240,6 +240,8 @@ for ($i = count($frameworks)+2; $i>0; $i--) {
 
 <div id="testhtml" style="position:relative">
   <b>This HTML is here for the tests:</b>
+  <div id="automargin" style="width:50px;margin:0 auto">automargin</div>
+  <div id="nomargin" style="width:50px;">nomargin</div>
   <div id="test" >
     <ul id="ul0" class="level0">
       <li id="item1" class="odd">item 1</li>

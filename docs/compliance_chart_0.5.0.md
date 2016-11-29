@@ -288,6 +288,7 @@ Compliance summary:<br>
         <issue severity="normal" proof="">jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</issue>
         <issue severity="low" proof="auto">When height is "auto", .css( "height" ) must return the height in pixels, not "auto"</issue>
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
+        <issue severity="low" proof="automargin">When margin-left is set to auto, picoQuery returns "0px", but should return the number of pixels it is indented</issue>
         <issue severity="edgecase" proof="nonexisting_property,adjust_css">Does not comply in a few edge cases</issue>
       </issues>
     </td>
@@ -298,10 +299,12 @@ Compliance summary:<br>
         <issue severity="normal" proof="unitless_string">Setting a property to a unitless string generally has no effect in jQuery. But Zepto sets the property to empty string</issue>
         <issue severity="normal" proof="px1">Does not support omitting "px" for widths etc. Ie. .css("width", "123") (but does support it, when type is number, ie .css("width", 123))</issue>
         <issue severity="normal" proof="function">.css( propertyName, function ) is not supported</issue>
+        <issue severity="low" proof="css_text">cssText is buggy - first property is ignored when trying to set cssText</issue>
         <issue severity="low" proof="important">Fails complying when a external style overrides style attribute with !important</issue>
         <issue severity="low" proof="width_height_exception">Sets width and height wrong, when given as a unitless string (as an exception to the general rule of ignoring unitless strings, jQuery allows to set width and height with unitless strings)</issue>
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
-        <issue severity="low" proof="auto">When height is "auto", .css( "height" ) must return the height in pixels, not "auto"</issue>
+        <issue severity="low" proof="auto">When height is "auto", .css( "height" ) must return the height in pixels, not "auto". This error causes position() not to work on auto either.</issue>
+        <issue severity="low" proof="automargin">When margin-left is set to auto, zepto returns "auto", but should return the number of pixels it is indented</issue>
         <issue severity="edgecase" proof="nonexisting_property,user_select,adjust_css,width_in_em">Does not comply in a few edge cases</issue>
       </issues>
     </td>
@@ -317,6 +320,7 @@ Compliance summary:<br>
         <issue severity="low" proof="width_height_exception">Sets width and height wrong, when given as a unitless string (as an exception to the general rule of ignoring unitless strings, jQuery allows to set width and height with unitless strings)</issue>
         <issue severity="low" proof="auto">When height is "auto", .css( "height" ) must return the height in pixels, not "auto"</issue>
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
+        <issue severity="low" proof="automargin">When margin-left is set to auto, Cash returns "0px", but should return the number of pixels it is indented</issue>
         <issue severity="edgecase" proof="user_select,adjust_css">Does not comply in a few edge cases</issue>
       </issues>
     </td>
@@ -590,21 +594,20 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.offset()</td>
+    <td class="full"></td>
     <td class="partial">
       <issues>
-        <issue severity="high" proof="set">.offset( coordinates ) is not supported. So setting coordinates is not supported, only getting</issue>
-        <issue severity="normal" proof="function">.offset( function ) is not supported</issue>
+        <issue severity="high" proof="get">.offset( ) returns wrong coordinates</issue>
+        <issue severity="high" proof="set">.offset( coordinates ) sets wrong coordinates</issue>
+        <issue severity="low" proof="iframe">.offset( ) always uses current window, also for iframes etc</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="high" proof="get,set">.offset( ) returns wrong coordinates</issue>
-      </issues>
-    </td>
-    <td class="partial">
-      <issues>
+        <issue severity="high" proof="get">.offset( ) in many cases returns wrong coordinates</issue>
         <issue severity="high" proof="set">.offset( coordinates ) is not supported. So setting coordinates is not supported, only getting</issue>
         <issue severity="normal" proof="function">.offset( function ) is not supported</issue>
+        <issue severity="low" proof="iframe">.offset( ) always uses current window, also for iframes etc</issue>
       </issues>
     </td>
   </tr>
@@ -651,6 +654,29 @@ Compliance summary:<br>
         <issue severity="normal" proof="selector">.parent( selector ) signature is not supported - so no filtering</issue>
         <issue severity="edgecase" proof="document_parent">parent of a document returns the documentElement, but in jQuery, it returns an empty selection</issue>
         <issue severity="edgecase" proof="html_parent">If you try to get the parent of a jQuery selection which hasnt been appended to document, you will get a containing div - in jQuery you get an empty selection</issue>
+      </issues>
+    </td>
+  </tr>
+  <tr>
+    <td>.position()</td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="automargin">Does not get it right, when margin is auto</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="border">Does not get it right, when there is border</issue>
+        <issue severity="normal" proof="fixed">Does not get it right, when position is fixed</issue>
+        <issue severity="normal" proof="automargin">Does not get it right, when margin is auto</issue>
+        <issue severity="edgecase" proof="html">Does not get html node quite right (it must always return (0,0)</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      <issues>
+        <issue severity="normal" proof="automargin">Does not get it right, when margin is auto</issue>
+        <issue severity="low" proof="decimal_points">Decimal precision is lost</issue>
+        <issue severity="edgecase" proof="get">Coordinates are returned in opposite order</issue>
       </issues>
     </td>
   </tr>

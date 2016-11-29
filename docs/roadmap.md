@@ -20,7 +20,9 @@ Done:
 - .attr( attributeName, value ) now handles when attributeName is a string class instead of a string literal
 - .filter() is now fully compliant
 - .css() is now much more compliant
+- .offset() is now fully compliant 
 - added .detach() method
+- added .position() method
 
 ### Features planned for 0.6:
 - Improve the builder UI a bit (especially the method selection part)
