@@ -10,6 +10,7 @@ How do they differ?
  - Gets the inline style attribute - does not take other styles into account!
  - Can be accessed both in dasherised and camelCase (only tested that in a few browsers)
  - Works on both attached nodes and unattached nodes
+ - Returns "auto" on a div with style="margin-left:auto"
   
 (2) getComputedStyle(el)[name]
  - Takes all styles into account
@@ -20,6 +21,8 @@ How do they differ?
       with the createElement method)
  - getComputedStyle(document.createElement('li'))['display'] returns 'block' in firefox
    but when created with innerHTML, FF returns 'list-item'
+ - Returns computed value in pixels when a property is set to "auto" 
+   With a div with style="margin-left:auto", it can for example return "44.62px"
  
 
 (3) getComputedStyle(el).getPropertyValue(name)
@@ -30,6 +33,47 @@ How do they differ?
 
     var computed = getComputedStyle(this.e[0]);
     return this.e[0].style[name] || computed.getPropertyValue(name) || computed[name];
+
+
+https://drafts.csswg.org/cssom/#resolved-values
+https://drafts.csswg.org/css-cascade-4/#used-value
+http://erik.eae.net/archives/2007/07/27/18.54.15/
+https://developer.mozilla.org/en-US/docs/Web/CSS/used_value
+
+
+  // Considering if(!value). 
+  // - But I guess we should support setting a property to an empty string
+  if (__IS_UNDEFINED__(<@ value @>)) {
+
+    // In picoQuery 0.1, we just return this.e[0].style[name]
+    // However, we need to support javascript properties as well
+
+    // There is a little quirk with 'float', because its a reserved word
+    // Therefore, its called 'cssFloat' instead of 'float' (its called styleFloat in IE8, but we
+    // needn't worry about that)
+    // http://stackoverflow.com/questions/606470/is-there-a-cross-browser-way-of-setting-style-float-in-javascript
+
+    // We should also support cssHooks, as plugins may add new ones: https://api.jquery.com/jQuery.cssHooks/
+//console.log(getComputedStyle(this.e[0]).getPropertyValue(name));
+
+
+    // TODO: zepto and jQuery camelCases the property. But it seems unneccessary, as
+    // getComputedStyle() returns an object with both ie "backgroundColor" and "background-color"
+    // console.log(getComputedStyle(this.e[0]));
+    // But does all modern browsers do that?
+    // getComputedStyle() also has the property 'float' - so no need to handle that (todo: browser-test it)
+
+
+      // Well, well, it seems that el.style has both variants (ie 'background-color' and 'backgroundColor')
+      // so we do not need to dasherize or camelCase.
+      // TODO: Browser-test it
+
+      // Although... this does not work with vender prefixes - there is ie no: el.style.-moz-user-select
+      // To set that, we need: el.style.MozUserSelect
+
+
+      // btw, zepto sets the style with style.cssText
+      // jQuery sets the style with el.style[camelCasedPropertyName]
 
 
 getPropertyValue
@@ -195,37 +239,6 @@ jQuery.extend( {
 	}
 } );
 
-jQuery.each( [ "height", "width" ], function( i, name ) {
-	jQuery.cssHooks[ name ] = {
-		get: function( elem, computed, extra ) {
-			if ( computed ) {
-
-				// certain elements can have dimension info if we invisibly show them
-				// however, it must have a current display style that would benefit from this
-				return rdisplayswap.test( jQuery.css( elem, "display" ) ) &&
-					elem.offsetWidth === 0 ?
-						swap( elem, cssShow, function() {
-							return getWidthOrHeight( elem, name, extra );
-						} ) :
-						getWidthOrHeight( elem, name, extra );
-			}
-		},
-
-		set: function( elem, value, extra ) {
-			var styles = extra && getStyles( elem );
-			return setPositiveNumber( elem, value, extra ?
-				augmentWidthOrHeight(
-					elem,
-					name,
-					extra,
-					support.boxSizing &&
-						jQuery.css( elem, "boxSizing", false, styles ) === "border-box",
-					styles
-				) : 0
-			);
-		}
-	};
-} );
 
 jQuery.fn.extend( {
 	css: function( name, value ) {
@@ -251,6 +264,126 @@ jQuery.fn.extend( {
 		}, name, value, arguments.length > 1 );
 	},
 ```
+
+There are a lot of CSS hooks...
+
+```
+jQuery.cssHooks.marginLeft = addGetHookIf( support.reliableMarginLeft,
+	function( elem, computed ) {
+		if ( computed ) {
+			return ( parseFloat( curCSS( elem, "marginLeft" ) ) ||
+				elem.getBoundingClientRect().left -
+					swap( elem, { marginLeft: 0 }, function() {
+						return elem.getBoundingClientRect().left;
+					} )
+				) + "px";
+		}
+	}
+);
+```
+support.reliableMarginLeft is false for FF 39, but true for Chromium 53.
+It is the test result of measuring if computed value is correct on an element set with auto.
+FF 39 for example fails, as it returns "0px"
+
+The swap function is used to:
+1) set elem.style.marginLeft to 0
+2) get elem.getBoundingClientRect().left;
+3) set elem.style.marginLeft back to original value
+
+
+More CSS hooks:
+```
+jQuery.cssHooks.marginRight = addGetHookIf( support.reliableMarginRight,
+	function( elem, computed ) {
+		if ( computed ) {
+			return swap( elem, { "display": "inline-block" },
+				curCSS, [ elem, "marginRight" ] );
+		}
+	}
+);
+
+jQuery.each( [ "height", "width" ], function( i, name ) {
+	jQuery.cssHooks[ name ] = {
+		get: function( elem, computed, extra ) {
+			if ( computed ) {
+
+				// Certain elements can have dimension info if we invisibly show them
+				// but it must have a current display style that would benefit
+				return rdisplayswap.test( jQuery.css( elem, "display" ) ) &&
+					elem.offsetWidth === 0 ?
+						swap( elem, cssShow, function() {
+							return getWidthOrHeight( elem, name, extra );
+						} ) :
+						getWidthOrHeight( elem, name, extra );
+			}
+		},
+
+		set: function( elem, value, extra ) {
+			var matches,
+				styles = extra && getStyles( elem ),
+				subtract = extra && augmentWidthOrHeight(
+					elem,
+					name,
+					extra,
+					jQuery.css( elem, "boxSizing", false, styles ) === "border-box",
+					styles
+				);
+
+			// Convert to pixels if value adjustment is needed
+			if ( subtract && ( matches = rcssNum.exec( value ) ) &&
+				( matches[ 3 ] || "px" ) !== "px" ) {
+
+				elem.style[ name ] = value;
+				value = jQuery.css( elem, name );
+			}
+
+			return setPositiveNumber( elem, value, subtract );
+		}
+	};
+} );
+
+// Support: Safari<7-8+, Chrome<37-44+
+// Add the top/left cssHooks using jQuery.fn.position
+// Webkit bug: https://bugs.webkit.org/show_bug.cgi?id=29084
+// Blink bug: https://code.google.com/p/chromium/issues/detail?id=229280
+// getComputedStyle returns percent when specified for top/left/bottom/right;
+// rather than make the css module depend on the offset module, just check for it here
+jQuery.each( [ "top", "left" ], function( i, prop ) {
+	jQuery.cssHooks[ prop ] = addGetHookIf( support.pixelPosition,
+		function( elem, computed ) {
+			if ( computed ) {
+				computed = curCSS( elem, prop );
+
+				// If curCSS returns percentage, fallback to offset
+				return rnumnonpx.test( computed ) ?
+					jQuery( elem ).position()[ prop ] + "px" :
+					computed;
+			}
+		}
+	);
+} );
+
+
+jQuery.extend( {
+
+	// Add in style property hooks for overriding the default
+	// behavior of getting and setting a style property
+	cssHooks: {
+		opacity: {
+			get: function( elem, computed ) {
+				if ( computed ) {
+
+					// We should always get a number back from opacity
+					var ret = curCSS( elem, "opacity" );
+					return ret === "" ? "1" : ret;
+				}
+			}
+		}
+	},
+  ...
+}
+```
+
 
 ### Zepto implementation
 ```

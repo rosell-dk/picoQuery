@@ -29,6 +29,25 @@ css: function(name, value) {
   if (!(1 in arguments)) {
     if (!this.e[0]) return;
     var computed = getComputedStyle(this.e[0]);
+
+//    console.log(name, computed[name], this.e[0].style[name], computed.getPropertyValue(name));
+
+    // camelCase
+    var origName = name.replace(/^-ms-/,"ms-").replace(/-([\da-z])/gi, function( all, letter ) {
+		  return letter.toUpperCase();
+	  });
+
+    if (origName == "marginLeft") {
+      var left1 = this.e[0].getBoundingClientRect().left,  
+        oldVal = this.e[0].style["margin-left"],
+        left2;
+
+      this.e[0].style["margin-left"] = 0;
+      left2 = this.e[0].getBoundingClientRect().left;
+      this.e[0].style["margin-left"] = oldVal;
+      return left1 - left2 + 'px';
+    }
+
     return computed[name] || this.e[0].style[name];
   } 
   else {
