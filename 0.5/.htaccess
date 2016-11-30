@@ -5,7 +5,7 @@ RewriteEngine On
 # Redirect: "src/picoquery-[version]-full.*"
 # to:       "builder/[version]/build.php?bid=BU******3.*"
 
-RewriteRule ^src\/picoquery-\d\.\d\.\d-full\.(.*)  builder/$3/build.php?bid=BU*********.$1 [L]
+RewriteRule ^src\/picoquery-\d\.\d\.\d-full\.(.*)  builder/$3/build.php?bid=BU*********1.$1 [L]
 
 
 

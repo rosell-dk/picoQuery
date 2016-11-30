@@ -273,6 +273,12 @@ var methods_meta = {
       ['jQuery.noConflict( removeAll ) => jQuery', NONE],
     ]
   ],
+  'jQuery.removeEvent': [
+    '',
+    [
+      ['jQuery.removeEvent() => undefined', FULL],
+    ]
+  ],
   'keyup': [
     'http://api.jquery.com/keyup/',
     [
