@@ -18,7 +18,7 @@ hide: function() {
 //  return this.css('display','none');
   __ITERATE__(<@ this.e @>, <@ function(el) {
 
-      <?php if (isFeatureEnabled('toggle') || isFeatureEnabled('show')): ?>
+<?php if (isFeatureEnabled('toggle') || isFeatureEnabled('show')): ?>
 
       var visible = getComputedStyle(el)['display'] != "none" && el.ownerDocument.documentElement.contains(el);
 
@@ -38,7 +38,7 @@ hide: function() {
 //        $(el).attr('store', el['__picoquerydata'][1]);
 
       }
-      <?php endif; ?>
+<?php endif; ?>
 
       $(el).css('display', 'none');
 
