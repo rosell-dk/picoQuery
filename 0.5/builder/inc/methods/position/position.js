@@ -19,14 +19,11 @@ position: function(a) {
     if (offsetParent.e[0].nodeName.toLowerCase() != "html") {
 //    if (offsetParent.e[0] != offsetParent.e[0].ownerDocument.documentElement) {
 			parentOffset = offsetParent.offset();
-//      console.log('parentOffset:', parentOffset);
 		}
 
 		parentOffset.top  += parseFloat( $(offsetParent).css("border-top-width") ) || 0;
 		parentOffset.left  += parseFloat( $(offsetParent).css("border-left-width") ) || 0;
 	}
-
-//  console.log(offset, parentOffset, $(elem).css("margin-left"), parseFloat( $(elem).css("margin-left") ));
 
 	return {
 		top:  offset.top  - parentOffset.top - parseFloat( $(elem).css("margin-top") ) || 0,
