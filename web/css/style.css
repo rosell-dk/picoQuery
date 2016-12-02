@@ -1,3 +1,4 @@
+
 body {
   margin: 0 auto;
   max-width: 1000px;
@@ -39,7 +40,6 @@ body.index h2 {
 }
 h2 {
 /*  color: #177617;*/
-  text-align: center;
   font-family: serif;
   font-size: 24px;
 }
@@ -198,5 +198,7 @@ nav li li a {
   vertical-align: top;
   zoom: 1;
 }
+
+
 
 

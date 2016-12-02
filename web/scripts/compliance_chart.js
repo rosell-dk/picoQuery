@@ -1,4 +1,14 @@
-
+var frameworks;
+switch (page) {
+  case 'compliance_chart':
+  case 'compliance_chart_0.4.0':
+    frameworks = 'picoquery-0.4.0-full.js,zepto,cash1.3.0.min.js';
+    break;
+  case 'compliance_chart_0.5.0':
+    frameworks = 'picoquery-0.5.0-full.js,zepto,cash1.3.0.min.js';
+    break;
+}
+frameworks = 'jquery-1.12.4.min.js,' + frameworks;
 $(function() {
   // Set backgrounds
 /*
@@ -107,7 +117,7 @@ $(function() {
     if (method.indexOf('()') > 0) {
       method = html.replace("()", "").split('.').join('');
     }
-    var html = '<a href="http://picoquery/lab/compliance-test/?frameworks=jquery-1.12.4.min.js,picoquery,zepto,cash&group=' + method + '" target="_blank">' + html + '</a>';
+    var html = '<a href="http://picoquery/lab/compliance-test/?frameworks=' + frameworks + '&group=' + method + '" target="_blank">' + html + '</a>';
     $(this).html(html);
   });
 

@@ -1,16 +1,23 @@
 <?php
 include('../lib/Parsedown.php');
 $Parsedown = new Parsedown();
+$md_path = '../docs/';
 
 $page = $_GET['page'];
 if ($page == '') {
   $page = 'index';
 }
-$page_filename_no_ext = '../docs/' . $page;
+$page_filename_no_ext = $md_path . $page;
 if (is_dir($page_filename_no_ext)) {
   $page_filename_no_ext .= '/index';
 }
 //echo $page_filename;
+
+if (!is_file($page_filename_no_ext . '.md')) {
+  header("HTTP/1.0 404 Not Found");
+  $page_filename_no_ext = $md_path . '404';
+}
+
 $page_md = file_get_contents($page_filename_no_ext . '.md');
 
 // TODO: grab first line, insert it as <title>
@@ -34,7 +41,13 @@ echo $title;
 ?></title>
 
   <link rel="stylesheet" href="/css/style.css" type="text/css" media="all">
-
+<?php
+if (is_file($page_filename_no_ext . '-HEAD.html')) {
+  echo file_get_contents($page_filename_no_ext . '-HEAD.html');
+}
+if ($page == 'compliance_chart') {
+}
+?>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -46,16 +59,20 @@ echo $title;
 
   </script>
 <?php
-if ($page == 'compliance_chart') {
+if (($page == 'compliance_chart') || ($page == 'compliance_chart_0.5.0')) {
   echo '<link rel="stylesheet" href="/css/compliance_chart.css" type="text/css" media="all">';
   echo '<link rel="stylesheet" href="/css/tipr.css" type="text/css" media="all">';
 //  echo '<script src="http://cdn.picoquery.com/picoquery-0.4.0-full.min.js"></script>';
   echo '<script src=https://code.jquery.com/jquery-1.12.4.min.js></script>';
+  echo '<script>var page="' . $page . '";</script>';
   echo '<script src="/scripts/compliance_chart.js"></script>';
 }
 else {
-  echo '<script src="http://cdn.picoquery.com/picoquery-0.4.0-full.min.js"></script>';
+  if (($page != 'index') && ($page != 'subsets')) {
+    echo '<script src="http://cdn.picoquery.com/picoquery-0.4.0-full.min.js"></script>';
+  }
 }
+
 ?>
 <script>
 window.twttr = (function(d, s, id) {
