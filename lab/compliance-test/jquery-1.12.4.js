@@ -7168,6 +7168,7 @@ jQuery.extend( {
 		// If a hook was provided get the computed value from there
 		if ( hooks && "get" in hooks ) {
 			val = hooks.get( elem, true, extra );
+//      console.log('jq', 'cssHook called', name, val);
 		}
 
 		// Otherwise, if a way to get the computed value exists, use that
@@ -7179,6 +7180,8 @@ jQuery.extend( {
 		if ( val === "normal" && name in cssNormalTransform ) {
 			val = cssNormalTransform[ name ];
 		}
+
+//    console.log('jq', 'css called', name, val);
 
 		// Return, converting to number if forced or a qualifier was provided and val looks numeric
 		if ( extra === "" || extra ) {
@@ -10807,8 +10810,12 @@ jQuery.fn.extend( {
 			parentOffset.top  += jQuery.css( offsetParent[ 0 ], "borderTopWidth", true );
 			parentOffset.left += jQuery.css( offsetParent[ 0 ], "borderLeftWidth", true );
 		}
-//    console.log('jq');
+    console.log('jq');
 //    console.log(elem, $(elem).css("margin-left"), parseFloat( $(elem).css("margin-left") ));
+//  console.log(offset, parentOffset, $(elem).css("margin-top"), parseFloat( $(elem).css("margin-top") ));
+  console.log(offsetParent, parentOffset);
+//  console.log($(elem).css("margin-top"));
+//  console.log(parentOffset);
 
 		// Subtract parent offsets and element margins
 		// note: when an element has margin: auto the offsetLeft and marginLeft

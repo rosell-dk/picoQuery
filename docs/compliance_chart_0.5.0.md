@@ -41,7 +41,7 @@ Compliance summary:<br>
 <tbody>
   <tr>
     <th></th>
-    <th>picoQuery 0.4.0</th>
+    <th>picoQuery 0.5.0</th>
     <th>Zepto 1.2.0</th>
     <th>Cash 1.3.0</th>
   </tr>
@@ -198,13 +198,15 @@ Compliance summary:<br>
     <td>.attr()</td>
     <td class="partial">
       <issues>
-        <issue severity="low" proof="">Does not implement attrHooks</issue>
+        <issue severity="low" proof="">Does not implement any attrHooks</issue>
+        <issue severity="low" proof="">Most notably attrHook is the one dealing with a problem in IE<=11+, which is that an input loses its value after becoming a radio</issue>
         <issue severity="edgecase" proof="undefined,string_class1">Does not comply in some edge cases</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
         <issue severity="low" proof="">Does not implement attrHooks</issue>
+        <issue severity="low" proof="">Most notably attrHook is the one dealing with a problem in IE<=11+, which is that an input loses its value after becoming a radio</issue>
         <issue severity="edgecase" proof="function_arg2_noclass,string_class1">Does not comply in an edge case</issue>
       </issues>
     </td>
@@ -213,6 +215,7 @@ Compliance summary:<br>
         <issue severity="normal" proof="function">.attr( attributeName, function ) signature is unsupported</issue>
         <issue severity="normal" proof="null_removes">Does not support removing attributes with null</issue>
         <issue severity="low" proof="">Does not implement attrHooks</issue>
+        <issue severity="low" proof="">Most notably attrHook is the one dealing with a problem in IE<=11+, which is that an input loses its value after becoming a radio</issue>
         <issue severity="edgecase" proof="null,undefined,string_class,string_class1">Does not comply in some edge cases</issue>
       </issues>
     </td>
@@ -243,9 +246,9 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.click()</td>
-    <td class="partial">See .on()</td>
-    <td>See .on()</td>
-    <td>See .on()</td>
+    <td>See .on() and .trigger()</td>
+    <td>See .on() and .trigger()</td>
+    <td>See .on() and .trigger()</td>
   </tr>
   <tr>
     <td>.clone()</td>
@@ -285,10 +288,9 @@ Compliance summary:<br>
     <td>.css()</td>
     <td class="partial">
       <issues>
-        <issue severity="normal" proof="">jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported.</issue>
-        <issue severity="low" proof="auto">When height is "auto", .css( "height" ) must return the height in pixels, not "auto"</issue>
+        <issue severity="normal" proof="">jQuery has quite a few "cssHooks" which handles certain css properties in specific ways. These are not supported (the hook that handles marginLeft is supported, though)</issue>
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
-        <issue severity="low" proof="automargin">When margin-left is set to auto, picoQuery returns "0px", but should return the number of pixels it is indented</issue>
+        <issue severity="low" proof="auto">When height or width is set to auto, picoQuery returns "0px", but should return the correctly calculated number of pixels</issue>
         <issue severity="edgecase" proof="nonexisting_property,adjust_css">Does not comply in a few edge cases</issue>
       </issues>
     </td>
@@ -303,8 +305,7 @@ Compliance summary:<br>
         <issue severity="low" proof="important">Fails complying when a external style overrides style attribute with !important</issue>
         <issue severity="low" proof="width_height_exception">Sets width and height wrong, when given as a unitless string (as an exception to the general rule of ignoring unitless strings, jQuery allows to set width and height with unitless strings)</issue>
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
-        <issue severity="low" proof="auto">When height is "auto", .css( "height" ) must return the height in pixels, not "auto". This error causes position() not to work on auto either.</issue>
-        <issue severity="low" proof="automargin">When margin-left is set to auto, zepto returns "auto", but should return the number of pixels it is indented</issue>
+        <issue severity="low" proof="automargin,auto">When height, margin-left etc is set to "auto", Zepto returns "auto", but should return calculated pixels value. This error causes position() not to work on auto either (because it relies on css('margin-left') and css('margin-top') to return pixel values)</issue>
         <issue severity="edgecase" proof="nonexisting_property,user_select,adjust_css,width_in_em">Does not comply in a few edge cases</issue>
       </issues>
     </td>
@@ -318,9 +319,9 @@ Compliance summary:<br>
         <issue severity="normal" proof="function">.css( propertyName, function ) is not supported</issue>
         <issue severity="normal" proof="property_names">.css( propertyNames [Array] ) signature is not supported.</issue>
         <issue severity="low" proof="width_height_exception">Sets width and height wrong, when given as a unitless string (as an exception to the general rule of ignoring unitless strings, jQuery allows to set width and height with unitless strings)</issue>
-        <issue severity="low" proof="auto">When height is "auto", .css( "height" ) must return the height in pixels, not "auto"</issue>
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
-        <issue severity="low" proof="automargin">When margin-left is set to auto, Cash returns "0px", but should return the number of pixels it is indented</issue>
+        <issue severity="low" proof="auto">When height is "auto", .css( "height" ) must return the height in pixels, not "auto"</issue>
+        <issue severity="low" proof="automargin">When margin-left is set to auto, Cash returns "0px" in some browsers (ie FF), but should return the number of pixels it is indented</issue>
         <issue severity="edgecase" proof="user_select,adjust_css">Does not comply in a few edge cases</issue>
       </issues>
     </td>
@@ -375,19 +376,11 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.empty()</td>
+    <td class="full"></td>
+    <td class="full"></td>
     <td class="partial">
       <issues>
-        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
-      </issues>
-    </td>
-    <td class="partial">
-      <issues>
-        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
-      </issues>
-    </td>
-    <td class="partial">
-      <issues>
-        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
+        <issue severity="low" proof="">Event listeners on the old HTML are not removed. It is concidered best practise to remove event listeners, but according to <a href="https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/">this article</a>, it is not strictly required for modern browsers:</issue>
       </issues>
     </td>
   </tr>
@@ -461,7 +454,7 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.focus()</td>
-    <td class="partial">See .on() and .trigger()</td>
+    <td>See .on() and .trigger()</td>
     <td>See .on() and .trigger()</td>
     <td>See .on() and .trigger()</td>
   </tr>
@@ -498,22 +491,17 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.html()</td>
-    <td class="partial">
+    <td class="full"></td>
+    <td class="approximate">
       <issues>
-        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
-      </issues>
-    </td>
-    <td class="partial">
-      <issues>
-        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
         <issue severity="edgecase" proof="empty_selection">Does not comply in an edge case</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
         <issue severity="normal" proof="function">html( function ) signature is not implemented</issue>
         <issue severity="edgecase" proof="empty_selection">Does not comply in an edge case</issue>
+        <issue severity="low" proof="">Event listeners on the old HTML are not removed. It is concidered best practise to remove event listeners, but according to <a href="https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/">this article</a>, it is not strictly required for modern browsers:</issue>
       </issues>
     </td>
   </tr>
@@ -622,10 +610,12 @@ Compliance summary:<br>
     </td>
     <td class="partial">
       <issues>
+        <issue severity="normal" proof="skiptable">Does not skip table elements with position:static</issue>
         <issue severity="low" proof="no_parents_positioned">When no parents are positioned, the body element is returned, but jQuery returns the document element</issue>
         <issue severity="low" proof="hidden_element">When element is hidden, an empty selection is returned, but jQuery returns the document element</issue>
         <issue severity="low" proof="no_elements">When no elements are in set, we get an error</issue>
         <issue severity="low" proof="multiple_elements">Does not handle operating on multiple elements</issue>
+
       </issues>
     </td>
   </tr>
@@ -633,12 +623,13 @@ Compliance summary:<br>
     <td>.on()</td>
     <td class="partial">
       <issues>
-        <issue severity="" proof="">Multiple events are NOT SUPPORTED - only one event name may be specified</issue>
-        <issue severity="" proof="">Namespaces such as "keydown.myPlugin" are not supported</issue>
-        <issue severity="" proof="">Event propagation may not be correct</issue>
+        <issue severity="normal" proof="">Multiple events are NOT SUPPORTED - only one event name may be specified</issue>
+        <issue severity="high" proof="">Event propagation may not be correct</issue>
+        <issue severity="normal" proof="">Custom events are not supported</issue>
+        <issue severity="low" proof="">Namespaces such as "keydown.myPlugin" are not supported</issue>
       </issues>
     </td>
-    <td>Has not been investigated</td>
+    <td>Has not been investigated. But it seems events are very well supported</td>
     <td>Has not been investigated</td>
   </tr>
   <tr>
@@ -659,22 +650,18 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.position()</td>
-    <td class="partial">
-      <issues>
-        <issue severity="normal" proof="automargin">Does not get it right, when margin is auto</issue>
-      </issues>
-    </td>
+    <td class="full"></td>
     <td class="partial">
       <issues>
         <issue severity="normal" proof="border">Does not get it right, when there is border</issue>
         <issue severity="normal" proof="fixed">Does not get it right, when position is fixed</issue>
-        <issue severity="normal" proof="automargin">Does not get it right, when margin is auto</issue>
+        <issue severity="normal" proof="automargin">margin:auto fails in some browsers (it ie fails in FF 49, but not in Chromium 53)</issue>
         <issue severity="edgecase" proof="html">Does not get html node quite right (it must always return (0,0)</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="normal" proof="automargin">Does not get it right, when margin is auto</issue>
+        <issue severity="normal" proof="automargin">margin:auto fails in some browsers (it ie fails in FF 49, but not in Chromium 53)</issue>
         <issue severity="low" proof="decimal_points">Decimal precision is lost</issue>
         <issue severity="edgecase" proof="get">Coordinates are returned in opposite order</issue>
       </issues>
@@ -749,20 +736,18 @@ Compliance summary:<br>
     <td>.remove()</td>
     <td class="partial">
       <issues>
-        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
         <issue severity="low" proof="selector_nested">.remove( selector ) does not support nested selectors. For example "* > b" does not match when performed on a "b" element</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
         <issue severity="normal" proof="selector">.remove( selector ) signature is not supported (all elements are removed)</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak</issue>
         <issue severity="normal" proof="selector">.remove( selector ) signature is not supported (all elements are removed)</issue>
+        <issue severity="low" proof="">Event listeners on the old HTML are not removed. It is concidered best practise to remove event listeners, but according to <a href="https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/">this article</a>, it is not strictly required for modern browsers:</issue>
       </issues>
     </td>
   </tr>
@@ -797,21 +782,16 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.replaceWith()</td>
+    <td class="full"></td>
     <td class="partial">
       <issues>
-        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak (it does however remove data)</issue>
-      </issues>
-    </td>
-    <td class="partial">
-      <issues>
-        <issue severity="normal" proof="">Event listeners on the old HTML are not removed, which can cause memory leak (no issues with data, because data is not stored as expando properties of nodes, but added as data-attributes)</issue>
         <issue severity="normal" proof="function">.replaceWith( function ) is not supported</issue>
       </issues>
     </td>
     <td class="partial">
       <issues>
-        <issue severity="normal" proof="">Event listeners and data on the old HTML are not removed, which can cause memory leak</issue>
         <issue severity="normal" proof="function">.replaceWith( function ) is not supported</issue>
+        <issue severity="low" proof="">Event listeners on the old HTML are not removed. It is concidered best practise to remove event listeners, but according to <a href="https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/">this article</a>, it is not strictly required for modern browsers:</issue>
       </issues>
     </td>
   </tr>
@@ -874,6 +854,21 @@ Compliance summary:<br>
   </tr>
   <tr>
     <td>.trigger()</td>
+    <td class="partial">
+      <issues>
+        <issue severity="high" proof="">Might not be compatible with all target browsers</issue>
+        <issue severity="high" proof="">Event propagation may not be correct</issue>
+        <issue severity="normal" proof="">.trigger( event, [extraParameters] ): extraParameters are not supported</issue>
+        <issue severity="low" proof="">Relies on .initEvent, which has been removed from the web standards. So we cannot rely on it to be supported by future (or even current?) browsers. However, initEvent is probably going to be supported quite a while.</issue>
+      </issues>
+    </td>
+    <td class="partial">
+      Has not been investigated. But it seems events are very well supported
+      <issues>
+        <issue severity="low" proof="">Relies on .initEvent, which has been removed from the web standards. So we cannot rely on it to be supported by future (or even current?) browsers. However, initEvent is probably going to be supported quite a while.</issue>
+      </issues>
+    </td>
+    <td>Has not been investigated</td>
   </tr>
 
 

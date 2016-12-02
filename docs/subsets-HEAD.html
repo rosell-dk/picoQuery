@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="/css/tipr.css" type="text/css" media="all">
+<style>
+.not-in-picoquery {
+  background-color: #ccc;
+  display: inline-block;
+  cursor: pointer;
+}
+
+</style>
+<script src=https://code.jquery.com/jquery-1.12.4.js></script>
+<script src=/scripts/tipr.min.js></script>
+
+<script>
+
+$(function() {
+  var frameworks = [], framework, i=0;
+
+  $('article *').each(function() {
+    if ($(this).get(0).tagName == 'H2') {
+      frameworks[i] = {name: $(this).text(), methods: []};
+      i++;
+    }
+    var $ems = $(this).find("em");
+    if ($ems.length > 4) {
+      frameworks[i-1].methods.push($ems);
+      var heading = $(this).prev().children('strong');
+//      heading.attr('title', $ems.length + ' methods');
+      heading.text(heading.text() + ' (' + $ems.length + ')');
+    }
+  });
+  
+  var picoInsanceMethods, picoClassMethods;
+
+  function elmText() {
+    return $(this).text();
+  }
+
+  frameworks.forEach(function(framework, index) {
+    if (index == 0) {
+      picoInsanceMethods = Array.prototype.slice.call(framework.methods[0].map(elmText));
+      picoClassMethods = Array.prototype.slice.call(framework.methods[0].map(elmText));
+//      console.log(picoInsanceMethods, picoInsanceMethods.length);
+      return;
+    }
+    var methods = framework.methods;
+    methods.forEach(function(el, index) {
+      el.each(function () {
+        var m = (index == 0 ? picoInsanceMethods : picoClassMethods);
+        if (picoInsanceMethods.indexOf($(this).text()) === -1) {
+          $(this).addClass('not-in-picoquery');
+          $(this).attr('title', 'Not in picoQuery - yet!');
+        }
+      });
+    });
+  });
+
+  // Tooltips
+  $('[title]').each(function() {
+    $(this).attr('data-tip', $(this).attr('title'));
+  });
+
+  $('[data-tip]').tipr({
+    'speed': 100,
+    'mode': 'bottom'
+   });
+
+});
+
+</script>
+

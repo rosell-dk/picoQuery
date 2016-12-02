@@ -296,6 +296,7 @@ Compliance summary:<br>
         <issue severity="normal" proof="function">.css( propertyName, function ) is not supported</issue>
         <issue severity="low" proof="important">Fails complying when a external style overrides style attribute with !important (Will be fixed in 0.5.0)</issue>
         <issue severity="low" proof="width_height_exception">As an exception to the general rule of ignoring unitless strings, jQuery allows to set width and height with unitless strings. This exception is not supported (Will be fixed in 0.5.0)</issue>
+        <issue severity="low" proof="automargin,auto">When height or margin-left is set to auto, picoQuery returns "0px", but should return the correctly calculated number of pixels</issue>
 
         <issue severity="low" proof="vendor_prefix">Automatic using vendor prefixed version when available is not supported.</issue>
         <issue severity="edgecase" proof="nonexisting_property,adjust_css">Does not comply in a few edge cases</issue>

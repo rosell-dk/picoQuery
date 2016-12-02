@@ -240,7 +240,7 @@ for ($i = count($frameworks)+2; $i>0; $i--) {
 
 <div id="testhtml" style="position:relative">
   <b>This HTML is here for the tests:</b>
-  <div id="automargin" style="width:50px;margin:0 auto">automargin</div>
+  <div id="auto_margin" style="width:50px;margin:0 auto">automargin</div>
   <div id="nomargin" style="width:50px;">nomargin</div>
   <div id="test" >
     <ul id="ul0" class="level0">
@@ -266,6 +266,11 @@ for ($i = count($frameworks)+2; $i>0; $i--) {
   </form>
   <i class="tablecell">tablecell</i>
   <iframe id="testiframe" src="about:blank" style="width:100px; height: 60px"></iframe>
+  <table><tr>
+    <td id="valignmiddle" style="vertical-align:middle">
+      <p>Vertically centered content</p>
+    </td></tr>
+  </table>
 </div>
 
 </body>

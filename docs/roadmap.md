@@ -4,7 +4,8 @@
 Goal of this release: To improve compliance of the current subset
 
 TODO:
-- More compliance...
+- Event handlers must be removed when elements are removed
+- Use Piwik instead of GA (https://piwik.org/)
 
 Done:
 - jQuery( html, ownerDocument ) signature is now supported
@@ -23,6 +24,7 @@ Done:
 - .offset() is now fully compliant 
 - added .detach() method
 - added .position() method
+- added jQuery.removeEvent() method
 
 ### Features planned for 0.6:
 - Improve the builder UI a bit (especially the method selection part)

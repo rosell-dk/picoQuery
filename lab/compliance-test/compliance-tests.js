@@ -707,8 +707,8 @@ window.complianceTests = [
           ['$(tempEl).append("<li style=\'float:left\'></li>").children().css("cssFloat")', "float is a special case, because getComputedStyle(el).getPropertyValue() needs to access it with cssFloat"],
           ['$(tempEl).append("<i class=\'tablecell\'></i>").children().css("display")', ""],
           ['$(tempEl).append("<tablecell></tablecell>").children().css("display")', ""],
-          ['$("#automargin").css("margin-left")', "margin:auto", "automargin"],
-          ['$("#automargin").css("marginLeft")', "margin:auto", "automargin2"],
+          ['$("#auto_margin").css("margin-left")', "margin:auto", "automargin"],
+          ['$("#auto_margin").css("marginLeft")', "margin:auto", "automargin2"],
           ['$("#nomargin").css("margin-left")', "no margin:auto"],
 
 
@@ -790,7 +790,7 @@ window.complianceTests = [
           ['$(tempEl).css("line-height", "1.4").css("line-height")', "jQuery does not add px to certain properties, such as line-height"],
 //          ['$(tempEl).css("width", "+=10").css("width")', "Relative"],
 //          ['$(tempEl).append("<div style=\'width:+=10px\'></div>").children().css("width")', ""],
-          ['$(tempEl).css("font-size", "+=10px").css("font-size")', "jQuery allows special syntax to add/substract from current value", ],
+          ['$(tempEl).css("font-size", "+=10px").css("font-size")', "jQuery allows special syntax to add/substract from current value", "adjust_css"],
           ['$(tempEl).css("font-size", "+=10").css("font-size")', "jQuery allows special syntax to add/substract from current value"],
           ['$(tempEl).append("<div style=\'font-size:+=10px\'></div>").children().css("font-size")', "(it is not standard css)"],
 //          ['$(tempEl).css("width", 123).css("width")', "Set width without px (as number))", "px2"],
@@ -1561,7 +1561,7 @@ window.complianceTests = [
 //          ['$("<iframe></iframe>").appendTo(tempEl).get(0).contentWindow.document.body', "iframe"],
           ['$($("<iframe></iframe>").appendTo(tempEl).get(0).contentWindow.document.body).offset()', "iframe"],
           ['$("<div></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:relative;width:50px").offset()', "margin:auto"],
-          ['$("#automargin").offset()', "margin:auto"],
+          ['$("#auto_margin").offset()', "margin:auto"],
           ['$("#nomargin").offset()', "no margin:auto"],
 
         ]
@@ -1612,9 +1612,10 @@ window.complianceTests = [
           ['$().offsetParent()', "No elements", "no_elements"],
           ['$("input").offsetParent()', "An element on this page..."],
           ['$("#item3_1, input").offsetParent()', "Two", "multiple_elements"],
-          ['$("#hidden_li").offsetParent()', "Element is hidden", "hidden_element"]
+          ['$("#hidden_li").offsetParent()', "Element is hidden", "hidden_element"],
 //          ['$("h1").offsetParent()', " "],
 // TODO: Read: https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
+          ['$("#valignmiddle").offsetParent()', "Skip table. jQuery skips tables (the DOM offsetParent does not, even though it has position:static)", "skiptable"],
         ]
       },
     ]
@@ -1625,6 +1626,8 @@ window.complianceTests = [
       {
         name: '.on( events, handler )',
         tests: [
+//          ['function(){var $el = $("<div></div>"); $el.on("click", function(){alert()}); $el.remove(); }()', "View console..."],
+
         ]
       },
       {
@@ -1700,7 +1703,7 @@ window.complianceTests = [
 
 //          ['$("<div></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:relative;width:50px").position()', "margin:auto"],
 //          ['$(tempEl).append("<div></div>").children().css("cssText", "color:black;margin:auto;position:relative;width:50px").position()', "margin:auto"],
-          ['$("#automargin").position()', "margin:auto", "automargin"],
+          ['$("#auto_margin").position()', "margin:auto", "automargin"],
           ['$("#nomargin").position()', "no margin:auto"],
 
 
@@ -1723,6 +1726,17 @@ window.complianceTests = [
     name: '.position2()',
     tests: [
       {
+        name: '.css( )',
+        tests: [
+          ['$("#auto_margin").css("margin-left")', "margin:auto", "automargin"],
+          ['$("#auto_margin").css("marginLeft")', "margin:auto", "automargin2"],
+          ['jQuery.support.reliableMarginLeft()', ""],
+          ['$("#valignmiddle").position()', ""],
+
+
+        ]
+      },/*
+      {
         name: '.position( )',
         tests: [
 //          ['$("#item2_1").position()', "Get position of an element", "get"],
@@ -1730,7 +1744,7 @@ window.complianceTests = [
 //          ['$("<div><b></b></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:absolute;width:800px").children().css("cssText", "color:black;margin:auto;position:absolute;width:200px").position()', "margin:auto"],
 //          ['$("<div></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:relative;width:50px").position()', "margin:auto"],
 //          ['$(tempEl).append("<div></div>").children().css("cssText", "color:black;margin:auto;position:relative;width:50px").position()', "margin:auto"],
-          ['$("#automargin").position()', "margin:auto", "automargin"],
+          ['$("#auto_margin").position()', "margin:auto", "automargin"],
           ['$("#nomargin").position()', "no margin:auto"],
 
 //          ['$("<div></div>").appendTo(tempEl).css("cssText", "color:black;margin:auto;position:relative;width:50px")', "margin:auto"],
@@ -1740,12 +1754,10 @@ window.complianceTests = [
       {
         name: '.offset( )',
         tests: [
-          ['$("#automargin").offset()', "margin:auto"],
+          ['$("#auto_margin").offset()', "margin:auto"],
           ['$("#nomargin").offset()', "no margin:auto"],
-
-
         ]
-      },
+      },*/
     ]
   },
   {
@@ -1911,6 +1923,10 @@ window.complianceTests = [
           ['$("<div><b></b><i></i></div>").children("b").remove()', "Basic: Remove an element (returns the element)"],
           ['function() {$(tempEl).append("<p><b></b><i></i></p>").find("b").remove(); return $(tempEl)}()', "Basic: Remove an element (parent no longer contains it)"],
           ['function() {$(tempEl).append("<p><b></b><i></i></p>").children().children().remove(); return $(tempEl)}()', "Remove two elements"],
+          ['function() {var $temp = $(tempEl); $temp.remove(); return $temp[0]}()', "References in [0], [1] etc are not removed. So the DOM nodes won't be freed until $temp is"],
+          ['function() {var $temp = $(tempEl); $temp.remove(); return $temp.length}()', "- and length is not 0"],
+          ['function() {var $temp = $(tempEl); $temp.remove(); return $temp.get()}()', "- and get() also returns them"],
+
         ]
       },
       {
