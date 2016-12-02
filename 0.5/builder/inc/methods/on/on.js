@@ -55,10 +55,31 @@ on:function(events, selector, data, handler) {
     // The third parameter "useCapture" is according to web standards optional and defaults to false.
     // However, in Firefox 2-6, it is non-optional
 //    el.addEventListener(events, handler, false);
+
+<?php if (isFeatureEnabled('remove') || isFeatureEnabled('html') || isFeatureEnabled('empty') || isFeatureEnabled('replaceWith')): ?>
+    var handler = function(e) {
+      e.data = data;
+      handler.call(this, e);
+    };
+    el.addEventListener(events, handler, false);
+
+    // Private data
+    if(!el['__picoquerydata']) {
+      el['__picoquerydata'] = {};
+    }
+    // Store reference to handler in array (FLAG#2)
+    if (!el['__picoquerydata'][2]) {
+      el['__picoquerydata'][2] = [];
+    }
+    el['__picoquerydata'][2].push({h:handler, t:events});
+
+<?php else: ?>
     el.addEventListener(events, function(e) {
       e.data = data;
       handler.call(this, e);
     }, false);
+<?php endif; ?>
+
   } @>);
   return this;
 }

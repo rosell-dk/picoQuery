@@ -20,8 +20,8 @@ remove: function(selector) {
   
 //  var $sel = ;
   __ITERATE__(<@ this.filter(selector||'*').e @>, <@ function(el) {
+    __CLEAN_DATA__(<@ el @>);
     if (el.parentNode) {
-      __CLEAN_DATA__(<@ el @>);
       el.parentNode.removeChild(el);
     }
   } @>);

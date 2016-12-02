@@ -1,3 +1,15 @@
+jQuery does not remove its references to its DOM nodes.
+ie, $(el).remove().get(0) will returns el.
+So picoQuery shall not do so, either.
+
+In chapter 3 in this page, it is recommended to remove such references.
+https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/
+
+Anyway, the DOM node references will be garbage collected along with the jQuery object, once
+it is unreferenced.
+
+
+
 ### Implementation
 ```
   var $sel = this.filter(selector||'*');

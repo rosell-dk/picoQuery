@@ -28,21 +28,21 @@ picoQuery is written for modern browsers (IE9+), but automatically detects if th
 <td><a href="http://picoquery.com">picoQuery 0.5.0</a> (full)</td>
 <td title="11.7 kB minified without compression, 3.7 kB gzipped">4 kB</td>
 <td><a href="/subsets" title="52 instance methods + 5 class methods. Click to see which">57</a></td>
-<td><a href="/compliance_chart" title="81% of the methods are fully or approximately implemented. 19% are only partially implemented. Click to see compliance chart">Decent</a></td>
+<td><a href="/compliance_chart" title="78% of the methods are fully or approximately implemented. 22% are only partially implemented. Click to see compliance chart">Decent</a></td>
 <td><a href="https://github.com/rosell-dk/picoQuery/graphs/commit-activity">Very active</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/madrobby/zepto" title="Click to go to github page. There is also a webpage zeptojs.com">Zepto 1.2.0</a></td>
 <td title="26.6 kB minified without compression, 9.8 kB gzipped">10 kB</td>
 <td><a href="/subsets" title="112 instance methods + 33 class methods. Click to see which">145</a></td>
-<td><a href="/compliance_chart" title="36% of the methods we have examined are fully or approximately implemented. 64% are only partially implemented. Click to see compliance chart">Rough</a></td>
+<td><a href="/compliance_chart" title="39% of the methods we have examined are fully or approximately implemented. 61% are only partially implemented. Click to see compliance chart">Rough</a></td>
 <td><a href="https://github.com/madrobby/zepto/graphs/commit-activity">Not much</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/kenwheeler/cash" title="Click to go to github page">Cash 1.3.0</a></td>
 <td title="9.7 kB minified without compression, 3.6 kB gzipped">4 kB</td>
 <td><a href="/subsets" title="67 instance methods + 13 class methods. Click to see which">80</a></td>
-<td><a href="/compliance_chart" title="18% of the methods we have examined are fully or approximately implemented. 82% are only partially implemented. Click for details">Poor</a></td>
+<td><a href="/compliance_chart" title="17% of the methods we have examined are fully or approximately implemented. 83% are only partially implemented. Click for details">Poor</a></td>
 <td><a href="https://github.com/kenwheeler/cash/graphs/commit-activity">Not much</a></td>
 </tr>
 </table>

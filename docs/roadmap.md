@@ -3,10 +3,6 @@
 ### Features planned for 0.5 (release date: ~2/12-2016)
 Goal of this release: To improve compliance of the current subset
 
-TODO:
-- Event handlers must be removed when elements are removed
-- Use Piwik instead of GA (https://piwik.org/)
-
 Done:
 - jQuery( html, ownerDocument ) signature is now supported
 - jQuery( Array-like-structure), ie jQuery( [HTMLCollection] ) is now supported
@@ -25,10 +21,12 @@ Done:
 - added .detach() method
 - added .position() method
 - added jQuery.removeEvent() method
+- Event handlers are now removed when elements are removed with .empty(), .replaceWith(), .remove() or .html() methods
 
 ### Features planned for 0.6:
 - Improve the builder UI a bit (especially the method selection part)
 - More API. I expect to work on animation methods, such as slideDown(). Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishlist) on the wiki.
+- Use Piwik instead of GA (https://piwik.org/)
 
 ### Features planned for 0.7, 0.8 and 0.9:
 - More API
