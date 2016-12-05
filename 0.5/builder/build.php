@@ -551,8 +551,9 @@ function include_javascript($filename_without_ext) {
   }*/
 
 //$optimize_ext = 'js';
-// http://picoquery/lab/compliance-test/?frameworks=picoquery-0.4.0-full.inline-all.js,picoquery-0.4.0-full.inline-never.js,picoquery-0.4.0-full.inline-all.min.js,picoquery-0.4.0-full.inline-never.min.js&group=all&onlyfails
-// http://picoquery/lab/compliance-test/?frameworks=picoquery-0.4.0-full.min.js,picoquery-0.4.0-full.inline-never.js,picoquery-0.4.0-full.inline-all.min.js,picoquery-0.4.0-full.inline-never.min.js&group=all&onlyfails
+// http://picoquery/lab/compliance-test/?frameworks=picoquery-0.5.0-full.inline-all.js,picoquery-0.5.0-full.inline-never.js,picoquery-0.5.0-full.inline-all.min.js,picoquery-0.5.0-full.inline-never.min.js&group=all&onlyfails
+// http://picoquery/lab/compliance-test/?frameworks=picoquery-0.5.0-full.min.js,picoquery-0.5.0-full.inline-never.js,picoquery-0.5.0-full.inline-all.min.js,picoquery-0.5.0-full.inline-never.min.js&group=all&onlyfails
+//http://picoquery/lab/compliance-test/?frameworks=jquery,picoquery-0.5.0-full.min.js
 
   $ext = $optimize_ext;
 
