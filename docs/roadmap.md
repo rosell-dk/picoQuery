@@ -1,34 +1,9 @@
 # Roadmap
 
-### Features planned for 0.5 (release date: ~3/12-2016)
-Goal of this release: To improve compliance of the current subset
-
-TODO:
-- final testing
-
-Done:
-- jQuery( html, ownerDocument ) signature is now supported
-- jQuery( Array-like-structure), ie jQuery( [HTMLCollection] ) is now supported
-- jQuery( html, attributes ) signature is now supported
-- jQuery( html ) now expands selfclosing container-tags
-- jQuery( html ) now accepts text nodes at root level
-- .offsetParent() is now fully compliant
-- .removeClass() is now fully compliant
-- .find() is now fully compliant
-- .show(), .hide() and .toggle() are now much more compliant
-- .attr( attributes ) signature is now supported
-- .attr( attributeName, value ) now handles when attributeName is a string class instead of a string literal
-- .filter() is now fully compliant
-- .css() is now much more compliant
-- .offset() is now fully compliant 
-- added .detach() method
-- added .position() method
-- added jQuery.removeEvent() method
-- Event handlers are now removed when elements are removed with .empty(), .replaceWith(), .remove() or .html() methods
 
 ### Features planned for 0.6:
 - Improve the builder UI a bit (especially the method selection part)
-- More API. I expect to work on animation methods, such as slideDown(). Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishlist) on the wiki.
+- More API. Maybe animation methods, such as slideDown(). Please let me know if there is a particular method you wish to be included. You can enter wishes on [this page](https://github.com/rosell-dk/picoQuery/wiki/Wishlist) on the wiki.
 - Use Piwik instead of GA (https://piwik.org/)
 
 ### Features planned for 0.7, 0.8 and 0.9:

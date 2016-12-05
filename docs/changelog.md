@@ -1,5 +1,28 @@
 # Changelog
 
+### 0.5.0
+*Released 05 Dec 2016*
+Focus has been to improve compliance with jQuery. Compliance went from being better than Zepto (within the supported subset!) to being way better
+
+- jQuery( html, ownerDocument ) signature is now supported
+- jQuery( Array-like-structure), ie jQuery( [HTMLCollection] ) is now supported
+- jQuery( html, attributes ) signature is now supported
+- jQuery( html ) now expands selfclosing container-tags
+- jQuery( html ) now accepts text nodes at root level
+- .offsetParent() is now fully compliant
+- .removeClass() is now fully compliant
+- .find() is now fully compliant
+- .show(), .hide() and .toggle() are now much more compliant
+- .attr( attributes ) signature is now supported
+- .attr( attributeName, value ) now handles when attributeName is a string class instead of a string literal
+- .filter() is now fully compliant
+- .css() is now much more compliant
+- .offset() is now fully compliant 
+- added .detach() method
+- added .position() method
+- added jQuery.removeEvent() method
+- Event handlers are now removed when elements are removed with .empty(), .replaceWith(), .remove() or .html() methods
+
 ### 0.4.0
 *Released 01 Nov 2016* 
 - More API: .hasClass(), .data(), jQuery.data(), .show(), .toggle(), .toArray(), .end(), .pushStack(), jQuery.camelCase(), jQuery.merge(), .add(), .addBack(), .andSelf(), .last()
