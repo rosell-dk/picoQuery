@@ -8,7 +8,7 @@ picoQuery is written for modern browsers (IE9+), but automatically detects if th
 1. Build your subset in the [online builder](/builder/)<br>
 2. Simply include the generated script instead of jQuery.
 
-### v.0.5.0 is almost done.
+### v.0.5.0 just released
 Focus has been to improve compliance with jQuery. No new methods, but compliance went from being better than Zepto (within the supported subset!) to being way better. Check out the updated [Compliance Chart](/compliance_chart), or the [Roadmap](/roadmap) to see whats new.
 
 ### Comparison
