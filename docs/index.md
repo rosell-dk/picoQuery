@@ -8,6 +8,9 @@ picoQuery is written for modern browsers (IE9+), but automatically detects if th
 1. Build your subset in the [online builder](/builder/)<br>
 2. Simply include the generated script instead of jQuery.
 
+### v.0.5.0 is almost done.
+Focus has been to improve compliance with jQuery. No new methods, but compliance went from being better than Zepto (within the supported subset!) to being way better. Check out the updated [Compliance Chart](/compliance_chart), or the [Roadmap](/roadmap) to see whats new.
+
 ### Comparison
 <!--
 <table class="comparison">
@@ -72,14 +75,14 @@ picoQuery is written for modern browsers (IE9+), but automatically detects if th
   <td title="9.7 kB minified without compression, 3.6 kB gzipped">4 kB</td>
 </tr>
 <tr>
-  <td>#methods</td>
-  <td><a href="/subsets" title="148 instance methods + 94 class methods. Click to see which">242</a></td>
-  <td><a href="/subsets" title="52 instance methods + 5 class methods. Click to see which">57</a></td>
-  <td><a href="/subsets" title="112 instance methods + 33 class methods. Click to see which">145</a></td>
-  <td><a href="/subsets" title="67 instance methods + 13 class methods. Click to see which">80</a></td>
+  <td>Number of API methods</td>
+  <td><a href="/subsets" title="148 instance methods + 94 class methods. Click to see which">242 methods</a></td>
+  <td><a href="/subsets" title="52 instance methods + 5 class methods. Click to see which">57 methods</a></td>
+  <td><a href="/subsets" title="112 instance methods + 33 class methods. Click to see which">145 methods</a></td>
+  <td><a href="/subsets" title="67 instance methods + 13 class methods. Click to see which">80 methods</a></td>
 </tr>
 <tr>
-  <td>Compliance within subset</td>
+  <td>Compliance (within subset)</td>
   <td title="Perfect, by definition">Perfect</td>
   <td><a href="/compliance_chart" title="78% of the methods are fully or approximately implemented. 22% are only partially implemented. Click to see compliance chart">Decent</a></td>
   <td><a href="/compliance_chart" title="39% of the methods we have examined are fully or approximately implemented. 61% are only partially implemented. Click to see compliance chart">Rough</a></td>
@@ -89,9 +92,9 @@ picoQuery is written for modern browsers (IE9+), but automatically detects if th
 <tr>
   <td>Activity</td>
   <td>-</td>
-  <td><a href="https://github.com/rosell-dk/picoQuery/graphs/commit-activity">Very active</a></td>
-  <td><a href="https://github.com/madrobby/zepto/graphs/commit-activity">Not much</a></td>
-  <td><a href="https://github.com/kenwheeler/cash/graphs/commit-activity">Not much</a></td>
+  <td><a href="https://github.com/rosell-dk/picoQuery/graphs/commit-activity" title="Click to see graph on github">Very active</a></td>
+  <td><a href="https://github.com/madrobby/zepto/graphs/commit-activity" title="Click to see graph on github">Not much</a></td>
+  <td><a href="https://github.com/kenwheeler/cash/graphs/commit-activity" title="Click to see graph on github">Not much</a></td>
 </tr>
 </table>
 

@@ -13,10 +13,25 @@
   font-size: 0.8em;
 }
 
+/* Flipped table */
+.comparison-flip {
+  border-collapse: collapse;
+  
+}
 .comparison-flip tr > * {
   padding-right: 20px;
   font-size: 0.8em;
   text-align: left;
+}
+
+.comparison-flip td,
+.comparison-flip th {
+  border: 1px solid #ddd;
+  padding: 6px 13px;
+}
+
+.comparison-flip tr:nth-child(2n) {
+  background-color: #f8f8f8;
 }
 
 .tipr_content {

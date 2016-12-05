@@ -26,15 +26,18 @@ RewriteRule ^(img|scripts|css)\/(.*)$  /web/$1/$2 [L]
 
 
 
+
 # ---- Markdown CMS ----
+# index
+RewriteRule ^$ /web/template.php?page=index [L]
+
 # Rewrite:   "*"
 # to:        "template.php?*"
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$  /web/template.php?page=$1 [NC,L,QSA]
 
 # Pass directories to template as well
-# RewriteCond %{REQUEST_FILENAME} -d
-# RewriteRule ^(.*)$ /web/template.php?page=index [NC,L,QSA]
 
 
 </IfModule>

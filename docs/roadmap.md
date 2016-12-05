@@ -1,7 +1,10 @@
 # Roadmap
 
-### Features planned for 0.5 (release date: ~2/12-2016)
+### Features planned for 0.5 (release date: ~3/12-2016)
 Goal of this release: To improve compliance of the current subset
+
+TODO:
+- final testing
 
 Done:
 - jQuery( html, ownerDocument ) signature is now supported

@@ -12,9 +12,9 @@ $hasPrivateData = $hasPrivData0 || $hasPrivData1 || $hasPrivData2;
     Array.prototype.push.apply(elems,a.getElementsByTagName("*"));
     for (z=0; elems[z] != null; z++ ) {
 //      console.log('cleaning data:', elems[z]);
-      if (el['__picoquerydata'] && el['__picoquerydata'][2]) {
-        el['__picoquerydata'][2].forEach(function(obj) {
-          el.removeEventListener(obj.t, obj.h);
+      if (elems[z]['__picoquerydata'] && elems[z]['__picoquerydata'][2]) {
+        elems[z]['__picoquerydata'][2].forEach(function(obj) {
+          elems[z].removeEventListener(obj.t, obj.h);
         });
       }
       elems[z].__picoquerydata = <?php if ($hasPublicData): ?>elems[z]._picoquerydata = <?php endif; ?>void 0;
@@ -28,11 +28,11 @@ $hasPrivateData = $hasPrivData0 || $hasPrivData1 || $hasPrivData2;
     Array.prototype.push.apply(elems,[[ARG1]].getElementsByTagName("*"));
     for (z=0; elems[z] != null; z++ ) {
 //      console.log('cleaning data:', elems[z]);
-      if (el['__picoquerydata'] && el['__picoquerydata'][2]) {
+      if (elems[z]['__picoquerydata'] && elems[z]['__picoquerydata'][2]) {
 //        console.log('removing event handlers...');
-        el['__picoquerydata'][2].forEach(function(obj) {
+        elems[z]['__picoquerydata'][2].forEach(function(obj) {
 //          console.log('removing ' + obj.type + ' handler', obj.handler);
-          el.removeEventListener(obj.t, obj.h);
+          elems[z].removeEventListener(obj.t, obj.h);
         });
       }
 

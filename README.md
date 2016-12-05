@@ -10,8 +10,12 @@ picoQuery is written for modern browsers (IE9+), but automatically detects if th
 
 For more information, visit the [website](http://picoquery.com/)
 
+### v.0.5.0 is almost done.
+Focus has been to improve compliance with jQuery. No new methods, but compliance went from being better than Zepto (within the supported subset!) to being way better. Check out the updated [Compliance Chart](http://picoquery.com/compliance_chart), or the [Roadmap](http://picoquery.com/roadmap) to see whats new.
+
+
 ### Comparison
-<table class="comparison-flip">
+<table>
 <tr>
   <td></td>
   <th><a href="http://jquery.com" title="jQuery 1.12.4">jQuery 1.12</a></th>

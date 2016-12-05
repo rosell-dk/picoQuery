@@ -117,7 +117,7 @@ $(function() {
     if (method.indexOf('()') > 0) {
       method = html.replace("()", "").split('.').join('');
     }
-    var html = '<a href="http://picoquery/lab/compliance-test/?frameworks=' + frameworks + '&group=' + method + '" target="_blank">' + html + '</a>';
+    var html = '<a href="/lab/compliance-test/?frameworks=' + frameworks + '&group=' + method + '" target="_blank">' + html + '</a>';
     $(this).html(html);
   });
 
