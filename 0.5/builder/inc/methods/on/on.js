@@ -57,11 +57,11 @@ on:function(events, selector, data, handler) {
 //    el.addEventListener(events, handler, false);
 
 <?php if (isFeatureEnabled('remove') || isFeatureEnabled('html') || isFeatureEnabled('empty') || isFeatureEnabled('replaceWith')): ?>
-    var handler = function(e) {
+    var h = function(e) {
       e.data = data;
       handler.call(this, e);
     };
-    el.addEventListener(events, handler, false);
+    el.addEventListener(events, h, false);
 
     // Private data
     if(!el['__picoquerydata']) {
@@ -71,7 +71,7 @@ on:function(events, selector, data, handler) {
     if (!el['__picoquerydata'][2]) {
       el['__picoquerydata'][2] = [];
     }
-    el['__picoquerydata'][2].push({h:handler, t:events});
+    el['__picoquerydata'][2].push({h:h, t:events});
 
 <?php else: ?>
     el.addEventListener(events, function(e) {
