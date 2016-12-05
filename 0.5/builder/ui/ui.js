@@ -452,7 +452,7 @@ function generateCode() {
   var localBuildUrlSrc = '/src/' + filename;
   var localBuildUrlSrcAlt = '/src/' + filenameAlt;
   var cdnUrl = 'http://cdn.picoquery.com/' + filename;
-  var cdnUrlAlt = 'http://cdn.picoquery.com/picoquery-' + filenameAlt;
+  var cdnUrlAlt = 'http://cdn.picoquery.com/' + filenameAlt;
 
   var cdnUrlProxy = 'get-build-from-cdn.php?filename=' + filename;
 
