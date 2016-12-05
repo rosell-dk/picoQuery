@@ -7,7 +7,7 @@
 
 **class methods**
 
-*camelCase*, *data*, *fn*, *merge*, *noConflict*, *removeEvent*
+*camelCase*, *data*, *fn*, *merge*, *noConflict*
 
 
 ## Cash 1.3.0

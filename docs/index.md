@@ -8,8 +8,8 @@ picoQuery is written for modern browsers (IE9+), but automatically detects if th
 1. Build your subset in the [online builder](/builder/)<br>
 2. Simply include the generated script instead of jQuery.
 
-### v.0.5.0 just released
-Focus has been to improve compliance with jQuery. No new methods, but compliance went from being better than Zepto (within the supported subset!) to being way better. Check out the updated [Compliance Chart](/compliance_chart), or the [Roadmap](/roadmap) to see whats new.
+### v.0.5.0 will be released tomorrow!
+Focus has been to improve compliance with jQuery. No new methods, but compliance went from being better than Zepto (within the supported subset!) to being way better. Check out the updated [Compliance Chart](/compliance_chart), or [Changelog](/changelog) to see whats new.
 
 ### Comparison
 <!--
@@ -77,7 +77,7 @@ Focus has been to improve compliance with jQuery. No new methods, but compliance
 <tr>
   <td>Number of API methods</td>
   <td><a href="/subsets" title="148 instance methods + 94 class methods. Click to see which">242 methods</a></td>
-  <td><a href="/subsets" title="52 instance methods + 5 class methods. Click to see which">57 methods</a></td>
+  <td><a href="/subsets" title="53 instance methods + 5 class methods. Click to see which">58 methods</a></td>
   <td><a href="/subsets" title="112 instance methods + 33 class methods. Click to see which">145 methods</a></td>
   <td><a href="/subsets" title="67 instance methods + 13 class methods. Click to see which">80 methods</a></td>
 </tr>
