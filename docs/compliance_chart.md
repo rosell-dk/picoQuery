@@ -1,6 +1,6 @@
 # Compliance Chart
 
-*Note: The chart is under construction. I'm starting with the methods supported by picoQuery, which has the effect that the summary is biased in favor of picoquery. However, it does show that the methods which are supported by picoQuery are significantly more compliant than the respective methods in Zepto and Cash*<br><br>
+*Note: I have only examined the compliance of the methods supported by picoQuery. This has has the effect that the summary is biased in favor of picoquery. However, it does show that the methods which are supported by picoQuery are significantly more compliant than the respective methods in Zepto and Cash*<br><br>
 
 Compliance summary:<br>
 

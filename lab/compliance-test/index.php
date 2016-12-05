@@ -2,6 +2,89 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>picoQuery compliance test</title>
+<style>
+body {padding: 1%}
+body > h1, body > h3 {text-align: center;}
+h1 {font-size: 30px;font-weight: normal}
+h3.fighters {}
+h3.fighters > span {display: inline-block;font-size: 20px; border:2px dashed black; padding: 10px 20px} 
+h3.fighters .vs {font-weight: normal; padding:0 30px; font-size:18px; border}
+#groups {margin-bottom:20px; width: 70%; margin: 0 auto 40px; padding: 10px}
+#groups * {padding: 0 10px}
+#groups a {color: black; text-decoration: none; display: inline-block;}
+#groups a.active {text-decoration: underline; font-size: 140%}
+table#testresults {border-collapse: collapse; width:100%; table-layout:fixed}
+tr.group {background-color:#aaaaee; line-height:2.4em;}
+tr.group th {font-style: normal; font-weight: bold; letter-spacing: 2px; text-align: center; padding-left: 0px} /*  text-transform: uppercase; */
+tr.endgroup td {padding-top:30px; border-top: none;}
+tr.subgroup {background-color:#fff; line-height:1.4em;}
+tr.subgroup th {text-align: left; padding-left: 0px;font-style: normal; font-weight: bold;padding-top: 15px; border-bottom: none;border-top: none;}
+tr.subgroup.empty {border:0}
+tr.endsubgroup td {padding-top:30px; border-top: none; border-bottom: none}
+th.no_tests_available_yet {text-align: left; border-top: none; border-bottom: none}
+tr.frameworks {background-color:#fff;}
+tr.frameworks th {border-top: none; border-bottom: none; padding: 3px 15px; color: #222; vertical-align: bottom; border-color: white;}
+tr.frameworks th.subgroup {text-align: left; padding-left: 5px;font-style: normal; font-weight: bold;padding-top: 25px; border-bottom: none; white-space: nowrap}
+
+tr th {font-style: italic; font-weight: normal}
+td,th {vertical-align:top; border: 1px solid #999; padding: 4px 6px}
+td.test {background-color:#eee}
+td:first-child, th:first-child {
+  width: 300px;
+}
+td,th {
+  width: 25%;
+}
+td:first-child, th:first-child {
+  border-left: none;
+}
+td:last-child, th:last-child {
+  border-right: none;
+}
+td:nth-child(n+4) {background-color:#bbffbb}
+td.mismatch {background-color: #ffbbbb}
+/*.code {max-width:20%;overflow:hidden;text-overflow: ellipsis; white-space:nowrap;}*/
+.code {padding-left:25px;text-indent:-25px;}  /* in order to get second+ line indented*/
+.array {}
+.comma {padding:0 10px; font-weight: bold}
+.tagname {color: blue;}
+.element-html {color: blue;}
+.error-description {font-size:12px;display: block; padding-top:3px}
+.tagid {color: darkblue;}
+.value {color: blue;}
+/*.error {color: red;}*/
+.italic {
+  font-style: italic;  
+}
+.zero-width-space {
+  font-size: 22px;
+}
+.italic-important {
+  font-style: italic!important;
+}
+.display-none {
+  display: none;
+}
+.inline-block {
+  display: inline-block;
+}
+.tablecell, tablecell { /* used for testing show() method */
+  display: table-cell;
+}
+
+
+
+#testhtml {
+  border: 1px solid #ccc;
+  padding: 10px;
+  float: right;
+  font-size: 10px;
+}
+
+li.odd {
+  font-style: italic;
+}
+</style>
 <script src="compliance-tests.js"></script>
 <script>
 var frameworks = [];
@@ -131,89 +214,22 @@ else {
 <link rel="stylesheet" href="chosen_v1.6.2/chosen.css">-->
 
 <script src="compliance-test.js"></script>
-<style>
-body {padding: 1%}
-body > h1, body > h3 {text-align: center;}
-h1 {font-size: 30px;font-weight: normal}
-h3.fighters {}
-h3.fighters > span {display: inline-block;font-size: 20px; border:2px dashed black; padding: 10px 20px} 
-h3.fighters .vs {font-weight: normal; padding:0 30px; font-size:18px; border}
-#groups {margin-bottom:20px; width: 70%; margin: 0 auto 40px; padding: 10px}
-#groups * {padding: 0 10px}
-#groups a {color: black; text-decoration: none; display: inline-block;}
-#groups a.active {text-decoration: underline; font-size: 140%}
-table#testresults {border-collapse: collapse; width:100%; table-layout:fixed}
-tr.group {background-color:#aaaaee; line-height:2.4em;}
-tr.group th {font-style: normal; font-weight: bold; letter-spacing: 2px; text-align: center; padding-left: 0px} /*  text-transform: uppercase; */
-tr.endgroup td {padding-top:30px; border-top: none;}
-tr.subgroup {background-color:#fff; line-height:1.4em;}
-tr.subgroup th {text-align: left; padding-left: 0px;font-style: normal; font-weight: bold;padding-top: 15px; border-bottom: none;border-top: none;}
-tr.subgroup.empty {border:0}
-tr.endsubgroup td {padding-top:30px; border-top: none; border-bottom: none}
-th.no_tests_available_yet {text-align: left; border-top: none; border-bottom: none}
-tr.frameworks {background-color:#fff;}
-tr.frameworks th {border-top: none; border-bottom: none; padding: 3px 15px; color: #222; vertical-align: bottom; border-color: white;}
-tr.frameworks th.subgroup {text-align: left; padding-left: 5px;font-style: normal; font-weight: bold;padding-top: 25px; border-bottom: none; white-space: nowrap}
 
-tr th {font-style: italic; font-weight: normal}
-td,th {vertical-align:top; border: 1px solid #999; padding: 4px 6px}
-td.test {background-color:#eee}
-td:first-child, th:first-child {
-  width: 300px;
-}
-td,th {
-  width: 25%;
-}
-td:first-child, th:first-child {
-  border-left: none;
-}
-td:last-child, th:last-child {
-  border-right: none;
-}
-td:nth-child(n+4) {background-color:#bbffbb}
-td.mismatch {background-color: #ffbbbb}
-/*.code {max-width:20%;overflow:hidden;text-overflow: ellipsis; white-space:nowrap;}*/
-.code {padding-left:25px;text-indent:-25px;}  /* in order to get second+ line indented*/
-.array {}
-.comma {padding:0 10px; font-weight: bold}
-.tagname {color: blue;}
-.element-html {color: blue;}
-.error-description {font-size:12px;display: block; padding-top:3px}
-.tagid {color: darkblue;}
-.value {color: blue;}
-/*.error {color: red;}*/
-.italic {
-  font-style: italic;  
-}
-.zero-width-space {
-  font-size: 22px;
-}
-.italic-important {
-  font-style: italic!important;
-}
-.display-none {
-  display: none;
-}
-.inline-block {
-  display: inline-block;
-}
-.tablecell, tablecell { /* used for testing show() method */
-  display: table-cell;
-}
-
-
-
-#testhtml {
-  border: 1px solid #ccc;
-  padding: 10px;
-  float: right;
-  font-size: 10px;
-}
-
-li.odd {
-  font-style: italic;
-}
-</style>
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//picoquery.com/piwik/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '1']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="//picoquery.com/piwik/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
+<!-- End Piwik Code -->
 </head>
 
 <body>
