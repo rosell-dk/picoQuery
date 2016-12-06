@@ -20,6 +20,7 @@ function P(a,b) {
 
   else if (__IS_STRING__(<@ a @>)) {
     // jQuery( html )
+
     if (a[0] == '<') {
       // According to the doc, ownerDocument must be a Document (but jQuery supports others, it seems at a quick glance of source)
 
@@ -132,8 +133,8 @@ function P(a,b) {
     // to the .ready() method, and always having 'ready' as a dependency. The .ready() method could then utilize it
     return $(d).ready(a);
   }
-  // jQuery( element )
-  else if (a.nodeType) {
+  // jQuery( element ) and jQuery( window )
+  else if (a.nodeType || a.window) {
     this.e = [a];
   } 
   // jQuery( selection ) - An existing jQuery object to clone.
