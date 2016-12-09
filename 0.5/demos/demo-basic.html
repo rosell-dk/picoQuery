@@ -32,11 +32,12 @@ All this, just to explain why we here include picoQuery inline, instead of doing
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 -->
-<script src="../../src/picoquery-0.5.0-full.min.js"></script>
+<script src="../../src/picoquery-0.5.0-full.js"></script>
+
 <!--<script src="http://cdn.picoquery.com/picoquery-0.5.0-full.min.js"></script>-->
 <script>
 //alert((Array.isArray ? 'yes' : 'no'));
-
+console.log($(window));
 $.fn.bgColor = function(bgColor) {
   this.css('background-color', bgColor);
 //  alert('background color was:' + this.css('background-color') + '. Setting it to:' + bgColor);
