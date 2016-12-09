@@ -190,6 +190,10 @@ foreach ($frameworks as $index => $framework) {
   if (strpos($framework, "angularjs") === 0 ) {
     continue;
   }
+  if ($framework == "zebrajs") {
+    echo '<script src="zebrajs.min.js"></script>' . "\n";
+    pushFramework($framework);
+  }
 
 
 }

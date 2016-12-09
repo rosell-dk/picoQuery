@@ -113,7 +113,8 @@ function toPrint(obj, skipMarkUp) {
         }
         if (isJquery ||
           (window.Zepto && obj instanceof Zepto.zepto.Z) ||
-          (obj.e)) {
+          (obj.e) ||
+          (obj.toggleClass)) {
           html = '$' + html;
         }
         else {
@@ -464,6 +465,7 @@ j$(function($) {
     ['zepto 1.2.0.js', 'zepto1.2.0.js'],
     ['cash 1.3.0', 'cash1.3.0.min.js'],
     ['angularjs 1.5.7 (jqLite)', 'angularjs-1.5.7.min.js'],
+    ['ZebraJs', 'zebrajs'],
     ['picoQuery 0.2.1-ffff1fff.min.js', 'picoquery-0.2.1-ffff1fff.min.js'],
     ['picoQuery 0.2.1-ffff1fff.js', 'picoquery-0.2.1-ffff1fff.js'],
     ['picoQuery 0.3.0-full.min.js', 'picoquery-0.3.0-full.min.js'],

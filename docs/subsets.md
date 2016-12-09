@@ -1,5 +1,18 @@
 # Subsets
 
+<!-- 
+To get instance methods:
+1) Open compliance test in chrome
+2) Open console
+3) Type: 
+   var obj=frameworks[3][0].fn;"*"+Object.keys(obj).filter(function(prop){return typeof obj[prop]=="function"}).sort().join("*, *")+"*";
+
+
+To get class methods:
+
+var obj=frameworks[3][0];"*"+Object.keys(obj).filter(function(prop){return typeof obj[prop]=="function"}).sort().join("*, *")+"*";
+-->
+
 ## picoQuery 0.5.0
 **instance methods**
 
@@ -26,9 +39,20 @@
 
 *add*, *addClass*, *after*, *append*, *appendTo*, *attr*, *before*, *bind*, *blur*, *change*, *children*, *click*, *clone*, *closest*, *concat*, *constructor*, *contents*, *css*, *data*, *dblclick*, *delegate*, *detach*, *die*, *each*, *empty*, *eq*, *error*, *filter*, *find*, *first*, *focus*, *focusin*, *focusout*, *forEach*, *get*, *has*, *hasClass*, *height*, *hide*, *html*, *index*, *indexOf*, *insertAfter*, *insertBefore*, *is*, *keydown*, *keypress*, *keyup*, *last*, *length*, *live*, *load*, *map*, *mousedown*, *mouseenter*, *mouseleave*, *mousemove*, *mouseout*, *mouseover*, *mouseup*, *next*, *not*, *off*, *offset*, *offsetParent*, *on*, *one*, *parent*, *parents*, *pluck*, *position*, *prepend*, *prependTo*, *prev*, *prop*, *push*, *ready*, *reduce*, *remove*, *removeAttr*, *removeClass*, *removeProp*, *replaceWith*, *resize*, *scroll*, *scrollLeft*, *scrollTop*, *select*, *serialize*, *serializeArray*, *show*, *siblings*, *size*, *slice*, *sort*, *splice*, *submit*, *text*, *toArray*, *toggle*, *toggleClass*, *trigger*, *triggerHandler*, *unbind*, *undelegate*, *unload*, *unwrap*, *val*, *width*, *wrap*, *wrapAll*, *wrapInner*
 
-**33 class methods**
+**class methods**
 
 *Event*, *active*, *ajax*, *ajaxJSONP*, *ajaxSettings*, *camelCase*, *contains*, *each*, *event*, *expr*, *extend*, *fn*, *get*, *getJSON*, *grep*, *inArray*, *isArray*, *isEmptyObject*, *isFunction*, *isNumeric*, *isPlainObject*, *isWindow*, *map*, *noop*, *param*, *parseJSON*, *post*, *proxy*, *support*, *trim*, *type*, *uuid*, *(zepto)*]
+
+
+## ZebraJs
+**instance methods**
+
+*addClass*, *after*, *append*, *appendTo*, *attr*, *before*, *children*, *clone*, *closest*, *css*, *data*, *detach*, *each*, *eq*, *find*, *first*, *get*, *hasClass*, *height*, *html*, *insertAfter*, *insertBefore*, *is*, *next*, *off*, *offset*, *on*, *one*, *outerHeight*, *outerWidth*, *parent*, *parents*, *position*, *prepend*, *prependTo*, *prev*, *ready*, *remove*, *removeClass*, *replaceWith*, *scrollLeft*, *scrollTop*, *serialize*, *siblings*, *text*, *toggleClass*, *trigger*, *unwrap*, *val*, *width*, *wrap*
+
+**class methods**
+
+*ajax*, *extend*, *inArray*
+
 
 ## jQuery 1.12.4: 
 **instance methods**

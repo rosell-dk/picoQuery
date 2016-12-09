@@ -617,6 +617,7 @@ window.complianceTests = [
       {
         name: 'Outside specification',
         tests: [
+          ['$(window).get(0)', "window"],
           ['$(jq$("<div>text</div>").get(0).childNodes[0])', "jQuery([Text Node])"],
           ['$("#item3", document)', "jQuery( selector, [HTMLDocument]"],
           ['$(document)', "jQuery( [HTMLDocument] )"],
