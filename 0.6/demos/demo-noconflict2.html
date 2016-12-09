@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>picoQuery demo: jQuery.noConflict()</title>
+
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script>
+  // Out here, $ points to jQuery
+  console.log('jQuery:', $.toString());
+  </script>
+<!--
+  <script src="../../src/picoquery-0.5.0-css-remove-~noConflict.min.js"></script>
+  <script src="../../src/picoquery-0.5.0-css-~noConflict.min.js"></script>
+  <script src="../../src/picoquery-0.5.0-full.min.js"></script>
+  <script src="http://cdn.picoquery.com/picoquery-0.5.0-full.min.js"></script>
+-->
+  <script src="http://cdn.picoquery.com/picoquery-0.5.0-full.min.js"></script>
+  <script>
+  jQuery.noConflict()(function($) {
+    // In here, $ points to picoQuery
+    console.log('picoquery:', $.toString());
+  })
+  // Out here, $ points to jQuery
+  console.log('jQuery:', $.toString());
+  </script>
+  <script>
+  // Out here, $ points to jQuery
+  console.log('jQuery:', $.toString());
+  </script>
+
+</head>
+<body>
+The source shows how to use picoQuery in a safe way, such that it does not accidently override jQuery
+<pre>
+</pre>
+</body>
+</html>

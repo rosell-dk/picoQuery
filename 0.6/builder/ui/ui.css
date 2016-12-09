@@ -1,0 +1,330 @@
+body, html {
+  height:100%;
+}
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 1em;
+}
+h1 {
+  padding: 5px 20px;
+  margin: 0;
+  font-size: 16px;
+  background-color: #666;
+  text-align: center;
+  color: white;
+}
+columns {
+  display: table;
+  width: 100%;
+}
+column {
+/*  display: inline-block;*/
+  display: table-cell;
+  vertical-align: top;
+}
+body > columns > column {
+  padding: 0 0 0 20px;
+  border-right: 1px solid #ccc;
+  min-width: 470px;
+  height: 100%;
+}
+body > columns > column:last-child {
+  border-right: 0px solid gold;
+  width: 100%;
+}
+
+column column {
+  width: 50%;
+}
+column column {
+  padding-right: 20px;
+}
+
+panel {
+  display: block;
+}
+
+panel ~ panel {
+  margin-top: 30px;
+}
+
+h3.panel-title {
+  font-style: italic;
+  font-weight: normal;
+  margin: 0 0 10px;
+  padding: 2px 8px;
+  font-size: 0.9em;
+  background-color: #ccc;
+}
+
+.checkbox-list label {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE/Edge */
+  user-select: none;           /* non-prefixed version, currently not supported by any browser */
+}
+
+#comment_selector {
+  display: block;
+}
+#code_panel {
+  height: 100%;
+}
+
+
+#code_panel textarea {
+  height: 200px;
+  width: 100%;
+  width: calc(100% - 20px);
+}
+
+#code-warning {
+  background-color: yellow;
+  width: 100%;
+}
+
+#url_panel > div h3 {
+  display: inline;
+  font-weight: bold;
+  font-size: 14px;
+}
+#url_panel .help-icon {
+  position: relative;
+  display: inline-block;
+}
+#url_panel .helptext {
+  width: 500px;
+}
+#code-url, #code-url-alt {
+  width: 80%;
+}
+
+
+#methods_column {
+}
+#methods_panel {
+}
+#methods {
+  margin-top: 10px;
+/*  overflow-y: scroll;*/
+/*  max-height: 100%;*/
+/*  margin-right: -16px;
+  padding-right: 20px;*/
+}
+
+#popup {
+  display: none;
+  left: 30%;
+  top: 40px;
+  position: absolute;
+  max-width: 65%;
+  max-height: 90%;
+  border: 1px solid #555;
+  overflow: auto;
+  background-color: #ccc;
+}
+#popup h4 {
+  background-color: #555;
+  display: block;
+  height: 25px;
+  margin: 0;
+  padding:0;
+  padding-left: 10px;
+  font-size: 15px;
+  line-height: 25px;
+  border-bottom: 1px solid #555;
+  color: white;
+}
+#popup pre {
+  margin: 0;
+  padding: 20px;
+  max-width: 100%;
+}
+
+.buildoption,
+.buildversion {
+  position: relative;
+}
+.buildoption label,
+.buildversion label {
+  width: 100%;
+  display: inline-block;
+  width: 165px;
+}
+
+/* Help icons and popup  */
+/* --------------------- */
+
+.help-icon {
+/*  display: none;*/
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+/*  float: right;*/
+/*
+  text-align: center;
+  font-size: 10px;
+  cursor: default;
+  line-height: 8px;
+  padding: 5px;
+  border-radius: 10px;
+  color: black;
+  font-weight: bold;
+  border: 1px solid #000;
+  background-color: #cfc;
+/*
+  background-color: #fff;
+  border: 1px solid #000;
+
+*/
+}
+
+.buildoption:hover {
+/*  background-color: #ddd;*/
+}
+.help-icon:hover {
+  display: block;
+}
+
+.help-icon img {
+  width: 16px;
+}
+.help-icon a {
+  cursor: pointer;
+  text-decoration: none;
+  color: #111;
+}
+.help-icon.warning {
+  /*
+  color: #aa0;
+  background-color: #ff7;
+  */
+}
+
+.helptext {
+  display: none;
+  position: absolute;
+  z-index:991;
+  border: 1px solid #111;
+  background-color: #ffffee;
+  margin: 5px 0 0 25px;
+  padding: 15px;
+  min-width: 170px;
+  line-height: 1.4;
+  font-family: sans-serif; 
+}
+.buildoption:nth-child(n+13) .helptext {
+  left: 200px;
+  bottom: -20px;
+}
+
+.buildversion .helptext {
+  min-width: 350px;
+}
+/*
+.buildoption:hover .helptext {
+  display: block;
+}*/
+
+
+/* Help-popups in build options */
+/* ---------------------------- */
+
+.buildoption .help-icon .incomplete,
+.buildoption .help-icon .complete {
+  text-align: center;
+  font-size: 10px;
+  cursor: default;
+  line-height: 8px;
+  padding: 5px;
+  border-radius: 10px;
+  color: black;
+  font-weight: bold;
+  border: 1px solid #000;
+  background-color: #cfc;
+}
+.buildoption .help-icon .incomplete {
+  background-color: #eeee00;
+}
+.buildoption .help-icon .complete {
+/*  background-color: #3366ff;*/
+  background-color: #99dd00;
+}
+.buildoption .helptext h4 {
+  white-space: nowrap;
+  display: block;
+/*  font-family: sans-serif;*/
+  font-size: 1em;
+  font-weight: normal;
+/*  text-decoration:underline;*/
+  margin: 0 0 3px 0;
+  
+}
+.buildoption .helptext .signature {
+  white-space: nowrap;
+  display: block;
+  margin: 4px 0 0 0px;
+  font-family: monospace;
+  font-size: 1.1em;
+}
+.buildoption .helptext .signature:last-child {
+  margin-bottom: 20px;
+}
+
+.buildoption .helptext .signatures .note {
+  display: block;
+  font-family: serif;
+  font-size: 12px;
+  font-style: italic;
+  margin: 0 10px 10px 0px;
+}
+
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?rf1fmr');
+  src:  url('fonts/icomoon.eot?rf1fmr#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?rf1fmr') format('truetype'),
+    url('fonts/icomoon.woff?rf1fmr') format('woff'),
+    url('fonts/icomoon.svg?rf1fmr#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  color: #999;
+}
+
+.icon-warning {
+  font-size: 16px;
+  text-indent: 2px;
+  color: #eecc00;
+}
+.icon-warning:hover {
+}
+.icon-info {
+  font-size: 18px;
+  padding-right: 1px;
+  color: #3366ff;
+  color: #999;
+/*  font-weight: bold; *//* actually, this makes it prettier... */
+}
+.icon-info:hover {
+}
