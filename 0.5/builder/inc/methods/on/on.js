@@ -50,7 +50,6 @@ on:function(events, selector, data, handler) {
 		return events;
 	}
 
-//console.log('data', data);
   __ITERATE__(<@ this.e @>, <@ function(el) {
     // The third parameter "useCapture" is according to web standards optional and defaults to false.
     // However, in Firefox 2-6, it is non-optional
