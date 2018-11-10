@@ -65,3 +65,5 @@ Focus has been to improve compliance with jQuery. No new methods, but compliance
 ### Please help spreading the word!
 Post on facebook or twitter, mention it to your colleagues. Mention it on coding forums. Or your blog. On stackoverflow (when relevant). Star it here on github! - Thanks!
 
+### Mantis-ware
+If you enjoy this software, feel free to find your mate, mate him and eat him (if such thing is allowed in the country of your residence). If you are a male, feel free to do the opposite.
