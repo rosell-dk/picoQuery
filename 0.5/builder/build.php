@@ -127,7 +127,7 @@ function base64str2flagsarray($str, $min_length = 0) {
 }
 
 function flagnames2flagsarray($flag_names, $selected_flags) {
-  /* usage: 
+  /* usage:
     $comment_flags = array('build_id', 'method_signatures');
     $comment_tokens = explode(',', $comments)
     list($comments_build_id, $comments_method_signatures, $comments_method_description, $comments_inline, $comments_devel_notes) = flagnames2flagsarray($comment_flags, $comment_tokens);
@@ -150,7 +150,7 @@ function decodeOptions($encodeOptionsString) {
   // ie 'addClass-css'  (/src/picoquery-0.3.0-addClass-css.min.js)
   if (($firstChar >= 'a') && ($firstChar <= 'z') || ($firstChar == '~')) {
 
-    $features = explode('-', $encodeOptionsString);    
+    $features = explode('-', $encodeOptionsString);
     foreach ($features as $index => $feature_nameid) {
       $invert = (substr($feature_nameid,0,2) == 'no');
       $feature_nameid = str_replace('~', 'jQuery.', $feature_nameid);
@@ -200,11 +200,11 @@ CDN URL, format #1:     http://cdn.picoquery.com/picoquery0.3.0-A2fa0.min.js
 CDN URL, format #2:     http://cdn.picoquery.com/picoquery0.3.0-addClass-css.min.js
 Note that build id starts with on uppercase letter, which specifyes the encoding
 Encodings currently available:
-"A": 
+"A":
    16 bit encoding of options.
    One bit per option, the option order is the one specified in build-options.inc
    The last trail of 0's can be omitted. Ie "A3" is an encoding for "addClass" and "css"
-"B": 
+"B":
    64 bit encoding of options.
    Same rules as "A" encoding
 
@@ -220,8 +220,8 @@ Encodings currently available:
 //    when building a build id, the builder will try out all bit sizes,
 //    and select the one that results in the most compact build id.
 //    As zero bits hardly makes sense, 000 means n=1, 001 means n=2, etc
-//    If for example every method 
-// 
+//    If for example every method
+//
 // For each method/build-option that has sub-functionality disabled:
 //   First [n] bits
 //     Tells how many items to skip in the list of build options included in the build.
@@ -229,8 +229,8 @@ Encodings currently available:
 //     If for example only .addClass(), get() and .each() are included in the build,
 //     the list will be: ['addClass', 'get', 'each']
 //     Say that n=4 and that these methods had 4 subfeatures each, and we were encoding with 1 bit
-//     build id would be this (no dashes): 
-//     010 (to set n=4) 
+//     build id would be this (no dashes):
+//     010 (to set n=4)
 //     0001 (skip one in the list - skips to "get"
 //     1111 (all subfeatures of get is deselected)
 //     0000 (skips to each. As each is right after 'get' in the list, the skip is 0)
@@ -387,7 +387,7 @@ if (isFeatureEnabled('builderurl')) {
   }
   $code = rtrim($code, '0');
   $bid = $code . '.' . $ext;
-  $builder_url = "picoquery.com/builder/" . $version . "/?" . $bid;
+  $builder_url = "picoquery.little-b.it/builder/" . $version . "/?" . $bid;
 }
 
 
@@ -416,7 +416,7 @@ if (isFeatureEnabled('hide') || isFeatureEnabled('toggle') || isFeatureEnabled('
 if (isFeatureEnabled('filter') || isFeatureEnabled('closest') || isFeatureEnabled('remove') || isFeatureEnabled('detach')) {
   enableFeatureByNameId('parent');
 }
-if (isFeatureEnabled('next') || 
+if (isFeatureEnabled('next') ||
     isFeatureEnabled('prev') ||
     isFeatureEnabled('children') ||
     isFeatureEnabled('parent') ||
@@ -481,7 +481,7 @@ if ($minify_functions || $minify_all) {
   include('../../lib/JShrink.php');
 }
 
-ob_start(); 
+ob_start();
 
 function funcBegin() {
   global $minify_functions;
@@ -617,7 +617,7 @@ function include_javascript($filename_without_ext) {
 
 
 function include_method($feat_nameid, $type = 'instance') {
-  
+
   $js = include_javascript('inc/methods/' . $feat_nameid . '/' . $feat_nameid);
 
   // If "array-like" feature isn't disabled, substitute "this.e[...]" with "this[...]"
@@ -701,7 +701,7 @@ function include_methods($type = 'instance') {
 
 
 function include_constructor() {
-  $js = include_javascript('inc/constructor');  
+  $js = include_javascript('inc/constructor');
   $js = indent($js, 1, TRUE);
   echo $js;
 }
@@ -942,7 +942,7 @@ function prepare_helpers() {
 //    funcBegin();
 
     // Start output buffer so we can indent
-    ob_start(); 
+    ob_start();
 
     $filename_without_ext = 'inc/helpers/' . $helper[0] . '/' . $helper[0];
 
@@ -1092,7 +1092,7 @@ function _process_helpers($js, $step, $helpers) {
       }
     }
 //$inline_all_helpers = TRUE;
-// ($helper[0] == 'EACH') || 
+// ($helper[0] == 'EACH') ||
 
     if (!$inline_this_helper) {
       $helpers_needed[] = $i;
@@ -1103,7 +1103,7 @@ function _process_helpers($js, $step, $helpers) {
     }
     else {
 
-      /* 
+      /*
 
       Inline the helper
 
@@ -1112,13 +1112,13 @@ function _process_helpers($js, $step, $helpers) {
       What we do here is transform ie:
       before: if(__IS_FUNCTION__(value))
       after:  if(typeof value == "function")
-      
+
       And it also works with multiline, and with multiple arguments:
 
       return __ITERATE__(this.e, function(el) {
         if (el.classList) {
           el.classList.add(value);
-        } 
+        }
         else {
           el.className += ' ' + value;
         }
@@ -1128,7 +1128,7 @@ function _process_helpers($js, $step, $helpers) {
       return [].forEach.call(this.e, function(el) {
         if (el.classList) {
           el.classList.add(value);
-        } 
+        }
         else {
           el.className += ' ' + value;
         }
@@ -1167,7 +1167,7 @@ function _process_helpers($js, $step, $helpers) {
 //print_r($matches[1]);
 //print_r($parseResult);
         $args = $parseResult['args'];
-        
+
         for ($j=0; $j<count($args); $j++) {
           // Do the actual substitution of "[[ARG1]]" etc in the inline code
           $inline_code = preg_replace('/\[\[ARG' . ($j + 1) . '\]\]/', $args[$j], $inline_code);
@@ -1246,7 +1246,7 @@ function _process_helpers($js, $step, $helpers) {
 
 ?>
 <?php if (isFeatureEnabled('fallback')):?>
-(Array.isArray ? 
+(Array.isArray ?
 <?php endif;?>
 (function(w,d,u,$,z) {
 <?php if (isFeatureEnabled('jQuery.noConflict')) {
@@ -1324,7 +1324,7 @@ that includes malicious code.
 http://stackoverflow.com/questions/4978235/absolute-urls-omitting-the-protocol-scheme-in-order-to-preserve-the-one-of-the
 http://www.paulirish.com/2010/the-protocol-relative-url/
 
-Note: We should definitely not use src=http://, because on IE8, it triggers an annoying 
+Note: We should definitely not use src=http://, because on IE8, it triggers an annoying
 warning about the page containing insecure content, when web page is on https
 
 Tips on how to set up https with good performance:

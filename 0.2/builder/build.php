@@ -61,7 +61,7 @@ function hexstr2flagsarray($hexstr, $min_length = 0) {
 }
 
 function flagnames2flagsarray($flag_names, $selected_flags) {
-  /* usage: 
+  /* usage:
     $comment_flags = array('build_id', 'method_signatures');
     $comment_tokens = explode(',', $comments)
     list($comments_build_id, $comments_method_signatures, $comments_method_description, $comments_inline, $comments_devel_notes) = flagnames2flagsarray($comment_flags, $comment_tokens);
@@ -136,8 +136,8 @@ elseif (isset($_GET['v'])) {
   //    when building a build id, the builder will try out all bit sizes,
   //    and select the one that results in the most compact build id.
   //    As zero bits hardly makes sense, 000 means n=1, 001 means n=2, etc
-  //    If for example every method 
-  // 
+  //    If for example every method
+  //
   // For each method/build-option that has sub-functionality disabled:
   //   First [n] bits
   //     Tells how many items to skip in the list of build options included in the build.
@@ -145,8 +145,8 @@ elseif (isset($_GET['v'])) {
   //     If for example only .addClass(), get() and .each() are included in the build,
   //     the list will be: ['addClass', 'get', 'each']
   //     Say that n=4 and that these methods had 4 subfeatures each, and we were encoding with 1 bit
-  //     build id would be this (no dashes): 
-  //     010 (to set n=4) 
+  //     build id would be this (no dashes):
+  //     010 (to set n=4)
   //     0001 (skip one in the list - skips to "get"
   //     1111 (all subfeatures of get is deselected)
   //     0000 (skips to each. As each is right after 'get' in the list, the skip is 0)
@@ -189,7 +189,7 @@ elseif (isset($_GET['v'])) {
   //                ALL the stuff our methods currently does must be made into sub features.
   //
   //                So, its "NO" then. That means subfeatures are selected. New subfeatures are default unselected
-  
+
   // The subfeatures can be part of the CDN URL like this:
   // https://cdn.picoquery.com/picoquery0.3-addClass0010-css100.fast.min.js
   // or base 8: https://cdn.picoquery.com/picoquery0.3-addClass2-css8-each17.small.min.js
@@ -216,7 +216,7 @@ elseif (isset($_GET['v'])) {
   // or...https://picoquery.com/builder?v=0.2&comments=none&minify=functions,all&fallback=jquery&methods=addclass,css,each
   // CDN URL:     https://cdn.picoquery.com/picoquery0.2.5-0-2000.min.js
 
-  
+
   // comments: none | build_id | builder_url | compact_builder_url...
   // minify: none | functions | all
   // fallback: jquery | url to cdn?
@@ -224,7 +224,7 @@ elseif (isset($_GET['v'])) {
 
   $v = $_GET['v'];
 
-  
+
   if (isset($_GET['compactness'])) {
     $compactness = $_GET['compactness'];
     if ($compactness == 'max') {
@@ -296,7 +296,7 @@ if (isFeatureEnabled('builderurl')) {
     $hex .= dechex(intval($fourflags, 2));
   }
 
-  $builder_url = "picoquery.com/builder/" . $version . "/?" . $compactness . "-" . $hex;
+  $builder_url = "picoquery.little-b.it/builder/" . $version . "/?" . $compactness . "-" . $hex;
 }
 
 
@@ -309,7 +309,7 @@ if (isFeatureEnabled('appendTo')) {
 if (isFeatureEnabled('hide')) {
   enableFeatureByNameId('css');
 }
-if (isFeatureEnabled('next') || 
+if (isFeatureEnabled('next') ||
     isFeatureEnabled('prev') ||
     isFeatureEnabled('children') ||
     isFeatureEnabled('parent')) {
@@ -336,7 +336,7 @@ if ($minify_functions || $minify_all) {
   include('../../lib/JShrink.php');
 }
 
-ob_start(); 
+ob_start();
 
 function funcBegin() {
   global $minify_functions;
@@ -388,7 +388,7 @@ function indent($js, $indent_levels = 0, $indent_first_line = FALSE) {
 function include_javascript($filename) {
   ob_start();
   global $bugfix_version;
-  
+
 /*  $bugfixes = [
     'constructor.js' => array(
       'version' => 1,
@@ -604,7 +604,7 @@ function include_helpers() {
 //    funcBegin();
 
     // Start output buffer so we can indent
-    ob_start(); 
+    ob_start();
     include('inc/helpers/' . $helper[0] . '.inc');
     $js = ob_get_clean();
 
@@ -645,7 +645,7 @@ function remove_unused_helpers($js) {
     }*/
     global $inline_all_helpers;
 //$inline_all_helpers = TRUE;
-// ($helper[0] == 'EACH') || 
+// ($helper[0] == 'EACH') ||
     $treshold = 100;
     if (($inline_all_helpers) || (($numCallsToHelper > 0) && ($numCallsToHelper <= $treshold))) {
       // Inline the helper
@@ -655,7 +655,7 @@ function remove_unused_helpers($js) {
       return __EACH__(this, function(el) {
         if (el.classList) {
           el.classList.add(value);
-        } 
+        }
         else {
           el.className += ' ' + value;
         }
@@ -665,7 +665,7 @@ function remove_unused_helpers($js) {
       return [].forEach.call(this.e, function(el) {
         if (el.classList) {
           el.classList.add(value);
-        } 
+        }
         else {
           el.className += ' ' + value;
         }
@@ -681,7 +681,7 @@ function remove_unused_helpers($js) {
         // Next, we substitute "[[ARG1]]" with the name of the first argument, ect.
 
         // The hardest part of doing this is finding the values supplied to the function call.
-        // But we have a helper for this, which is lenient enough that it works even though 
+        // But we have a helper for this, which is lenient enough that it works even though
         // the string it gets has more code than the list of arguments.
         preg_match('/__' . $helper[0] . '__\\s*\((.*)\[\[END-INCLUDE\]\]/ms', $js, $matches);
         if (count($matches) == 0) {
@@ -693,7 +693,7 @@ function remove_unused_helpers($js) {
         // A little quirk: We add ' ', because otherwise an ending "}" is eaten (when methods are minimized)
         $parseResult = parseArgs($matches[1] . ' ');
         $args = $parseResult['args'];
-        
+
         for ($j=0; $j<count($args); $j++) {
           // Do the actual substitution of "[[ARG1]]" etc in the inline code
           $inline_code = preg_replace('/\[\[ARG' . ($j + 1) . '\]\]/', $args[$j], $inline_code);
@@ -825,11 +825,11 @@ include_methods('instance');
       });
 
 <?php endif;?>
-    }        
+    }
 <?php if (isFeatureEnabled('fallback')):?>
   }
   else {
-    // jQuery fallback 
+    // jQuery fallback
     d.write('<scrip' + 't src=https://code.jquery.com/jquery-1.9.1.min.js><' + '/script>');
   }
 <?php endif;?>
@@ -861,7 +861,7 @@ that includes malicious code.
 http://stackoverflow.com/questions/4978235/absolute-urls-omitting-the-protocol-scheme-in-order-to-preserve-the-one-of-the
 http://www.paulirish.com/2010/the-protocol-relative-url/
 
-Note: We should definitely not use src=http://, because on IE8, it triggers an annoying 
+Note: We should definitely not use src=http://, because on IE8, it triggers an annoying
 warning about the page containing insecure content, when web page is on https
 
 Tips on how to set up https with good performance:

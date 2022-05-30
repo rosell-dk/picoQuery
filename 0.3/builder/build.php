@@ -127,7 +127,7 @@ function base64str2flagsarray($str, $min_length = 0) {
 }
 
 function flagnames2flagsarray($flag_names, $selected_flags) {
-  /* usage: 
+  /* usage:
     $comment_flags = array('build_id', 'method_signatures');
     $comment_tokens = explode(',', $comments)
     list($comments_build_id, $comments_method_signatures, $comments_method_description, $comments_inline, $comments_devel_notes) = flagnames2flagsarray($comment_flags, $comment_tokens);
@@ -193,11 +193,11 @@ CDN URL, format #1:     http://cdn.picoquery.com/picoquery0.3.0-A2fa0.min.js
 CDN URL, format #2:     http://cdn.picoquery.com/picoquery0.3.0-addClass-css.min.js
 Note that build id starts with on uppercase letter, which specifyes the encoding
 Encodings currently available:
-"A": 
+"A":
    16 bit encoding of options.
    One bit per option, the option order is the one specified in build-options.inc
    The last trail of 0's can be omitted. Ie "A3" is an encoding for "addClass" and "css"
-"B": 
+"B":
    64 bit encoding of options.
    Same rules as "A" encoding
 
@@ -213,8 +213,8 @@ Encodings currently available:
 //    when building a build id, the builder will try out all bit sizes,
 //    and select the one that results in the most compact build id.
 //    As zero bits hardly makes sense, 000 means n=1, 001 means n=2, etc
-//    If for example every method 
-// 
+//    If for example every method
+//
 // For each method/build-option that has sub-functionality disabled:
 //   First [n] bits
 //     Tells how many items to skip in the list of build options included in the build.
@@ -222,8 +222,8 @@ Encodings currently available:
 //     If for example only .addClass(), get() and .each() are included in the build,
 //     the list will be: ['addClass', 'get', 'each']
 //     Say that n=4 and that these methods had 4 subfeatures each, and we were encoding with 1 bit
-//     build id would be this (no dashes): 
-//     010 (to set n=4) 
+//     build id would be this (no dashes):
+//     010 (to set n=4)
 //     0001 (skip one in the list - skips to "get"
 //     1111 (all subfeatures of get is deselected)
 //     0000 (skips to each. As each is right after 'get' in the list, the skip is 0)
@@ -333,7 +333,7 @@ elseif (isset($_GET['v'])) {
 
   $v = $_GET['v'];
 
-  
+
   if (isset($_GET['compactness'])) {
     $compactness = $_GET['compactness'];
     if ($compactness == 'max') {
@@ -410,9 +410,9 @@ if (isFeatureEnabled('builderurl')) {
       $ext = 'js';
       break;
   }
-    
+
   $bid = $code . '.' . $ext;
-  $builder_url = "picoquery.com/builder/" . $version . "/?" . $bid;
+  $builder_url = "picoquery.little-b.it/builder/" . $version . "/?" . $bid;
 }
 
 
@@ -438,7 +438,7 @@ if (isFeatureEnabled('prepend') || isFeatureEnabled('prepend') || isFeatureEnabl
 if (isFeatureEnabled('hide')) {
   enableFeatureByNameId('css');
 }
-if (isFeatureEnabled('next') || 
+if (isFeatureEnabled('next') ||
     isFeatureEnabled('prev') ||
     isFeatureEnabled('children') ||
     isFeatureEnabled('parent')) {
@@ -469,7 +469,7 @@ if ($minify_functions || $minify_all) {
   include('../../lib/JShrink.php');
 }
 
-ob_start(); 
+ob_start();
 
 function funcBegin() {
   global $minify_functions;
@@ -521,7 +521,7 @@ function indent($js, $indent_levels = 0, $indent_first_line = FALSE) {
 function include_javascript($filename) {
   ob_start();
   global $bugfix_version;
-  
+
 /*  $bugfixes = [
     'constructor.js' => array(
       'version' => 1,
@@ -756,7 +756,7 @@ function prepare_helpers() {
 //    funcBegin();
 
     // Start output buffer so we can indent
-    ob_start(); 
+    ob_start();
     include('inc/helpers/' . $helper[0] . '.inc');
     $js = ob_get_clean();
 
@@ -810,7 +810,7 @@ function _process_helpers($js, $step) {
     }*/
     global $inline_all_helpers;
 //$inline_all_helpers = TRUE;
-// ($helper[0] == 'EACH') || 
+// ($helper[0] == 'EACH') ||
     $treshold = 8;
     if ($helper[0] == 'ITERATE') {
 //      $treshold = 0;
@@ -831,7 +831,7 @@ function _process_helpers($js, $step) {
       return __EACH__(this, function(el) {
         if (el.classList) {
           el.classList.add(value);
-        } 
+        }
         else {
           el.className += ' ' + value;
         }
@@ -841,7 +841,7 @@ function _process_helpers($js, $step) {
       return [].forEach.call(this.e, function(el) {
         if (el.classList) {
           el.classList.add(value);
-        } 
+        }
         else {picoquery-0.3
           el.className += ' ' + value;
         }
@@ -857,7 +857,7 @@ function _process_helpers($js, $step) {
         // Next, we substitute "[[ARG1]]" with the name of the first argument, ect.
 
         // The hardest part of doing this is finding the values supplied to the function call.
-        // But we have a helper for this, which is lenient enough that it works even though 
+        // But we have a helper for this, which is lenient enough that it works even though
         // the string it gets has more code than the list of arguments.
         preg_match('/__' . $helper[0] . '__\\s*\((.*)\[\[END-INCLUDE\]\]/ms', $js, $matches);
         if (count($matches) == 0) {
@@ -869,7 +869,7 @@ function _process_helpers($js, $step) {
         // A little quirk: We add ' ', because otherwise an ending "}" is eaten (when methods are minimized)
         $parseResult = parseArgs($matches[1] . ' ');
         $args = $parseResult['args'];
-        
+
         for ($j=0; $j<count($args); $j++) {
           // Do the actual substitution of "[[ARG1]]" etc in the inline code
           $inline_code = preg_replace('/\[\[ARG' . ($j + 1) . '\]\]/', $args[$j], $inline_code);
@@ -951,7 +951,7 @@ function _process_helpers($js, $step) {
 
 ?>
 <?php if (isFeatureEnabled('fallback')):?>
-(Array.isArray ? 
+(Array.isArray ?
 <?php endif;?>
 (function(w,d,u,$<?php if ($use_optimized_methods) {echo ',z';} // TODO: Detect if u and z are used. u can be tested For example with the javascript parser ?>) {
 <?php if (isFeatureEnabled('jQuery.noConflict')) {
@@ -1028,7 +1028,7 @@ that includes malicious code.
 http://stackoverflow.com/questions/4978235/absolute-urls-omitting-the-protocol-scheme-in-order-to-preserve-the-one-of-the
 http://www.paulirish.com/2010/the-protocol-relative-url/
 
-Note: We should definitely not use src=http://, because on IE8, it triggers an annoying 
+Note: We should definitely not use src=http://, because on IE8, it triggers an annoying
 warning about the page containing insecure content, when web page is on https
 
 Tips on how to set up https with good performance:
