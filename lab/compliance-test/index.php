@@ -7,7 +7,7 @@ body {padding: 1%}
 body > h1, body > h3 {text-align: center;}
 h1 {font-size: 30px;font-weight: normal}
 h3.fighters {}
-h3.fighters > span {display: inline-block;font-size: 20px; border:2px dashed black; padding: 10px 20px} 
+h3.fighters > span {display: inline-block;font-size: 20px; border:2px dashed black; padding: 10px 20px}
 h3.fighters .vs {font-weight: normal; padding:0 30px; font-size:18px; border}
 #groups {margin-bottom:20px; width: 70%; margin: 0 auto 40px; padding: 10px}
 #groups * {padding: 0 10px}
@@ -54,7 +54,7 @@ td.mismatch {background-color: #ffbbbb}
 .value {color: blue;}
 /*.error {color: red;}*/
 .italic {
-  font-style: italic;  
+  font-style: italic;
 }
 .zero-width-space {
   font-size: 22px;
@@ -141,18 +141,19 @@ foreach ($frameworks as $index => $framework) {
     $found = preg_match('/jquery-([0-9.]*)\.(.*)/i', $framework, $matches);
     $version = $matches[1];
     $ext = $matches[2];
-    
+
 //    echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/' . $version . '/jquery.' . $ext . '"></script>' . "\n";
     echo '<script src="jquery-1.12.4.js"></script>' . "\n";
 
 //    echo '<script src="../feature-detect/feature-detect.js"></script>';
 
-//    echo '<script>j$ = window.$</script>';
+    echo '<script>j$ = window.$</script>';
     pushFramework($framework);
   }
   if (strpos($framework, "pico") === 0 ) {
     if ($framework == "picoquery") {
-      $framework = "picoquery-0.4.0-full.min.js";
+      //$framework = "picoquery-0.4.0-full.min.js";
+      $framework = "picoquery-0.5.0-full.min.js";
       $frameworks[$index] = $framework;
     }
     if ($_SERVER['HTTP_HOST'] == 'picoquery.com') {
@@ -161,7 +162,7 @@ foreach ($frameworks as $index => $framework) {
     }
     else {
       echo '<script src="/src/' . $framework . '"></script>' . "\n";
-    }    
+    }
     pushFramework($framework);
   }
 
@@ -219,21 +220,7 @@ else {
 
 <script src="compliance-test.js"></script>
 
-<!-- Piwik -->
-<script type="text/javascript">
-  var _paq = _paq || [];
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//picoquery.com/piwik/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', '1']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<noscript><p><img src="//picoquery.com/piwik/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
-<!-- End Piwik Code -->
+
 </head>
 
 <body>
@@ -243,7 +230,7 @@ else {
 <h3 class="fighters"><span><span class="framework-selector"><?php echo implode('</span><span class="vs">and</span><span class="framework-selector">', array_slice($frameworks,1)) ?></span><span class="vs">tested against</span><?php echo $frameworks[0] ?></span></h3>
 <div id="groups"></div>
 <p>Each line in the table below represents a test. First column is the test code. Second column is the result of the test code evaluated in <?php echo $frameworks[0] ?>. Third column is the result of the test code evalaluated in <?php echo $frameworks[1] ?><?php if (count($frameworks) > 2) echo ' etc' ?>. If the results are the same, the background will be green, otherwise red.</p>
-<p>When the test code is evaluated, <i>$</i> points to the framework that is tested. <i>jq$</i> always points to jQuery 1.9.1. Its used to facilitate making tests that does not rely on other methods than the test in question</p> 
+<p>When the test code is evaluated, <i>$</i> points to the framework that is tested. <i>jq$</i> always points to jQuery 1.9.1. Its used to facilitate making tests that does not rely on other methods than the test in question</p>
 
 <table id="testresults">
   <colgroup>
