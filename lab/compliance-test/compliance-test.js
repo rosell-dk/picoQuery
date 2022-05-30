@@ -33,7 +33,14 @@ function toPrint(obj, skipMarkUp) {
         return 'object without constructor?';
 
       }
-      var className = obj.constructor.toString().match(/function (\w*)/)[1];
+      var constructorString = obj.constructor.toString();
+
+
+      var classNameMatch = obj.constructor.toString().match(/function (\w*)/);
+
+      var className = (classNameMatch ? classNameMatch[1] : ''); //
+
+      //var className = obj.constructor.toString().match(/function (\w*)/)[1];
       if ((className == 'DOMException') || (className == 'TypeError') || (className == 'ReferenceError') || (className == 'Error')) {
         if (skipMarkUp) {
           html = obj.name + (obj['message'] ? obj.message : '');
@@ -87,8 +94,8 @@ function toPrint(obj, skipMarkUp) {
         }*/
       }
       else if (obj.splice) {  // (this is the same test as console.log performs)
-        // Its an array 
-        // - or a jQuery object, or something array-like 
+        // Its an array
+        // - or a jQuery object, or something array-like
         var content = [];
         for (var i=0; i<obj.length; i++) {
           content.push(toPrint(obj[i], skipMarkUp));
@@ -101,7 +108,7 @@ function toPrint(obj, skipMarkUp) {
         }
 
         if (obj.ready) {
-          
+
         }
         // hm... how to test if its a jQuery / zepto / picoQuery?
 //          html += className;
@@ -179,17 +186,19 @@ function testInAllFrameworks(code, description, anchor_name) {
   var testResults = [], printedResults = [];
 //  var frameworks = [j$, z$, p$, pmin$];
 
+//console.log(frameworks);
   frameworks.forEach(function (framework) {
     var result;
     var printedResult;
-    $ = framework[0];
+
+    var $ = framework[0];
     jQuery = framework[2];
     jq$ = j$;
 
     var tempEl = j$('<div></div>').appendTo('body').get(0);
 
     function makeTextNode(text) {
-      return j$("<b>" + text + "</b>").get(0).childNodes[0];    
+      return j$("<b>" + text + "</b>").get(0).childNodes[0];
     }
     function makeElement(html) {
       return j$(html).get(0);
@@ -209,11 +218,20 @@ function testInAllFrameworks(code, description, anchor_name) {
 
     try {
 //      result = fn.call();
+      //code = code.replace('$', 'framework[0]');
       eval("result = " + code);
       printedResult = toPrint(result);
     }
     catch (e) {
       console.log(e);
+      console.log('code:', code);
+      console.log('framework:', framework[1], framework[0]);
+      console.log('$:', $);
+      console.log('framework[0]:', framework[0]);
+
+
+
+
       result = e;
     }
     j$(tempEl).remove();
@@ -304,7 +322,7 @@ function testInAllFrameworks(code, description, anchor_name) {
         while (oneMoreRound) {
           oneMoreRound = false;
 
-          // skip zero-width-spaces      
+          // skip zero-width-spaces
           while (tdContent[i].substr(j,7) == '&#8203;') {
             j+=7;
             oneMoreRound = true;
@@ -334,7 +352,7 @@ function testInAllFrameworks(code, description, anchor_name) {
 //  $('#testresults tbody').append(tr);
   return tr;
 
-  // TODO: red backgrounds if td[2] != td[1]    
+  // TODO: red backgrounds if td[2] != td[1]
 
 //  console.log('Test #' + window.testNumber, testResults);
 //  console.log(testResults);
@@ -343,15 +361,15 @@ function testInAllFrameworks(code, description, anchor_name) {
 var colspan = 'colspan=' + (frameworks.length + 2);
 
 function group(caption) {
-  $('#testresults tbody').append('<tr class="group"><th ' + colspan + '>' + caption + '</th></tr>');  
+  $('#testresults tbody').append('<tr class="group"><th ' + colspan + '>' + caption + '</th></tr>');
 }
 
 function endgroup() {
-  $('#testresults tbody').append('<tr class="endgroup"><td ' + colspan + '></td></tr>');  
+  $('#testresults tbody').append('<tr class="endgroup"><td ' + colspan + '></td></tr>');
 }
 
 function subgroup(caption) {
-//  $('#testresults tbody').append('<tr class="subgroup"><th colspan=5>' + caption + '</th></tr>');  
+//  $('#testresults tbody').append('<tr class="subgroup"><th colspan=5>' + caption + '</th></tr>');
 //  $('#testresults tbody').append('<tr class="frameworks"><th></th><th>jQuery 1.9.1 (ref)</th><th>zepto 1.2.0</th><th>picoQuery 0.2</th><th>picoQuery.min</th></tr>');
 
 //  $('#testresults tbody').append('<tr class="frameworks"><th class="subgroup">' + caption + '</th><th>jQuery 1.9.1 (ref)</th><th>zepto 1.2.0</th><th>picoQuery 0.2</th><th>picoQuery.min</th></tr>');
@@ -371,12 +389,12 @@ function subgroup(caption) {
 }
 
 function subgroup_empty(caption) {
-  $('#testresults tbody').append('<tr class="subgroup empty"><th ' + colspan + '>' + caption + '</th></tr>');  
+  $('#testresults tbody').append('<tr class="subgroup empty"><th ' + colspan + '>' + caption + '</th></tr>');
   $('#testresults tbody').append('<tr><th colspan=' + (frameworks.length + 1) + ' class="no_tests_available_yet">No tests available yet</th></tr>');
 }
 
 function endsubgroup() {
-//  $('#testresults tbody').append();  
+//  $('#testresults tbody').append();
   return '<tr class="endsubgroup"><td ' + colspan + '></td></tr>';
 }
 
@@ -405,7 +423,7 @@ function displayTestGroupLinks(groupsToShow) {
   html.unshift('<a href="?frameworks=' + frameworksSearch + '&group=all" ' + (groupsToShow == 'all' ? ' class="active"': '') + '>All tests (slow!)</a>');
   $('#groups').append(html.join(''));
 
-  
+
 }
 
 function runTests(groupsToShow) {
@@ -438,7 +456,7 @@ function runTests(groupsToShow) {
           var tr = testInAllFrameworks(test[0], test[1], test[2]);
           if (tr != "") {
             subgrouptrs.push(tr);
-          }          
+          }
         });
         if (subgrouptrs.length > 0) {
           $('#testresults tbody').append(subgroup(sg['name']));
@@ -459,8 +477,8 @@ function runTest(id) {
 
 j$(function($) {
   var availableFrameworks = [
-    ['jQuery 1.9.1', 'jquery-1.9.1.min.js'], 
-    ['jQuery 1.12.4', 'jquery-1.12.4.min.js'], 
+    ['jQuery 1.9.1', 'jquery-1.9.1.min.js'],
+    ['jQuery 1.12.4', 'jquery-1.12.4.min.js'],
     ['zepto 1.2.0.min.js', 'zepto1.2.0.min.js'],
     ['zepto 1.2.0.js', 'zepto1.2.0.js'],
     ['cash 1.3.0', 'cash1.3.0.min.js'],
@@ -470,6 +488,8 @@ j$(function($) {
     ['picoQuery 0.2.1-ffff1fff.js', 'picoquery-0.2.1-ffff1fff.js'],
     ['picoQuery 0.3.0-full.min.js', 'picoquery-0.3.0-full.min.js'],
     ['picoQuery 0.3.0-full.js', 'picoquery-0.3.0-full.js'],
+    ['picoQuery 0.4.0-full.js', 'picoquery-0.4.0-full.js'],
+    ['picoQuery 0.5.0-full.js', 'picoquery-0.5.0-full.js'],
   ];
   var af = availableFrameworks.map(function(item) {return item[1]});
   frameworks.slice(1).forEach(function (item) {
@@ -477,18 +497,18 @@ j$(function($) {
       availableFrameworks.push([item[1],item[1]])
     }
   });
-  
+
   var options = '<select class="framework-options"><options>';
   availableFrameworks.forEach(function (item) {
     options += '<option value="' + item[1] + '">' + item[0] + '</option>';
   });
   options += '</select>';
-  $('.framework-selector').each(function(i) {   
-    $(this).html(options);    
+  $('.framework-selector').each(function(i) {
+    $(this).html(options);
     if (frameworks[i+1]) {
       $(this).children('select').val(frameworks[i+1][1]); // .chosen();
     }
-    
+
     // "option[value='']").prop('selected', true);
   });
   $('.framework-options').on('change', function () {
@@ -518,4 +538,3 @@ j$(function($) {
 
   runTests(groupsToShow);
 });
-
